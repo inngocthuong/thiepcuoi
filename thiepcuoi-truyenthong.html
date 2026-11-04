@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thiệp Cưới Truyền Thống</title>
+    <style>
+        /* --- 1. CÀI ĐẶT CHUNG --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f6f9;
+            color: #333;
+        }
+
+        /* --- 2. PHẦN BANNER --- */
+        .banner {
+            position: relative;
+            width: 100%;
+        }
+
+        .banner img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .banner-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            color: white;
+            text-align: center;
+        }
+
+        .banner-search {
+            position: absolute;
+            top: 50%;
+            right: 50px;
+            transform: translateY(-50%);
+            z-index: 10;
+        }
+
+        .banner-search form {
+            display: flex;
+            align-items: center;
+            width: 260px;
+            height: 40px;
+            background: #fff;
+            border: 1px solid #ead4cc;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .banner-search input {
+            flex: 1;
+            min-width: 0;
+            height: 100%;
+            padding: 0 14px;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .banner-search button {
+            height: 100%;
+            padding: 0 13px;
+            border: none;
+            background: #fff;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* --- 3. THANH MENU NGANG --- */
+        .navbar {
+            background-color: #526456;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .main-menu {
+            list-style: none;
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .menu-item {
+            position: relative;
+        }
+
+        .menu-item a {
+            display: block;
+            color: #e5e7eb;
+            text-decoration: none;
+            padding: 18px 22px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .menu-item:hover > a {
+            background-color: #687b6c;
+            color: #ffffff;
+        }
+
+        .dropdown-menu {
+            list-style: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #526456;
+            min-width: 220px;
+            display: none;
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.15);
+        }
+
+        .dropdown-menu a {
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            border-bottom: 1px solid #1a3038;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #687b6c;
+            padding-left: 25px;
+        }
+
+        .menu-item:hover .dropdown-menu {
+            display: block;
+        }
+
+        .cum-tieu-de-danh-muc {
+            max-width: 1200px;
+            margin: 30px auto 25px auto;
+            padding: 0 15px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .cum-tieu-de-danh-muc h2 {
+            font-weight: bold;
+            text-transform: uppercase;
+            margin: 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid currentColor;
+        }
+
+        /* --- 4. KHU VỰC SẢN PHẨM --- */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 15px;
+        }
+
+        .product_noibat_box {
+            display: flex;
+            flex-wrap: wrap;
+            margin-right: -10px;
+            margin-left: -10px;
+        }
+
+        .product_noibat_item {
+            position: relative;
+            width: 25%; /* 4 sản phẩm trên 1 hàng */
+            padding-right: 10px;
+            padding-left: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        .product_noibat_item .img_pro {
+            position: relative;
+            display: block;
+            width: 100%;
+            overflow: hidden;
+            background: #f7f7f7;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .product_noibat_item .img_pro img {
+            width: 100%;
+            height: 220px;
+            display: block;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product_noibat_item .img_pro:hover img {
+            transform: scale(1.05);
+        }
+
+        .product_noibat_item h3 {
+            margin: 0 0 5px 0;
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.4;
+            height: 40px;
+            overflow: hidden;
+        }
+
+        .product_noibat_item h3 a {
+            color: #333;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            cursor: pointer;
+        }
+
+        .product_noibat_item h3 a:hover {
+            color: #2980b9;
+        }
+
+        .text-split {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .product_noibat_item .box_price_box {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .product_noibat_item .box_price_box strong {
+            color: #e74c3c;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        /* --- STYLE THANH PHÂN TRANG (PAGINATION) --- */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+
+        .uk-pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            gap: 8px;
+        }
+
+        .uk-pagination li a {
+            display: block;
+            padding: 8px 14px;
+            border: 1px solid #ddd;
+            background: #fff;
+            color: #333;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .uk-pagination li a:hover {
+            background: #526456;
+            color: #fff;
+            border-color: #526456;
+        }
+
+        .uk-pagination li a.active {
+            background: #6a0716;
+            color: #fff;
+            border-color: #6a0716;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .product_noibat_item { width: 33.333%; }
+        }
+
+        @media (max-width: 768px) {
+            .product_noibat_item { width: 50%; }
+            .navbar, .banner, .footer, .menu-item, .banner-search { display: none !important; }
+            .navbar-mobile {
+                display: flex !important;
+                justify-content: space-around;
+                background: #526456;
+                padding: 12px 5px;
+                position: sticky;
+                top: 0;
+                z-index: 999;
+            }
+            .navbar-mobile a {
+                color: #ffffff;
+                text-decoration: none;
+                font-weight: bold;
+                font-size: 14.5px;
+            }
+            .banner-mobile { display: block !important; width: 100%; margin-bottom: 10px; }
+            .banner-mobile img { width: 100%; height: auto; display: block; }
+            .footer-mobile {
+                display: block !important;
+                background: #526456;
+                color: #ffffff;
+                text-align: center;
+                padding: 25px 15px;
+                font-size: 13.5px;
+                line-height: 1.6;
+                margin-top: 30px;
+            }
+            .footer-mobile h4 { color: #ffffff; font-size: 15px; margin-bottom: 10px; text-transform: uppercase; }
+            .footer-mobile p { margin-bottom: 8px; }
+            .footer-mobile-actions { display: flex; justify-content: center; gap: 15px; margin: 15px 0; }
+            .footer-mobile-actions a {
+                background: #ffffff; color: #526456; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 13px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            }
+            .footer-mobile-copy { border-top: 1px solid rgba(255,255,255,0.1); margin-top: 15px; padding-top: 12px; font-size: 12px; color: #bbb; }
+        }
+
+        .navbar-mobile, .banner-mobile, .footer-mobile { display: none !important; }
+
+        footer {
+            background-color: #e0e1e0;
+            color: #000;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            padding: 40px 0 20px 0;
+            margin-top: 60px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .footer-col { flex: 1; min-width: 280px; margin-bottom: 30px; padding-right: 20px; }
+        .footer-col h3 { color: #000; font-size: 1.1rem; margin-bottom: 20px; text-transform: uppercase; }
+        .footer-col p { margin-bottom: 10px; }
+        .footer-col strong { color: #000; }
+        .footer-links { list-style: none; padding: 0; margin: 0; }
+        .footer-links li { margin-bottom: 8px; }
+        .footer-links a { color: #000; text-decoration: none; }
+        .footer-links a:hover { color: #03692a; }
+        .footer-copyright { text-align: center; border-top: 1px solid #bab6b6; margin-top: 20px; padding-top: 20px; font-size: 0.8rem; color: #000; width: 100%; }
+    </style>
+</head>
+<body>
+
+    <!-- 1. BANNER CỬA HÀNG -->
+    <div class="banner-mobile">
+        <a href="index.html"><img src="anh/banner-mobile.png" alt="Banner Điện Thoại"></a>
+    </div>
+
+    <div class="banner">
+        <img src="anh/banner.png" alt="Banner">
+        <div class="banner-content">
+            <div class="banner-search">
+                <form action="index.html" method="get">
+                    <input type="text" id="search-input" placeholder="Tìm thiệp cưới...">
+                    <button type="button">🔍</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. THANH MENU HÀNG HÓA -->
+    <nav class="navbar">
+        <ul class="main-menu">
+            <li class="menu-item"><a href="index.html">Trang Chủ</a></li>
+            <li class="menu-item">
+                <a href="mauthiepcuoi.html">Mẫu Thiệp Cưới ▾</a>
+                <ul class="dropdown-menu">
+                    <li><a href="thiepcuoi-hiendai.html">Thiệp Cưới Hiện Đại</a></li>
+                    <li><a href="thiepcuoi-truyenthong.html">Thiệp Cưới Truyền Thống</a></li>
+                    <li><a href="thiepcuoi-docquyen.html">Thiệp Cưới Độc Quyền KTS</a></li>
+                    <li><a href="thiepcuoi-dq-25.html">Thiệp Cưới DQ_25</a></li>
+                </ul>
+            </li>
+            <li class="menu-item">
+                <a href="thiep-moi.html">Thiệp Mời ▾</a>
+                <ul class="dropdown-menu">
+                    <li><a href="thiep-tangia.html">Thiệp Tân Gia</a></li>
+                    <li><a href="thiep-sinhnhat.html">Thiệp Sinh Nhật</a></li>
+                    <li><a href="thiep-taon.html">Thiệp Công Giáo</a></li>
+                </ul>
+            </li>
+            <li class="menu-item"><a href="thiepcuoi-online.html">Thiệp Cưới Online</a></li>
+            <li class="menu-item"><a href="huong-dan.html">Hướng Dẫn</a></li>
+            <li class="menu-item"><a href="lienhe.html">Liên Hệ</a></li>
+        </ul>
+    </nav>
+
+    <!-- BANNER MENU THU GỌN DI ĐỘNG -->
+    <nav class="navbar-mobile">
+        <a href="thiepcuoi-hiendai.html">Hiện Đại</a>
+        <a href="thiepcuoi-truyenthong.html">Truyền Thống</a>
+        <a href="thiepcuoi-docquyen.html">Độc Quyền</a>
+        <a href="thiepcuoi-online.html">Thiệp Online</a>
+    </nav>
+
+    <!-- 3. KHU VỰC SẢN PHẨM & PHÂN TRANG -->
+    <main class="container">
+
+        <div class="cum-tieu-de-danh-muc">   
+            <h2 style="text-align: left; color: #6a0716; font-size: 24px;">THIỆP CƯỚI TRUYỀN THỐNG</h2>
+        </div>
+        
+        <!-- KHUNG CHỨA TOÀN BỘ 17 SẢN PHẨM -->
+        <div class="product_noibat_box" id="product-list">
+
+            <!-- 1 -->
+            <div class="product_noibat_item" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/LA4ilurn.jpg" alt="Mẫu thiệp HHY-9401"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp HHY-9401</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 2 -->
+            <div class="product_noibat_item" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210gt">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/OxIkz6lG.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9102"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9102</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 3 -->
+            <div class="product_noibat_item" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/r7ai7rrI.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9103"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9103</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 4 -->
+            <div class="product_noibat_item" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/MoqNfJpx.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9104"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9104</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 5 -->
+            <div class="product_noibat_item" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/JLUCv7Ap.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9105"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9105</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 6 -->
+            <div class="product_noibat_item" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/KiCqxfkA.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9106"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9106</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 7 -->
+            <div class="product_noibat_item" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/ftElnjSD.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9107"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9107</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 8 -->
+            <div class="product_noibat_item" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/LilV9pQE.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9108"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9108</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 9 -->
+            <div class="product_noibat_item" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/SIYWXVZI.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9109"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9109</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 10 -->
+            <div class="product_noibat_item" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/8txxkfQ9.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9110"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9110</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 11 -->
+            <div class="product_noibat_item" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/b8KsaHnW.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9111"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9111</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 12 -->
+            <div class="product_noibat_item" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/hec8lkka.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9112"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9112</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 13 -->
+            <div class="product_noibat_item" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210gt">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/LOQByDqD.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9113"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9113</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 14 -->
+            <div class="product_noibat_item" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/ydiNNdDV.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9114"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9114</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 15 -->
+            <div class="product_noibat_item" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/OeoSJkHb.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9115"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9115</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 16 -->
+            <div class="product_noibat_item" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/SV3xnGX1.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9116"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9116</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 17 -->
+            <div class="product_noibat_item" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/sJ8rcN9W.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9117"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9117</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            
+
+        </div>
+
+        <!-- KHU VỰC HIỂN THỊ NÚT CHUYỂN TRANG -->
+        <div class="pagination-container">
+            <ul class="uk-pagination" id="pagination-list"></ul>
+        </div>
+
+    </main>
+
+    <!-- 4. CHÂN TRANG (FOOTER) -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>🏠 NHÀ IN THIỆP CƯỚI NGỌC THƯƠNG</h3>
+                <p><strong>Cơ sở in:</strong> Hệ thống in ấn thiệp cưới cao cấp Ngọc Thương</p>
+                <p><strong>Địa chỉ xưởng:</strong> 123 Đường Nguyễn Trãi, Quận 1, TP. Hồ Chí Minh</p>
+            </div>
+            <div class="footer-col">
+                <h3>⏰ THỜI GIAN LÀM VIỆC</h3>
+                <p><strong>Tư vấn trực tiếp:</strong> 08:00 - 21:00 (Hàng ngày)</p>
+                <p><strong>Hỗ trợ trực tuyến:</strong> 24/7 qua Zalo / Hotline</p>
+            </div>
+            <div class="footer-col">
+                <h3>🔗 CHÍNH SÁCH DỊCH VỤ</h3>
+                <ul class="footer-links">
+                    <li><a href="#">▶ Hướng dẫn quy trình duyệt thiết kế</a></li>
+                    <li><a href="#">▶ Chính sách in bù lỗi phát sinh 100%</a></li>
+                    <li><a href="#">▶ Giao hàng tận nơi toàn quốc</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>© 2026 Thiệp Cưới Ngọc Thương - Tinh Tế Trong Từng Đường Nét</p>
+        </div>
+    </footer>
+
+    <!-- FOOTER DI ĐỘNG -->
+    <div class="footer-mobile">
+        <h4>THIỆP CƯỚI NGỌC THƯƠNG</h4>
+        <p>📍 123 Nguyễn Trãi, Quận 1, TP.HCM</p>
+        <div class="footer-mobile-actions">
+            <a href="tel:0773060379">📞 Gọi Ngay</a>
+            <a href="https://zalo.me/0773060379" target="_blank">💬 Nhắn Zalo</a>
+        </div>
+        <div class="footer-mobile-copy">
+            © 2026 Thiệp Cưới Ngọc Thương
+        </div>
+    </div>
+    
+    <!-- SCRIPT TỰ ĐỘNG PHÂN TRANG VÀ LƯU DỮ LIỆU SANG TRANG CHI TIẾT -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const itemsPerPage = 20;
+            const productItems = document.querySelectorAll("#product-list .product_noibat_item");
+            const paginationList = document.getElementById("pagination-list");
+            
+            const totalPages = Math.ceil(productItems.length / itemsPerPage);
+            let currentPage = 1;
+
+            function showPage(page) {
+                currentPage = page;
+                const start = (page - 1) * itemsPerPage;
+                const end = start + itemsPerPage;
+
+                productItems.forEach((item, index) => {
+                    if (index >= start && index < end) {
+                        item.style.display = "block";
+                    } else {
+                        item.style.display = "none";
+                    }
+                });
+
+                renderPagination();
+            }
+
+            function renderPagination() {
+                let paginationHTML = "";
+                if (totalPages > 1) {
+                    for (let i = 1; i <= totalPages; i++) {
+                        let activeClass = (i === currentPage) ? "active" : "";
+                        paginationHTML += `<li><a href="#" class="${activeClass}" data-page="${i}">${i}</a></li>`;
+                    }
+                }
+                paginationList.innerHTML = paginationHTML;
+
+                document.querySelectorAll("#pagination-list a").forEach(link => {
+                    link.addEventListener("click", function (e) {
+                        e.preventDefault();
+                        let pageNum = parseInt(this.getAttribute("data-page"));
+                        showPage(pageNum);
+                        
+                        document.querySelector('.cum-tieu-de-danh-muc').scrollIntoView({ behavior: 'smooth' });
+                    });
+                });
+            }
+
+            if (productItems.length > 0) {
+                showPage(1);
+            }
+
+            productItems.forEach(function(item) {
+                var links = item.querySelectorAll('a');
+                links.forEach(function(link) {
+                    link.onclick = function() {
+                        var name = item.querySelector('.text-split').innerText;
+                        var price = item.querySelector('.box_price_box strong').innerText;
+                        var imgUrl = item.querySelector('img').src;
+                        var description = item.getAttribute('data-description') || 'Chưa cập nhật';
+                        
+                        localStorage.setItem('clickProdName', name);
+                        localStorage.setItem('clickProdPrice', price);
+                        localStorage.setItem('clickProdImg', imgUrl);
+                        localStorage.setItem('clickProdDesc', description);
+                    };
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Box Tin Tức</title>
+
+<style>
+:root { 
+    --xanh: #17720b; 
+    --blue: #0f6204; 
+    --den: #ffffff; 
+    --xam: #ffffff; 
+    --bg: #046c04; 
+} 
+
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Arial,sans-serif; } 
+body { background: #ffffff; padding: 15px; } 
+
+.sh-khoi-bao-ve-he-thong {
+    max-width: 1200px;
+    margin: 0 auto;
+    
+}
+
+.t-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: flex-end; 
+    border-bottom: 2px solid var(--xanh); 
+    margin-bottom: 15px; 
+    padding-bottom: 5px; 
+} 
+.t-title { 
+    font-size: 18px; 
+    font-weight: bold; 
+    text-transform: uppercase; 
+    color: var(--xanh); 
+} 
+.t-tabs { display: flex; } 
+.t-btn { 
+    font-size: 16px; 
+    font-weight: bold; 
+    color: #449d39; 
+    cursor: pointer; 
+    padding: 0 12px 5px 12px; 
+    margin-left: 5px; 
+    border-bottom: 1px solid transparent; 
+    transition: all 0.2s; 
+} 
+.t-btn.active, 
+.t-btn:hover { 
+    color: var(--xanh); 
+   
+} 
+.box-flex { 
+    display: flex; 
+    width: 100%;
+    height: 440px; 
+    border: 1px solid #ddd; 
+    border-radius: 8px; 
+    overflow: hidden; 
+    background: #fafafa; /*MÀU NỀN BOX LỚN*/ 
+    position: relative; 
+} 
+.col-left { 
+    width: 65%; 
+    padding: 30px; 
+    border-right: 2px solid #eee; 
+   /* ĐÃ XÓA dòng cursor: pointer ở đây */
+} 
+
+.img-wrap { 
+    width: 100%; 
+    height: 280px; 
+    overflow: hidden; 
+    border-radius: 6px; 
+    background: #ffffff; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer; /* THÊM DÒNG NÀY: Để rê chuột vào ảnh đại diện lớn hiện bàn tay click */
+} 
+
+.img-big { 
+    width: 100%;
+    height: 100%;
+    object-fit: fill; 
+    display: block; 
+    transition: opacity 0.2s; 
+} 
+.p-title { 
+    font-size: 18px; 
+    font-weight: bold; 
+    margin: 15px 0 8px 0; 
+    color: #0e7007; 
+    line-height: 1.4; 
+    text-align: left !important; 
+    cursor: pointer; /* THÊM DÒNG NÀY: Để rê chuột vào tiêu đề lớn hiện bàn tay click */
+    display: block; /* THÊM DÒNG NÀY: Giúp vùng click vừa vặn với chữ */
+    width: 100% !important;
+              /* === THÊM CÁC DÒNG DƯỚI ĐÂY ĐỂ GIỚI HẠN DÒNG TIÊU ĐỀ TRÊN === */
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Hiện tối đa 2 dòng, phần thừa biến thành dấu ... */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word; 
+} 
+.p-title:hover {
+    text-decoration: underline; /* THÊM KHỐI NÀY: Gạch chân tiêu đề khi rê chuột vào */
+    color: #449d39 !important; /* THÊM KHỐI NÀY: Đổi màu tiêu đề khi rê chuột vào */
+}
+
+ 
+.p-desc { 
+    font-size: 13px; 
+    color: #000000; 
+    line-height: 1.5; 
+    text-align: left !important;
+    display: block !important; 
+} 
+
+.col-right { 
+    width: 35%; 
+    display: flex; 
+    flex-direction: column; 
+    background: #fFfFfa; 
+    position: relative; 
+    z-index: 1;
+    padding-top: 10px;
+     height: 420px;       /* Khống chế chiều cao bằng với khối ảnh lớn bên trái */
+    overflow-y: auto; 
+} 
+
+.row-news { 
+   display: flex; 
+   align-items: center; 
+   padding: 12px 15px; 
+   border-bottom: 1px solid #eee; 
+   cursor: pointer; 
+   border-left: 4px solid transparent; 
+   transition: all 0.2s;
+} 
+ 
+.row-news:last-child { border-bottom: none; } 
+
+.row-news:hover {
+    background: #f1fcf5;
+    border-left-color: #f1fcf5;
+}
+.row-news:hover .r-title {
+    color: #4b9956 !important; 
+}
+.row-news:hover .r-date {
+    color: #000000 !important;
+}
+
+.row-news.active { 
+    background: #e4f1e9;
+    border-left-color: #115e07;
+       
+}
+.row-news.active .r-title {
+    color: #115e07 !important; 
+    
+}
+.thumb-wrap { 
+    width: 80px; 
+    min-width: 80px; 
+    height: 55px; 
+    margin-right: 12px; 
+    overflow: hidden; 
+    border-radius: 4px; 
+    border: 1px solid #000000;
+    background: #ffffff; 
+}
+ 
+.img-thumb { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+} 
+
+.txt-wrap { overflow: hidden; } 
+
+.r-title { 
+    font-size: 14px; 
+    font-weight: 600; 
+    color: #000000 !important; 
+    line-height: 1.4; 
+    text-align: left; 
+              /* === THÊM CÁC DÒNG DƯỚI ĐÂY ĐỂ GIỚI HẠN DÒNG TIÊU ĐỀ TRÊN === */
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Hiện tối đa 2 dòng, phần thừa biến thành dấu ... */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+} 
+
+.r-date { 
+    font-size: 11px; 
+    color: #000000 !important; 
+    margin-top: 4px; 
+    text-align: left; 
+} 
+
+
+/* =========================================================
+   TỰ ĐỘNG CHUYỂN ĐỔI GIAO DIỆN ĐIỆN THOẠI CHO HỘP LỜI CHÚA
+========================================================= */
+@media (max-width: 768px) {
+    /* 1. Xóa khoảng trống đệm lề mặc định của body */
+    body {
+        padding: 5px !important;
+    }
+
+    /* 2. Ép cấu trúc Flexbox chuyển từ hàng ngang thành hàng dọc */
+      .box-flex {
+        display: flex !important;
+        flex-direction: column !important;
+        
+        height: auto !important;         /* Hủy chiều cao cố định để không sinh cuộn dọc */
+        overflow: visible !important;    /* ➔ THÊM DÒNG NÀY: Cho phép nội dung hiển thị tự do, triệt tiêu thanh cuộn ngoài */
+    }
+
+    /* 3. Ép khung xem trước bên trái mở rộng 100% màn hình dọc */
+     .col-left {
+        width: 100% !important;
+        height: auto !important;         /* Cho phép tự co giãn theo nội dung chữ */
+        padding: 15px !important;
+        border-right: none !important;
+        border-bottom: 1px solid #ddd;
+    }
+
+    /* 4. Hạ bớt chiều cao vùng ảnh lớn cho cân đối với màn hình dọc */
+    .img-wrap {
+        height: 220px !important;
+    }
+
+    /* 5. Ép danh sách tin bài bên phải mở rộng 100% và khống chế vùng cuộn dọc */
+      .col-right {
+        width: 100% !important;
+        
+        /* Cài đặt không gian vuốt lướt tin tức vừa vặn ngón tay trên di động */
+        height: 250px !important;        /* Chiều cao của riêng vùng danh sách bài viết */
+        overflow-y: auto !important;     /* ➔ GIỮ NGUYÊN dòng này để làm thanh cuộn duy nhất */
+        
+        background: #ffffff !important;
+    }
+
+    /* Tối ưu các nút tab tiêu đề trên điện thoại cho khỏi tràn hàng */
+    .t-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+    }
+    .t-tabs {
+        width: 100% !important;
+        overflow-x: auto !important; /* Tự động mọc cuộn ngang nếu tab quá dài */
+        padding-bottom: 5px;
+    }
+    .t-btn {
+        font-size: 14px !important;
+        padding: 0 8px 5px 8px !important;
+        white-space: nowrap !important; /* Chống rớt chữ xuống dòng */
+    }
+}
+
+</style>
+</head>
+<body>
+
+   <!-- ================================================================= -->
+    <!-- BẮT ĐẦU DÁN TỪ ĐOẠN KHỐI BOX VIDEO TIỆN ÍCH NÀY TRỞ XUỐNG HẾT FILE -->
+    <!-- ================================================================= -->
+    <div class="sh-khoi-bao-ve-he-thong">
+        <div class="t-header">
+            <h2 class="t-title">Tin Mới</h2>
+            <div class="t-tabs">
+                <div class="t-btn active" id="tab1">Tin giáo xứ</div>
+                <div class="t-btn" id="tab2">Tin giáo phận</div>
+
+            </div>
+        </div>  
+               <div class="box-flex">
+            <!-- Khối lớn bên trái -->
+            <div class="col-left">
+                <div class="img-wrap" onclick="goToLink()"><img src="" class="img-big" id="p-img" alt="Hình lớn"></div>
+                <h3 class="p-title" id="p-title" onclick="goToLink()">Đang tải...</h3>
+                <p class="p-desc" id="p-desc"></p>
+            </div>
+            
+            <!-- ĐẢM BẢO THẺ ID="LIST-ZONE" NẰM ĐÚNG Ở ĐÂY -->
+            <div class="col-right" id="list-zone"></div>
+        </div>
+    </div>
+
+
+<script>
+// MẢNG DỮ LIỆU BÀI VIẾT (ĐOẠN XỬ LÝ CLICK CHUẨN XỊN)
+var DATA_1 = [
+    { title: "NGÀY HỌP MẶT GIÁO LÝ VIÊN - HUYNH TRƯỞNG: RỰC CHÁY NGỌN LỬA “HIỆP NHẤT - YÊU THƯƠNG”", 
+    img: "https://giaoxuhongan.com/files/assets/hinh_tin_tuc/834861245_122113907217481966_4459846546936736785_n.jpg", 
+    url: "tingiaoxu-hopmat-giaolyvien-hongan.html", 
+    date: "06/10/2026" },
+
+    { title: "Rộn Ràng Đêm Hội Chợ Trung Thu Tại Giáo Xứ Hồng Ân", 
+    img: "https://giaoxuhongan.com/files/tin/385/jpg/ron-rang-dem-hoi-cho-trung-thu-tai-giao-xu-hong-an.jpg", 
+    url: "tingiaoxu-giao-xu-hong-an-hoi-cho-trung-thu-2026.html", 
+    date: "10/09/2026" },
+
+    { title: "Giáo Họ Duy Ân: Hội Chợ Trung Thu Đầy Niềm Vui Cho Các Em Thiếu Nhi", 
+    img: "https://giaoxuhongan.com/files/tin/384/jpg/giao-ho-duy-an-hoi-cho-trung-thu-day-niem-vui-cho-cac-em-thieu-nhi.jpg", 
+    url: "tingiaoxu-giao-ho-duy-an-hoi-cho-trung-thu-2026.html", 
+    date: "30/08/2026" },
+
+    { title: "ĐÊM TRUNG THU – ÁNH TRĂNG YÊU THƯƠNG DÀNH CHO CÁC EM THIẾU NHI GIÁO HỌ DUY ÂN", 
+    img: "https://giaoxuhongan.com/files/tin/367/png/dem-trung-thu-anh-trang-yeu-thuong-danh-cho-cac-em-thieu-nhi-giao-ho-duy-an.png", 
+    url: "tingiaoxu-giao-ho-duy-an-trung-thu-2026.html", 
+    date: "30/08/2026" },
+
+    { title: "TRUNG THU 2026 – NIỀM VUI TUỔI THƠ TRONG MÁI NHÀ GIÁO XỨ HỒNG ÂN", 
+    img: "https://giaoxuhongan.com/files/tin/366/jpg/trung-thu-2026-niem-vui-tuoi-tho-trong-mai-nha-giao-xu-hong-an.jpg", 
+    url: "tingiaoxu-giao-xu-hong-an-trung-thu-2026.html", 
+    date: "10/09/2026" },
+
+    { title: "Giáo Họ Duy Ân Hân Hoan Khai Giảng Năm Học Giáo Lý Niên Khóa 2026 – 2027", 
+    img: "https://giaoxuhongan.com/files/tin/326/jpg/giao-ho-duy-an-han-hoan-khai-giang-nam-hoc-giao-ly-nien-khoa-2026-2027.jpg", 
+    url: "tingiaoxu-giao-ho-duy-an-khaigiang-namhoc-giaoly-2026–2027.html", 
+    date: "30/08/2026" },
+
+    { title: "Giáo Xứ Hồng Ân: Khai Giảng Năm Học Giáo Lý Mới Niên Khóa 2026 – 2027", 
+    img: "https://giaoxuhongan.com/files/tin/325/jpg/giao-xu-hong-an-khai-giang-nam-hoc-giao-ly-moi-nien-khoa-2026-2027.jpg", 
+    url: "tingiaoxu-hong-an-khaigiang-namhoc-giaoly-2026–2027.html", 
+    date: "30/08/2026" }
+  
+]; 
+var DATA_2 = [
+    { title: "Trung Tâm Hành Hương Đức Mẹ Núi Cúi: Thánh Lễ Đức Mẹ Sầu Bi – Điểm Tựa Niềm Cậy Trông Cho Các Bà Mẹ Đau Khổ", 
+    img: "https://giaoxuhongan.com/files/tin/353/jpg/trung-tam-hanh-huong-duc-me-nui-cui-thanh-le-duc-me-sau-bi-diem-tua-niem-cay-trong-cho-cac-ba-me-dau-kho.jpg", 
+    url: "tingiaophan-thanh-le-duc-me-sau-bi-nui-cui.html", 
+    date: "23/04/2025" },
+
+    { title: "Thánh Lễ Truyền Chức Linh Mục Giáo Phận Xuân Lộc Năm 2026", 
+    img: "https://giaoxuhongan.com/files/tin/317/jpg/thanh-le-truyen-chuc-linh-muc-giao-phan-xuan-loc-nam-2026.jpg", 
+    url: "tingiaophan-thanh-le-truyen-chuc-linh-muc-2026.html", 
+    date: "07/04/2023" },
+
+    { title: "Đại Chủng viện Thánh Giuse Xuân Lộc Khai Giảng năm học mới 2026 - 2027", 
+    img: "https://giaoxuhongan.com/files/tin/296/jpg/dai-chung-vien-thanh-giuse-xuan-loc-khai-giang-nam-hoc-moi-2026-2027.jpg", 
+    url: "tingiaophan-dai-chung-vien-xuan-loc-khai-giang-nam-hoc-2026-2027.html", 
+    date: "10/09/2026" },
+
+    { title: "Thánh lễ Tạ ơn Tân linh mục Phêrô Nguyễn Văn Thông và Phêrô Trần Minh Tín - tại Giáo xứ Gia Vinh", 
+    img: "https://giaoxuhongan.com/files/tin/253/jpg/thanh-le-ta-on-tan-linh-muc-phero-nguyen-van-thong-va-phero-tran-minh-tin-tai-giao-xu-gia-vinh.jpg", 
+    url: "tingiaophan-thanh-le-ta-on-tan-linh-muc-gx-gia-vinh.html", 
+    date: "30/08/2026" },
+
+    { title: "Thánh lễ Tạ ơn Tân linh mục Inhaxio Nguyễn Thanh Xuân", 
+    img: "https://giaoxuhongan.com/files/tin/235/jpg/thanh-le-ta-on-tan-linh-muc-inhaxio-nguyen-thanh-xuan.jpg", 
+    url: "tingiaophan-thanh-le-ta-on-tan-linh-muc-cha-xuan-2026.html", 
+    date: "03/08/2026" },
+
+    { title: "BẾ MẠC NĂM THÁNH HUYNH ĐOÀN THÁNH THỂ MIỀN NAM 2025", 
+    img: "https://giaoxuhongan.com/files/tin/161/jpg/be-mac-nam-thanh-huynh-doan-thanh-the-mien-nam-2025.jpg", 
+    url: "tingiaophan-be-mac-huynh-doan-thanh-the-2025.html", 
+    date: "10/09/2026" },
+
+]; 
+
+
+var currentUrl = ""; 
+
+// 1. HÀM TẠO DANH SÁCH BÀI VIẾT (XÓA BỎ CHỮ ACTIVE TỰ ĐỘNG TRONG VÒNG LẶP)
+function render(data) {
+    var zone = document.getElementById("list-zone"); 
+    var html = ""; 
+    window.activeData = data; 
+    
+    for (var i = 0; i < data.length; i++) {
+        // Mặc định tất cả dòng tin ban đầu đều là chữ thường, không tự ý chèn chữ active nữa
+        var imgHtml = (data[i].img && !data[i].img.includes("ibb.co")) ? '<img src="' + data[i].img + '" class="img-thumb">' : '';
+        html += '<div class="row-news" onclick="changeNews(' + i + ', this)">' +
+                '<div class="thumb-wrap">' + imgHtml + '</div>' +
+                '<div class="txt-wrap"><div class="r-title">' + data[i].title + '</div><div class="r-date">📅 ' + data[i].date + '</div></div>' +
+                '</div>';
+    }
+    zone.innerHTML = html;
+    
+    // Nạp nội dung bài đầu tiên lên ô bên trái một cách an toàn khi khởi động
+    if (data.length > 0) { 
+        var rows = zone.getElementsByClassName("row-news");
+        if (rows.length > 0) {
+            rows[0].classList.add("active"); // Chỉ tô màu xanh cho dòng 1 chứ không kích hoạt click
+            napDuLieuXemTruoc(0); // Nạp chữ và ảnh sang trái
+        }
+    }
+}
+
+// 2. HÀM XỬ LÝ KHI NGƯỜI DÙNG TỰ TAY CLICK CHUỘT LÊN DÒNG TIN
+function changeNews(idx, element) {
+    // Nếu dòng này ĐÃ ĐANG ĐƯỢC CHỌN (có chữ active) -> Người dùng click lần 2 -> CHUYỂN TRANG
+    if (element && element.classList.contains("active")) {
+        goToLink();
+        return;
+    }
+
+    // Nếu click dòng khác -> Xóa active cũ, tô màu xanh active cho dòng mới
+    var rows = document.getElementsByClassName("row-news");
+    for (var j = 0; j < rows.length; j++) { rows[j].classList.remove("active"); }
+    if (element) element.classList.add("active");
+    
+    // Nạp nội dung sang ô xem trước bên trái
+    napDuLieuXemTruoc(idx);
+}
+
+// HÀM PHỤ HỖ TRỢ NẠP CHỮ VÀ ẢNH SANG Ô TRÁI
+function napDuLieuXemTruoc(idx) {
+    var currentData = window.activeData[idx];
+    document.getElementById("p-title").innerHTML = currentData.title;
+    document.getElementById("p-desc").innerHTML = "📅 " + currentData.date;
+    
+    var pImg = document.getElementById("p-img");
+    if (currentData.img && !currentData.img.includes("ibb.co")) { 
+        pImg.src = currentData.img; 
+        pImg.style.display = "block"; 
+    } else { 
+        pImg.src = "";
+        pImg.style.display = "none"; 
+    }
+    currentUrl = currentData.url;
+}
+
+function goToLink() { if (currentUrl && currentUrl !== "#") { window.parent.location.href = currentUrl; } }
+
+// KHỞI ĐỘNG MẶC ĐỊNH
+render(DATA_1);
+
+document.getElementById("tab1").onclick = function() { selectTab("tab1", DATA_1); };
+document.getElementById("tab2").onclick = function() { selectTab("tab2", DATA_2); };
+
+function selectTab(tabId, data) {
+    var tabs = document.getElementsByClassName("t-btn");
+    for (var i = 0; i < tabs.length; i++) { tabs[i].classList.remove("active"); }
+    document.getElementById(tabId).classList.add("active"); 
+    render(data); // Tải danh sách mới của tab đó
+}
+
+</script>
+</body>
+</html>

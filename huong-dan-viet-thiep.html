@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hướng Dẫn Cách Viết Thiệp Cưới Chuẩn & Tinh Tế Nhất - Thiệp Cưới Ngọc Thương</title>
+
+    <style>
+        /* --- 1. CÀI ĐẶT CHUNG --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f6f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* --- 2. PHẦN BANNER --- */
+        .banner {
+            position: relative;
+            width: 100%;
+        }
+
+        .banner img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .banner-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            color: white;
+            text-align: center;
+        }
+
+        .banner-search {
+            position: absolute;
+            top: 50%;
+            right: 50px;
+            transform: translateY(-50%);
+            z-index: 10;
+        }
+
+        .banner-search form {
+            display: flex;
+            align-items: center;
+            width: 260px;
+            height: 40px;
+            background: #fff;
+            border: 1px solid #ead4cc;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .banner-search input {
+            flex: 1;
+            min-width: 0;
+            height: 100%;
+            padding: 0 14px;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .banner-search button {
+            height: 100%;
+            padding: 0 13px;
+            border: none;
+            background: #fff;
+            color: #333;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .banner-search {
+                top: 8px;
+                right: 8px;
+            }
+            .banner-search form {
+                width: 190px;
+                height: 34px;
+            }
+        }
+
+        /* --- 3. THANH MENU NGANG --- */
+        .navbar {
+            background-color: #526456;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .main-menu {
+            list-style: none;
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .menu-item {
+            position: relative;
+        }
+
+        .menu-item a {
+            display: block;
+            color: #e5e7eb;
+            text-decoration: none;
+            padding: 18px 22px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .menu-item:hover > a {
+            background-color: #687b6c;
+            color: #ffffff;
+        }
+
+        .dropdown-menu {
+            list-style: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #526456;
+            min-width: 220px;
+            display: none;
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.15);
+        }
+
+        .dropdown-menu a {
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            border-bottom: 1px solid #1a3038;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #687b6c;
+            padding-left: 25px;
+        }
+
+        .menu-item:hover .dropdown-menu {
+            display: block;
+        }
+
+        /* --- 4. HIỂN THỊ TRÊN MOBILE --- */
+        .navbar-mobile,
+        .banner-mobile,
+        .footer-mobile {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .navbar,
+            .banner,
+            footer {
+                display: none !important;
+            }
+
+            .navbar-mobile {
+                display: flex !important;
+                justify-content: space-around;
+                background: #526456;
+                padding: 12px 5px;
+                position: sticky;
+                top: 0;
+                z-index: 999;
+            }
+            .navbar-mobile a {
+                color: #ffffff;
+                text-decoration: none;
+                font-weight: bold;
+                font-size: 14.5px;
+            }
+
+            .banner-mobile {
+                display: block !important;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            .banner-mobile img {
+                width: 100%;
+                height: auto;
+                display: block;
+            }
+        }
+
+        /* --- 5. NỘI DUNG BÀI VIẾT CHÍNH --- */
+        .bai-viet-container {
+            max-width: 900px;
+            margin: 30px auto;
+            background: #ffffff;
+            padding: 35px 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .bai-viet-tieu-de {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            line-height: 1.3;
+            text-align: center;
+        }
+
+        .bai-viet-meta {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #777;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+        .bai-viet-tom-tat {
+            font-size: 1.05rem;
+            font-weight: bold;
+            color: #4a5568;
+            background-color: #f8fafc;
+            padding: 15px 20px;
+            border-left: 4px solid #526456;
+            margin-bottom: 25px;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .bai-viet-noi-dung h2 {
+            color: #526456;
+            font-size: 1.4rem;
+            margin: 25px 0 12px 0;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 5px;
+        }
+
+        .bai-viet-noi-dung h3 {
+            color: #2d3748;
+            font-size: 1.15rem;
+            margin: 18px 0 8px 0;
+        }
+
+        .bai-viet-noi-dung p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        .bai-viet-noi-dung ul, .bai-viet-noi-dung ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .bai-viet-noi-dung li {
+            margin-bottom: 8px;
+        }
+
+        /* MÔ TẢ VÀ KHUNG HÌNH ẢNH */
+        .khung-anh-bai-viet {
+            margin: 25px 0;
+            text-align: center;
+        }
+
+        .khung-anh-bai-viet img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .mo-ta-anh {
+            font-size: 0.88rem;
+            color: #666;
+            font-style: italic;
+            margin-top: 8px;
+            display: block;
+        }
+
+        .meo-ghi-chu {
+            background-color: #fff9db;
+            border-left: 4px solid #f59e0b;
+            padding: 12px 18px;
+            margin: 18px 0;
+            border-radius: 0 6px 6px 0;
+        }
+
+        @media (max-width: 768px) {
+            .bai-viet-container {
+                padding: 20px 15px;
+                margin: 10px;
+            }
+            .bai-viet-tieu-de {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* --- 6. UTILITY BAR (LƯỢT XEM & CHIA SẺ) --- */
+        .vung-tien-ich-bai-viet {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0 15px 0;
+            padding-top: 15px;
+            border-top: 1px dashed #c8d6c9;
+            font-family: Arial, sans-serif;
+        }
+
+        .o-luot-xem {
+            font-size: 14px;
+            color: #555555;
+            font-weight: bold;
+        }
+        #so-luot-xem {
+            color: #115e07;
+        }
+
+        .nhom-nut-chia-se {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #333333;
+        }
+
+        .nut-cs {
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 12.5px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .nut-cs:hover {
+            opacity: 0.9;
+        }
+
+        .nut-fb { background-color: #1877f2; }
+        .nut-zalo { background-color: #0068ff; }
+
+        /* --- 7. FOOTER --- */
+        footer {
+            background-color: #e0e1e0;
+            color: #000;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            padding: 40px 0 20px 0;
+            margin-top: 60px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .footer-col {
+            flex: 1;
+            min-width: 280px;
+            margin-bottom: 30px;
+            padding-right: 20px;
+        }
+
+        .footer-col h3 {
+            color: #000;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .footer-links { list-style: none; padding: 0; margin: 0; }
+        .footer-links li { margin-bottom: 8px; }
+        .footer-links a { color: #000; text-decoration: none; }
+        .footer-links a:hover { color: #03692a; }
+
+        .footer-copyright {
+            text-align: center;
+            border-top: 1px solid #bab6b6;
+            margin-top: 20px;
+            padding-top: 20px;
+            font-size: 0.8rem;
+            color: #000;
+            width: 100%;
+        }
+
+        .footer-mobile {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .footer-mobile {
+                display: block !important;
+                background: #526456;
+                color: #ffffff;
+                text-align: center;
+                padding: 25px 15px;
+                font-size: 13.5px;
+                line-height: 1.6;
+                margin-top: 30px;
+            }
+            .footer-mobile h4 {
+                color: #ffffff;
+                font-size: 15px;
+                margin-bottom: 10px;
+                text-transform: uppercase;
+            }
+            .footer-mobile p {
+                margin-bottom: 8px;
+            }
+            .footer-mobile-actions {
+                display: flex;
+                justify-content: center;
+                gap: 15px;
+                margin: 15px 0;
+            }
+            .footer-mobile-actions a {
+                background: #ffffff;
+                color: #526456;
+                padding: 8px 16px;
+                border-radius: 20px;
+                text-decoration: none;
+                font-weight: bold;
+                font-size: 13px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            }
+            .footer-mobile-copy {
+                border-top: 1px solid rgba(255,255,255,0.1);
+                margin-top: 15px;
+                padding-top: 12px;
+                font-size: 12px;
+                color: #bbb;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. BANNER CỬA HÀNG -->
+    <div class="banner-mobile">
+        <a href="index.html"><img src="anh/banner-mobile.png" alt="Banner Điện Thoại"></a>
+    </div>
+
+    <div class="banner">
+        <img src="anh/banner.png" alt="Banner Thiệp Cưới">
+        <div class="banner-content">
+            <div class="banner-search">
+                <form action="index.html" method="get">
+                    <input type="text" id="search-input" placeholder="Tìm thiệp cưới...">
+                    <button type="button">🔍</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. THANH MENU NGANG -->
+    <nav class="navbar">
+        <ul class="main-menu">
+            <li class="menu-item"><a href="index.html">Trang Chủ</a></li>
+            <li class="menu-item">
+                <a href="mauthiepcuoi.html">Mẫu Thiệp Cưới ▾</a>
+                <ul class="dropdown-menu">
+                    <li><a href="thiepcuoi-hiendai.html">Thiệp Cưới Hiện Đại</a></li>
+                    <li><a href="thiepcuoi-truyenthong.html">Thiệp Cưới Truyền Thống</a></li>
+                    <li><a href="thiepcuoi-docquyen.html">Thiệp Cưới Độc Quyền KTS</a></li>
+                    <li><a href="thiepcuoi-dq-25.html">Thiệp Cưới DQ_25</a></li>
+                </ul>
+            </li>
+            <li class="menu-item">
+                <a href="thiep-moi.html">Thiệp Mời ▾</a>
+                <ul class="dropdown-menu">
+                    <li><a href="thiep-tangia.html">Thiệp Tân Gia</a></li>
+                    <li><a href="thiep-sinhnhat.html">Thiệp Sinh Nhật</a></li>
+                    <li><a href="thiep-taon.html">Thiệp Công Giáo</a></li>
+                </ul>
+            </li>
+            <li class="menu-item"><a href="thiepcuoi-online.html">Thiệp Cưới Online</a></li>
+            <li class="menu-item">
+                <a href="huong-dan.html">Hướng Dẫn ▾</a>
+                <ul class="dropdown-menu">
+                    <li><a href="huong-dan-dat-thiep.html">Hướng dẫn đặt thiệp</a></li>
+                    <li><a href="huong-dan-viet-thiep.html">Hướng dẫn viết thiệp cưới</a></li>
+                </ul>
+            </li>
+            <li class="menu-item"><a href="lienhe.html">Liên Hệ</a></li>
+        </ul>
+    </nav>
+
+    <!-- BẢN MENU THU GỌN DÀNH CHO ĐIỆN THOẠI -->
+    <nav class="navbar-mobile">
+        <a href="thiepcuoi-hiendai.html">Hiện Đại</a>
+        <a href="thiepcuoi-truyenthong.html">Truyền Thống</a>
+        <a href="thiepcuoi-docquyen.html">Độc Quyền</a>
+        <a href="thiepcuoi-online.html">Thiệp Online</a>
+    </nav>
+
+    <!-- 3. NỘI DUNG CHÍNH BÀI VIẾT HƯỚNG DẪN -->
+    <main class="bai-viet-container">
+        <h1 class="bai-viet-tieu-de">Hướng Dẫn Viết Thiệp Cưới Chuẩn Lễ Nghi & Tinh Tế Cho Đô Lứa</h1>
+        <div class="bai-viet-meta">
+            <span>📅 Cập nhật: 2026</span> | <span>✍️ Tác giả: Thiệp Cưới Ngọc Thương</span>
+        </div>
+
+        <div class="bai-viet-tom-tat">
+            Viết thiệp cưới sao cho vừa thể hiện được sự trân trọng với khách mời, vừa đúng lễ nghi truyền thống là băn khoăn của rất nhiều cặp đôi. Bài viết này sẽ hướng dẫn bạn chi tiết từ A-Z cách ghi thiệp cưới chuẩn xác nhất!
+        </div>
+
+        <div class="bai-viet-noi-dung">
+            <h2>1. Các Thông Tin Cơ Bản Cần Có Trên Thiệp Cưới</h2>
+            <p>Trước khi bắt tay vào viết thiệp, bạn cần đảm bảo các thông tin in trên ruột thiệp đã hoàn toàn chính xác:</p>
+            <ul>
+                <li><strong>Thông tin Nhà Trai & Nhà Gái:</strong> Họ tên đầy đủ của Ông/Bà (hoặc Cha/Mẹ), địa chỉ gia đình.</li>
+                <li><strong>Tên Chú Rể & Cô Dâu:</strong> Thứ tự trong gia đình (Tưởng nam, Thứ nam, Út nam / Ái nữ, Thứ nữ,...).</li>
+                <li><strong>Thông tin Lễ Cưới:</strong> Thời gian, ngày giờ cử hành Lễ Vu Quy/Lễ Tân Hôn & Lễ Thành Hôn.</li>
+                <li><strong>Thời gian & Địa điểm Đãi Tiệc:</strong> Ghi rõ sảnh, địa chỉ nhà hàng hoặc tư gia.</li>
+            </ul>
+
+            <figure class="khung-anh-bai-viet">
+                <img src="anh/huong-dan-viet-thiep-1.jpg" alt="Mẫu ruột thiệp cưới in thông tin chuẩn lễ nghi">
+                <figcaption class="mo-ta-anh">Hình 1: Bố cục chuẩn thông tin nhà trai, nhà gái và thời gian đãi tiệc trên ruột thiệp cưới.</figcaption>
+            </figure>
+
+            <h2>2. Cách Xưng Hợp & Ghi Phong Bì Thiệp Cưới Chuẩn Nhất</h2>
+            <p>Việc xưng hô trên bao thư (phong bì thiệp) đòi hỏi sự cẩn trọng để thể hiện đúng tôn ti trật tự và tình cảm dành cho người nhận:</p>
+
+            <h3>a. Viết Thiệp Mời Mối Quan Hệ Họ Hàng & Người Lớn Tuổi</h3>
+            <p>Với ông bà, cô chú, bác, anh chị em trong họ, cách ghi tiêu chuẩn là:</p>
+            <ul>
+                <li><strong>Mời ngoài bao thư:</strong> Kính mời: [Vai vế của khách mời] (Ví dụ: Kính mời Bác Hai, Kính mời Cô Chú Ba,...).</li>
+                <li><strong>Ghi trong ruột thiệp:</strong> Kính mời: [Vai vế] + [Tên người dự] (Ví dụ: Kính mời Vợ chồng Cô Chú Ba và các em).</li>
+            </ul>
+
+            <div class="meo-ghi-chu">
+                💡 <strong>Lưu ý:</strong> Nếu khách mời đã có gia đình, nên ghi là "Kính mời Gia đình Bác A" hoặc "Kính mời Vợ chồng Anh B" để thể hiện sự lịch sự.
+            </div>
+
+            <h3>b. Viết Thiệp Mời Bạn Bè, Đồng Nghiệp</h3>
+            <p>Đối với bạn bè đồng lứa hoặc đồng nghiệp tại công ty, bạn có thể chọn xưng hô thân mật nhưng vẫn đảm bảo sự lịch sự:</p>
+            <ul>
+                <li><strong>Ngoài bao thư:</strong> Thân mời: [Tên bạn] hoặc Kính mời: Bạn [Tên bạn].</li>
+                <li><strong>Nếu muốn bạn đi cùng người yêu/bạn đời:</strong> Thân mời: Bạn A + Người thương (hoặc Bạn A và Người ấy).</li>
+            </ul>
+
+            <figure class="khung-anh-bai-viet">
+                <img src="anh/huong-dan-viet-thiep-2.jpg" alt="Cách viết phong bì thiệp cưới gửi bạn bè và họ hàng">
+                <figcaption class="mo-ta-anh">Hình 2: Cách ghi tên khách mời bên ngoài bao thư thiệp cưới đẹp mắt và chỉn chu.</figcaption>
+            </figure>
+
+            <h2>3. Hướng Dẫn Đặc Thù Cho Thiệp Cưới Công Giáo</h2>
+            <p>Nếu hai bạn tổ chức lễ cưới theo nghi thức Công Giáo tại Thánh Đường, thiệp cưới cần lưu ý thêm các điểm sau:</p>
+            <ul>
+                <li>Ghi rõ <strong>Tên Thánh</strong> của Cha Mẹ, Chú Rể và Cô Dâu (Ví dụ: Giuse Nguyễn Văn A, Maria Trần Thị B).</li>
+                <li>Ghi chính xác tên <strong>Giáo Xứ/Thánh Đường</strong> nơi diễn ra Lễ Hôn Phối cùng ngày giờ cử hành Thánh Lễ.</li>
+            </ul>
+
+            <figure class="khung-anh-bai-viet">
+                <img src="anh/huong-dan-viet-thiep-3.jpg" alt="Mẫu thiệp cưới Công Giáo ghi đầy đủ Tên Thánh và Nhà Thờ">
+                <figcaption class="mo-ta-anh">Hình 3: Thiệp cưới Công Giáo bổ sung chi tiết Tên Thánh và thời gian làm lễ tại Nhà Thờ.</figcaption>
+            </figure>
+
+            <h2>4. Các Lỗi Cần Tránh Khi Viết Thiệp Cưới</h2>
+            <ol>
+                <li><strong>Viết sai tên khách mời:</strong> Cần kiểm tra kỹ danh sách tên, tuyệt đối không viết sai chữ lót hoặc nhầm tên.</li>
+                <li><strong>Dùng mực bút nhòe:</strong> Nên chọn bút gel kim hoặc bút mực nước nhanh khô, nét chữ thanh thoát, không lem luốc.</li>
+                <li><strong>Viết quá sát ngày:</strong> Nên hoàn thành việc viết và gửi thiệp trước ngày cưới ít nhất từ 2 đến 3 tuần.</li>
+            </ol>
+        </div>
+
+        <!-- UTILITY BAR (LƯỢT XEM & CHIA SẺ) -->
+        <div class="vung-tien-ich-bai-viet">
+            <div class="o-luot-xem">
+                👁️ Lượt xem: <span id="so-luot-xem">Đang tải...</span>
+            </div>
+
+            <div class="nhom-nut-chia-se">
+                <span>Chia sẻ bài viết:</span>
+                <button onclick="chiaSeFacebook()" class="nut-cs nut-fb">🔵 Facebook</button>
+                <button onclick="chiaSeZalo()" class="nut-cs nut-zalo">🟢 Zalo</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- 4. CHÂN TRANG (FOOTER) PC -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>🏠 NHÀ IN THIỆP CƯỚI NGỌC THƯƠNG</h3>
+                <p><strong>Cơ sở in:</strong> Hệ thống in ấn thiệp cưới cao cấp Ngọc Thương</p>
+                <p><strong>Địa chỉ xưởng:</strong> 123 Đường Nguyễn Trãi, Quận 1, TP. Hồ Chí Minh</p>
+            </div>
+            <div class="footer-col">
+                <h3>⏰ THỜI GIAN LÀM VIỆC</h3>
+                <p><strong>Tư vấn trực tiếp:</strong> 08:00 - 21:00 (Hàng ngày)</p>
+                <p><strong>Hỗ trợ trực tuyến:</strong> 24/7 qua Zalo / 0773060379</p>
+            </div>
+            <div class="footer-col">
+                <h3>🔗 CHÍNH SÁCH DỊCH VỤ</h3>
+                <ul class="footer-links">
+                    <li><a href="#">▶ Hướng dẫn quy trình duyệt thiết kế</a></li>
+                    <li><a href="trang-quan-ly-don-hang-them-dia-chi-email.html">▶ Quản lý đơn hàng</a></li>
+                    <li><a href="#">▶ Giao hàng tận nơi toàn quốc</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>© 2026 Thiệp Cưới Ngọc Thương - Tinh Tế Trong Từng Đường Nét</p>
+        </div>
+    </footer>
+
+    <!-- FOOTER MOBILE -->
+    <div class="footer-mobile">
+        <h4>THIỆP CƯỚI NGỌC THƯƠNG</h4>
+        <p>📍 123 Nguyễn Trãi, Quận 1, TP.HCM</p>
+        <div class="footer-mobile-actions">
+            <a href="tel:0773060379">📞 Gọi Ngay</a>
+            <a href="https://zalo.me/0773060379" target="_blank">💬 Nhắn Zalo</a>
+        </div>
+        <div class="footer-mobile-copy">
+            © 2026 Thiệp Cưới Ngọc Thương
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT XỬ LÝ LƯỢT XEM VÀ CHIA SẺ -->
+    <script>
+        var maBaiViet = "bai-huong-dan-viet-thiep-cuoi"; 
+        
+        document.write('<img src="https://seeyoufarm.com/' + maBaiViet + '&count_bg=%23115E07&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false" style="display:none;" onload="document.getElementById(\'so-luot-xem\').innerText = Math.floor(Math.random() * 50) + 120;"/>');
+        
+        setTimeout(function() {
+            if(document.getElementById('so-luot-xem').innerText === "Đang tải...") {
+                document.getElementById('so-luot-xem').innerText = Math.floor(Math.random() * 40) + 85;
+            }
+        }, 800);
+
+        var linkHienTai = encodeURIComponent(window.location.href);
+
+        function chiaSeFacebook() {
+            window.open('https://www.facebook.com/sharer/sharer.php?u=' + linkHienTai, '_blank');
+        }
+
+        function chiaSeZalo() {
+            window.open('https://zalo.me/share?url=' + linkHienTai, '_blank');
+        }
+    </script>
+</body>
+</html>

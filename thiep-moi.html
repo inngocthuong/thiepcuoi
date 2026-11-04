@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mẫu Thiệp Sinh Nhật</title>
+    <style>
+        /* --- 1. CÀI ĐẶT CHUNG --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f6f9;
+            color: #333;
+        }
+
+
+/* --- 2. PHẦN BANNER MỚI --- */
+
+        .banner {
+    position: relative;
+    width: 100%;
+}
+
+.banner img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.banner-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    color: white;
+    text-align: center;
+}
+
+/* Khung bọc giới hạn độ rộng bằng thanh ngang tiêu đề */
+.banner-giua-trang {
+    max-width: 1200px;       /* Ép độ rộng tối đa bằng đúng khung nội dung */
+    margin: 10px auto;       /* Tự động căn giữa và tạo khoảng cách 30px với khối trên/dưới */
+    padding: 0 15px;         /* Khoảng đệm an toàn khi xem trên điện thoại */
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Định dạng cho tấm ảnh bên trong tự động co giãn mềm mại */
+.banner-giua-trang img {
+    width: 100%;             /* Ép ảnh luôn rộng hết 100% lề của cái hộp 1200px */
+    height: auto;            /* Tự động tính chiều cao theo tỷ lệ gốc để ảnh không bị méo */
+    display: block;          /* Xóa khoảng trống thừa dưới đáy ảnh của trình duyệt */
+    border-radius: 6px;      /* Bo tròn nhẹ 4 góc ảnh cho mềm mại giống các hộp box */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* Tạo bóng đổ nhẹ xung quanh tấm ảnh cho sang trọng */
+    transition: transform 0.2s ease; /* Hiệu ứng mượt mà khi rê chuột */
+}
+
+/* Thanh tìm kiếm ở góc phải banner */
+.banner {
+    position: relative;
+}
+
+.banner-search {
+position: absolute;
+top: 50%;
+right: 50px;
+transform: translateY(-50%);
+z-index: 10;
+}
+
+.banner-search form {
+    display: flex;
+    align-items: center;
+    width: 260px;
+    height: 40px;
+    background: #fff;
+    border: 1px solid #ead4cc;
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.banner-search input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    padding: 0 14px;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #333;
+    font-size: 14px;
+}
+
+.banner-search button {
+    height: 100%;
+    padding: 0 13px;
+    border: none;
+    background: #fff;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.banner-search button:hover {
+    background: #fff;
+}
+
+/* Hiển thị phù hợp trên điện thoại */
+@media (max-width: 600px) {
+    .banner-search {
+        top: 8px;
+        right: 8px;
+    }
+
+    .banner-search form {
+        width: 190px;
+        height: 34px;
+    }
+}
+
+
+        /* --- 3. THANH MENU NGANG SHOPPING --- */
+        .navbar {
+            background-color: #526456;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .main-menu {
+            list-style: none;
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .menu-item {
+            position: relative;
+        }
+
+        .menu-item a {
+            display: block;
+            color: #e5e7eb;
+            text-decoration: none;
+            padding: 18px 22px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .menu-item:hover > a {
+            background-color: #687b6c;
+            color: #ffffff;
+        }
+
+        /* --- 4. DROPDOWN DANH MỤC SẢN PHẨM --- */
+        .dropdown-menu {
+            list-style: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #526456;
+            min-width: 220px;
+            display: none;
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.15);
+        }
+
+        .dropdown-menu a {
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            border-bottom: 1px solid #1a3038;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #687b6c;
+            padding-left: 25px;
+        }
+
+        .menu-item:hover .dropdown-menu {
+            display: block;
+        }
+
+                /*-------- TIÊU ĐỀ DANH MỤC CÓ GẠCH DÁI DƯỚI ------------*/
+.cum-tieu-de-danh-muc {
+    max-width: 1200px; /* Bạn có thể chỉnh lại số này trùng với max-width khối nội dung của bạn */
+    margin: 30px auto 25px auto; /* Khoảng cách trên và dưới dòng tiêu đề */
+    padding: 0 15px;
+    width: 100%;
+    box-sizing: border-box;}
+    /* Định dạng cho chữ h2 bên trong khối */
+.cum-tieu-de-danh-muc h2 {
+    font-weight: bold;
+    text-transform: uppercase; /* Ép chữ luôn viết hoa */
+    margin: 0;
+    padding-bottom: 10px; /* Khoảng cách giữa chữ và đường gạch dưới */
+    
+    /* ĐƯỜNG GẠCH NGANG DÀI HẾT KHUNG NỘI DUNG */
+    /* Lệnh currentColor giúp đường gạch tự động đổi màu theo màu của chữ h2 bên trên */
+    border-bottom: 2px solid currentColor; }
+
+    /* =========================================================
+   TỰ ĐỘNG CHUYỂN ĐỔI GIAO DIỆN ĐIỆN THOẠI (DƯỚI 768_PIXEL)
+========================================================= */
+@media (max-width: 768px) {
+    
+    /* 1. Biến các hàng ngang bọc 3 box thành hàng dọc để lướt vuốt */
+    .vung-chua-3-box,
+    .trang-chu-container,
+    .box-flex {
+        display: flex !important;
+        flex-direction: column !important; /* Ép xếp dọc từ trên xuống */
+        height: auto !important;           /* Hủy chiều cao cố định để không bị vỡ khung */
+        gap: 15px !important;
+    }
+
+    /* 2. Ép các ô iframe mở rộng hết 100% chiều ngang màn hình điện thoại */
+    iframe {
+        width: 100% !important;
+        height: 750px !important; /* Đặt chiều cao vừa vặn cho 1 màn hình dọc di động */
+        flex: none !important;
+    }
+
+    /* 3. Tối ưu lại kích thước chữ Menu trên điện thoại cho khỏi dính nhau */
+    .navbar a {
+        padding: 10px 8px !important;
+        font-size: 14px !important;
+    }
+}
+
+/* =========================================================
+   1. ĐỊNH DẠNG MẶC ĐỊNH (KHI XEM TRÊN MÁY TÍNH PC)
+========================================================= */
+/* Mặc định trên máy tính: HIỆN giao diện PC và ẨN giao diện Điện thoại đi */
+.navbar-mobile,
+.banner-mobile,
+.footer-mobile {
+    display: none !important;
+}
+
+/* =========================================================
+   2. ĐỊNH DẠNG KHI CHUYỂN SANG MÀN HÌNH ĐIỆN THOẠI (DƯỚI 768PX)
+========================================================= */
+@media (max-width: 768px) {
+    /* ➔ BẤT CÔNG TẮC: ẨN sạch sẽ giao diện máy tính dài dòng đi */
+    .navbar,
+    .banner,
+    .footer,
+    .menu-item,
+    .banner-search 
+    {
+        display: none !important;
+    }
+
+    /* ➔ BẬT CÔNG TẮC: HIỆN giao diện điện thoại thu gọn lên */
+    .navbar-mobile {
+        display: flex !important;
+        justify-content: space-around;
+        background: #526456; /* Màu xanh lá Giáo xứ */
+        padding: 12px 5px;
+        position: sticky;
+        top: 0;
+        z-index: 999;
+    }
+    .navbar-mobile a {
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14.5px;
+    }
+
+    /* Thiết kế riêng cho ảnh Banner điện thoại */
+    .banner-mobile {
+        display: block !important;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .banner-mobile img {
+        width: 100%;
+        height: auto; /* Tự co giãn vừa vặn màn hình dọc */
+        display: block;
+    }
+
+    /* Thiết kế riêng cho Chân web di động siêu ngắn gọn */
+    .footer-mobile {
+        display: block !important;
+        background: #115e07;
+        color: #ffffff;
+        text-align: center;
+        padding: 15px 10px;
+        font-size: 13px;
+        line-height: 1.6;
+        margin-top: 30px;
+    }
+}
+
+        /* --- 5. KHU VỰC SẢN PHẨM --- */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 30px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 3px;
+            background-color: #381a1f;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #eef0f5;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .product-name {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #222;
+            text-decoration: none;
+            height: 44px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-price {
+            font-size: 1.2rem;
+            color: #d93838;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .btn-buy {
+            background-color: #731717;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            margin-top: auto;
+        }
+
+        .btn-buy:hover {
+            background-color: #9a3636;
+        }
+
+           /* --- 6. PHẦN CHÂN TRANG (FOOTER) --- */
+        footer {
+            background-color: #e0e1e0;
+            color: #000;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            padding: 40px 0 20px 0;
+            margin-top: 60px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .footer-col {
+            flex: 1;
+            min-width: 280px;
+            margin-bottom: 30px;
+            padding-right: 20px;
+        }
+
+        .footer-col h3 {
+            color: #000;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .footer-col p { margin-bottom: 10px; }
+        .footer-col strong { color: #000; }
+
+        .footer-links { list-style: none; padding: 0; margin: 0; }
+        .footer-links li { margin-bottom: 8px; }
+        .footer-links a { color: #000; text-decoration: none; }
+        .footer-links a:hover { color: #03692a; }
+
+        .footer-copyright {
+            text-align: center;
+            border-top: 1px solid #bab6b6;
+            margin-top: 20px;
+            padding-top: 20px;
+            font-size: 0.8rem;
+            color: #000;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .main-menu { flex-direction: column; padding: 0; }
+            .dropdown-menu { position: static; width: 100%; }
+            .footer-container { flex-direction: column; }
+            .footer-col { padding-right: 0; }
+            footer { display: none !important; }
+        }
+
+        /* --- PHẦN CSS RIÊNG CHO FOOTER MOBILE --- */
+        .footer-mobile {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .footer-mobile {
+                display: block !important;
+                background: #526456;
+                color: #ffffff;
+                text-align: center;
+                padding: 25px 15px;
+                font-size: 13.5px;
+                line-height: 1.6;
+                margin-top: 30px;
+            }
+            .footer-mobile h4 {
+                color: #ffffff;
+                font-size: 15px;
+                margin-bottom: 10px;
+                text-transform: uppercase;
+            }
+            .footer-mobile p {
+                margin-bottom: 8px;
+            }
+            .footer-mobile-actions {
+                display: flex;
+                justify-content: center;
+                gap: 15px;
+                margin: 15px 0;
+            }
+            .footer-mobile-actions a {
+                background: #ffffff;
+                color: #526456;
+                padding: 8px 16px;
+                border-radius: 20px;
+                text-decoration: none;
+                font-weight: bold;
+                font-size: 13px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            }
+            .footer-mobile-copy {
+                border-top: 1px solid rgba(255,255,255,0.1);
+                margin-top: 15px;
+                padding-top: 12px;
+                font-size: 12px;
+                color: #bbb;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="banner-mobile">
+    <a href="index.html"><img src="anh/banner-mobile.png" alt="Banner Điện Thoại"></a>
+</div>
+
+    <div class="banner">
+        <img src="anh/banner.png" alt="Banner">
+        <div class="banner-content">
+        <div class="banner-search">
+        <form action="index.html" method="get">
+        <input type="text" id="search-input" placeholder="Tìm thiệp cưới...">
+        <button type="button">🔍</button>
+        </form>
+        </div>
+        </div>
+        </div>
+
+    <!-- 2. THANH MENU HÀNG HÓA -->
+
+    <nav class="navbar">
+        <ul class="main-menu">
+        <li class="menu-item"><a href="index.html">Trang Chủ</a></li>
+        <li class="menu-item">
+                <a href="mauthiepcuoi.html">Mẫu Thiệp Cưới ▾</a>
+                <ul class="dropdown-menu">
+                <li><a href="thiepcuoi-hiendai.html">Thiệp Cưới Hiện Đại</a></li>
+                <li><a href="thiepcuoi-truyenthong.html">Thiệp Cưới Truyền Thống</a></li>
+                <li><a href="thiepcuoi-docquyen.html">Thiệp Cưới Độc Quyền KTS</a></li>
+                <li><a href="thiepcuoi-dq-25.html">Thiệp Cưới DQ_25</a></li>
+                </ul>
+                </li>
+         <li class="menu-item">
+                <a href="thiep-moi.html">Thiệp Mời ▾</a>
+                <ul class="dropdown-menu">
+                <li><a href="thiep-tangia.html">Thiệp Tân Gia</a></li>
+                <li><a href="thiep-sinhnhat.html">Thiệp Sinh Nhật</a></li>
+                <li><a href="thiep-taon.html">Thiệp Công Giáo</a></li>
+                </ul>
+                </li>
+        <li class="menu-item"><a href="thiepcuoi-online.html">Thiệp Cưới Online</a></li>
+        <li class="menu-item"><a href="huong-dan.html">Hướng Dẫn</a></li>
+        <li class="menu-item"><a href="lienhe.html">Liên Hệ</a></li>
+        </ul>
+        </nav>
+
+    <!-- BẢN MENU THU GỌN DÀNH CHO ĐIỆN THOẠI -->
+    <nav class="navbar-mobile">
+        <a href="thiepcuoi-hiendai.html">Hiện Đại</a>
+        <a href="thiepcuoi-truyenthong.html">Truyền Thống</a>
+        <a href="thiepcuoi-docquyen.html">Độc Quyền</a>
+        <a href="thiepcuoi-online.html">Thiệp Online</a>
+    </nav>
+
+    <!-- 3. KHU VỰC HIỂN THỊ SẢN PHẨM CHÍNH -->
+    <main class="container">
+
+            <!-- KHỐI TIÊU ĐỀ THIỆP CƯỚI HIỆN ĐẠI -->
+<div class="cum-tieu-de-danh-muc">   
+    <!-- Bạn có thể chỉnh căn lề (left, center, right) và màu sắc ngay tại dòng h2 này -->
+    <h2 style="text-align: left; color: #6a0716; font-size: 24px;">THIỆP SINH NHẬT</h2>
+
+</div>
+        
+        <div class="product-grid">
+            
+            <!-- Sản phẩm số 1 -->
+            <div class="product-card" data-description="Mô tả">
+                <img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/sn436-8914.jpg" alt="Sản phẩm 1" class="product-img">
+                <div class="product-info">
+                    <a href="chi-tiet-sinh-nhat.html" class="product-name">Thiệp sinh nhật Doremon HHY-436</a>
+                    <div class="product-price">3.000 đ</div>
+                    <a href="" class="btn-buy">Xem chi tiết</a>
+                </div>
+            </div>
+
+            <!-- Sản phẩm số 2 -->
+            <div class="product-card" data-description="Mô tả">
+                <img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/sn429-4414.jpg" alt="Sản phẩm 2" class="product-img">
+                <div class="product-info">
+                    <a href="chi-tiet-sinh-nhat.html" class="product-name">Thiệp sinh nhật bé gái HHY-429</a>
+                    <div class="product-price">3.000 đ</div>
+                    <a href="" class="btn-buy">Xem chi tiết</a>
+                </div>
+            </div>
+
+            <!-- Sản phẩm số 3 -->
+            <div class="product-card" data-description="Mô tả">
+                <img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/sn428-5869.jpg" alt="Sản phẩm 3" class="product-img">
+                <div class="product-info">
+                    <a href="chi-tiet-sinh-nhat.html" class="product-name">THIỆP SINH NHẬT HHY-428</a>
+                    <div class="product-price">3.000 đ</div>
+                    <a href="" class="btn-buy">Xem chi tiết</a>
+                </div>
+            </div>
+
+            <!-- Sản phẩm số 4 -->
+            <div class="product-card" data-description="Mô tả">
+                <img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/sn435-4019.jpg" alt="Sản phẩm 4" class="product-img">
+                <div class="product-info">
+                    <a href="chi-tiet-sinh-nhat.html" class="product-name">Thiệp thôi nôi em bé HHY-435</a>
+                    <div class="product-price">3.000 đ</div>
+                    <a href="" class="btn-buy">Xem chi tiết</a>
+                </div>
+            </div>
+             <!-- Sản phẩm số 5 -->
+            <div class="product-card" data-description="Mô tả">
+                <img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/sn424-9683.jpg" alt="Sản phẩm 1" class="product-img">
+                <div class="product-info">
+                    <a href="chi-tiet-sinh-nhat.html" class="product-name">PHÔI THIỆP SINH NHẬT HHY-424</a>
+                    <div class="product-price">3.000 đ</div>
+                    <a href="" class="btn-buy">Xem chi tiết</a>
+                </div>
+            </div>
+
+            <!-- Sản phẩm số 6 -->
+            <div class="product-card" data-description="Mô tả">
+                <img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/sn474-9279.jpg" alt="Sản phẩm 2" class="product-img">
+                <div class="product-info">
+                    <a href="chi-tiet-sinh-nhat.html" class="product-name">Thiệp sinh nhật bé trai dễ thương HHY-474</a>
+                    <div class="product-price">3.000 đ</div>
+                    <a href="" class="btn-buy">Xem chi tiết</a>
+                </div>
+            </div>
+
+            <!-- Sản phẩm số 7 -->
+            <div class="product-card" data-description="Mô tả">
+                <img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/sn411.jpg-0559.jpg" alt="Sản phẩm 3" class="product-img">
+                <div class="product-info">
+                    <a href="chi-tiet-sinh-nhat.html" class="product-name">THIỆP MỜI SINH NHẬT SN411</a>
+                    <div class="product-price">3.000 đ</div>
+                    <a href="" class="btn-buy">Xem chi tiết</a>
+                </div>
+            </div>
+
+            <!-- Sản phẩm số 8 -->
+            <div class="product-card" data-description="Mô tả">
+                <img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/sn409.jpg-4163.jpg" alt="Sản phẩm 4" class="product-img">
+                <div class="product-info">
+                    <a href="chi-tiet-sinh-nhat.html" class="product-name">THIỆP MỜI SINH NHẬT SN409</a>
+                    <div class="product-price">3.000 đ</div>
+                    <a href="" class="btn-buy">Xem chi tiết</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+   
+
+    <!-- 4. KHU VỰC CHÂN TRANG (FOOTER) DƯỚI CÙNG -->
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>🏠 NHÀ IN THIỆP CƯỚI NGỌC THƯƠNG</h3>
+                <p><strong>Cơ sở in:</strong> Hệ thống in ấn thiệp cưới cao cấp Ngọc Thương</p>
+                <p><strong>Địa chỉ xưởng:</strong> 123 Đường Nguyễn Trãi, Quận 1, TP. Hồ Chí Minh</p>
+            </div>
+            <div class="footer-col">
+                <h3>⏰ THỜI GIAN LÀM VIỆC</h3>
+                <p><strong>Tư vấn trực tiếp:</strong> 08:00 - 21:00 (Hàng ngày)</p>
+                <p><strong>Hỗ trợ trực tuyến:</strong> 24/7 qua Zalo / Hotline</p>
+            </div>
+            <div class="footer-col">
+                <h3>🔗 CHÍNH SÁCH DỊCH VỤ</h3>
+                <ul class="footer-links">
+                    <li><a href="#">▶ Hướng dẫn quy trình duyệt thiết kế</a></li>
+                    <li><a href="#">▶ Chính sách in bù lỗi phát sinh 100%</a></li>
+                    <li><a href="#">▶ Giao hàng tận nơi toàn quốc</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>© 2026 Thiệp Cưới Ngọc Thương - Tinh Tế Trong Từng Đường Nét</p>
+        </div>
+    </footer>
+
+      <!-- KHU VỰC FOOTER THU GỌN RIÊNG CHO ĐIỆN THOẠI (FOOTER MOBILE) -->
+    <div class="footer-mobile">
+        <h4>THIỆP CƯỚI NGỌC THƯƠNG</h4>
+        <p>📍 123 Nguyễn Trãi, Quận 1, TP.HCM</p>
+        <div class="footer-mobile-actions">
+            <a href="tel:0773060379">📞 Gọi Ngay</a>
+            <a href="https://zalo.me/0773060379" target="_blank">💬 Nhắn Zalo</a>
+        </div>
+        <div class="footer-mobile-copy">
+            © 2026 Thiệp Cưới Ngọc Thương
+        </div>
+    </div>
+    
+    <!-- LỆNH TỰ ĐỘNG PHÂN LOẠI NHÓM VÀ TRUYỀN DỮ LIỆU SANG TRANG CHI TIẾT -->
+   <script>
+        window.onload = function() {
+            // Tìm tất cả các thẻ sản phẩm trên trang chủ
+            var productCards = document.querySelectorAll('.product-card');
+            
+            productCards.forEach(function(card) {
+                // Tìm nút "Xem Chi Tiết" bên trong từng sản phẩm
+                var btnBuy = card.querySelector('.btn-buy');
+                
+                if (btnBuy) {
+                    // Sửa đường link dẫn về chung 1 file chi-tiet.html
+                    btnBuy.setAttribute('href', 'chi-tiet-sinh-nhat.html');
+                    
+                    // Lắng nghe hành động khi khách bấm vào nút
+                    btnBuy.onclick = function(event) {
+                        // Quét và lấy thông tin thực tế đang hiển thị trên trang chủ
+                        var name = card.querySelector('.product-name').innerText;
+                        var price = card.querySelector('.product-price').innerText;
+                        var imgUrl = card.querySelector('.product-img').src;
+                        var description = card.getAttribute('data-description') || 'Chưa cập nhật';
+                        
+                        // Cất tạm thời vào bộ nhớ trình duyệt
+                        localStorage.setItem('clickProdName', name);
+                        localStorage.setItem('clickProdPrice', price);
+                        localStorage.setItem('clickProdImg', imgUrl);
+                        localStorage.setItem('clickProdDesc', description);
+                    };
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

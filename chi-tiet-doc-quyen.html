@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Thiệp Độc Quyền</title>
+    <style>
+        /* --- NHÚNG TOÀN BỘ CSS ĐỒNG BỘ TỪ TRANG CHỦ --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+        body { background-color: #f5f6f9; color: #333; }
+
+        /* --- 2. PHẦN BANNER --- */
+        .banner { position: relative; width: 100%; }
+        .banner img { display: block; width: 100%; height: auto; }
+        .banner-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; color: white; text-align: center; }
+
+        .banner-giua-trang { max-width: 1200px; margin: 10px auto; padding: 0 15px; width: 100%; box-sizing: border-box; }
+        .banner-giua-trang img { width: 100%; height: auto; display: block; border-radius: 6px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); transition: transform 0.2s ease; }
+
+        .banner-search { position: absolute; top: 50%; right: 50px; transform: translateY(-50%); z-index: 10; }
+        .banner-search form { display: flex; align-items: center; width: 260px; height: 40px; background: #fff; border: 1px solid #ead4cc; border-radius: 25px; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); }
+        .banner-search input { flex: 1; min-width: 0; height: 100%; padding: 0 14px; border: none; outline: none; background: transparent; color: #333; font-size: 14px; }
+        .banner-search button { height: 100%; padding: 0 13px; border: none; background: #fff; color: white; cursor: pointer; font-size: 16px; }
+
+        @media (max-width: 600px) {
+            .banner-search { top: 8px; right: 8px; }
+            .banner-search form { width: 190px; height: 34px; }
+        }
+
+        /* --- 3. THANH MENU NGANG --- */
+        .navbar { background-color: #526456; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .main-menu { list-style: none; display: flex; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .menu-item { position: relative; }
+        .menu-item a { display: block; color: #e5e7eb; text-decoration: none; padding: 18px 22px; font-weight: 500; transition: all 0.3s; }
+        .menu-item:hover > a { background-color: #687b6c; color: #ffffff; }
+
+        /* --- 4. DROPDOWN DANH MỤC --- */
+        .dropdown-menu { list-style: none; position: absolute; top: 100%; left: 0; background-color: #526456; min-width: 220px; display: none; box-shadow: 0px 8px 16px rgba(0,0,0,0.15); }
+        .dropdown-menu a { padding: 12px 20px; font-size: 0.95rem; border-bottom: 1px solid #1a3038; }
+        .dropdown-menu a:hover { background-color: #687b6c; padding-left: 25px; }
+        .menu-item:hover .dropdown-menu { display: block; }
+
+        /* --- CSS RIÊNG TRANG CHI TIẾT SẢN PHẨM --- */
+        .product-detail-container { max-width: 1200px; margin: 40px auto 20px auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; flex-wrap: wrap; gap: 40px; box-sizing: border-box; }
+        .detail-gallery { flex: 1.2; min-width: 350px; }
+        .detail-gallery img { width: 100%; max-height: 500px; object-fit: contain; background-color: #fafafa; border-radius: 6px; border: 1px solid #eef0f5; cursor: zoom-in; transition: opacity 0.2s; }
+        .detail-gallery img:hover { opacity: 0.95; }
+        .detail-content { flex: 1; min-width: 350px; display: flex; flex-direction: column; }
+        .detail-title { font-size: 1.8rem; font-weight: 600; margin-bottom: 15px; color: #111; }
+        .detail-price { font-size: 1.8rem; color: #d93838; font-weight: bold; margin-bottom: 5px; }
+        .price-note { font-size: 0.85rem; color: #666; font-style: italic; margin-bottom: 20px; }
+        .detail-desc-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 10px; border-bottom: 2px solid #1a3038; padding-bottom: 5px; display: inline-block; }
+        .detail-desc { line-height: 1.7; color: #555; margin-bottom: 25px; }
+        .btn-order-now { background-color: #d93838; color: white; text-align: center; padding: 15px 35px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 1.1rem; transition: background 0.2s; cursor: pointer; border: none; display: inline-block; width: fit-content; }
+        .btn-order-now:hover { background-color: #b82828; }
+
+        /* --- CSS CHO KHUNG PHÓNG TO ẢNH (LIGHTBOX) --- */
+        .image-modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .image-modal img {
+            max-width: 90%;
+            max-height: 90vh;
+            border-radius: 6px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+            object-fit: contain;
+            background: #fff;
+        }
+        .image-modal .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .image-modal .close-modal:hover {
+            color: #d93838;
+        }
+
+        /* --- TÁI TẠO CHUẨN GIAO DIỆN HOÀNG HẢI YẾN CHO PHẦN "CÙNG LOẠI" --- */
+        .related-section { max-width: 1200px; margin: 0 auto 50px auto; padding: 0 15px; box-sizing: border-box; }
+        .related-title { color: #6a0716; font-size: 24px; margin-bottom: 25px; border-bottom: 2px solid currentColor; padding-bottom: 8px; text-align: left; text-transform: uppercase; font-weight: bold; }
+
+        .product_noibat_box { display: flex; flex-wrap: wrap; margin-right: -10px; margin-left: -10px; }
+        .product_noibat_item { position: relative; width: 25%; padding-right: 10px; padding-left: 10px; margin-bottom: 20px; box-sizing: border-box; }
+        .product_noibat_item .img_pro { position: relative; display: block; width: 100%; overflow: hidden; background: #f7f7f7; border-radius: 4px; margin-bottom: 10px; cursor: pointer; }
+        .product_noibat_item .img_pro img { width: 100%; height: 220px; display: block; object-fit: cover; transition: transform 0.3s ease; }
+        .product_noibat_item .img_pro:hover img { transform: scale(1.05); }
+        .product_noibat_item h3 { margin: 0 0 5px 0; display: block; font-size: 14px; font-weight: 500; line-height: 1.4; height: 40px; overflow: hidden; }
+        .product_noibat_item h3 a { color: #333; text-decoration: none; transition: color 0.2s ease; cursor: pointer; }
+        .product_noibat_item h3 a:hover { color: #2980b9; }
+        .text-split { overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .product_noibat_item .box_price_box { font-size: 14px; margin-top: 5px; }
+        .product_noibat_item .box_price_box strong { color: #e74c3c; font-weight: bold; margin: 0; }
+
+        /* --- PHÂN TRANG CSS --- */
+        .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 30px; }
+        .pagination button { padding: 8px 14px; border: 1px solid #ddd; background: #fff; color: #333; font-weight: 600; border-radius: 4px; cursor: pointer; transition: all 0.2s; }
+        .pagination button:hover { background: #526456; color: #fff; border-color: #526456; }
+        .pagination button.active { background: #526456; color: #fff; border-color: #526456; }
+
+        /* --- FOOTER & RESPONSIVE --- */
+        footer { background-color: #e0e1e0; color: #000; font-size: 0.9rem; line-height: 1.8; padding: 40px 0 20px 0; margin-top: 60px; }
+        .footer-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; justify-content: space-between; }
+        .footer-col { flex: 1; min-width: 280px; margin-bottom: 30px; padding-right: 20px; }
+        .footer-col h3 { color: #000; font-size: 1.1rem; margin-bottom: 20px; text-transform: uppercase; }
+        .footer-col p { margin-bottom: 10px; }
+        .footer-links { list-style: none; padding: 0; margin: 0; }
+        .footer-links li { margin-bottom: 8px; }
+        .footer-links a { color: #000; text-decoration: none; }
+        .footer-links a:hover { color: #03692a; }
+        .footer-copyright { text-align: center; border-top: 1px solid #bab6b6; margin-top: 20px; padding-top: 20px; font-size: 0.8rem; color: #000; width: 100%; }
+
+        .navbar-mobile, .banner-mobile, .footer-mobile { display: none !important; }
+
+        @media (max-width: 992px) {
+            .product_noibat_item { width: 33.333%; }
+        }
+
+        @media (max-width: 768px) {
+            .product_noibat_item { width: 50%; }
+            .main-menu, .banner, .footer, .menu-item, .banner-search { display: none !important; }
+            .navbar-mobile { display: flex !important; justify-content: space-around; background: #526456; padding: 12px 5px; position: sticky; top: 0; z-index: 999; }
+            .navbar-mobile a { color: #ffffff; text-decoration: none; font-weight: bold; font-size: 14.5px; }
+            .banner-mobile { display: block !important; width: 100%; margin-bottom: 10px; }
+            .banner-mobile img { width: 100%; height: auto; display: block; }
+            .footer-mobile { display: block !important; background: #526456; color: #ffffff; text-align: center; padding: 25px 15px; font-size: 13.5px; line-height: 1.6; margin-top: 30px; }
+            .footer-mobile h4 { color: #ffffff; font-size: 15px; margin-bottom: 10px; text-transform: uppercase; }
+            .footer-mobile p { margin-bottom: 8px; }
+            .footer-mobile-actions { display: flex; justify-content: center; gap: 15px; margin: 15px 0; }
+            .footer-mobile-actions a { background: #ffffff; color: #526456; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 13px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+            .footer-mobile-copy { border-top: 1px solid rgba(255,255,255,0.1); margin-top: 15px; padding-top: 12px; font-size: 12px; color: #bbb; }
+            footer { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. BANNER CỬA HÀNG -->
+    <div class="banner-mobile">
+        <a href="index.html"><img src="anh/banner-mobile.png" alt="Banner Điện Thoại"></a>
+    </div>
+
+    <div class="banner">
+        <img src="anh/banner.png" alt="Banner">
+        <div class="banner-content">
+            <div class="banner-search">
+                <form action="index.html" method="get">
+                    <input type="text" id="search-input" placeholder="Tìm thiệp cưới...">
+                    <button type="button">🔍</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. THANH MENU HÀNG HÓA -->
+    <nav class="navbar">
+        <ul class="main-menu">
+            <li class="menu-item"><a href="index.html">Trang Chủ</a></li>
+            <li class="menu-item">
+                <a href="mauthiepcuoi.html">Mẫu Thiệp Cưới ▾</a>
+                <ul class="dropdown-menu">
+                    <li><a href="thiepcuoi-hiendai.html">Thiệp Cưới Hiện Đại</a></li>
+                    <li><a href="thiepcuoi-truyenthong.html">Thiệp Cưới Truyền Thống</a></li>
+                    <li><a href="thiepcuoi-docquyen.html">Thiệp Cưới Độc Quyền KTS</a></li>
+                    <li><a href="thiepcuoi-dq-25.html">Thiệp Cưới DQ_25</a></li>
+                </ul>
+            </li>
+            <li class="menu-item">
+                <a href="thiep-moi.html">Thiệp Mời ▾</a>
+                <ul class="dropdown-menu">
+                    <li><a href="thiep-tangia.html">Thiệp Tân Gia</a></li>
+                    <li><a href="thiep-sinhnhat.html">Thiệp Sinh Nhật</a></li>
+                    <li><a href="thiep-taon.html">Thiệp Công Giáo</a></li>
+                </ul>
+            </li>
+            <li class="menu-item"><a href="thiepcuoi-online.html">Thiệp Cưới Online</a></li>
+            <li class="menu-item"><a href="huong-dan.html">Hướng Dẫn</a></li>
+            <li class="menu-item"><a href="lienhe.html">Liên Hệ</a></li>
+        </ul>
+    </nav>
+
+    <!-- MENU THU GỌN DI ĐỘNG -->
+    <nav class="navbar-mobile">
+        <a href="thiepcuoi-hiendai.html">Hiện Đại</a>
+        <a href="thiepcuoi-truyenthong.html">Truyền Thống</a>
+        <a href="thiepcuoi-docquyen.html">Độc Quyền</a>
+        <a href="thiepcuoi-online.html">Thiệp Online</a>
+    </nav>
+
+    <!-- 3. KHU VỰC CHI TIẾT SẢN PHẨM CHÍNH -->
+    <main class="product-detail-container">
+        <div class="detail-gallery">
+            <!-- Thêm sự kiện click để phóng to ảnh -->
+            <img src="" alt="Hình ảnh thiệp cưới" id="prod-image" onclick="openImageModal(this.src)" title="Click để phóng to ảnh">
+        </div>
+        <div class="detail-content">
+            <h2 class="detail-title" id="prod-title">Đang tải tên sản phẩm...</h2>
+            <div>
+                <span class="detail-price" id="prod-price">0 đ</span>
+                <span style="color: #666; font-weight: 500;"> / bộ</span>
+            </div>
+            <p class="price-note">(* Giá đã bao gồm đầy đủ thiết kế bản vẽ và công in thành phẩm)</p>
+            
+            <div class="detail-desc-title">Thông số & Chất liệu:</div>
+            <div class="detail-desc" id="prod-desc"></div>
+
+            <button class="btn-order-now" onclick="transferDataToOrderPage()">TIẾN HÀNH ĐẶT IN</button>
+        </div>
+    </main>
+
+    <!-- KHUNG LIGHTBOX PHÓNG TO ẢNH -->
+    <div id="imageModal" class="image-modal" onclick="closeImageModal()">
+        <span class="close-modal">&times;</span>
+        <img id="modalImage" src="" alt="Phóng to thiệp cưới">
+    </div>
+
+    <!-- 4. KHU VỰC SẢN PHẨM CÙNG LOẠI CÓ PHÂN TRANG -->
+    <section class="related-section">
+        <h3 class="related-title">Mẫu Thiệp cùng Loại</h3>
+        
+        <div class="product_noibat_box" id="product-list">
+            <!-- Sản phẩm được render tự động qua JavaScript -->
+        </div>
+
+        <!-- Thanh phân trang -->
+        <div class="pagination" id="pagination"></div>
+    </section>
+
+    <!-- 5. FOOTER -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>🏠 NHÀ IN THIỆP CƯỚI NGỌC THƯƠNG</h3>
+                <p><strong>Cơ sở in:</strong> Hệ thống in ấn thiệp cưới cao cấp Ngọc Thương</p>
+                <p><strong>Địa chỉ xưởng:</strong> 123 Đường Nguyễn Trãi, Quận 1, TP. Hồ Chí Minh</p>
+            </div>
+            <div class="footer-col">
+                <h3>⏰ THỜI GIAN LÀM VIỆC</h3>
+                <p><strong>Tư vấn trực tiếp:</strong> 08:00 - 21:00 (Hàng ngày)</p>
+                <p><strong>Hỗ trợ trực tuyến:</strong> 24/7 qua Zalo / Hotline</p>
+            </div>
+            <div class="footer-col">
+                <h3>🔗 CHÍNH SÁCH DỊCH VỤ</h3>
+                <ul class="footer-links">
+                    <li><a href="#">▶ Hướng dẫn quy trình duyệt thiết kế</a></li>
+                    <li><a href="#">▶ Chính sách in bù lỗi phát sinh 100%</a></li>
+                    <li><a href="#">▶ Giao hàng tận nơi toàn quốc</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>© 2026 Thiệp Cưới Ngọc Thương - Tinh Tế Trong Từng Đường Nét</p>
+        </div>
+    </footer>
+
+    <!-- FOOTER DI ĐỘNG -->
+    <div class="footer-mobile">
+        <h4>THIỆP CƯỚI NGỌC THƯƠNG</h4>
+        <p>📍 123 Nguyễn Trãi, Quận 1, TP.HCM</p>
+        <div class="footer-mobile-actions">
+            <a href="tel:0773060379">📞 Gọi Ngay</a>
+            <a href="https://zalo.me/0773060379" target="_blank">💬 Nhắn Zalo</a>
+        </div>
+        <div class="footer-mobile-copy">
+            © 2026 Thiệp Cưới Ngọc Thương
+        </div>
+    </div>
+
+    <!-- 6. JAVASCRIPT XỬ LÝ DỮ LIỆU, PHÂN TRANG VÀ PHÓNG TO ẢNH -->
+    <script>
+        const products = [
+           { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6179-2433.jpg", 
+            name: "In thiệp sinh nhật bé trai theo thiết kế HHY-6179", 
+            price: "2.500", 
+            desc: "In thiệp sinh nhật bé trai theo thiết kế" },
+            
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6177-8040.jpg", 
+            name: "Thiệp cưới giấy ánh kim cao cấp HHY-6177", 
+            price: "Liên hệ", 
+            desc: "Thiệp cưới giấy ánh kim cao cấp" },
+
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6176-0877.jpg", 
+            name: "In thiệp chữ nhật Bé gái theo yêu cầu HHY-6176", 
+            price: "Liên hệ", 
+            desc: "In thiệp chữ nhật Bé gái theo yêu cầu" },
+
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6175-7458.jpg", 
+            name: "Thiệp cưới giấy ánh kim thơm cao cấp HHY-6175", 
+            price: "Liên hệ", 
+            desc: "Thiệp cưới giấy ánh kim thơm cao cấp" },
+
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6174-2689.jpg", 
+            name: "In thiệp cưới truyền thống HHY-6174", 
+            price: "Liên hệ", 
+            desc: "In thiệp cưới truyền thống" },
+
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6173-4380.jpg", 
+            name: "In thiệp cưới theo thiết kế HHY-6173", 
+            price: "Liên hệ", 
+            desc: "In thiệp cưới theo thiết kế" },
+
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6172-7523.jpg", 
+            name: "In thiệp cưới đỏ truyền thống theo yêu cầu HHY-6172", 
+            price: "Liên hệ", 
+            desc: "In thiệp cưới đỏ truyền thống theo yêu cầu" },
+            
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6171-9377.jpg", name: "In thiệp cưới giấy ánh kim thơm cao cấp HHY-6171", price: "Liên hệ", desc: "In thiệp cưới giấy ánh kim thơm cao cấp" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6170-7905.jpg", name: "Thiệp cưới in kts HHY-6170", price: "Liên hệ", desc: "Thiệp cưới in kts" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6169-2763.jpg", name: "Thiệp cưới in theo yêu cầu HHY-6169 giấy ánh kim xoắn ốc", price: "Liên hệ", desc: "Thiệp cưới in theo yêu cầu - Giấy ánh kim xoắn ốc" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6168-1648.jpg", name: "Thiệp cưới độc quyền màu đỏ truyền thống HHY-6168", price: "Liên hệ", desc: "Thiệp cưới độc quyền màu đỏ truyền thống" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6167-4548.jpg", name: "Thiết kế thiệp cưới giấy ánh kim thơm cao cấp HHY-6167", price: "Liên hệ", desc: "Thiết kế thiệp cưới giấy ánh kim thơm cao cấp" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6166-0832.jpg", name: "Thiệp cưới thiết kế màu đỏ HHY-6166", price: "Liên hệ", desc: "Thiệp cưới thiết kế màu đỏ" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6165-1473.jpg", name: "Thiệp tân gia thiết kế theo yêu cầu HHY-6165", price: "Liên hệ", desc: "Thiệp tân gia thiết kế theo yêu cầu" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6164-0008.jpg", name: "Thiệp cưới thiết kế đơn giản HHY-6164", price: "Liên hệ", desc: "Thiệp cưới thiết kế đơn giản" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/6163-1693.jpg", name: "Thiệp cưới độc quyền HHY-6163 giấy draft", price: "Liên hệ", desc: "Thiệp cưới độc quyền giấy draft" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6159-7249.jpg", name: "Thiệp cưới độc quyền đỏ truyền thống HHY-6162", price: "Liên hệ", desc: "Thiệp cưới độc quyền đỏ truyền thống" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6161-1382.jpg", name: "In thiệp sinh nhật bé gái theo thiết kế HHY-6161", price: "Liên hệ", desc: "In thiệp sinh nhật bé gái theo thiết kế" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6160-0025.jpg", name: "In thiệp cưới theo thiết kế HHY-6160 kem", price: "Liên hệ", desc: "In thiệp cưới theo thiết kế kem" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6159-4408.jpg", name: "Thiệp cưới độc quyền HHY-6159 xanh", price: "Liên hệ", desc: "Thiệp cưới độc quyền xanh" },
+            
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6158k-9497.jpg", name: "Thiệp cưới độc quyền HHY-6158 kem", price: "Liên hệ", desc: "Thiệp cưới độc quyền kem" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6158d-3097.jpg", name: "In thiệp cưới độc quyền HHY-6158 đỏ", price: "Liên hệ", desc: "In thiệp cưới độc quyền đỏ" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6157-8954.jpg", name: "Tự tạo thiệp cưới online HHY-6157", price: "Liên hệ", desc: "Tự tạo thiệp cưới online" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/6156-9010.jpg", name: "Thiệp cưới thiết kế online HHY-6156", price: "Liên hệ", desc: "Thiệp cưới thiết kế online" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6155-4424.jpg", name: "Thiệp sinh nhật thiết kế miễn phí HHY-6155", price: "Liên hệ", desc: "Thiệp sinh nhật thiết kế miễn phí" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6154-9895.jpg", name: "Thiệp cưới thiết kế miền tây HHY-6154", price: "Liên hệ", desc: "Thiệp cưới thiết kế miền tây" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/web6153-1643.jpg", name: "Thiệp cưới độc quyền giấy ánh kim thơm HHY-6153", price: "Liên hệ", desc: "Thiệp cưới độc quyền giấy ánh kim thơm" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/web6152-4017.jpg", name: "Thiệp cưới hình vuông HHY-6152", price: "Liên hệ", desc: "Thiệp cưới hình vuông" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/web6151-9926.jpg", name: "Thiệp cưới hoa sen HHY-6151", price: "Liên hệ", desc: "Thiệp cưới hoa sen" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/web6150-0819.jpg", name: "Thiết kế thiệp cưới online miễn phí HHY-6150", price: "Liên hệ", desc: "Thiết kế thiệp cưới online miễn phí" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/web6149-7936.jpg", name: "Thiệp cưới thiết kế online HHY-6149", price: "Liên hệ", desc: "Thiệp cưới thiết kế online" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/web6148-0034.jpg", name: "Tạo thiệp cưới online miễn phí HHY-6148", price: "Liên hệ", desc: "Tạo thiệp cưới online miễn phí" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/web6147-0411.jpg", name: "Thiết kế thiệp cưới HHY-6147", price: "Liên hệ", desc: "Thiết kế thiệp cưới" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/web6146hong-4214.jpg", name: "Thiệp cưới ánh kim thơm nhà trai HHY-6146", price: "Liên hệ", desc: "Thiệp cưới ánh kim thơm nhà trai" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/web6146kem-5233.jpg", name: "Thiệp cưới độc quyền giấy thơm ánh kim HHY-6146 kem", price: "Liên hệ", desc: "Thiệp cưới độc quyền giấy thơm ánh kim kem" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/web6145-2960.jpg", name: "Thiệp cưới đỏ độc quyền HHY-6145", price: "Liên hệ", desc: "Thiệp cưới đỏ độc quyền" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/webhhy6144-5273.jpg", name: "Thiệp mời khai trương HHY-6144", price: "Liên hệ", desc: "Thiệp mời khai trương" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/webhhy6143-2217.jpg", name: "Tạo thiệp cưới online miễn phí HHY-6143", price: "Liên hệ", desc: "Tạo thiệp cưới online miễn phí" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6142-8919.jpg", name: "Thiệp cưới màu hồng pastel HHY-6142", price: "Liên hệ", desc: "Thiệp cưới màu hồng pastel" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6141-2443.jpg", name: "Thiệp cưới màu xanh HHY-6141", price: "Liên hệ", desc: "Thiệp cưới màu xanh" },
+
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6140x-8937.jpg", name: "Mẫu thiệp cưới màu xanh HHY-6140X", price: "Liên hệ", desc: "Mẫu thiệp cưới màu xanh" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6140h---copy-4535.jpg", name: "Thiệp cưới màu hồng HHY-6140H", price: "Liên hệ", desc: "Thiệp cưới màu hồng" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/6139web-5692.jpg", name: "Thiệp cưới thiết kế giấy ánh kim thơm HHY-6139", price: "Liên hệ", desc: "Thiệp cưới thiết kế giấy ánh kim thơm" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/web6138-8319.jpg", name: "Thiệp cưới màu đỏ đẹp HHY-6138", price: "Liên hệ", desc: "Thiệp cưới màu đỏ đẹp" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/web6137-3384.jpg", name: "Thiệp cưới màu xanh HHY-6137", price: "Liên hệ", desc: "Thiệp cưới màu xanh" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/web6136-7983.jpg", name: "Thiệp cưới độc quyền HHY-6136", price: "Liên hệ", desc: "Thiệp cưới độc quyền" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/goc6135.download-4112.jpg", name: "Mẫu thiệp cưới đẹp màu đỏ HHY-6135", price: "Liên hệ", desc: "Mẫu thiệp cưới đẹp màu đỏ" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/goc6134-3446.jpg", name: "Mẫu thiệp giấy draft đẹp HHY-6134", price: "Liên hệ", desc: "Mẫu thiệp giấy draft đẹp" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/goc6133-5870.jpg", name: "Thiệp cưới tiếng hoa HHY-6133", price: "Liên hệ", desc: "Thiệp cưới tiếng hoa" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/goc6132-6661.jpg", name: "Thiệp cưới in hình HHY-6132", price: "Liên hệ", desc: "Thiệp cưới in hình" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/goc6131-0776.jpg", name: "Thiệp cưới thiết kế tiếng Hoa HHY-6131", price: "Liên hệ", desc: "Thiệp cưới thiết kế tiếng Hoa" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/goc6130-0534.jpg", name: "Thiệp Phúc gốc Hoa HHY-6130", price: "Liên hệ", desc: "Thiệp Phúc gốc Hoa" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/goc6129-5544.jpg", name: "Thiệp cưới đỏ truyền thống HHY-6129", price: "Liên hệ", desc: "Thiệp cưới đỏ truyền thống" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/goc6128-4721.jpg", name: "Thiệp khai trương HHY-6128", price: "Liên hệ", desc: "Thiệp khai trương" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/goc6127-4293.jpg", name: "Thiệp cưới truyền thống HHY-6127", price: "Liên hệ", desc: "Thiệp cưới truyền thống" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6126-4058.jpg", name: "Thiệp cưới in nhanh KTS HHY-6126", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/hinhweb-0072.jpg", name: "Thiệp cưới độc quyền HHY-6125", price: "Liên hệ", desc: "Thiệp cưới độc quyền" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6124-7683.png", name: "Thiệp cưới độc quyền HHY-6124", price: "Liên hệ", desc: "Thiệp cưới độc quyền" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/6123-4641.jpg", name: "Thiệp cưới in nhanh KTS HHY-6123", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/6122-9757.jpg", name: "Thiệp cưới in nhanh KTS HHY-6122", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/web6121-0687.jpg", name: "Thiệp cưới in nhanh KTS HHY-6121", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6120-6531.jpg", name: "Thiệp cưới in nhanh KTS HHY-6120", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6119-7406.jpg", name: "Thiệp cưới in nhanh KTS HHY-6119", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6118-0514.jpg", name: "Thiệp cưới in nhanh KTS HHY-6118", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6117-7117.jpg", name: "Thiệp cưới in nhanh KTS HHY-6117", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/xemweb6116-3269.jpg", name: "Thiệp cưới in nhanh KTS HHY-6116", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/xemweb6115-8911.jpg", name: "Thiệp cưới in nhanh KTS HHY-6115", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6114-3375.jpg", name: "Thiệp cưới in nhanh KTS HHY-6114", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6113-8448.jpg", name: "Thiệp cươi in nhanh KTS HHY-6113", price: "Liên hệ", desc: "Thiệp cươi in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6112-8354.jpg", name: "Thiệp cưới in nhanh KTS HHY-6112", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6111-3332.jpg", name: "Thiệp cưới in nhanh KTS HHY-6111", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/xemweb6110-3695.jpg", name: "Thiệp cưới in nhanh KTS HHY-6110", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/xemweb6109-8275.jpg", name: "Thiệp cưới in nhanh KTS HHY-6109", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/xemweb6108-3528.jpg", name: "Thiệp cưới in nhanh KTS HHY-6108", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/xemweb6107-0090.jpg", name: "Thiệp cưới in nhanh KTS HHY-6107", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/xemweb6106-9604.jpg", name: "Thiệp cưới in nhanh KTS HHY-6106", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/6104-9368.jpg", name: "Thiệp cưới in nhanh KTS HHY-6104", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/6103-7540.jpg", name: "Thiệp cưới in nhanh KTS HHY-6103", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/hinhweb6102-6190.jpg", name: "Thiệp cưới in nhanh KTS HHY-6102", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6101-2536.jpg", name: "Thiệp cưới in nhanh KTS HHY-6101", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/hinhweb6100-6176.jpg", name: "Thiệp cưới in nhanh KTS HHY-6100", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6099-0579.jpg", name: "Thiệp cưới in nhanh KTS HHY-6099", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/hinhweb6098-2659.jpg", name: "Thiệp cưới in nhanh KTS HHY-6098", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6097-4862.jpg", name: "Thiệp cưới in nhanh KTS HHY-6097", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6096-6951.jpg", name: "Thiệp cưới in nhanh KTS HHY-6096", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/6095-1327.jpg", name: "Thiệp cưới in nhanh KTS HHY-6095", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/6094-7209.jpg", name: "Thiệp cưới độc quyền HHY-6094", price: "Liên hệ", desc: "Thiệp cưới độc quyền" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/6093-6062.jpg", name: "Thiệp cưới in nhanh KTS HHY-6093", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/6092-2237.jpg", name: "Thiệp cưới in nhanh KTS HHY-6092", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/6091-3620.jpg", name: "Thiệp cưới in nhanh KTS HHY-6091", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/6090-3552.jpg", name: "Thiệp cưới in nhanh KTS HHY-6090", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/6089-3058.jpg", name: "Ảh thiệp cưới HHY-6089", price: "Liên hệ", desc: "Ảnh thiệp cưới" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/6088-0106.jpg", name: "Thiệp cưới độc quyền HHY-6088", price: "Liên hệ", desc: "Thiệp cưới độc quyền" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/dr6087-1648.jpg", name: "Thiệp cưới độc quyền HHY-6087", price: "Liên hệ", desc: "Thiệp cưới độc quyền" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/dr6086-0947.jpg", name: "Thiệp cưới in nhanh KTS HHY-6086", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/dr6085-3994.jpg", name: "Thiệp cưới in nhanh KTS HHY-6085", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/dr6084-8707.jpg", name: "Thiệp cưới in nhanh KTS HHY-6084", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/dr6083-7365.jpg", name: "Thiệp cưới in nhanh KTS HHY-6083", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/dr6081-7055.jpg", name: "Thiệp cưới in nhanh KTS HHY-6081", price: "Liên hệ", desc: "Thiệp cưới in nhanh KTS" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/dr6080-7214.jpg", name: "Thiệp cưới độc quyền HHY-6080", price: "Liên hệ", desc: "Thiệp cưới độc quyền" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/c614-6573.jpg", name: "THIỆP CƯỚI ĐỘC QUYỀN HHY-614", price: "Liên hệ", desc: "Thiệp cưới độc quyền" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/c613-5380.jpg", name: "THIỆP CƯỚI ĐỘC QUYỀN HHY-613", price: "Liên hệ", desc: "Thiệp cưới độc quyền" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/c612-5846.jpg", name: "THIỆP CƯỚI ĐỘC QUYỀN HHY-612", price: "Liên hệ", desc: "Thiệp cưới độc quyền" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/c611-8598.jpg", name: "THIỆP CƯỚI ĐỘC QUYỀN HHY-611", price: "Liên hệ", desc: "Thiệp cưới độc quyền" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/c610-0977.jpg", name: "THIỆP CƯỚI ĐỘC QUYỀN HHY-610", price: "Liên hệ", desc: "Thiệp cưới độc quyền" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/c609-5856.jpg", name: "THIỆP CƯỚI ĐỘC QUYỀN HHY-609", price: "Liên hệ", desc: "Thiệp cưới độc quyền" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/dr608-4516.jpg", name: "THIỆP CƯỚI ĐỘC QUYỀN HHY-608", price: "Liên hệ", desc: "Thiệp cưới độc quyền" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/dr607-1156.jpg", name: "THIỆP CƯỚI ĐỘC QUYỀN HHY-607", price: "Liên hệ", desc: "Thiệp cưới độc quyền" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/dr606-4091.jpg", name: "THIỆP CƯỚI ĐỘC QUYỀN HHY-606", price: "Liên hệ", desc: "Thiệp cưới độc quyền" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/dr605-0000.jpg", name: "THIỆP CƯỚI ĐỘC QUYỀN HHY-605", price: "Liên hệ", desc: "Thiệp cưới độc quyền" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/dr604-4519.jpg", name: "THIỆP CƯỚI ĐỘC QUYỀN HHY-604", price: "Liên hệ", desc: "Thiệp cưới độc quyền" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/dr603-7895.jpg", name: "THIỆP CƯỚI ĐỘC QUYỀN HHY-603", price: "Liên hệ", desc: "Thiệp cưới độc quyền" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/dr602-6128.jpg", name: "THIỆP CƯỚI ĐỘC QUYỀN HHY-602", price: "Liên hệ", desc: "Thiệp cưới độc quyền" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/dr601-2422.jpg", name: "THIỆP CƯỚI ĐỘC QUYỀN HHY-601", price: "Liên hệ", desc: "Thiệp cưới độc quyền" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts002-0596.jpg", name: "THIỆP CƯỚI IN HÌNH ĐỘC QUYỀN HHY-KTS002", price: "Liên hệ", desc: "Thiệp cưới in hình độc quyền" },
+            { img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/kts001-0510.jpg", name: "THIỆP CƯỚI IN ĐỘC QUYỀN HÌNH DÂU RỂ HHY-KTS001", price: "Liên hệ", desc: "Thiệp cưới in độc quyền hình dâu rể" }
+        ];
+
+        const itemsPerPage = 20;
+        let currentPage = 1;
+
+        window.onload = function() {
+            if (products.length > 0) {
+                var firstProd = products[0];
+                var name = localStorage.getItem('clickProdName') || firstProd.name;
+                var price = localStorage.getItem('clickProdPrice') || firstProd.price;
+                var imgUrl = localStorage.getItem('clickProdImg') || firstProd.img;
+                var description = localStorage.getItem('clickProdDesc') || firstProd.desc;
+
+                document.getElementById("prod-title").innerText = name;
+                document.getElementById("prod-price").innerText = price;
+                document.getElementById("prod-image").src = imgUrl;
+                
+                document.getElementById("prod-desc").innerHTML = 
+                    "<p><strong>Tên sản phẩm:</strong> " + escapeHtml(name) + ".</p>" +
+                    "<p><strong>Chi tiết:</strong> " + escapeHtml(description) + ".</p>" +
+                    "<p><strong>Đơn giá hoàn thiện:</strong> " + escapeHtml(price) + " (Bao gồm bao thư + ruột thiệp).</p>" +
+                    "<p><strong>Chất liệu giấy:</strong> Giấy mỹ thuật cao cấp dày dặn, có vân mịn sang trọng.</p>" +
+                    "<p><strong>Công nghệ in:</strong> Kỹ thuật số độ phân giải cao, mực in sắc nét không phai.</p>" +
+                    "<p><strong>Ứng dụng:</strong> Phù hợp làm thiệp đám cưới, tiệc thành hôn, tiệc báo hỷ.</p>";
+            }
+
+            renderPage(currentPage);
+        }
+
+        function renderPage(page) {
+            currentPage = page;
+            const start = (page - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const paginatedItems = products.slice(start, end);
+
+            const productListHTML = paginatedItems.map(item => `
+                <div class="product_noibat_item" data-description="${escapeHtml(item.desc)}">
+                    <a class="img_pro" href="#" onclick="event.preventDefault(); chonMau(this, '${escapeHtml(item.price)}', '${escapeHtml(item.desc)}');">
+                        <img src="${item.img}" alt="${escapeHtml(item.name)}">
+                    </a>
+                    <h3><a href="#" class="text-split" onclick="event.preventDefault(); chonMau(this, '${escapeHtml(item.price)}', '${escapeHtml(item.desc)}');">${escapeHtml(item.name)}</a></h3>
+                    <div class="box_price_box"><strong>${escapeHtml(item.price)}</strong></div>
+                </div>
+            `).join('');
+
+            document.getElementById('product-list').innerHTML = productListHTML;
+            renderPagination();
+        }
+
+        function renderPagination() {
+            const pageCount = Math.ceil(products.length / itemsPerPage);
+            let paginationHTML = '';
+
+            for (let i = 1; i <= pageCount; i++) {
+                paginationHTML += `<button class="${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+            }
+
+            document.getElementById('pagination').innerHTML = paginationHTML;
+        }
+
+        function changePage(page) {
+            renderPage(page);
+            document.querySelector('.related-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function escapeHtml(value) {
+            return String(value).replace(/[&<>"']/g, function(ch) {
+                return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch];
+            });
+        }
+
+        function chonMau(element, gia, moTa) {
+            var item = element.closest('.product_noibat_item');
+            var ten = item.querySelector('h3 a').innerText;
+            var linkAnh = item.querySelector('img').src;
+
+            localStorage.setItem('clickProdName', ten);
+            localStorage.setItem('clickProdPrice', gia);
+            localStorage.setItem('clickProdImg', linkAnh);
+            localStorage.setItem('clickProdDesc', moTa || 'Chưa cập nhật');
+
+            document.getElementById("prod-title").innerText = ten;
+            document.getElementById("prod-price").innerText = gia;
+            document.getElementById("prod-image").src = linkAnh;
+            document.getElementById("prod-desc").innerHTML =
+                "<p><strong>Tên sản phẩm:</strong> " + escapeHtml(ten) + ".</p>" +
+                "<p><strong>Chi tiết:</strong> " + escapeHtml(moTa || 'Chưa cập nhật') + ".</p>" +
+                "<p><strong>Đơn giá hoàn thiện:</strong> " + escapeHtml(gia) + " (Bao gồm bao thư + ruột thiệp).</p>" +
+                "<p><strong>Chất liệu giấy:</strong> Giấy mỹ thuật cao cấp dày dặn, có vân mịn sang trọng.</p>" +
+                "<p><strong>Công nghệ in:</strong> Kỹ thuật số độ phân giải cao, mực in sắc nét không phai.</p>" +
+                "<p><strong>Ứng dụng:</strong> Phù hợp làm thiệp đám cưới, tiệc thành hôn, tiệc báo hỷ.</p>";
+
+            document.querySelector('.product-detail-container').scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+
+        // --- HÀM XỬ LÝ PHÓNG TO / THU NHỎ ẢNH ---
+        function openImageModal(imgSrc) {
+            var modal = document.getElementById("imageModal");
+            var modalImg = document.getElementById("modalImage");
+            modal.style.display = "flex";
+            modalImg.src = imgSrc;
+        }
+
+        function closeImageModal() {
+            document.getElementById("imageModal").style.display = "none";
+        }
+
+        function transferDataToOrderPage() {
+            var templateName = document.getElementById("prod-title").innerText;
+            var templatePrice = document.getElementById("prod-price").innerText;
+            
+            localStorage.setItem("selectedTemplate", templateName);
+            localStorage.setItem("selectedPrice", templatePrice);
+            
+            window.location.href = "trang-dat-hang-v03.html";
+        }
+    </script>
+</body>
+</html>

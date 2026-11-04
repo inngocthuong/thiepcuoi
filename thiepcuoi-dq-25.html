@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mẫu Thiệp Cưới DQ-25</title>
+    <style>
+        /* --- 1. CÀI ĐẶT CHUNG --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f6f9;
+            color: #333;
+        }
+
+        /* --- 2. PHẦN BANNER --- */
+        .banner {
+            position: relative;
+            width: 100%;
+        }
+
+        .banner img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .banner-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            color: white;
+            text-align: center;
+        }
+
+        .banner-search {
+            position: absolute;
+            top: 50%;
+            right: 50px;
+            transform: translateY(-50%);
+            z-index: 10;
+        }
+
+        .banner-search form {
+            display: flex;
+            align-items: center;
+            width: 260px;
+            height: 40px;
+            background: #fff;
+            border: 1px solid #ead4cc;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .banner-search input {
+            flex: 1;
+            min-width: 0;
+            height: 100%;
+            padding: 0 14px;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .banner-search button {
+            height: 100%;
+            padding: 0 13px;
+            border: none;
+            background: #fff;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* --- 3. THANH MENU NGANG --- */
+        .navbar {
+            background-color: #526456;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .main-menu {
+            list-style: none;
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .menu-item {
+            position: relative;
+        }
+
+        .menu-item a {
+            display: block;
+            color: #e5e7eb;
+            text-decoration: none;
+            padding: 18px 22px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .menu-item:hover > a {
+            background-color: #687b6c;
+            color: #ffffff;
+        }
+
+        .dropdown-menu {
+            list-style: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #526456;
+            min-width: 220px;
+            display: none;
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.15);
+        }
+
+        .dropdown-menu a {
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            border-bottom: 1px solid #1a3038;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #687b6c;
+            padding-left: 25px;
+        }
+
+        .menu-item:hover .dropdown-menu {
+            display: block;
+        }
+
+        .cum-tieu-de-danh-muc {
+            max-width: 1200px;
+            margin: 30px auto 25px auto;
+            padding: 0 15px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .cum-tieu-de-danh-muc h2 {
+            font-weight: bold;
+            text-transform: uppercase;
+            margin: 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid currentColor;
+        }
+
+        /* --- 4. KHU VỰC SẢN PHẨM --- */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 15px;
+        }
+
+        .product_noibat_box {
+            display: flex;
+            flex-wrap: wrap;
+            margin-right: -10px;
+            margin-left: -10px;
+        }
+
+        .product_noibat_item {
+            position: relative;
+            width: 25%; /* 4 sản phẩm trên 1 hàng => 5 hàng = 20 sản phẩm */
+            padding-right: 10px;
+            padding-left: 10px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        .product_noibat_item .img_pro {
+            position: relative;
+            display: block;
+            width: 100%;
+            overflow: hidden;
+            background: #f7f7f7;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .product_noibat_item .img_pro img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product_noibat_item .img_pro:hover img {
+            transform: scale(1.05);
+        }
+
+        .product_noibat_item h3 {
+            margin: 0 0 5px 0;
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .product_noibat_item h3 a {
+            color: #333;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .product_noibat_item h3 a:hover {
+            color: #2980b9;
+        }
+
+        .text-split {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: block;
+        }
+
+        .product_noibat_item .box_price_box {
+            font-size: 14px;
+        }
+
+        .product_noibat_item .box_price_box strong {
+            color: #e74c3c;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        /* --- STYLE THANH PHÂN TRANG (PAGINATION) --- */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+
+        .uk-pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            gap: 8px;
+        }
+
+        .uk-pagination li a {
+            display: block;
+            padding: 8px 14px;
+            border: 1px solid #ddd;
+            background: #fff;
+            color: #333;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .uk-pagination li a:hover {
+            background: #526456;
+            color: #fff;
+            border-color: #526456;
+        }
+
+        .uk-pagination li a.active {
+            background: #6a0716;
+            color: #fff;
+            border-color: #6a0716;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .product_noibat_item { width: 33.333%; }
+        }
+
+        @media (max-width: 768px) {
+            .product_noibat_item { width: 50%; }
+            .navbar, .banner, .footer, .menu-item, .banner-search { display: none !important; }
+            .navbar-mobile {
+                display: flex !important;
+                justify-content: space-around;
+                background: #526456;
+                padding: 12px 5px;
+                position: sticky;
+                top: 0;
+                z-index: 999;
+            }
+            .navbar-mobile a {
+                color: #ffffff;
+                text-decoration: none;
+                font-weight: bold;
+                font-size: 14.5px;
+            }
+            .banner-mobile { display: block !important; width: 100%; margin-bottom: 10px; }
+            .banner-mobile img { width: 100%; height: auto; display: block; }
+            .footer-mobile {
+                display: block !important;
+                background: #526456;
+                color: #ffffff;
+                text-align: center;
+                padding: 25px 15px;
+                font-size: 13.5px;
+                line-height: 1.6;
+                margin-top: 30px;
+            }
+            .footer-mobile h4 { color: #ffffff; font-size: 15px; margin-bottom: 10px; text-transform: uppercase; }
+            .footer-mobile p { margin-bottom: 8px; }
+            .footer-mobile-actions { display: flex; justify-content: center; gap: 15px; margin: 15px 0; }
+            .footer-mobile-actions a {
+                background: #ffffff; color: #526456; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 13px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            }
+            .footer-mobile-copy { border-top: 1px solid rgba(255,255,255,0.1); margin-top: 15px; padding-top: 12px; font-size: 12px; color: #bbb; }
+        }
+
+        .navbar-mobile, .banner-mobile, .footer-mobile { display: none !important; }
+
+        footer {
+            background-color: #e0e1e0;
+            color: #000;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            padding: 40px 0 20px 0;
+            margin-top: 60px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .footer-col { flex: 1; min-width: 280px; margin-bottom: 30px; padding-right: 20px; }
+        .footer-col h3 { color: #000; font-size: 1.1rem; margin-bottom: 20px; text-transform: uppercase; }
+        .footer-col p { margin-bottom: 10px; }
+        .footer-col strong { color: #000; }
+        .footer-links { list-style: none; padding: 0; margin: 0; }
+        .footer-links li { margin-bottom: 8px; }
+        .footer-links a { color: #000; text-decoration: none; }
+        .footer-links a:hover { color: #03692a; }
+        .footer-copyright { text-align: center; border-top: 1px solid #bab6b6; margin-top: 20px; padding-top: 20px; font-size: 0.8rem; color: #000; width: 100%; }
+    </style>
+</head>
+<body>
+
+    <!-- 1. BANNER CỬA HÀNG -->
+    <div class="banner-mobile">
+        <a href="index.html"><img src="anh/banner-mobile.png" alt="Banner Điện Thoại"></a>
+    </div>
+
+    <div class="banner">
+        <img src="anh/banner.png" alt="Banner">
+        <div class="banner-content">
+            <div class="banner-search">
+                <form action="index.html" method="get">
+                    <input type="text" id="search-input" placeholder="Tìm thiệp cưới...">
+                    <button type="button">🔍</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. THANH MENU HÀNG HÓA -->
+    <nav class="navbar">
+        <ul class="main-menu">
+            <li class="menu-item"><a href="index.html">Trang Chủ</a></li>
+            <li class="menu-item">
+                <a href="mauthiepcuoi.html">Mẫu Thiệp Cưới ▾</a>
+                <ul class="dropdown-menu">
+                    <li><a href="thiepcuoi-hiendai.html">Thiệp Cưới Hiện Đại</a></li>
+                    <li><a href="thiepcuoi-truyenthong.html">Thiệp Cưới Truyền Thống</a></li>
+                    <li><a href="thiepcuoi-docquyen.html">Thiệp Cưới Độc Quyền KTS</a></li>
+                    <li><a href="thiepcuoi-dq-25.html">Thiệp Cưới DQ_25</a></li>
+                </ul>
+            </li>
+            <li class="menu-item">
+                <a href="thiep-moi.html">Thiệp Mời ▾</a>
+                <ul class="dropdown-menu">
+                    <li><a href="thiep-tangia.html">Thiệp Tân Gia</a></li>
+                    <li><a href="thiep-sinhnhat.html">Thiệp Sinh Nhật</a></li>
+                    <li><a href="thiep-taon.html">Thiệp Công Giáo</a></li>
+                </ul>
+            </li>
+            <li class="menu-item"><a href="thiepcuoi-online.html">Thiệp Cưới Online</a></li>
+            <li class="menu-item"><a href="huong-dan.html">Hướng Dẫn</a></li>
+            <li class="menu-item"><a href="lienhe.html">Liên Hệ</a></li>
+        </ul>
+    </nav>
+
+    <!-- BANNER MENU THU GỌN DI ĐỘNG -->
+    <nav class="navbar-mobile">
+        <a href="thiepcuoi-hiendai.html">Hiện Đại</a>
+        <a href="thiepcuoi-truyenthong.html">Truyền Thống</a>
+        <a href="thiepcuoi-docquyen.html">Độc Quyền</a>
+        <a href="thiepcuoi-online.html">Thiệp Online</a>
+    </nav>
+
+    <!-- 3. KHU VỰC SẢN PHẨM & PHÂN TRANG -->
+    <main class="container">
+
+        <div class="cum-tieu-de-danh-muc">   
+            <h2 style="text-align: left; color: #6a0716; font-size: 24px;">DANH SÁCH THIỆP CƯỚI</h2>
+        </div>
+        
+        <!-- KHUNG CHỨA TOÀN BỘ SẢN PHẨM (Ví dụ 24 sản phẩm bên dưới) -->
+        <div class="product_noibat_box" id="product-list">
+            <!-- Sản phẩm 1 -->
+            <div class="product_noibat_item" data-description="Lót đôi giấy fo210g, in 2 mặt, có bế ">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744362329-DQ25A14Offsetcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A14 Offse</a></h3>
+                <div class="box_price_box"><strong>2.500 đ</strong></div>
+            </div>
+
+            <!-- Sản phẩm 2 -->
+            <div class="product_noibat_item" data-description="Bao thư giấy fo150g, in 2 mặt-Lót đôi giấy fo210g, in 2 mặt.">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744362699-DQ25A15Offsetcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A15 Offset</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+            <!-- Sản phẩm 3 -->
+          
+            <div class="product_noibat_item" data-description="Bao thư giấy fo150g, in 2 mặt-Lót đôi giấy fo210g, in 2 mặt.">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744362778-DQ25A16Offsetcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A16 Offset</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- Sản phẩm 4 -->
+            
+            <div class="product_noibat_item" data-description="Bao thư giấy fo150g, in 2 mặt-Lót đôi giấy fo210g, in 2 mặt.">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744362854-DQ25A17Offsetscopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A17 Offset</a></h3>
+                <div class="box_price_box"><strong>3.500 đ</strong></div></div>
+
+            <!-- Sản phẩm 5 -->
+            <div class="product_noibat_item"data-description="Bao thư giấy fo150g, in 2 mặt-Lót đôi giấy fo210g, in 2 mặt.">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744362933-DQ25A18Offsetcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A18 Offset</a></h3>
+                <div class="box_price_box"><strong>2.500 đ</strong></div></div>
+
+            <!-- Sản phẩm 6 -->
+            <div class="product_noibat_item"data-description="Bao thư giấy fo150g, in 2 mặt-Lót đôi giấy fo210g, in 2 mặt.">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744363004-DQ25A19Offsetcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A19 Offset</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div></div>
+
+            <!-- Sản phẩm 7 -->
+            <div class="product_noibat_item"data-description="Bao thư giấy fo150g, in 2 mặt-Lót đôi giấy fo210g, in 2 mặt.">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744363080-DQ25A20Offsetcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A20 Offset</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div></div>
+
+            <!-- Sản phẩm 8 -->
+            <div class="product_noibat_item"data-description="Bao thư giấy fo150g, in 2 mặt-Lót đôi giấy fo210g, in 2 mặt.">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744363156-DQ25A21Offsetcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A21 Offset</a></h3>
+                <div class="box_price_box"><strong>3.500 đ</strong></div></div>
+
+            <!-- Sản phẩm 9 -->
+            <div class="product_noibat_item"data-description="Bao thư giấy fo150g, in 2 mặt-Lót đôi giấy fo210g, in 2 mặt.">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744363235-DQ25A22Offsetcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A22 Offset</a></h3>
+                <div class="box_price_box"><strong>2.500 đ</strong></div></div>
+
+            <!-- Sản phẩm 10 -->
+            <div class="product_noibat_item"data-description="Bao thư giấy ánh kim thơm 2M 150g-Lót đôi giấy ánh kim thơm 2M 190g">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744363325-DQ25A24Anhkimthom2Mcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A24 Ánh Kim Thơm 2M</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div></div>
+
+            <!-- Sản phẩm 11 -->
+            <div class="product_noibat_item"data-description="Bao thư giấy ánh kim thơm 2M 150g-Lót đôi giấy ánh kim thơm 2M 190g">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744363489-DQ25A25Anhkimthom2Mcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A25 Ánh Kim Thơm 2M</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div></div>
+
+            <!-- Sản phẩm 12 -->
+            <div class="product_noibat_item"data-description="Bao thư giấy ánh kim thơm 2M 150g-Lót đôi giấy ánh kim thơm 2M 190g">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744363576-DQ25A26Anhkimthom2Mcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A26 Ánh Kim Thơm 2M</a></h3>
+                <div class="box_price_box"><strong>3.500 đ</strong></div></div>
+
+            <!-- Sản phẩm 13 -->
+            <div class="product_noibat_item"data-description="Bao thư giấy ánh kim thơm 2M 150g-Lót đôi giấy ánh kim thơm 2M 190g">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744363667-DQ25A27Anhkimthom2Mcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A27 Ánh Kim Thơm 2M</a></h3>
+                <div class="box_price_box"><strong>2.500 đ</strong></div></div>
+
+            <!-- Sản phẩm 14 -->
+            <div class="product_noibat_item"data-description="Bao thư giấy ánh kim thơm 2M 150g-Lót đôi giấy ánh kim thơm 2M 190g">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744363730-DQ25A28Anhkimthom2Mcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A28 Ánh Kim Thơm 2M</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div></div>
+
+            <!-- Sản phẩm 15 -->
+            <div class="product_noibat_item"data-description="Bao thư giấy ánh kim thơm 2M 150g-Lót đôi giấy ánh kim thơm 2M 190g">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744363789-DQ25A29Anhkimthom2Mcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A29 Ánh Kim Thơm 2M</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div></div>
+
+            <!-- Sản phẩm 16 -->
+            <div class="product_noibat_item"data-description="Bao thư giấy ánh kim thơm 2M 150g-Lót đôi giấy ánh kim thơm 2M 190g">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744363863-DQ25A30Anhkimthom2Mcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A30 Ánh Kim Thơm 2M</a></h3>
+                <div class="box_price_box"><strong>3.500 đ</strong></div></div>
+
+            <!-- Sản phẩm 17 -->
+            <div class="product_noibat_item"data-description="Bao thư giấy ánh kim thơm 2M 150g-Lót đôi giấy ánh kim thơm 2M 190g">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744363930-DQ25A31Anhkimthom2Mcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A31 Ánh Kim Thơm 2M</a></h3>
+                <div class="box_price_box"><strong>2.500 đ</strong></div></div>
+
+            <!-- Sản phẩm 18 -->
+            <div class="product_noibat_item"data-description="Bao thư giấy ánh kim thơm 2M 150g-Lót đôi giấy ánh kim thơm 2M 190g">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                    <img src="https://ducquyencards.com/upload/images/2025/04/1744364003-DQ25A32Anhkimthom2Mcopy.jpg"></a>
+                    <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A32 Ánh Kim Thơm 2M</a></h3>
+                    <div class="box_price_box"><strong>4.500 đ</strong></div></div>
+
+            <!-- Sản phẩm 19 -->
+            <div class="product_noibat_item"data-description="Bao thư giấy ánh kim thơm 2M 150g-Lót đôi giấy ánh kim thơm 2M 190g">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744364097-DQ25A34Anhkimthom2Mcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A34 Ánh Kim Thơm 2M</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div></div>
+
+            <!-- Sản phẩm 20 (ĐỦ 5 HÀNG NGANG) -->
+            <div class="product_noibat_item"data-description="Bao thư giấy ánh kim thơm 2M 150g-Lót đôi giấy ánh kim thơm 2M 190g">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744364179-DQ25A35Anhkimthom2Mcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A35 Ánh Kim Thơm 2M</a></h3>
+                <div class="box_price_box"><strong>3.500 đ</strong></div></div>
+            
+            <!-- SẢN PHẨM SỐ 21 TRỞ ĐI (SẼ TỰ ĐỘNG ĐẨY SANG TRANG 2) -->
+            <div class="product_noibat_item"data-description="Bao thư giấy ánh kim thơm 2M 150g-Lót đôi giấy ánh kim thơm 2M 190g">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744364240-DQ25A38Anhkimthom2Mcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A38 Ánh Kim Thơm 2M</a></h3>
+                <div class="box_price_box"><strong>2.500 đ</strong></div></div>
+
+            <div class="product_noibat_item"data-description="Bao thư giấy ánh kim thơm 2M 150g-Lót đôi giấy ánh kim thơm 2M 190g">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744364329-DQ25A39Anhkimthom2Mcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A39 Ánh Kim Thơm 2M</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div></div>
+
+            <div class="product_noibat_item"data-description="Thiệp túi giấy Fo150g ,In 2 mặt">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744364640-DQ25A42Thieptuioffsetcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A42 Thiệp túi Offset</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div></div>
+
+            <div class="product_noibat_item"data-description="Thiệp túi giấy Fo150g ,In 2 mặt">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744364718-DQ25A43Thieptuioffsetcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A43 Thiệp túi Offset</a></h3>
+                <div class="box_price_box"><strong>3.500 đ</strong></div></div>
+
+            <div class="product_noibat_item"data-description="Thiệp túi giấy Fo150g ,In 2 mặt">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744364757-DQ25A44Thieptuioffsetcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A44 Thiệp túi Offset</a></h3>
+                <div class="box_price_box"><strong>3.500 đ</strong></div></div>
+            
+            <!-- SẢN PHẨM SỐ 21 TRỞ ĐI (SẼ TỰ ĐỘNG ĐẨY SANG TRANG 2) -->
+            <div class="product_noibat_item"data-description="Thiệp túi giấy Fo150g ,In 2 mặt">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744364989-DQ25A45Thieptuioffsetcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A45 Thiệp túi Offset</a></h3>
+                <div class="box_price_box"><strong>2.500 đ</strong></div></div>
+
+            <div class="product_noibat_item"data-description="Thiệp túi giấy Ánh kim thơm 2M 150g">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744365064-46ThieptuiAnhkimthom2Mcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A46 Thiệp túi Ánh kim thơm 2M</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div></div>
+
+            <div class="product_noibat_item"data-description="Thiệp túi giấy Ánh kim thơm 2M 150g">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744365136-47ThieptuiAnhkimthom2Mcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A47 Thiệp túi Ánh kim thơm 2M</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div></div>
+
+            <div class="product_noibat_item"data-description="Thiệp túi giấy Ánh kim thơm 2M 150g">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744365166-48ThieptuiAnhkimthom2Mcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A48 Thiệp túi Ánh kim thơm 2M</a></h3>
+                <div class="box_price_box"><strong>3.500 đ</strong></div></div>
+
+                   <div class="product_noibat_item"data-description="Thiệp túi giấy Ánh kim thơm 2M 150g">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744365202-49ThieptuiAnhkimthom2Mcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A49 Thiệp túi Ánh kim thơm 2M</a></h3>
+                <div class="box_price_box"><strong>2.500 đ</strong></div></div>
+
+            <div class="product_noibat_item"data-description="Thiệp túi giấy Ánh kim thơm 2M 150g">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744365225-50ThieptuiAnhkimthom2Mcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A50 Thiệp túi Ánh kim thơm 2M</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div></div>
+
+            <div class="product_noibat_item"data-description="Thiệp túi giấy Ánh kim thơm 2M 150g">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744365252-51ThieptuiAnhkimthom2Mcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A51 Thiệp túi Ánh kim thơm 2M</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div></div>
+
+            <div class="product_noibat_item"data-description="Thiệp túi giấy Ánh kim thơm 2M 150g">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744365275-52ThieptuiAnhkimthom2Mcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A52 Thiệp túi Ánh kim thơm 2M</a></h3>
+                <div class="box_price_box"><strong>3.500 đ</strong></div></div>
+
+            <div class="product_noibat_item"data-description="Thiệp túi giấy Ánh kim thơm 2M 150g">
+                <a class="img_pro" href="chi-tiet-dq-25.html">
+                <img src="https://ducquyencards.com/upload/images/2025/04/1744365297-53ThieptuiAnhkimthom2Mcopy.jpg"></a>
+                <h3><a href="chi-tiet-dq-25.html" class="text-split">DQ-25A53 Thiệp túi Ánh kim thơm 2M</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div></div>
+
+         
+                
+                
+
+                
+
+                
+
+                
+        </div>
+
+        <!-- KHU VỰC HIỂN THỊ NÚT CHUYỂN TRANG (JS TỰ SINH NÚT 1, 2,...) -->
+        <div class="pagination-container">
+            <ul class="uk-pagination" id="pagination-list"></ul>
+        </div>
+
+    </main>
+
+    <!-- 4. CHÂN TRANG (FOOTER) -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>🏠 NHÀ IN THIỆP CƯỚI NGỌC THƯƠNG</h3>
+                <p><strong>Cơ sở in:</strong> Hệ thống in ấn thiệp cưới cao cấp Ngọc Thương</p>
+                <p><strong>Địa chỉ xưởng:</strong> 123 Đường Nguyễn Trãi, Quận 1, TP. Hồ Chí Minh</p>
+            </div>
+            <div class="footer-col">
+                <h3>⏰ THỜI GIAN LÀM VIỆC</h3>
+                <p><strong>Tư vấn trực tiếp:</strong> 08:00 - 21:00 (Hàng ngày)</p>
+                <p><strong>Hỗ trợ trực tuyến:</strong> 24/7 qua Zalo / Hotline</p>
+            </div>
+            <div class="footer-col">
+                <h3>🔗 CHÍNH SÁCH DỊCH VỤ</h3>
+                <ul class="footer-links">
+                    <li><a href="#">▶ Hướng dẫn quy trình duyệt thiết kế</a></li>
+                    <li><a href="#">▶ Chính sách in bù lỗi phát sinh 100%</a></li>
+                    <li><a href="#">▶ Giao hàng tận nơi toàn quốc</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>© 2026 Thiệp Cưới Ngọc Thương - Tinh Tế Trong Từng Đường Nét</p>
+        </div>
+    </footer>
+
+    <!-- FOOTER DI ĐỘNG -->
+    <div class="footer-mobile">
+        <h4>THIỆP CƯỚI NGỌC THƯƠNG</h4>
+        <p>📍 123 Nguyễn Trãi, Quận 1, TP.HCM</p>
+        <div class="footer-mobile-actions">
+            <a href="tel:0773060379">📞 Gọi Ngay</a>
+            <a href="https://zalo.me/0773060379" target="_blank">💬 Nhắn Zalo</a>
+        </div>
+        <div class="footer-mobile-copy">
+            © 2026 Thiệp Cưới Ngọc Thương
+        </div>
+    </div>
+    
+    <!-- SCRIPT TỰ ĐỘNG PHÂN TRANG (MAX 5 HÀNG NGANG = 20 SẢN PHẨM/TRANG) -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const itemsPerPage = 20; // Ép giới hạn đúng 20 sản phẩm (5 hàng ngang)
+            const productItems = document.querySelectorAll("#product-list .product_noibat_item");
+            const paginationList = document.getElementById("pagination-list");
+            
+            const totalPages = Math.ceil(productItems.length / itemsPerPage);
+            let currentPage = 1;
+
+            // Hàm hiển thị sản phẩm theo trang được chọn
+            function showPage(page) {
+                currentPage = page;
+                const start = (page - 1) * itemsPerPage;
+                const end = start + itemsPerPage;
+
+                productItems.forEach((item, index) => {
+                    if (index >= start && index < end) {
+                        item.style.display = "block"; // Hiển thị 20 sản phẩm thuộc trang này
+                    } else {
+                        item.style.display = "none";  // Ẩn sản phẩm của các trang khác
+                    }
+                });
+
+                renderPagination();
+            }
+
+            // Hàm vẽ nút bấm phân trang (1, 2, 3...)
+            function renderPagination() {
+                let paginationHTML = "";
+                if (totalPages > 1) {
+                    for (let i = 1; i <= totalPages; i++) {
+                        let activeClass = (i === currentPage) ? "active" : "";
+                        paginationHTML += `<li><a href="#" class="${activeClass}" data-page="${i}">${i}</a></li>`;
+                    }
+                }
+                paginationList.innerHTML = paginationHTML;
+
+                // Gắn sự kiện khi khách bấm đổi trang
+                document.querySelectorAll("#pagination-list a").forEach(link => {
+                    link.addEventListener("click", function (e) {
+                        e.preventDefault();
+                        let pageNum = parseInt(this.getAttribute("data-page"));
+                        showPage(pageNum);
+                        
+                        // Cuộn mượt lên đầu danh sách sản phẩm
+                        document.querySelector('.cum-tieu-de-danh-muc').scrollIntoView({ behavior: 'smooth' });
+                    });
+                });
+            }
+
+            // Kích hoạt hiển thị Trang 1 ban đầu
+            if (productItems.length > 0) {
+                showPage(1);
+            }
+
+            // Lắng nghe sự kiện click sản phẩm truyền dữ liệu sang trang chi tiết
+            productItems.forEach(function(item) {
+                var links = item.querySelectorAll('a');
+                links.forEach(function(link) {
+                    link.onclick = function() {
+                        var name = item.querySelector('.text-split').innerText;
+                        var price = item.querySelector('.box_price_box strong').innerText;
+                        var imgUrl = item.querySelector('img').src;
+                        var description = item.getAttribute('data-description') || 'Chưa cập nhật';
+                        
+                        localStorage.setItem('clickProdName', name);
+                        localStorage.setItem('clickProdPrice', price);
+                        localStorage.setItem('clickProdImg', imgUrl);
+                        localStorage.setItem('clickProdDesc', description);
+                    };
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang chủ</title>
+    <style>
+        /* --- 1. CÀI ĐẶT CHUNG --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f6f9;
+            color: #333;
+        }
+
+        /* --- 2. PHẦN BANNER MỚI --- */
+        .banner {
+            position: relative;
+            width: 100%;
+        }
+
+        .banner img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .banner-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            color: white;
+            text-align: center;
+        }
+
+        .banner-giua-trang {
+            max-width: 1200px;
+            margin: 10px auto;
+            padding: 0 15px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .banner-giua-trang1 {
+            max-width: 1200px;
+            margin: 0px auto;
+            padding: 0 15px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .banner-giua-trang img,
+        .banner-giua-trang1 img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 6px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .banner-search {
+            position: absolute;
+            top: 50%;
+            right: 50px;
+            transform: translateY(-50%);
+            z-index: 10;
+        }
+
+        .banner-search form {
+            display: flex;
+            align-items: center;
+            width: 260px;
+            height: 40px;
+            background: #fff;
+            border: 1px solid #ead4cc;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .banner-search input {
+            flex: 1;
+            min-width: 0;
+            height: 100%;
+            padding: 0 14px;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .banner-search button {
+            height: 100%;
+            padding: 0 13px;
+            border: none;
+            background: #fff;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .cum-tieu-de-danh-muc {
+            max-width: 1600px;
+            margin: 30px auto 25px auto;
+            padding: 0 15px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .cum-tieu-de-danh-muc h2 {
+            font-weight: bold;
+            text-transform: uppercase;
+            margin: 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid currentColor; 
+        }
+
+        @media (max-width: 600px) {
+            .banner-search {
+                top: 8px;
+                right: 8px;
+            }
+            .banner-search form {
+                width: 190px;
+                height: 34px;
+            }
+        }
+
+        /* --- 3. THANH MENU NGANG SHOPPING --- */
+        .navbar {
+            background-color: #526456;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .main-menu {
+            list-style: none;
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .menu-item {
+            position: relative;
+        }
+
+        .menu-item a {
+            display: block;
+            color: #e5e7eb;
+            text-decoration: none;
+            padding: 18px 22px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .menu-item:hover > a {
+            background-color: #687b6c;
+            color: #ffffff;
+        }
+
+        /* --- 4. DROPDOWN DANH MỤC SẢN PHẨM --- */
+        .dropdown-menu {
+            list-style: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #526456;
+            min-width: 220px;
+            display: none;
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.15);
+        }
+
+        .dropdown-menu a {
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            border-bottom: 1px solid #1a3038;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #687b6c;
+            padding-left: 25px;
+        }
+
+        .menu-item:hover .dropdown-menu {
+            display: block;
+        }
+
+        /* --- 5. KHU VỰC SẢN PHẨM TỰ CHẠY HÀNG NGANG (SLIDER AUTO) --- */
+        .container {
+            max-width: 1600px;
+            margin: 40px auto;
+            padding: 0 15px;
+        }
+
+        /* Khung chứa hiệu ứng cuộn ngang */
+        .slider-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding-bottom: 10px;
+            scrollbar-width: thin; /* Đẹp mắt trên Firefox */
+        }
+
+
+
+        /* Dành cho trình duyệt Chrome, Safari, Edge */
+        .slider-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+        
+
+        /* Tùy chỉnh thanh cuộn cho Chrome/Safari */
+        .slider-wrapper::-webkit-scrollbar {
+            height: 6px;
+        }
+        .slider-wrapper::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        .product_noibat_box_slider {
+            display: flex;
+            gap: 20px;
+            width: max-content;
+        }
+
+        .product_noibat_item_slider {
+            width: 260px; /* Cố định độ rộng từng sản phẩm khi chạy ngang */
+            flex-shrink: 0;
+            background: #fff;
+            padding: 10px;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s ease;
+        }
+
+        .product_noibat_item_slider:hover {
+            transform: translateY(-5px);
+        }
+
+        .product_noibat_item_slider .img_pro {
+            position: relative;
+            display: block;
+            width: 100%;
+            overflow: hidden;
+            background: #f7f7f7;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        .product_noibat_item_slider .img_pro img {
+            width: 100%;
+            height: 220px;
+            display: block;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product_noibat_item_slider .img_pro:hover img {
+            transform: scale(1.05);
+        }
+
+        .product_noibat_item_slider h3 {
+            margin: 0 0 5px 0;
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.4;
+            height: 40px;
+            overflow: hidden;
+        }
+
+        .product_noibat_item_slider h3 a {
+            color: #333;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            cursor: pointer;
+        }
+
+        .product_noibat_item_slider h3 a:hover {
+            color: #2980b9;
+        }
+
+        .text-split {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .product_noibat_item_slider .box_price_box {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .product_noibat_item_slider .box_price_box strong {
+            color: #e74c3c;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        /* Responsive di động */
+        .navbar-mobile, .banner-mobile, .footer-mobile { display: none !important; }
+
+        @media (max-width: 768px) {
+            .main-menu, .banner, .footer, .menu-item, .banner-search, .vung-chua-2-box { display: none !important; }
+            .navbar-mobile {
+                display: flex !important;
+                justify-content: space-around;
+                background: #526456;
+                padding: 12px 5px;
+                position: sticky;
+                top: 0;
+                z-index: 999;
+            }
+            .navbar-mobile a { color: #ffffff; text-decoration: none; font-weight: bold; font-size: 14.5px; }
+            .banner-mobile { display: block !important; width: 100%; margin-bottom: 10px; }
+            .banner-mobile img { width: 100%; height: auto; display: block; }
+            .footer-mobile {
+                display: block !important;
+                background: #526456;
+                color: #ffffff;
+                text-align: center;
+                padding: 25px 15px;
+                font-size: 13.5px;
+                line-height: 1.6;
+                margin-top: 30px;
+            }
+            .footer-mobile h4 { color: #ffffff; font-size: 15px; margin-bottom: 10px; text-transform: uppercase; }
+            .footer-mobile p { margin-bottom: 8px; }
+            .footer-mobile-actions { display: flex; justify-content: center; gap: 15px; margin: 15px 0; }
+            .footer-mobile-actions a {
+                background: #ffffff; color: #526456; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 13px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            }
+            .footer-mobile-copy { border-top: 1px solid rgba(255,255,255,0.1); margin-top: 15px; padding-top: 12px; font-size: 12px; color: #bbb; }
+            footer { display: none !important; }
+            .product_noibat_item_slider { width: 200px; }
+        }
+
+        /* --- 6. PHẦN CHÂN TRANG (FOOTER) --- */
+        footer {
+            background-color: #e0e1e0;
+            color: #000;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            padding: 40px 0 20px 0;
+            margin-top: 60px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .footer-col { flex: 1; min-width: 280px; margin-bottom: 30px; padding-right: 20px; }
+        .footer-col h3 { color: #000; font-size: 1.1rem; margin-bottom: 20px; text-transform: uppercase; }
+        .footer-col p { margin-bottom: 10px; }
+        .footer-links { list-style: none; padding: 0; margin: 0; }
+        .footer-links li { margin-bottom: 8px; }
+        .footer-links a { color: #000; text-decoration: none; }
+        .footer-links a:hover { color: #03692a; }
+        .footer-copyright { text-align: center; border-top: 1px solid #bab6b6; margin-top: 20px; padding-top: 20px; font-size: 0.8rem; color: #000; width: 100%; }
+    </style>
+</head>
+
+<body>
+
+    <!-- 1. BANNER CỬA HÀNG -->
+    <div class="banner-mobile">
+        <a href="index.html"><img src="anh/banner-mobile.png" alt="Banner Điện Thoại"></a>
+    </div>
+
+    <div class="banner">
+        <img src="anh/banner.png" alt="Banner">
+        <div class="banner-content">
+            <div class="banner-search">
+                <form action="index.html" method="get">
+                    <input type="text" id="search-input" placeholder="Tìm thiệp cưới...">
+                    <button type="button">🔍</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. THANH MENU HÀNG HÓA -->
+    <nav class="navbar">
+        <ul class="main-menu">
+            <li class="menu-item"><a href="index.html">Trang Chủ</a></li>
+            <li class="menu-item">
+                <a href="mauthiepcuoi.html">Mẫu Thiệp Cưới ▾</a>
+                <ul class="dropdown-menu">
+                    <li><a href="thiepcuoi-hiendai.html">Thiệp Cưới Hiện Đại</a></li>
+                    <li><a href="thiepcuoi-truyenthong.html">Thiệp Cưới Truyền Thống</a></li>
+                    <li><a href="thiepcuoi-docquyen.html">Thiệp Cưới Độc Quyền KTS</a></li>
+                    <li><a href="thiepcuoi-dq-25.html">Thiệp Cưới DQ_25</a></li>
+                </ul>
+            </li>
+            <li class="menu-item">
+                <a href="thiep-moi.html">Thiệp Mời ▾</a>
+                <ul class="dropdown-menu">
+                    <li><a href="thiep-tangia.html">Thiệp Tân Gia</a></li>
+                    <li><a href="thiep-sinhnhat.html">Thiệp Sinh Nhật</a></li>
+                    <li><a href="thiep-taon.html">Thiệp Công Giáo</a></li>
+                </ul>
+            </li>
+            <li class="menu-item"><a href="thiepcuoi-online.html">Thiệp Cưới Online</a></li>
+            <li class="menu-item">
+                <a href="huong-dan.html">Hướng Dẫn ▾</a>
+                <ul class="dropdown-menu">
+                    <li><a href="huong-dan-dat-thiep.html">Hướng dẫn đặt thiệp</a></li>
+                    <li><a href="huong-dan-viet-thiep.html">Hướng dẫn viết thiệp cưới</a></li>
+                </ul>
+            </li>
+            <li class="menu-item"><a href="lienhe.html">Liên Hệ</a></li>
+        </ul>
+    </nav>
+
+    <!-- BẢN MENU THU GỌN DÀNH CHO ĐIỆN THOẠI -->
+    <nav class="navbar-mobile">
+        <a href="thiepcuoi-hiendai.html">Hiện Đại</a>
+        <a href="thiepcuoi-truyenthong.html">Truyền Thống</a>
+        <a href="thiepcuoi-docquyen.html">Độc Quyền</a>
+        <a href="thiepcuoi-online.html">Thiệp Online</a>
+    </nav>
+
+    <!-- 3. KHU VỰC HIỂN THỊ SẢN PHẨM CHÍNH -->
+    
+        <div class="vung-chua-2-box" style="max-width: 1600px; margin: 30px auto; padding: 0 15px; display: flex; gap: 10px;">
+            <div class="banner-giua-trang1">   
+                <img src="anh/banner-duoi.png" alt="Biểu ngữ Giáo xứ">
+            </div>
+            <iframe src="menu-cot-phai.html" style="flex: 35; height: 330px; border: none; overflow: hidden;"></iframe>
+        </div>
+<main class="container">
+          <!-- =================  MẪU THIỆP ĐỘC QUYỀN ================= -->
+        <div class="cum-tieu-de-danh-muc">
+            <h2 style="text-align: left; color: #526456; font-size: 24px;">Mẫu Thiệp Độc Quyền</h2>
+        </div>
+        
+        <div class="slider-wrapper" id="slider-truyenthong">
+            <div class="product_noibat_box_slider">
+
+                 <!-- TRANG 1 -->
+            <div class="product_noibat_item_slider" data-description="In thiệp sinh nhật bé trai theo thiết kế">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6179-2433.jpg" alt="In thiệp sinh nhật bé trai theo thiết kế HHY-6179"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">In thiệp sinh nhật bé trai theo thiết kế HHY-6179</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới giấy ánh kim cao cấp">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6177-8040.jpg" alt="Thiệp cưới giấy ánh kim cao cấp HHY-6177"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới giấy ánh kim cao cấp HHY-6177</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="In thiệp chữ nhật Bé gái theo yêu cầu">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6176-0877.jpg" alt="In thiệp chữ nhật Bé gái theo yêu cầu HHY-6176"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">In thiệp chữ nhật Bé gái theo yêu cầu HHY-6176</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới giấy ánh kim thơm cao cấp">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6175-7458.jpg" alt="Thiệp cưới giấy ánh kim thơm cao cấp HHY-6175"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới giấy ánh kim thơm cao cấp HHY-6175</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="In thiệp cưới truyền thống">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6174-2689.jpg" alt="In thiệp cưới truyền thống HHY-6174"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">In thiệp cưới truyền thống HHY-6174</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="In thiệp cưới theo thiết kế">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6173-4380.jpg" alt="In thiệp cưới theo thiết kế HHY-6173"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">In thiệp cưới theo thiết kế HHY-6173</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="In thiệp cưới đỏ truyền thống theo yêu cầu">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6172-7523.jpg" alt="In thiệp cưới đỏ truyền thống theo yêu cầu HHY-6172"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">In thiệp cưới đỏ truyền thống theo yêu cầu HHY-6172</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="In thiệp cưới giấy ánh kim thơm cao cấp">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6171-9377.jpg" alt="In thiệp cưới giấy ánh kim thơm cao cấp HHY-6171"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">In thiệp cưới giấy ánh kim thơm cao cấp HHY-6171</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in kts">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6170-7905.jpg" alt="Thiệp cưới in kts HHY-6170"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in kts HHY-6170</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in theo yêu cầu - Giấy ánh kim xoắn ốc">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6169-2763.jpg" alt="Thiệp cưới in theo yêu cầu HHY-6169"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in theo yêu cầu HHY-6169 giấy ánh kim xoắn ốc</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền màu đỏ truyền thống">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6168-1648.jpg" alt="Thiệp cưới độc quyền màu đỏ truyền thống HHY-6168"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới độc quyền màu đỏ truyền thống HHY-6168</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiết kế thiệp cưới giấy ánh kim thơm cao cấp">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6167-4548.jpg" alt="Thiết kế thiệp cưới giấy ánh kim thơm cao cấp HHY-6167"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiết kế thiệp cưới giấy ánh kim thơm cao cấp HHY-6167</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới thiết kế màu đỏ">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6166-0832.jpg" alt="Thiệp cưới thiết kế màu đỏ HHY-6166"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới thiết kế màu đỏ HHY-6166</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp tân gia thiết kế theo yêu cầu">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6165-1473.jpg" alt="Thiệp tân gia thiết kế theo yêu cầu HHY-6165"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp tân gia thiết kế theo yêu cầu HHY-6165</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới thiết kế đơn giản">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6164-0008.jpg" alt="Thiệp cưới thiết kế đơn giản HHY-6164"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới thiết kế đơn giản HHY-6164</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền giấy draft">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/6163-1693.jpg" alt="Thiệp cưới độc quyền HHY-6163 giấy draft"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới độc quyền HHY-6163 giấy draft</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền đỏ truyền thống">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6159-7249.jpg" alt="Thiệp cưới độc quyền đỏ truyền thống HHY-6162"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới độc quyền đỏ truyền thống HHY-6162</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="In thiệp sinh nhật bé gái theo thiết kế">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6161-1382.jpg" alt="In thiệp sinh nhật bé gái theo thiết kế HHY-6161"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">In thiệp sinh nhật bé gái theo thiết kế HHY-6161</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="In thiệp cưới theo thiết kế kem">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6160-0025.jpg" alt="In thiệp cưới theo thiết kế HHY-6160 kem"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">In thiệp cưới theo thiết kế HHY-6160 kem</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền xanh">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6159-4408.jpg" alt="Thiệp cưới độc quyền HHY-6159 xanh"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới độc quyền HHY-6159 xanh</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+
+            <!-- TRANG 2 ĐẾN HẾT (Đã cập nhật link thành chi-tiet-doc-quyen.html) -->
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền kem">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6158k-9497.jpg" alt="Thiệp cưới độc quyền HHY-6158 kem"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới độc quyền HHY-6158 kem</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="In thiệp cưới độc quyền đỏ">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6158d-3097.jpg" alt="In thiệp cưới độc quyền HHY-6158 đỏ"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">In thiệp cưới độc quyền HHY-6158 đỏ</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Tự tạo thiệp cưới online">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6157-8954.jpg" alt="Tự tạo thiệp cưới online HHY-6157"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Tự tạo thiệp cưới online HHY-6157</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới thiết kế online">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/6156-9010.jpg" alt="Thiệp cưới thiết kế online HHY-6156"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới thiết kế online HHY-6156</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp sinh nhật thiết kế miễn phí">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6155-4424.jpg" alt="Thiệp sinh nhật thiết kế miễn phí HHY-6155"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp sinh nhật thiết kế miễn phí HHY-6155</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới thiết kế miền tây">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6154-9895.jpg" alt="Thiệp cưới thiết kế miền tây HHY-6154"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới thiết kế miền tây HHY-6154</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền giấy ánh kim thơm">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/web6153-1643.jpg" alt="Thiệp cưới độc quyền giấy ánh kim thơm HHY-6153"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới độc quyền giấy ánh kim thơm HHY-6153</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới hình vuông">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/web6152-4017.jpg" alt="Thiệp cưới hình vuông HHY-6152"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới hình vuông HHY-6152</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới hoa sen">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/web6151-9926.jpg" alt="Thiệp cưới hoa sen HHY-6151"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới hoa sen HHY-6151</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiết kế thiệp cưới online miễn phí">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/web6150-0819.jpg" alt="Thiết kế thiệp cưới online miễn phí HHY-6150"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiết kế thiệp cưới online miễn phí HHY-6150</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới thiết kế online">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/web6149-7936.jpg" alt="Thiệp cưới thiết kế online HHY-6149"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới thiết kế online HHY-6149</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Tạo thiệp cưới online miễn phí">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/web6148-0034.jpg" alt="Tạo thiệp cưới online miễn phí HHY-6148"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Tạo thiệp cưới online miễn phí HHY-6148</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiết kế thiệp cưới">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/web6147-0411.jpg" alt="Thiết kế thiệp cưới HHY-6147"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiết kế thiệp cưới HHY-6147</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới ánh kim thơm nhà trai">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/web6146hong-4214.jpg" alt="Thiệp cưới ánh kim thơm nhà trai HHY-6146"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới ánh kim thơm nhà trai HHY-6146</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền giấy thơm ánh kim kem">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/web6146kem-5233.jpg" alt="Thiệp cưới độc quyền giấy thơm ánh kim HHY-6146 kem"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới độc quyền giấy thơm ánh kim HHY-6146 kem</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới đỏ độc quyền">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/web6145-2960.jpg" alt="Thiệp cưới đỏ độc quyền HHY-6145"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới đỏ độc quyền HHY-6145</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp mời khai trương">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/webhhy6144-5273.jpg" alt="Thiệp mời khai trương HHY-6144"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp mời khai trương HHY-6144</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Tạo thiệp cưới online miễn phí">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/webhhy6143-2217.jpg" alt="Tạo thiệp cưới online miễn phí HHY-6143"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Tạo thiệp cưới online miễn phí HHY-6143</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới màu hồng pastel">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6142-8919.jpg" alt="Thiệp cưới màu hồng pastel HHY-6142"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới màu hồng pastel HHY-6142</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới màu xanh">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6141-2443.jpg" alt="Thiệp cưới màu xanh HHY-6141"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới màu xanh HHY-6141</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+
+            <!-- TRANG 3 -->
+            <div class="product_noibat_item_slider" data-description="Mẫu thiệp cưới màu xanh">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6140x-8937.jpg" alt="Mẫu thiệp cưới màu xanh HHY-6140X"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Mẫu thiệp cưới màu xanh HHY-6140X</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới màu hồng">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6140h---copy-4535.jpg" alt="Thiệp cưới màu hồng HHY-6140H"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới màu hồng HHY-6140H</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới thiết kế giấy ánh kim thơm">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/6139web-5692.jpg" alt="Thiệp cưới thiết kế giấy ánh kim thơm HHY-6139"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới thiết kế giấy ánh kim thơm HHY-6139</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới màu đỏ đẹp">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/web6138-8319.jpg" alt="Thiệp cưới màu đỏ đẹp HHY-6138"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới màu đỏ đẹp HHY-6138</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới màu xanh">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/web6137-3384.jpg" alt="Thiệp cưới màu xanh HHY-6137"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới màu xanh HHY-6137</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/web6136-7983.jpg" alt="Thiệp cưới độc quyền HHY-6136"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới độc quyền HHY-6136</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Mẫu thiệp cưới đẹp màu đỏ">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/goc6135.download-4112.jpg" alt="Mẫu thiệp cưới đẹp màu đỏ HHY-6135"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Mẫu thiệp cưới đẹp màu đỏ HHY-6135</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Mẫu thiệp giấy draft đẹp">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/goc6134-3446.jpg" alt="Mẫu thiệp giấy draft đẹp HHY-6134"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Mẫu thiệp giấy draft đẹp HHY-6134</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới tiếng hoa">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/goc6133-5870.jpg" alt="Thiệp cưới tiếng hoa HHY-6133"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới tiếng hoa HHY-6133</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in hình">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/goc6132-6661.jpg" alt="Thiệp cưới in hình HHY-6132"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in hình HHY-6132</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới thiết kế tiếng Hoa">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/goc6131-0776.jpg" alt="Thiệp cưới thiết kế tiếng Hoa HHY-6131"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới thiết kế tiếng Hoa HHY-6131</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp Phúc gốc Hoa">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/goc6130-0534.jpg" alt="Thiệp Phúc gốc Hoa HHY-6130"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp Phúc gốc Hoa HHY-6130</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới đỏ truyền thống">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/goc6129-5544.jpg" alt="Thiệp cưới đỏ truyền thống HHY-6129"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới đỏ truyền thống HHY-6129</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp khai trương">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/goc6128-4721.jpg" alt="Thiệp khai trương HHY-6128"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp khai trương HHY-6128</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới truyền thống">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/goc6127-4293.jpg" alt="Thiệp cưới truyền thống HHY-6127"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới truyền thống HHY-6127</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6126-4058.jpg" alt="Thiệp cưới in nhanh KTS HHY-6126"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6126</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/hinhweb-0072.jpg" alt="Thiệp cưới độc quyền HHY-6125"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới độc quyền HHY-6125</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6124-7683.png" alt="Thiệp cưới độc quyền HHY-6124"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới độc quyền HHY-6124</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/6123-4641.jpg" alt="Thiệp cưới in nhanh KTS HHY-6123"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6123</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/6122-9757.jpg" alt="Thiệp cưới in nhanh KTS HHY-6122"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6122</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+
+            <!-- TRANG 4 -->
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/web6121-0687.jpg" alt="Thiệp cưới in nhanh KTS HHY-6121"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6121</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6120-6531.jpg" alt="Thiệp cưới in nhanh KTS HHY-6120"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6120</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6119-7406.jpg" alt="Thiệp cưới in nhanh KTS HHY-6119"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6119</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6118-0514.jpg" alt="Thiệp cưới in nhanh KTS HHY-6118"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6118</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6117-7117.jpg" alt="Thiệp cưới in nhanh KTS HHY-6117"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6117</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/xemweb6116-3269.jpg" alt="Thiệp cưới in nhanh KTS HHY-6116"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6116</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/xemweb6115-8911.jpg" alt="Thiệp cưới in nhanh KTS HHY-6115"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6115</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6114-3375.jpg" alt="Thiệp cưới in nhanh KTS HHY-6114"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6114</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6113-8448.jpg" alt="Thiệp cươi in nhanh KTS HHY-6113"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cươi in nhanh KTS HHY-6113</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6112-8354.jpg" alt="Thiệp cưới in nhanh KTS HHY-6112"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6112</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6111-3332.jpg" alt="Thiệp cưới in nhanh KTS HHY-6111"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6111</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/xemweb6110-3695.jpg" alt="Thiệp cưới in nhanh KTS HHY-6110"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6110</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/xemweb6109-8275.jpg" alt="Thiệp cưới in nhanh KTS HHY-6109"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6109</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/xemweb6108-3528.jpg" alt="Thiệp cưới in nhanh KTS HHY-6108"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6108</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/xemweb6107-0090.jpg" alt="Thiệp cưới in nhanh KTS HHY-6107"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6107</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/xemweb6106-9604.jpg" alt="Thiệp cưới in nhanh KTS HHY-6106"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6106</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/6104-9368.jpg" alt="Thiệp cưới in nhanh KTS HHY-6104"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6104</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/6103-7540.jpg" alt="Thiệp cưới in nhanh KTS HHY-6103"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6103</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/hinhweb6102-6190.jpg" alt="Thiệp cưới in nhanh KTS HHY-6102"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6102</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6101-2536.jpg" alt="Thiệp cưới in nhanh KTS HHY-6101"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6101</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+
+            <!-- TRANG 5 -->
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/hinhweb6100-6176.jpg" alt="Thiệp cưới in nhanh KTS HHY-6100"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6100</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6099-0579.jpg" alt="Thiệp cưới in nhanh KTS HHY-6099"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6099</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/hinhweb6098-2659.jpg" alt="Thiệp cưới in nhanh KTS HHY-6098"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6098</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6097-4862.jpg" alt="Thiệp cưới in nhanh KTS HHY-6097"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6097</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts6096-6951.jpg" alt="Thiệp cưới in nhanh KTS HHY-6096"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6096</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/6095-1327.jpg" alt="Thiệp cưới in nhanh KTS HHY-6095"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6095</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/6094-7209.jpg" alt="Thiệp cưới độc quyền HHY-6094"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới độc quyền HHY-6094</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/6093-6062.jpg" alt="Thiệp cưới in nhanh KTS HHY-6093"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6093</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/6092-2237.jpg" alt="Thiệp cưới in nhanh KTS HHY-6092"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6092</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/6091-3620.jpg" alt="Thiệp cưới in nhanh KTS HHY-6091"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6091</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/6090-3552.jpg" alt="Thiệp cưới in nhanh KTS HHY-6090"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6090</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Ảnh thiệp cưới">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/6089-3058.jpg" alt="Ảh thiệp cưới HHY-6089"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Ảh thiệp cưới HHY-6089</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/6088-0106.jpg" alt="Thiệp cưới độc quyền HHY-6088"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới độc quyền HHY-6088</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/dr6087-1648.jpg" alt="Thiệp cưới độc quyền HHY-6087"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới độc quyền HHY-6087</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/dr6086-0947.jpg" alt="Thiệp cưới in nhanh KTS HHY-6086"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6086</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/dr6085-3994.jpg" alt="Thiệp cưới in nhanh KTS HHY-6085"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6085</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/dr6084-8707.jpg" alt="Thiệp cưới in nhanh KTS HHY-6084"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6084</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/dr6083-7365.jpg" alt="Thiệp cưới in nhanh KTS HHY-6083"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6083</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in nhanh KTS">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/dr6081-7055.jpg" alt="Thiệp cưới in nhanh KTS HHY-6081"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới in nhanh KTS HHY-6081</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/dr6080-7214.jpg" alt="Thiệp cưới độc quyền HHY-6080"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">Thiệp cưới độc quyền HHY-6080</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/c614-6573.jpg" alt="THIỆP CƯỚI ĐỘC QUYỀN HHY-614"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">THIỆP CƯỚI ĐỘC QUYỀN HHY-614</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/c613-5380.jpg" alt="THIỆP CƯỚI ĐỘC QUYỀN HHY-613"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">THIỆP CƯỚI ĐỘC QUYỀN HHY-613</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/c612-5846.jpg" alt="THIỆP CƯỚI ĐỘC QUYỀN HHY-612"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">THIỆP CƯỚI ĐỘC QUYỀN HHY-612</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/c611-8598.jpg" alt="THIỆP CƯỚI ĐỘC QUYỀN HHY-611"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">THIỆP CƯỚI ĐỘC QUYỀN HHY-611</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/c610-0977.jpg" alt="THIỆP CƯỚI ĐỘC QUYỀN HHY-610"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">THIỆP CƯỚI ĐỘC QUYỀN HHY-610</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/c609-5856.jpg" alt="THIỆP CƯỚI ĐỘC QUYỀN HHY-609"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">THIỆP CƯỚI ĐỘC QUYỀN HHY-609</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/dr608-4516.jpg" alt="THIỆP CƯỚI ĐỘC QUYỀN HHY-608"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">THIỆP CƯỚI ĐỘC QUYỀN HHY-608</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/dr607-1156.jpg" alt="THIỆP CƯỚI ĐỘC QUYỀN HHY-607"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">THIỆP CƯỚI ĐỘC QUYỀN HHY-607</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/dr606-4091.jpg" alt="THIỆP CƯỚI ĐỘC QUYỀN HHY-606"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">THIỆP CƯỚI ĐỘC QUYỀN HHY-606</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/dr605-0000.jpg" alt="THIỆP CƯỚI ĐỘC QUYỀN HHY-605"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">THIỆP CƯỚI ĐỘC QUYỀN HHY-605</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/dr604-4519.jpg" alt="THIỆP CƯỚI ĐỘC QUYỀN HHY-604"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">THIỆP CƯỚI ĐỘC QUYỀN HHY-604</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/dr603-7895.jpg" alt="THIỆP CƯỚI ĐỘC QUYỀN HHY-603"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">THIỆP CƯỚI ĐỘC QUYỀN HHY-603</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/dr602-6128.jpg" alt="THIỆP CƯỚI ĐỘC QUYỀN HHY-602"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">THIỆP CƯỚI ĐỘC QUYỀN HHY-602</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới độc quyền">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/dr601-2422.jpg" alt="THIỆP CƯỚI ĐỘC QUYỀN HHY-601"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">THIỆP CƯỚI ĐỘC QUYỀN HHY-601</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in hình độc quyền">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts002-0596.jpg" alt="THIỆP CƯỚI IN HÌNH ĐỘC QUYỀN HHY-KTS002"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">THIỆP CƯỚI IN HÌNH ĐỘC QUYỀN HHY-KTS002</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+            <div class="product_noibat_item_slider" data-description="Thiệp cưới in độc quyền hình dâu rể">
+                <a class="img_pro" href="chi-tiet-doc-quyen.html"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/kts001-0510.jpg" alt="THIỆP CƯỚI IN ĐỘC QUYỀN HÌNH DÂU RỂ HHY-KTS001"></a>
+                <h3><a href="chi-tiet-doc-quyen.html" class="text-split">THIỆP CƯỚI IN ĐỘC QUYỀN HÌNH DÂU RỂ HHY-KTS001</a></h3>
+                <div class="box_price_box"><strong>Liên hệ</strong></div>
+            </div>
+             </div>
+              </div>
+
+        <!-- ================= DANH MỤC 1: MẪU THIỆP HIỆN ĐẠI ================= -->
+        <div class="cum-tieu-de-danh-muc">
+            <h2 style="text-align: left; color: #526456; font-size: 24px;">Mẫu Thiệp Hiện Đại</h2>
+        </div>
+        
+        <div class="slider-wrapper" id="slider-hiendai">
+            <div class="product_noibat_box_slider">
+
+
+                         <!-- 1 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/O90SRyjR.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9101"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9101</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 2 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/NDLOsGtN.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9102"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9102</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 3 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/gcpCTEsb.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9103"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9103</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 4 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/JSnDLlLj.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9105"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9105</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 5 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/LBpPZKpx.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9106"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9106</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 6 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/tq1q0Cu9.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9107"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9107</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 7 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/VGKF5nnj.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9109"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9109</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 8 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/TjsTtKuE.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9110"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9110</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 9 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/5VEHPHyy.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9111"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9111</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 10 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/CY94eUvk.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9112"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9112</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 11 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/KGKPVwk2.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9113"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9113</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 12 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/alqfzCbD.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9114"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9114</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 13 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/jcaidvsn.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9115"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9115</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 14 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/10gXGFh2.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9116"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9116</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 15 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/RBjHc6h5.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9117"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9117</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 16 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/IH48EHiz.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9118"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9118</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 17 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/L0qK0Cv7.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9119"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9119</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 18 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/TqbOkCuG.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9120"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9120</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 19 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/DoMzfllH.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9121"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9121</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 20 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/gwtOP3wo.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9122"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9122</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 21 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/W8Px3bnL.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9123"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9123</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 22 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/I02PZcsH.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9124"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9124</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 23 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/VhpFpQWh.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9125"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9125</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 24 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/c33dlkj8.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9126"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9126</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 25 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/gu0Be8bv.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9127"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9127</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 26 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/wQguW9Ll.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9128"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9128</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 27 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/FjqQjflt.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9129"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9129</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 28 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/hx5YbvrF.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9130"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9130</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 29 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/CF0khPsN.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9131"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9131</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 30 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/GejOREXT.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9132"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9132</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 31 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/Cp6kPP1H.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9133"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9133</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 32 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/GUx8syQp.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9134"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9134</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 33 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/WEEurQSy.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9135"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9135</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 34 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/WR6pncz5.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9136"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9136</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 35 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/Xw4fQEBq.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9137"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9137</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 36 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/zctB6OMc.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9138"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9138</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 37 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/8bbgzmgB.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9139"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9139</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 38 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/p5hvXHuo.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9140"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9140</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 39 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/pWEW3LNw.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9141"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9141</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 40 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/H0JYwp0j.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9142"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9142</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 41 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/aQVH2bpM.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9143"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9143</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 42 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, 2 tờ lót, in 1 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/QBWL4ztu.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9144"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9144</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 43 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, thiệp túi, in 2 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/1dkjnVs0.jpg" alt="Mẫu thiệp túi kỷ thuật số hhy-kts-9301"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp túi kỷ thuật số hhy-kts-9301</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 44 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, thiệp túi, in 2 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/7BTG4g09.jpg" alt="Mẫu thiệp túi kỷ thuật số hhy-kts-9302"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp túi kỷ thuật số hhy-kts-9302</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 45 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, thiệp túi, in 2 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/fmW5pE4h.jpg" alt="Mẫu thiệp túi kỷ thuật số hhy-kts-9303"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp túi kỷ thuật số hhy-kts-9303</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 46 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, thiệp túi, in 2 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/ZrAbfKiq.jpg" alt="Mẫu thiệp túi kỷ thuật số hhy-kts-9304"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp túi kỷ thuật số hhy-kts-9304</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 47 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, thiệp túi, in 2 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/hg3q2Kwb.jpg" alt="Mẫu thiệp túi kỷ thuật số hhy-kts-9305"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp túi kỷ thuật số hhy-kts-9305</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 48 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, thiệp túi, in 2 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/J9M1knYN.jpg" alt="Mẫu thiệp túi kỷ thuật số hhy-kts-9306"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp túi kỷ thuật số hhy-kts-9306</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 49 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, thiệp túi, in 2 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/iB9njxqp.jpg" alt="Mẫu thiệp túi kỷ thuật số hhy-kts-9307"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp túi kỷ thuật số hhy-kts-9307</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+
+            <!-- 50 -->
+            <div class="product_noibat_item_slider" data-description="Giấy ánh kim thơm 200g, thiệp túi, in 2 mặt">
+                <a class="img_pro" href="chi-tiet-hien-dai.html"><img src="https://cdn.upanhlaylink.com/i/fj7ZgfOI.jpg" alt="Mẫu thiệp túi kỷ thuật số hhy-kts-9308"></a>
+                <h3><a href="chi-tiet-hien-dai.html" class="text-split">Mẫu thiệp túi kỷ thuật số hhy-kts-9308</a></h3>
+                <div class="box_price_box"><strong>4.500 đ</strong></div>
+            </div>
+            </div>
+        </div>
+
+        <!-- ================= DANH MỤC 2: MẪU THIỆP TRUYỀN THỐNG ================= -->
+        <div class="cum-tieu-de-danh-muc">
+            <h2 style="text-align: left; color: #526456; font-size: 24px;">Mẫu Thiệp Truyền Thống</h2>
+        </div>
+        
+        <div class="slider-wrapper" id="slider-truyenthong">
+            <div class="product_noibat_box_slider">
+
+              <!-- 1 -->
+            <div class="product_noibat_item_slider" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/LA4ilurn.jpg" alt="Mẫu thiệp HHY-9401"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp HHY-9401</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 2 -->
+            <div class="product_noibat_item_slider" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210gt">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/OxIkz6lG.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9102"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9102</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 3 -->
+            <div class="product_noibat_item_slider" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/r7ai7rrI.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9103"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9103</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 4 -->
+            <div class="product_noibat_item_slider" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/MoqNfJpx.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9104"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9104</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 5 -->
+            <div class="product_noibat_item_slider" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/JLUCv7Ap.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9105"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9105</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 6 -->
+            <div class="product_noibat_item_slider" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/KiCqxfkA.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9106"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9106</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 7 -->
+            <div class="product_noibat_item_slider" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/ftElnjSD.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9107"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9107</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 8 -->
+            <div class="product_noibat_item_slider" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/LilV9pQE.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9108"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9108</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 9 -->
+            <div class="product_noibat_item_slider" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/SIYWXVZI.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9109"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9109</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 10 -->
+            <div class="product_noibat_item_slider" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/8txxkfQ9.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9110"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9110</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 11 -->
+            <div class="product_noibat_item_slider" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/b8KsaHnW.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9111"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9111</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 12 -->
+            <div class="product_noibat_item_slider" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/hec8lkka.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9112"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9112</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 13 -->
+            <div class="product_noibat_item_slider" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210gt">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/LOQByDqD.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9113"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9113</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 14 -->
+            <div class="product_noibat_item_slider" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/ydiNNdDV.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9114"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9114</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 15 -->
+            <div class="product_noibat_item_slider" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/OeoSJkHb.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9115"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9115</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 16 -->
+            <div class="product_noibat_item_slider" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/SV3xnGX1.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9116"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9116</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            <!-- 17 -->
+            <div class="product_noibat_item_slider" data-description="Bao thư giấy fo150g-Lót đôi giấy fo210g">
+                <a class="img_pro" href="chi-tiet-truyen-thong.html"><img src="https://cdn.upanhlaylink.com/i/sJ8rcN9W.jpg" alt="Mẫu thiệp kỷ thuật số hhy-kts-9117"></a>
+                <h3><a href="chi-tiet-truyen-thong.html" class="text-split">Mẫu thiệp kỷ thuật số hhy-kts-9117</a></h3>
+                <div class="box_price_box"><strong>3.000 đ</strong></div>
+            </div>
+
+            </div>
+        </div>
+       
+      </main>
+
+    <!-- 4. KHU VỰC CHÂN TRANG (FOOTER) DƯỚI CÙNG -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>🏠 NHÀ IN THIỆP CƯỚI NGỌC THƯƠNG</h3>
+                <p><strong>Cơ sở in:</strong> Hệ thống in ấn thiệp cưới cao cấp Ngọc Thương</p>
+                <p><strong>Địa chỉ xưởng:</strong> 123 Đường Nguyễn Trãi, Quận 1, TP. Hồ Chí Minh</p>
+            </div>
+            <div class="footer-col">
+                <h3>⏰ THỜI GIAN LÀM VIỆC</h3>
+                <p><strong>Tư vấn trực tiếp:</strong> 08:00 - 21:00 (Hàng ngày)</p>
+                <p><strong>Hỗ trợ trực tuyến:</strong> 24/7 qua Zalo / 0773060379</p>
+            </div>
+            <div class="footer-col">
+                <h3>🔗 CHÍNH SÁCH DỊCH VỤ</h3>
+                <ul class="footer-links">
+                    <li><a href="huong-dan-dat-thiep.html">▶ Hướng dẫn quy trình duyệt thiết kế</a></li>
+                    <li><a href="trang-quan-ly-don-hang-v03.html">▶ Quản lý đơn hàng</a></li>
+                    <li><a href="#">▶ Giao hàng tận nơi toàn quốc</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-copyright">
+            <p>© 2026 Thiệp Cưới Ngọc Thương - Tinh Tế Trong Từng Đường Nét</p>
+        </div>
+    </footer>
+
+    <!-- KHU VỰC FOOTER THU GỌN RIÊNG CHO ĐIỆN THOẠI (FOOTER MOBILE) -->
+    <div class="footer-mobile">
+        <h4>THIỆP CƯỚI NGỌC THƯƠNG</h4>
+        <p>📍 123 Nguyễn Trãi, Quận 1, TP.HCM</p>
+        <div class="footer-mobile-actions">
+            <a href="tel:0773060379">📞 Gọi Ngay</a>
+            <a href="https://zalo.me/0773060379" target="_blank">💬 Nhắn Zalo</a>
+        </div>
+        <div class="footer-mobile-copy">
+            © 2026 Thiệp Cưới Ngọc Thương
+        </div>
+    </div>
+
+    <!-- SCRIPT XỬ LÝ TỰ ĐỘNG CHẠY NGANG & LƯU DỮ LIỆU CICK -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // 1. Tự động chạy trượt ngang cho tất cả slider
+            const sliders = document.querySelectorAll('.slider-wrapper');
+
+            sliders.forEach(slider => {
+                let isHovered = false;
+
+                slider.addEventListener('mouseenter', () => isHovered = true);
+                slider.addEventListener('mouseleave', () => isHovered = false);
+
+                setInterval(() => {
+                    if (!isHovered) {
+                        // Nếu cuộn đến cuối danh sách thì quay lại đầu
+                        if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 5) {
+                            slider.scrollLeft = 0;
+                        } else {
+                            slider.scrollLeft += 1.5; // Tốc độ trượt ngang (có thể tăng giảm tùy ý)
+                        }
+                    }
+                }, 30);
+            });
+
+            // 2. Truyền thông tin sang trang chi tiết khi bấm vào sản phẩm
+            const productItems = document.querySelectorAll('.product_noibat_item_slider');
+
+            productItems.forEach(item => {
+                const links = item.querySelectorAll('a');
+                links.forEach(link => {
+                    link.onclick = function() {
+                        const name = item.querySelector('.text-split').innerText;
+                        const price = item.querySelector('.box_price_box strong').innerText;
+                        const imgUrl = item.querySelector('img').src;
+                        const description = item.getAttribute('data-description') || 'Chưa cập nhật';
+
+                        localStorage.setItem('clickProdName', name);
+                        localStorage.setItem('clickProdPrice', price);
+                        localStorage.setItem('clickProdImg', imgUrl);
+                        localStorage.setItem('clickProdDesc', description);
+                    };
+                });
+            });
+        });
+    </script>
+    
+</body>
+</html>

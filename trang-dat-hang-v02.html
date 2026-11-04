@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nội Dung Đặt Thiệp</title>
+    <style>
+        /* --- ĐỒNG BỘ CSS TRANG CHỦ --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+        body { background-color: #f5f6f9; color: #333; }
+
+        .banner { position: relative; width: 100%; }
+        .banner img { display: block; width: 100%; height: auto; }
+        .banner-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; color: white; text-align: center; }
+
+        .banner-search { position: absolute; top: 50%; right: 50px; transform: translateY(-50%); z-index: 10; }
+        .banner-search form { display: flex; align-items: center; width: 260px; height: 40px; background: #fff; border: 1px solid #ead4cc; border-radius: 25px; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); }
+        .banner-search input { flex: 1; min-width: 0; height: 100%; padding: 0 14px; border: none; outline: none; background: transparent; color: #333; font-size: 14px; }
+        .banner-search button { height: 100%; padding: 0 13px; border: none; background: #fff; cursor: pointer; font-size: 16px; }
+
+        .navbar { background-color: #526456; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .main-menu { list-style: none; display: flex; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .menu-item { position: relative; }
+        .menu-item a { display: block; color: #e5e7eb; text-decoration: none; padding: 18px 22px; font-weight: 500; transition: all 0.3s; }
+        .menu-item:hover > a { background-color: #687b6c; color: #ffffff; }
+
+        .dropdown-menu { list-style: none; position: absolute; top: 100%; left: 0; background-color: #526456; min-width: 220px; display: none; box-shadow: 0px 8px 16px rgba(0,0,0,0.15); }
+        .dropdown-menu a { padding: 12px 20px; font-size: 0.95rem; border-bottom: 1px solid #1a3038; }
+        .dropdown-menu a:hover { background-color: #687b6c; padding-left: 25px; }
+        .menu-item:hover .dropdown-menu { display: block; }
+
+        @media (max-width: 768px) {
+            .vung-chua-3-box, .trang-chu-container, .box-flex {
+                display: flex !important; flex-direction: column !important; height: auto !important; gap: 15px !important;
+            }
+            iframe { width: 100% !important; height: 750px !important; flex: none !important; }
+            .navbar a { padding: 10px 8px !important; font-size: 14px !important; }
+        }
+
+        .navbar-mobile, .banner-mobile, .footer-mobile { display: none !important; }
+
+        @media (max-width: 768px) {
+            .navbar, .banner, .footer, .menu-item, .banner-search { display: none !important; }
+            .navbar-mobile {
+                display: flex !important; justify-content: space-around; background: #526456; padding: 12px 5px; position: sticky; top: 0; z-index: 999;
+            }
+            .navbar-mobile a { color: #ffffff; text-decoration: none; font-weight: bold; font-size: 14.5px; }
+            .banner-mobile { display: block !important; width: 100%; margin-bottom: 10px; }
+            .banner-mobile img { width: 100%; height: auto; display: block; }
+            .footer-mobile {
+                display: block !important; background: #526456; color: #ffffff; text-align: center; padding: 25px 15px; font-size: 13.5px; line-height: 1.6; margin-top: 30px;
+            }
+            .footer-mobile h4 { color: #ffffff; font-size: 15px; margin-bottom: 10px; text-transform: uppercase; }
+            .footer-mobile p { margin-bottom: 8px; }
+            .footer-mobile-actions { display: flex; justify-content: center; gap: 15px; margin: 15px 0; }
+            .footer-mobile-actions a {
+                background: #ffffff; color: #526456; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 13px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            }
+            .footer-mobile-copy { border-top: 1px solid rgba(255,255,255,0.1); margin-top: 15px; padding-top: 12px; font-size: 12px; color: #bbb; }
+        }
+
+        .order-container { max-width: 900px; margin: 40px auto; padding: 30px; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .form-section { margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px dashed #ddd; }
+        .form-section h3 { color: #1a3038; margin-bottom: 15px; font-size: 1.2rem; border-left: 4px solid #d93838; padding-left: 10px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.95rem; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; }
+        .form-group input[readonly] { background-color: #f0f2f5; color: #555; font-weight: bold; }
+        
+        /* Bố cục chia 2/3 và 1/3 cho Tên và Danh xưng Cô Dâu - Chú Rể */
+        .couple-input-row { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; align-items: center; }
+        @media(max-width:650px){ .couple-input-row { grid-template-columns: 1fr; gap: 8px; } }
+
+        .family-grid { display:grid; grid-template-columns:1fr 1fr; gap:22px; margin: 8px 0 20px; }
+        .family-column { min-width:0; }
+        .family-title { text-align:center; font-size:1.05rem; color:#444; margin:0 0 10px; font-weight:600; }
+        .family-row { display:grid; grid-template-columns:58px minmax(0,1fr); gap:9px; align-items:center; margin-bottom:10px; }
+        .family-row label { margin:0; font-weight:500; }
+        .family-row input { width:100%; min-width:0; padding:10px 12px; border:1px solid #ccc; border-radius:4px; font-size:1rem; }
+        .family-row input:focus { outline:2px solid #dce8df; border-color:#526456; }
+        @media(max-width:650px){ .family-grid { grid-template-columns:1fr; gap:12px; } .family-title { text-align:left; } }
+        
+        .total-highlight { font-size: 1.3rem; color: #d93838; font-weight: bold; }
+        .payment-options{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+        .payment-option{display:flex;gap:10px;align-items:flex-start;padding:14px;border:1px solid #d5ddd6;border-radius:7px;cursor:pointer;background:#fff}
+        .payment-option:has(input:checked){border-color:#526456;background:#f3f7f3;box-shadow:0 0 0 1px #526456}
+        .payment-option input{margin-top:4px;accent-color:#526456}
+        .payment-option span{display:flex;flex-direction:column;gap:5px}.payment-option small{color:#666;line-height:1.4}
+        .transfer-box{margin-top:15px;padding:16px;border:1px dashed #526456;border-radius:8px;background:#f8fbf8;display:grid;grid-template-columns:1fr 190px;gap:14px;align-items:center}
+        .transfer-box[hidden]{display:none!important}.transfer-info p{margin-top:8px;overflow-wrap:anywhere}.transfer-qr{width:100%;max-width:190px;border:1px solid #ddd;background:#fff;border-radius:6px}
+        .transfer-note{grid-column:1/-1;color:#666;font-size:.88rem}
+        @media(max-width:600px){.payment-options{grid-template-columns:1fr}.transfer-box{grid-template-columns:1fr}.transfer-qr{margin:0 auto;max-width:220px}}
+        .btn-submit-order { background-color: #d93838; color: white; border: none; padding: 15px 30px; font-size: 1.1rem; font-weight: bold; border-radius: 4px; cursor: pointer; width: 100%; margin-top: 20px; transition: background 0.2s; }
+        .btn-submit-order:hover { background-color: #b82828; }
+
+        footer { background-color: #e0e1e0; color: #000; font-size: 0.9rem; line-height: 1.8; padding: 40px 0 20px 0; margin-top: 60px; }
+        .footer-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; justify-content: space-between; }
+        .footer-col { flex: 1; min-width: 280px; margin-bottom: 30px; padding-right: 20px; }
+        .footer-col h3 { color: #000; font-size: 1.1rem; margin-bottom: 20px; text-transform: uppercase; }
+        .footer-col p { margin-bottom: 10px; }
+        .footer-links { list-style: none; padding: 0; margin: 0; }
+        .footer-links li { margin-bottom: 8px; }
+        .footer-links a { color: #000; text-decoration: none; }
+        .footer-links a:hover { color: #03692a; }
+        .footer-copyright { text-align: center; border-top: 1px solid #bab6b6; margin-top: 20px; padding-top: 20px; font-size: 0.8rem; color: #000; width: 100%; }
+        @media (max-width: 768px) {
+            .main-menu { flex-direction: column; padding: 0; }
+            .dropdown-menu { position: static; width: 100%; }
+            .footer-container { flex-direction: column; }
+            .footer-col { padding-right: 0; }
+            footer { display: none !important; }
+        }
+             @media (max-width: 768px) {
+    /* Giữ nguyên cấu trúc ẩn desktop */
+    .main-menu, .banner, .footer, .menu-item, .banner-search, .vung-chua-2-box { 
+        display: none !important; 
+    }
+
+    /* Thanh Menu Mobile Chính */
+    .navbar-mobile {
+        display: flex !important;
+        justify-content: space-around;
+        align-items: center;
+        background: #526456;
+        padding: 8px 5px;
+        position: sticky;
+        top: 0;
+        z-index: 999;
+    }
+
+    .navbar-mobile > a, 
+    .mobile-dropdown-btn {
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14.5px;
+        cursor: pointer;
+        list-style: none; /* Xóa dấu mũi tên mặc định của summary */
+        user-select: none;
+    }
+
+    .mobile-dropdown-btn::-webkit-details-marker {
+        display: none; /* Xóa mũi tên mặc định trên Safari/Chrome */
+    }
+
+    /* Khung chứa Menu Con Xổ Xuống */
+    .mobile-dropdown {
+        position: relative;
+    }
+
+    .mobile-dropdown-content {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #435247; /* Tông màu tối hơn menu chính để phân biệt */
+        min-width: 200px;
+        box-shadow: 0px 8px 16px rgba(0,0,0,0.25);
+        border-radius: 6px;
+        margin-top: 8px;
+        overflow: hidden;
+        z-index: 1000;
+    }
+
+    .mobile-dropdown-content a {
+        color: #ffffff;
+        padding: 10px 16px;
+        text-decoration: none;
+        display: block;
+        font-size: 13.5px;
+        font-weight: normal;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .mobile-dropdown-content a:last-child {
+        border-bottom: none;
+    }
+
+    .mobile-dropdown-content a:active {
+        background-color: #687b6c;
+    }
+}
+    </style>
+</head>
+<body>
+
+   <div class="banner-mobile">
+    <a href="index.html"><img src="anh/banner-mobile.png" alt="Banner Điện Thoại"></a>
+</div>
+
+    <div class="banner">
+        <img src="anh/banner.png" alt="Banner">
+        <div class="banner-content">
+        <div class="banner-search">
+        <form action="index.html" method="get">
+        <input type="text" id="search-input" placeholder="Tìm thiệp cưới...">
+        <button type="button">🔍</button>
+        </form>
+        </div>
+        </div>
+        </div>
+
+    <!-- 2. THANH MENU HÀNG HÓA -->
+
+    <nav class="navbar">
+        <ul class="main-menu">
+        <li class="menu-item"><a href="index.html">Trang Chủ</a></li>
+        <li class="menu-item">
+                <a href="mauthiepcuoi.html">Mẫu Thiệp Cưới ▾</a>
+                <ul class="dropdown-menu">
+                <li><a href="thiepcuoi-hiendai.html">Thiệp Cưới Hiện Đại</a></li>
+                <li><a href="thiepcuoi-truyenthong.html">Thiệp Cưới Truyền Thống</a></li>
+                <li><a href="thiepcuoi-docquyen.html">Thiệp Cưới Độc Quyền KTS</a></li>
+                <li><a href="thiepcuoi-dq-25.html">Thiệp Cưới DQ_25</a></li>
+                </ul>
+                </li>
+         <li class="menu-item">
+                <a href="thiep-moi.html">Thiệp Mời ▾</a>
+                <ul class="dropdown-menu">
+                <li><a href="thiep-tangia.html">Thiệp Tân Gia</a></li>
+                <li><a href="thiep-sinhnhat.html">Thiệp Sinh Nhật</a></li>
+                <li><a href="thiep-taon.html">Thiệp Công Giáo</a></li>
+                </ul>
+                </li>
+        <li class="menu-item"><a href="thiepcuoi-online.html">Thiệp Cưới Online</a></li>
+        <li class="menu-item"><a href="huong-dan.html">Hướng Dẫn</a></li>
+        <li class="menu-item"><a href="lienhe.html">Liên Hệ</a></li>
+        </ul>
+        </nav>
+
+   <!-- BẢN MENU DÀNH CHO ĐIỆN THOẠI (CÓ MENU CON XỔ XUỐNG) -->
+    <nav class="navbar-mobile">
+        <details class="mobile-dropdown">
+            <summary class="mobile-dropdown-btn">Sản Phẩm ▾</summary>
+            <div class="mobile-dropdown-content">
+                <a href="mauthiepcuoi.html">📌 Tất Cả Mẫu Thiệp</a>
+                <a href="thiepcuoi-hiendai.html">Mẫu Thiệp Hiện Đại</a>
+                <a href="thiepcuoi-truyenthong.html">Mẫu Thiệp Truyền Thống</a>
+                <a href="thiepcuoi-docquyen.html">Mẫu Thiệp Độc Quyền KTS</a>
+                <a href="thiepcuoi-dq-25.html">Mẫu Thiệp DQ_25</a>
+                <a href="thiep-tangia.html">Thiệp Tân Gia</a>
+                <a href="thiep-sinhnhat.html">Thiệp Sinh Nhật</a>
+                <a href="thiep-taon.html">Thiệp Công Giáo</a>
+            </div>
+        </details>
+        <a href="thiepcuoi-online.html">Thiệp Online</a>
+        <a href="huong-dan.html">Hướng Dẫn</a>
+        <a href="lienhe.html">Liên Hệ</a>
+    </nav>
+
+    <main class="order-container">
+        <form id="weddingOrderForm" action="https://formspree.io/f/xzedgknq" method="POST" onsubmit="saveOrderToSystem(event)">
+            
+            <div class="form-section">
+                <h3>1. Thông Tin Đơn Hàng</h3>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Mẫu thiệp đã chọn:</label>
+                        <input type="text" id="orderTemplate" name="Mau_Thiep" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Đơn giá (1 chiếc):</label>
+                        <input type="text" id="orderPrice" name="Don_Gia" readonly>
+                    </div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Số lượng thiệp cần in (cái):</label>
+                        <input type="number" id="orderQuantity" name="So_Luong" min="1" value="1" oninput="calculateTotal()" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tổng cộng tiền thiệp:</label>
+                        <input type="text" id="orderTotalInput" name="Tong_Tien" style="display:none;">
+                        <span class="total-highlight" id="orderTotal">0 đ</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3>2. Thông Tin Người Đặt</h3>
+                <div class="grid-2">
+                    <div class="form-group"><label for="clientName">Tên khách hàng:</label><input type="text" id="clientName" name="Ten_Khach_Hang" required></div>
+                    <div class="form-group"><label for="clientPhone">Số điện thoại:</label><input type="tel" id="clientPhone" name="So_Dien_Thoai" required></div>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group"><label for="clientAddress">Địa chỉ nhận hàng:</label><input type="text" id="clientAddress" name="Dia_Chi_Nguoi_Dat" placeholder="Số nhà, đường, phường/xã, tỉnh/thành phố" required autocomplete="street-address"></div>
+                    <div class="form-group"><label for="clientEmail">Email (không bắt buộc):</label><input type="email" id="clientEmail" name="Email_Khach_Hang" placeholder="vidu@email.com" autocomplete="email"></div>
+                </div>
+            </div>
+
+            <div class="form-section" id="invitationTypeSection">
+                <h3>3. Chọn Loại Thiệp</h3>
+                <div class="form-group">
+                    <label for="invitationType">Bạn muốn đặt loại thiệp nào?</label>
+                    <select id="invitationType" name="Loai_Thiep" required>
+                        <option value="Thiệp cưới" selected>Thiệp cưới</option>
+                        <option value="Thiệp sinh nhật">Thiệp sinh nhật</option>
+                        <option value="Thiệp tân gia">Thiệp tân gia</option>
+                        <option value="Thiệp khai trương">Thiệp khai trương</option>
+                        <option value="Thiệp thôi nôi">Thiệp thôi nôi</option>
+                        <option value="Thiệp khác">Loại thiệp khác</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="weddingFields">
+                <div class="form-section">
+                    <h3>4. Nội Dung In Trên Thiệp Cưới</h3>
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label>Chọn Lễ In Trên Thiệp:</label>
+                        <select id="weddingType" name="Loai_Le" style="font-weight: bold; color: #d93838;">
+                            <option value="LỄ VŨ QUY (Nhà gái)">LỄ VŨ QUY (Nhà gái)</option>
+                            <option value="LỄ TÂN HÔN (Nhà trai)">LỄ TÂN HÔN (Nhà trai)</option>
+                            <option value="LỄ THÀNH HÔN (Hai họ chung)">LỄ THÀNH HÔN (Hai họ chung)</option>
+                            <option value="LỄ ĐÍNH HÔN">LỄ ĐÍNH HÔN</option>
+                        </select>
+                    </div>
+                    <label style="color:#c0392b; font-size:0.9rem; margin-bottom: 10px; display:block;">* Lưu ý: Nếu là thiệp Công giáo, phải ghi rõ Tên thánh trước tên.</label>
+                    
+                    <div class="family-grid">
+                        <div class="family-column">
+                            <div class="family-title">Họ nhà trai</div>
+                            <div class="family-row"><label for="fatherGroom">Ông:</label><input type="text" id="fatherGroom" name="Cha_Ong_Nha_Trai" placeholder="Ví dụ: Giuse Nguyễn Văn A"></div>
+                            <div class="family-row"><label for="motherGroom">Bà:</label><input type="text" id="motherGroom" name="Cha_Ba_Nha_Trai" placeholder="Ví dụ: Maria Trần Thị B"></div>
+                            <div class="family-row"><label for="addressGroom">Đc:</label><input type="text" id="addressGroom" name="Dia_Chi_Nha_Trai" placeholder="Địa chỉ nhà trai"></div>
+                        </div>
+                        <div class="family-column">
+                            <div class="family-title">Họ nhà gái</div>
+                            <div class="family-row"><label for="fatherBride">Ông:</label><input type="text" id="fatherBride" name="Cha_Ong_Nha_Gai" placeholder="Ví dụ: Gioan Baotixita Lê Văn C"></div>
+                            <div class="family-row"><label for="motherBride">Bà:</label><input type="text" id="motherBride" name="Cha_Ba_Nha_Gai" placeholder="Ví dụ: Anna Phạm Thị D"></div>
+                            <div class="family-row"><label for="addressBride">Đc:</label><input type="text" id="addressBride" name="Dia_Chi_Nha_Gai" placeholder="Địa chỉ nhà gái"></div>
+                        </div>
+                    </div>
+
+                    <!-- PHẦN CHÚ RỂ VÀ CÔ DÂU CHIA TỶ LỆ 2/3 TÊN VÀ 1/3 DANH XƯNG -->
+                    <div class="grid-2" style="margin-top: 15px;">
+                        <div class="form-group">
+                            <label>Chú Rể (Tên & Danh xưng):</label>
+                            <div class="couple-input-row">
+                                <input type="text" id="nameGroom" name="Ten_Chu_Re" placeholder="Nhập tên chú rể..." required>
+                                <select id="titleGroom" name="Danh_Xung_Chu_Re">
+                                    <option value="Trưởng nam">Trưởng nam</option>
+                                    <option value="Thứ nam" selected>Thứ nam</option>
+                                    <option value="Út nam">Út nam</option>
+                                    <option value="Con độc">Con độc</option>
+                                    <option value="Con một">Con một</option>
+                                    <option value="Nam gia">Nam gia</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Cô Dâu (Tên & Danh xưng):</label>
+                            <div class="couple-input-row">
+                                <input type="text" id="nameBride" name="Ten_Co_Dau" placeholder="Nhập tên cô dâu..." required>
+                                <select id="titleBride" name="Danh_Xung_Co_Dau">
+                                    <option value="Trưởng nữ">Trưởng nữ</option>
+                                    <option value="Thứ nữ" selected>Thứ nữ</option>
+                                    <option value="Út nữ">Út nữ</option>
+                                    <option value="Con độc">Con độc</option>
+                                    <option value="Con một">Con một</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background-color: #f8f9fa; padding: 15px; border-radius: 6px; margin: 15px 0; border: 1px solid #e9ecef;">
+                        <strong style="color: #007bff; display: block; margin-bottom: 10px;">✦ THÔNG TIN CỬ HÀNH HÔN LỄ</strong>
+                        <div class="form-group">
+                            <label>Địa điểm cử hành Hôn Lễ:</label>
+                            <input type="text" id="ceremonyAddress" name="Dia_Diem_Hon_Le" placeholder="Ví dụ: Tại Thánh đường Giáo xứ..." required>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Ngày giờ cử hành (Dương lịch):</label>
+                                <input type="text" id="dateSolar" name="Ngay_DL_Hon_Le" placeholder="Ví dụ: 08h00 ngày 27/05/2026" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Ngày cử hành (Âm lịch):</label>
+                                <input type="text" id="dateLunar" name="Ngay_AL_Hon_Le" placeholder="Ví dụ: Ngày 11 tháng 4 năm Bính Ngọ">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background-color: #fff5f5; padding: 15px; border-radius: 6px; border: 1px solid #ffe3e3;">
+                        <strong style="color: #d93838; display: block; margin-bottom: 10px;">✦ THÔNG TIN TỔ CHỨC TIỆC CƯỚI</strong>
+                        <div class="form-group">
+                            <label>Địa điểm tổ chức Tiệc Cưới:</label>
+                            <input type="text" id="address" name="Dia_Diem_Tiec" placeholder="Ví dụ: Tại nhà hàng... hoặc Tại Tư gia..." required>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label>Ngày giờ đãi tiệc (Dương lịch):</label>
+                                <input type="text" id="dateSolar2" name="Ngay_DL_Tiec" placeholder="Ví dụ: 17h00 ngày 27/05/2026" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Ngày đãi tiệc (Âm lịch):</label>
+                                <input type="text" id="dateLunar2" name="Ngay_AL_Tiec" placeholder="Ví dụ: Ngày 11 tháng 4 năm Bính Ngọ">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div id="otherInvitationFields" class="form-section" hidden>
+                <h3>4. Thông Tin Và Nội Dung Thiệp</h3>
+                <div class="grid-2">
+                    <div class="form-group"><label for="eventName">Tên gia chủ / người tổ chức:</label><input type="text" id="eventName" name="Ten_Su_Kien" placeholder="Ví dụ: Gia đình anh Nguyễn Văn A"></div>
+                    <div class="form-group"><label for="eventDateTime">Ngày giờ tổ chức:</label><input type="text" id="eventDateTime" name="Ngay_Gio_Su_Kien" placeholder="Ví dụ: 17 giờ 30, ngày 15/11/2026"></div>
+                </div>
+                <div class="form-group"><label for="eventLocation">Địa điểm tổ chức:</label><input type="text" id="eventLocation" name="Dia_Diem_Su_Kien" placeholder="Ví dụ: Tại tư gia, số nhà..., phường/xã..."></div>
+                <div class="form-group"><label for="invitationText">Nội dung đầy đủ cần in trên thiệp:</label><textarea id="invitationText" name="Noi_Dung_In_Thiep" rows="7" placeholder="Nhập hoặc dán toàn bộ nội dung cần in..." required style="resize:vertical;line-height:1.6"></textarea></div>
+                <div class="form-group"><label for="invitationNotes">Ghi chú / yêu cầu thêm (nếu có):</label><textarea id="invitationNotes" name="Ghi_Chu_Thiep" rows="3" placeholder="Ví dụ: In chữ màu đỏ..." style="resize:vertical;line-height:1.6"></textarea></div>
+            </div>
+
+            <div class="form-section" id="paymentSection">
+              <h3>5. Hình Thức Thanh Toán</h3>
+              <div class="payment-options">
+                <label class="payment-option">
+                  <input type="radio" name="Hinh_Thuc_Thanh_Toan" id="payCOD" value="Thanh toán khi nhận hàng" checked>
+                  <span><strong>🚚 Thanh toán khi nhận hàng</strong><small>Thanh toán khi nhận được đơn hàng.</small></span>
+                </label>
+                <label class="payment-option">
+                  <input type="radio" name="Hinh_Thuc_Thanh_Toan" id="payTransfer" value="Thanh toán chuyển khoản">
+                  <span><strong>🏦 Thanh toán chuyển khoản</strong><small>Quét mã QR bên dưới bằng ứng dụng ngân hàng.</small></span>
+                </label>
+              </div>
+              <div id="transferDetails" class="transfer-box" hidden>
+                <div class="transfer-info">
+                  <strong>Thông tin chuyển khoản</strong>
+                  <p>Ngân hàng: <b id="bankNameDisplay"></b></p>
+                  <p>Số tài khoản: <b id="bankAccountDisplay"></b></p>
+                  <p>Chủ tài khoản: <b id="bankOwnerDisplay"></b></p>
+                  <p>Số tiền cần chuyển: <b id="transferAmount" class="total-highlight">0 đ</b></p>
+                  <p>Nội dung chuyển khoản: <b id="transferMemo"></b></p>
+                  <p>Xác nhận chuyển khoản: <b id="transferconfirm"></b></p>
+                </div>
+                <img id="transferQr" class="transfer-qr" alt="Mã QR chuyển khoản" loading="lazy">
+                <p class="transfer-note">Vui lòng kiểm tra đúng số tiền trước khi xác nhận chuyển khoản.</p>
+              </div>
+              <input type="hidden" id="paymentMethodHidden" name="Phuong_Thuc_Thanh_Toan" value="Thanh toán khi nhận hàng">
+              <input type="hidden" id="paymentAmountHidden" name="So_Tien_Thanh_Toan" value="0 đ">
+            </div>
+
+            <button type="submit" class="btn-submit-order">XÁC NHẬN GỬI ĐƠN HÀNG</button>
+        </form>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>🏠 NHÀ IN THIỆP CƯỚI NGỌC THƯƠNG</h3>
+                <p><strong>Cơ sở in:</strong> Hệ thống in ấn thiệp cưới cao cấp Ngọc Thương</p>
+                <p><strong>Địa chỉ xưởng:</strong> 123 Đường Nguyễn Trãi, Quận 1, TP. Hồ Chí Minh</p>
+            </div>
+            <div class="footer-col">
+                <h3>⏰ THỜI GIAN LÀM VIỆC</h3>
+                <p><strong>Tư vấn trực tiếp:</strong> 08:00 - 21:00 (Hàng ngày)</p>
+                <p><strong>Hỗ trợ trực tuyến:</strong> 24/7 qua Zalo / Hotline</p>
+            </div>
+            <div class="footer-col">
+                <h3>🔗 CHÍNH SÁCH DỊCH VỤ</h3>
+                <ul class="footer-links">
+                    <li><a href="#">▶ Hướng dẫn quy trình duyệt thiết kế</a></li>
+                    <li><a href="#">▶ Chính sách in bù lỗi phát sinh 100%</a></li>
+                    <li><a href="#">▶ Giao hàng tận nơi toàn quốc</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <p>© 2026 Thiệp Cưới Ngọc Thương - Tinh Tế Trong Từng Đường Nét</p>
+        </div>
+    </footer>
+
+    <div class="footer-mobile">
+        <h4>THIỆP CƯỚI NGỌC THƯƠNG</h4>
+        <p>📍 123 Nguyễn Trãi, Quận 1, TP.HCM</p>
+        <div class="footer-mobile-actions">
+            <a href="tel:0773060379">📞 Gọi Ngay</a>
+            <a href="https://zalo.me/0773060379" target="_blank">💬 Nhắn Zalo</a>
+        </div>
+        <div class="footer-mobile-copy">© 2026 Thiệp Cưới Ngọc Thương</div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script>
+        var singlePrice = 0;
+        const PAYMENT_BANK = { bankId: "STB", bankName: "Sacombank", accountNumber: "050160157019", accountName: "LÊ MINH THÔNG" };
+
+        function updatePaymentDetails() {
+            const qty = parseInt(document.getElementById("orderQuantity").value) || 0;
+            const total = qty * singlePrice;
+            const amountText = total.toLocaleString("vi-VN") + " đ";
+            const transferSelected = document.getElementById("payTransfer").checked;
+            document.getElementById("transferDetails").hidden = !transferSelected;
+            document.getElementById("paymentMethodHidden").value = transferSelected ? "Thanh toán chuyển khoản" : "Thanh toán khi nhận hàng";
+            document.getElementById("paymentAmountHidden").value = amountText;
+            document.getElementById("bankNameDisplay").textContent = PAYMENT_BANK.bankName;
+            document.getElementById("bankAccountDisplay").textContent = PAYMENT_BANK.accountNumber;
+            document.getElementById("bankOwnerDisplay").textContent = PAYMENT_BANK.accountName;
+            document.getElementById("transferAmount").textContent = amountText;
+            const memo = "Thanh toan thiep Ngoc Thuong";
+            const confirm = "077 3060 379 (Ms.Thương)";
+            document.getElementById("transferMemo").textContent = memo;
+            document.getElementById("transferconfirm").textContent = confirm;
+            const qr = document.getElementById("transferQr");
+            const configured = PAYMENT_BANK.accountNumber && PAYMENT_BANK.accountNumber === "050160157019" && PAYMENT_BANK.accountName === "LÊ MINH THÔNG";
+            if (configured && total > 0) {
+                qr.src = "https://img.vietqr.io/image/" + encodeURIComponent(PAYMENT_BANK.bankId) + "-" +
+                    encodeURIComponent(PAYMENT_BANK.accountNumber) + "-compact2.png?amount=" + total +
+                    "&addInfo=" + encodeURIComponent(memo) + "&accountName=" + encodeURIComponent(PAYMENT_BANK.accountName);
+                qr.style.display = "block";
+            } else {
+                qr.removeAttribute("src");
+                qr.style.display = "none";
+            }
+        }
+
+        function updateInvitationTypeFields() {
+            const typeSelect = document.getElementById("invitationType");
+            const weddingFields = document.getElementById("weddingFields");
+            const otherFields = document.getElementById("otherInvitationFields");
+            if (!typeSelect || !weddingFields || !otherFields) return;
+            const isWedding = typeSelect.value === "Thiệp cưới";
+            weddingFields.hidden = !isWedding;
+            weddingFields.style.display = isWedding ? "" : "none";
+            otherFields.hidden = isWedding;
+            otherFields.style.display = isWedding ? "none" : "block";
+            weddingFields.querySelectorAll("input, select, textarea, button").forEach(el => { el.disabled = !isWedding; });
+            otherFields.querySelectorAll("input, select, textarea, button").forEach(el => { el.disabled = isWedding; });
+            const invitationText = document.getElementById("invitationText");
+            if (invitationText) invitationText.required = !isWedding;
+        }
+
+        const invitationTypeSelect = document.getElementById("invitationType");
+        if (invitationTypeSelect) {
+            invitationTypeSelect.addEventListener("change", updateInvitationTypeFields);
+            updateInvitationTypeFields();
+        }
+        document.querySelectorAll('input[name="Hinh_Thuc_Thanh_Toan"]').forEach(function(radio) {
+            radio.addEventListener("change", updatePaymentDetails);
+        });
+
+        window.onload = function() {
+            var template = localStorage.getItem("selectedTemplate") || "Chưa chọn mẫu";
+            var priceStr = localStorage.getItem("selectedPrice") || "0";
+            document.getElementById("orderTemplate").value = template;
+            document.getElementById("orderPrice").value = priceStr;
+            singlePrice = parseInt(priceStr.replace(/[^0-9]/g, '')) || 0;
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            var qty = parseInt(document.getElementById("orderQuantity").value) || 0;
+            var total = qty * singlePrice;
+            var formattedTotal = total.toLocaleString('vi-VN') + " đ";
+            document.getElementById("orderTotal").innerText = formattedTotal;
+            document.getElementById("orderTotalInput").value = formattedTotal;
+            if (document.getElementById("paymentAmountHidden")) updatePaymentDetails();
+        }
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyC3SZETmG1bdpfJLNeZ/z9JRym9f0CPBY0",
+            authDomain: "thiep-cuoi-quan-ly-don.firebaseapp.com",
+            projectId: "thiep-cuoi-quan-ly-don",
+            messagingSenderId: "1091752464136",
+            appId: "1:1091752464136:web:bede3fe7abd640fd4ca6bd",
+            measurementId: "G-2XYKN5GQKS"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        async function saveOrderToSystem(event) {
+            event.preventDefault();
+            var form = event.target;
+            var formData = new FormData(form);
+
+            // Kết hợp Tên và Danh xưng thành chuỗi hoàn chỉnh để lưu trữ và hiển thị đồng bộ
+            var rawGroomName = document.getElementById("nameGroom").value.trim();
+            var groomTitle = document.getElementById("titleGroom").value;
+            var fullGroom = rawGroomName ? (rawGroomName + " (" + groomTitle + ")") : "";
+
+            var rawBrideName = document.getElementById("nameBride").value.trim();
+            var brideTitle = document.getElementById("titleBride").value;
+            var fullBride = rawBrideName ? (rawBrideName + " (" + brideTitle + ")") : "";
+
+            var orderData = {
+                id_don_hang: "DH" + Date.now(),
+                thoi_gian: new Date().toLocaleString('vi-VN'),
+                created_at: firebase.firestore.FieldValue.serverTimestamp(),
+                mau_thiep: document.getElementById("orderTemplate").value,
+                so_luong: parseInt(document.getElementById("orderQuantity").value) || 0,
+                don_gia: document.getElementById("orderPrice").value || (singlePrice.toLocaleString("vi-VN") + " đ"),
+                tong_tien: document.getElementById("orderTotal").innerText,
+                hinh_thuc_thanh_toan: document.getElementById("paymentMethodHidden").value,
+                so_tien_thanh_toan: document.getElementById("paymentAmountHidden").value,
+                ngan_hang_nhan: document.getElementById("payTransfer").checked ? PAYMENT_BANK.bankName : "",
+                so_tai_khoan_nhan: document.getElementById("payTransfer").checked ? PAYMENT_BANK.accountNumber : "",
+                chu_tai_khoan_nhan: document.getElementById("payTransfer").checked ? PAYMENT_BANK.accountName : "",
+                noi_dung_chuyen_khoan: document.getElementById("payTransfer").checked ? "Thanh toan thiep Ngoc Thuong" : "",
+
+                ten_khach: document.getElementById("clientName").value.trim(),
+                dia_chi_nguoi_dat: document.getElementById("clientAddress").value.trim(),
+                email_khach_hang: document.getElementById("clientEmail").value.trim(),
+                so_dien_thoai: document.getElementById("clientPhone").value,
+                loai_thiep: document.getElementById("invitationType").value,
+                ten_su_kien: document.getElementById("eventName").value.trim(),
+                ngay_gio_su_kien: document.getElementById("eventDateTime").value.trim(),
+                dia_diem_su_kien: document.getElementById("eventLocation").value.trim(),
+                noi_dung_in_thiep: document.getElementById("invitationText").value.trim(),
+                ghi_chu_thiep: document.getElementById("invitationNotes").value.trim(),
+
+                loai_le: document.getElementById("weddingType").value,
+                ten_chu_re: fullGroom,
+                ten_co_dau: fullBride,
+                danh_xung_chu_re: groomTitle,
+                danh_xung_co_dau: brideTitle,
+
+                cha_ong_nha_trai: document.getElementById("fatherGroom").value.trim(),
+                cha_ba_nha_trai: document.getElementById("motherGroom").value.trim(),
+                dia_chi_nha_trai: document.getElementById("addressGroom").value.trim(),
+                cha_ong_nha_gai: document.getElementById("fatherBride").value.trim(),
+                cha_ba_nha_gai: document.getElementById("motherBride").value.trim(),
+                dia_chi_nha_gai: document.getElementById("addressBride").value.trim(),
+                cha_me_nha_trai: [
+                  document.getElementById("fatherGroom").value.trim() ? "Ông: " + document.getElementById("fatherGroom").value.trim() : "",
+                  document.getElementById("motherGroom").value.trim() ? "Bà: " + document.getElementById("motherGroom").value.trim() : "",
+                  document.getElementById("addressGroom").value.trim() ? "Địa chỉ: " + document.getElementById("addressGroom").value.trim() : ""
+                ].filter(Boolean).join("\n"),
+                cha_me_nha_gai: [
+                  document.getElementById("fatherBride").value.trim() ? "Ông: " + document.getElementById("fatherBride").value.trim() : "",
+                  document.getElementById("motherBride").value.trim() ? "Bà: " + document.getElementById("motherBride").value.trim() : "",
+                  document.getElementById("addressBride").value.trim() ? "Địa chỉ: " + document.getElementById("addressBride").value.trim() : ""
+                ].filter(Boolean).join("\n"),
+
+                dia_diem_hon_le: document.getElementById("ceremonyAddress").value,
+                ngay_dl_hon_le: document.getElementById("dateSolar").value,
+                ngay_al_hon_le: document.getElementById("dateLunar").value,
+                dia_diem_tiec: document.getElementById("address").value,
+                ngay_dl_tiec: document.getElementById("dateSolar2").value,
+                ngay_al_tiec: document.getElementById("dateLunar2").value,
+                trang_thai: "Chờ xử lý"
+            };
+
+            try {
+                await db.collection("orders").add(orderData);
+                let response = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (response.ok) {
+                    alert("🎉 Đơn hàng đã được gửi thành công và đã lưu vào hệ thống quản lý!");
+                    window.location.href = "trang-quan-ly-don-hang-them-dia-chi-email.html";
+                } else {
+                    alert("Đơn hàng đã lưu vào hệ thống nhưng có lỗi gửi email thông báo.");
+                }
+            } catch (error) {
+                console.error("Lỗi đồng bộ Firebase:", error);
+                alert("Có lỗi kết nối mạng xảy ra. Không thể gửi đơn hàng, vui lòng thử lại!");
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quản lý đơn hàng - Thiệp Cưới Ngọc Thương</title>
+<style>
+*{box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif;margin:0;padding:0}
+body{background:#f0f2f5;padding:20px;color:#333}
+.admin-container{max-width:1600px;margin:0 auto;background:#fff;padding:25px;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,.05)}
+h2{margin-bottom:20px;color:#115e07;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:2px solid #526456;padding-bottom:10px;font-size:1.25rem}
+button{cursor:pointer;border:0;border-radius:4px;padding:10px 14px;font-size:.95rem}
+.refresh-btn,.primary-btn{background:#526456;color:#fff}.refresh-btn:hover,.primary-btn:hover{background:#687b6c}
+.logout-btn{background:#eee;color:#333}
+.print-btn{display:block;margin-top:8px;background:#1f6b3a;color:#fff;padding:7px 9px;font-size:.82rem;white-space:nowrap}.print-btn:hover{background:#15552c}
+.delete-btn{display:block;margin-top:7px;background:#b42318;color:#fff;padding:7px 9px;font-size:.82rem;white-space:nowrap}.delete-btn:hover{background:#8f1b13}.delete-btn:disabled{opacity:.6;cursor:wait}
+.login-box{max-width:440px;margin:30px auto;padding:24px;border:1px solid #ddd;border-radius:8px;background:#fafafa}
+.login-box h3{margin-bottom:16px;color:#115e07}.field{margin-bottom:14px}.field label{display:block;margin-bottom:6px;font-weight:600}.field input{width:100%;padding:11px;border:1px solid #ccc;border-radius:4px;font-size:1rem}
+.message{margin:12px 0;padding:10px;border-radius:4px;line-height:1.5;background:#f4f6f8}.error{color:#a40000;background:#fff0f0}.hidden{display:none!important}
+.table-wrap{width:100%;overflow-x:auto}table{width:100%;min-width:1050px;border-collapse:collapse;margin-top:15px;font-size:.9rem}th,td{border:1px solid #ddd;padding:12px 10px;text-align:left;vertical-align:top;overflow-wrap:anywhere}th{background:#f4f6f8;font-weight:600;color:#444}tr:nth-child(even){background:#fafafa}tr:hover{background:#f1f5f9}
+.status-badge{display:inline-block;padding:4px 8px;border-radius:12px;font-size:.8rem;font-weight:bold}.status-pending{background:#ffe3e3;color:#d93838}.status-processing{background:#fff3cd;color:#856404}.status-done{background:#d4edda;color:#155724}.action-select{padding:6px;border-radius:4px;border:1px solid #ccc;font-size:.85rem;margin-top:7px;display:block;max-width:100%}.info-block{font-size:.85rem;line-height:1.5;background:#f8f9fa;padding:7px;border-radius:4px;margin-top:4px;overflow-wrap:anywhere}
+.search-panel{display:grid;grid-template-columns:minmax(220px,1fr) minmax(180px,260px) auto;gap:10px;align-items:center;margin:12px 0 8px;padding:14px;background:#f7f9f7;border:1px solid #dfe5df;border-radius:8px}.search-panel input,.search-panel select{width:100%;min-width:0;padding:11px 12px;border:1px solid #c8d0c8;border-radius:5px;background:#fff;font-size:.95rem;color:#333}.search-panel input:focus,.search-panel select:focus{outline:2px solid #9bb8a1;border-color:#526456}.clear-filter-btn{background:#e8ece8;color:#344437;white-space:nowrap}.result-count{font-size:.9rem;color:#526456;margin:7px 2px 10px}.no-results{padding:24px;text-align:center;color:#666;background:#fafafa}
+.home-btn { background-color: #526456; color: white; text-decoration: none; padding: 8px 15px; border-radius: 4px; font-weight: 500; }
+@media(max-width:700px){.search-panel{grid-template-columns:1fr}.clear-filter-btn{width:100%}}
+@media(max-width:600px){body{padding:8px}.admin-container{padding:12px}h2{font-size:1.05rem}.login-box{padding:16px}.print-btn,.delete-btn{font-size:.78rem;padding:7px 8px}}
+</style>
+</head>
+<body>
+
+<div class="admin-container">
+  <h2><span>🛠️ BẢNG ĐIỀU KHIỂN QUẢN LÝ ĐƠN HÀNG</span><a href="index.html" class="home-btn">⬅ Quay Về Trang Chủ</a><span id="adminActions" class="hidden"><button class="refresh-btn" id="refreshBtn" type="button">🔄 Tải lại</button> <button class="logout-btn" id="logoutBtn" type="button">Đăng xuất</button></span></h2>
+  
+  <div id="loginBox" class="login-box">
+    <h3>Đăng nhập quản trị</h3>
+    <p>Chỉ tài khoản quản trị được cấp quyền mới xem và cập nhật đơn hàng.</p>
+    <form id="loginForm">
+      <div class="field"><label for="adminEmail">Email quản trị</label><input id="adminEmail" type="email" autocomplete="username" required></div>
+      <div class="field"><label for="adminPassword">Mật khẩu</label><input id="adminPassword" type="password" autocomplete="current-password" required></div>
+      <button class="primary-btn" type="submit">Đăng nhập</button>
+    </form>
+    <div id="loginMessage" class="message hidden" role="status"></div>
+  </div>
+
+  <div id="adminPanel" class="hidden">
+    <div id="pageMessage" class="message" role="status">Đang kết nối Firebase...</div>
+    <div class="search-panel" aria-label="Tìm kiếm và lọc đơn hàng">
+      <input id="orderSearch" type="search" placeholder="🔎 Tìm mã đơn, tên, SĐT, địa chỉ, email..." autocomplete="off" aria-label="Tìm đơn hàng">
+      <select id="statusFilter" aria-label="Lọc theo trạng thái">
+        <option value="">Tất cả trạng thái</option>
+        <option value="Chờ xử lý">Chờ xử lý</option>
+        <option value="Đang xử lý/In">Đang xử lý/In</option>
+        <option value="Đã hoàn thành">Đã hoàn thành</option>
+      </select>
+      <button class="clear-filter-btn" id="clearFiltersBtn" type="button">Xóa bộ lọc</button>
+    </div>
+    <div id="resultCount" class="result-count" aria-live="polite">Đang chuẩn bị danh sách...</div>
+    <div class="table-wrap">
+      <table id="ordersTable">
+        <thead>
+          <tr>
+            <th>Mã đơn / Thời gian</th>
+            <th>Thông tin khách</th>
+            <th>Sản phẩm đặt</th>
+            <th>Thông tin cô dâu & chú rể</th>
+            <th>Chi tiết tiệc & hôn lễ</th>
+            <th>Trạng thái & xử lý</th>
+          </tr>
+        </thead>
+        <tbody id="ordersList">
+          <tr><td colspan="6" style="text-align:center;padding:30px">Đang tải đơn hàng...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+ const firebaseConfig = {
+    apiKey: "AIzaSyC35ZEtmGlbdpfJLNeZ7z9JRym9fDCPBY8",
+    authDomain: "thiep-cuoi-quan-ly-don.firebaseapp.com",
+    projectId: "thiep-cuoi-quan-ly-don",
+    storageBucket: "thiep-cuoi-quan-ly-don.firebasestorage.app",
+    messagingSenderId: "1091752464136",
+    appId: "1:1091752464136:web:bede3fe7abd640fd4ca6bd",
+    measurementId: "G-2XYKN5GQKS"
+  };
+
+const ADMIN_EMAIL = "lethongsr@gmail.com";
+
+const loginBox = document.getElementById('loginBox');
+const adminPanel = document.getElementById('adminPanel');
+const adminActions = document.getElementById('adminActions');
+const loginMessage = document.getElementById('loginMessage');
+const pageMessage = document.getElementById('pageMessage');
+const ordersList = document.getElementById('ordersList');
+const ordersCache = new Map();
+let orderSequence = [];
+const orderSearch = document.getElementById('orderSearch');
+const statusFilter = document.getElementById('statusFilter');
+const resultCount = document.getElementById('resultCount');
+
+if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+function showMessage(el, message, isError=false) {
+  el.textContent = message;
+  el.classList.remove('hidden', 'error');
+  if (isError) el.classList.add('error');
+}
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+const PAYMENT_BANK = { bankId: 'STB', bankName: 'Sacombank', accountNumber: '050160157019', accountName: 'LE MINH THONG' };
+function parseMoney(value) {
+  if (typeof value === 'number' && Number.isFinite(value)) return Math.round(value);
+  const digits = String(value ?? '').replace(/[^0-9]/g, '');
+  return digits ? Number(digits) : 0;
+}
+function formatVND(value) {
+  const amount = parseMoney(value);
+  return amount ? amount.toLocaleString('vi-VN') + ' đ' : (String(value ?? '').trim() || 'Chưa có');
+}
+function getUnitPrice(d) {
+  if (d.don_gia !== undefined && d.don_gia !== null && String(d.don_gia).trim() !== '') return formatVND(d.don_gia);
+  const qty = parseMoney(d.so_luong);
+  const total = parseMoney(d.tong_tien);
+  return qty > 0 && total > 0 ? formatVND(Math.round(total / qty)) : 'Chưa có';
+}
+function isBankTransfer(d) {
+  return (d.hinh_thuc_thanh_toan || d.phuong_thuc_thanh_toan || '') === 'Thanh toán chuyển khoản';
+}
+function isWeddingOrder(d) {
+  const type = String(d.loai_thiep || '').trim().toLocaleLowerCase('vi');
+  return !type || type === 'thiệp cưới' || type === 'thiep cuoi';
+}
+function displayInvitationType(d) { return String(d.loai_thiep || 'Thiệp cưới'); }
+function paymentQrUrl(d) {
+  const amount = parseMoney(d.so_tien_thanh_toan || d.tong_tien);
+  const memo = String(d.noi_dung_chuyen_khoan || ('Thanh toan thiep Ngoc Thuong ' + (d.id_don_hang || ''))).trim();
+  return 'https://img.vietqr.io/image/' + PAYMENT_BANK.bankId + '-' + PAYMENT_BANK.accountNumber +
+    '-compact2.png?amount=' + amount + '&addInfo=' + encodeURIComponent(memo) +
+    '&accountName=' + encodeURIComponent(PAYMENT_BANK.accountName);
+}
+function statusClass(status) {
+  if (status === 'Đã hoàn thành') return 'status-done';
+  if (status === 'Đang xử lý/In') return 'status-processing';
+  return 'status-pending';
+}
+function dateForSort(data) {
+  if (data.created_at && typeof data.created_at.toMillis === 'function') return data.created_at.toMillis();
+  return 0;
+}
+
+auth.onAuthStateChanged(async user => {
+  if (!user) {
+    loginBox.classList.remove('hidden'); adminPanel.classList.add('hidden'); adminActions.classList.add('hidden');
+    return;
+  }
+  if (!user.email || user.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+    await auth.signOut();
+    showMessage(loginMessage, 'Tài khoản này không phải email quản trị được cấu hình.', true);
+    return;
+  }
+  loginBox.classList.add('hidden'); adminPanel.classList.remove('hidden'); adminActions.classList.remove('hidden');
+  await loadOrdersFromFirebase();
+});
+
+document.getElementById('loginForm').addEventListener('submit', async event => {
+  event.preventDefault();
+  const email = document.getElementById('adminEmail').value.trim();
+  const password = document.getElementById('adminPassword').value;
+  showMessage(loginMessage, 'Đang đăng nhập...');
+  try {
+    await auth.signInWithEmailAndPassword(email, password);
+  } catch (error) {
+    console.error('Lỗi đăng nhập:', error);
+    showMessage(loginMessage, 'Đăng nhập không thành công. Hãy kiểm tra lại.', true);
+  }
+});
+
+document.getElementById('logoutBtn').addEventListener('click', () => auth.signOut());
+document.getElementById('refreshBtn').addEventListener('click', loadOrdersFromFirebase);
+orderSearch.addEventListener('input', renderOrders);
+statusFilter.addEventListener('change', renderOrders);
+document.getElementById('clearFiltersBtn').addEventListener('click', () => { orderSearch.value = ''; statusFilter.value = ''; renderOrders(); orderSearch.focus(); });
+
+async function loadOrdersFromFirebase() {
+  const user = auth.currentUser;
+  if (!user || !user.email || user.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) return;
+  ordersList.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px">🔄 Đang cập nhật dữ liệu...</td></tr>';
+  showMessage(pageMessage, 'Đang tải danh sách đơn hàng...');
+  try {
+    const snapshot = await db.collection('orders').get();
+    if (snapshot.empty) {
+      ordersCache.clear();
+      orderSequence = []; resultCount.textContent = 'Đang hiển thị 0/0 đơn hàng';
+      ordersList.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px">Hệ thống chưa ghi nhận đơn hàng nào.</td></tr>';
+      showMessage(pageMessage, 'Chưa có đơn hàng.');
+      return;
+    }
+    const docs = snapshot.docs.slice().sort((a,b) => {
+      const diff = dateForSort(b.data()) - dateForSort(a.data());
+      if (diff !== 0) return diff;
+      return String(b.data().id_don_hang || '').localeCompare(String(a.data().id_don_hang || ''), 'vi');
+    });
+    ordersCache.clear();
+    orderSequence = docs.map(doc => doc.id);
+    docs.forEach(doc => ordersCache.set(doc.id, doc.data()));
+    renderOrders();
+    showMessage(pageMessage, `Đã tải ${docs.length} đơn hàng.`);
+  } catch (error) {
+    console.error('Lỗi lấy dữ liệu:', error);
+    ordersList.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:#a40000">Không thể tải dữ liệu.</td></tr>';
+    showMessage(pageMessage, 'Lỗi tải dữ liệu.', true);
+  }
+}
+
+function renderOrders() {
+  const keyword = (orderSearch.value || '').trim().toLocaleLowerCase('vi');
+  const wantedStatus = statusFilter.value;
+  const ids = orderSequence.filter(id => {
+    const d = ordersCache.get(id) || {};
+    const status = d.trang_thai || 'Chờ xử lý';
+    if (wantedStatus && status !== wantedStatus) return false;
+    if (!keyword) return true;
+    const searchable = [id, d.id_don_hang, d.ten_khach, d.so_dien_thoai, d.mau_thiep,
+      d.ten_chu_re, d.ten_co_dau, d.dia_chi_nguoi_dat, d.email_khach_hang, d.dia_diem_hon_le, d.dia_diem_tiec, status, d.thoi_gian,
+      d.hinh_thuc_thanh_toan, d.phuong_thuc_thanh_toan, d.noi_dung_chuyen_khoan]
+      .map(v => String(v ?? '')).join(' ').toLocaleLowerCase('vi');
+    return searchable.includes(keyword);
+  });
+  resultCount.textContent = `Đang hiển thị ${ids.length}/${ordersCache.size} đơn hàng`;
+  if (!ids.length) {
+    ordersList.innerHTML = '<tr><td colspan="6" class="no-results">Không tìm thấy đơn hàng phù hợp.</td></tr>';
+    return;
+  }
+  ordersList.innerHTML = ids.map(docId => {
+    const d = ordersCache.get(docId) || {};
+    const id = escapeHtml(docId);
+    const status = d.trang_thai || 'Chờ xử lý';
+    const time = d.thoi_gian || 'Không rõ';
+    return `<tr>
+      <td><strong>${escapeHtml(d.id_don_hang || 'Không rõ')}</strong><br><span style="color:#666;font-size:.8rem">${escapeHtml(time)}</span></td>
+      <td><strong>Họ tên:</strong> ${escapeHtml(d.ten_khach)}<br><strong>SĐT:</strong> <a href="tel:${escapeHtml(d.so_dien_thoai)}">${escapeHtml(d.so_dien_thoai)}</a><br><strong>Địa chỉ:</strong> ${escapeHtml(d.dia_chi_nguoi_dat || 'Chưa có thông tin')}<br><strong>Email:</strong> ${d.email_khach_hang ? `<a href="mailto:${escapeHtml(d.email_khach_hang)}">${escapeHtml(d.email_khach_hang)}</a>` : 'Không cung cấp'}</td>
+      <td><strong>Loại thiệp:</strong> ${escapeHtml(displayInvitationType(d))}<br><strong>Mẫu:</strong> ${escapeHtml(d.mau_thiep)}<br><strong>SL:</strong> ${escapeHtml(d.so_luong)} cái<br><strong>Đơn giá:</strong> ${escapeHtml(getUnitPrice(d))}<br><strong>Tổng tiền:</strong> <span style="color:#d93838;font-weight:bold">${escapeHtml(d.tong_tien)}</span><div class="info-block" style="background:#f3f7f3"><strong>Hình thức thanh toán:</strong> ${escapeHtml(d.hinh_thuc_thanh_toan || d.phuong_thuc_thanh_toan || 'Chưa ghi nhận')}${isBankTransfer(d) ? `<br><strong>Ngân hàng:</strong> Sacombank<br><strong>Số TK:</strong> 050160157019<br><strong>Chủ TK:</strong> LÊ MINH THÔNG<br><strong>Số tiền CK:</strong> ${escapeHtml(formatVND(d.so_tien_thanh_toan || d.tong_tien))}<br><strong>Nội dung CK:</strong> ${escapeHtml(d.noi_dung_chuyen_khoan || ('Thanh toan thiep Ngoc Thuong ' + (d.id_don_hang || '')))}<br><img src="${escapeHtml(paymentQrUrl(d))}" alt="Mã VietQR" style="display:block;width:120px;max-width:100%;height:auto;margin:7px auto 0" loading="lazy">` : ''}</div></td>
+      <td><div class="info-block">${isWeddingOrder(d) ? `<strong>Loại lễ:</strong> <span style="color:#d93838">${escapeHtml(d.loai_le)}</span><br><strong>Chú rể:</strong> ${escapeHtml(d.ten_chu_re)}<br><strong>Cô dâu:</strong> ${escapeHtml(d.ten_co_dau)}<br><strong>Cha mẹ nhà trai:</strong><br>${escapeHtml(d.cha_me_nha_trai).replace(/\n/g,'<br>')}<br><strong>Cha mẹ nhà gái:</strong><br>${escapeHtml(d.cha_me_nha_gai).replace(/\n/g,'<br>')}` : `<strong>Loại thiệp:</strong> ${escapeHtml(displayInvitationType(d))}<br><strong>Tên người / sự kiện:</strong> ${escapeHtml(d.ten_su_kien || 'Chưa nhập')}<br><strong>Ngày giờ:</strong> ${escapeHtml(d.ngay_gio_su_kien || 'Chưa nhập')}<br><strong>Địa điểm:</strong> ${escapeHtml(d.dia_diem_su_kien || 'Chưa nhập')}<br><strong>Nội dung in:</strong><div style="white-space:pre-wrap;margin-top:4px">${escapeHtml(d.noi_dung_in_thiep || 'Chưa nhập')}</div>${d.ghi_chu_thiep ? `<br><strong>Ghi chú:</strong> ${escapeHtml(d.ghi_chu_thiep)}` : ''}`}</div></td>
+      <td><div class="info-block" style="background:#eef7ff"><strong>⛪ NƠI CỬ HÀNH:</strong> ${escapeHtml(d.dia_diem_hon_le)}<br>📅 DL: ${escapeHtml(d.ngay_dl_hon_le)} | AL: ${escapeHtml(d.ngay_al_hon_le || 'Không nhập')}</div><div class="info-block" style="background:#fff0f0"><strong>🍽️ ĐÃI TIỆC:</strong> ${escapeHtml(d.dia_diem_tiec)}<br>📅 DL: ${escapeHtml(d.ngay_dl_tiec)} | AL: ${escapeHtml(d.ngay_al_tiec || 'Không nhập')}</div></td>
+      <td><span class="status-badge ${statusClass(status)}" id="badge-${id}">${escapeHtml(status)}</span><select class="action-select" data-doc-id="${id}" aria-label="Đổi trạng thái đơn hàng"><option value="">-- Đổi trạng thái --</option><option value="Chờ xử lý" ${status==='Chờ xử lý'?'selected':''}>Chờ xử lý</option><option value="Đang xử lý/In" ${status==='Đang xử lý/In'?'selected':''}>Đang xử lý/In</option><option value="Đã hoàn thành" ${status==='Đã hoàn thành'?'selected':''}>Đã hoàn thành</option></select><button type="button" class="print-btn" data-print-id="${id}">🖨️ In đơn A4</button><button type="button" class="delete-btn" data-delete-id="${id}" data-order-number="${escapeHtml(d.id_don_hang || docId)}">🗑️ Xóa đơn</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function printOrder(docId) {
+  const user = auth.currentUser;
+  if (!user || !user.email || user.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+    showMessage(pageMessage, 'Bạn cần đăng nhập bằng tài khoản quản trị để in đơn hàng.', true);
+    return;
+  }
+  const d = ordersCache.get(docId);
+  if (!d) {
+    showMessage(pageMessage, 'Không tìm thấy dữ liệu đơn hàng.', true);
+    return;
+  }
+  const safe = value => escapeHtml(value === undefined || value === null || value === '' ? 'Không có thông tin' : value);
+  const familyInfoHtml = value => {
+    const raw = String(value ?? '').trim();
+    if (!raw) return 'Không có thông tin';
+    const normalized = raw.replace(/\r\n?/g, '\n').replace(/[ \t]*(Ông\s*:|Bà\s*:|Địa\s*chỉ\s*:)/gi, '\n$1');
+    const lines = normalized.split('\n').map(line => line.trim()).filter(Boolean);
+    return lines.length ? lines.map(line => escapeHtml(line)).join('<br>') : 'Không có thông tin';
+  };
+  const orderId = safe(d.id_don_hang || docId);
+  const weddingOrder = isWeddingOrder(d);
+  const invitationType = safe(displayInvitationType(d));
+  const printWindow = window.open('', '_blank', 'width=900,height=700');
+  if (!printWindow) {
+    showMessage(pageMessage, 'Trình duyệt đang chặn cửa sổ in. Hãy cho phép pop-up.', true);
+    return;
+  }
+  const html = `<!DOCTYPE html>
+  <html lang="vi">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Phiếu đơn hàng ${orderId}</title>
+  <style>
+  @page{size:A4 portrait;margin:14mm}
+  *{box-sizing:border-box}
+  body{font-family:Arial,'Helvetica Neue',sans-serif;color:#222;font-size:12px;line-height:1.45;margin:0;background:#fff}
+  .sheet{width:100%;max-width:190mm;margin:0 auto}
+  .brand{text-align:center;border-bottom:2px solid #287342;padding-bottom:12px;margin-bottom:15px}
+  .brand h1{font-size:20px;color:#17632f;margin:0 0 5px}
+  .brand p{margin:0;font-size:11px;color:#555}
+  .doc-title{text-align:center;font-size:17px;letter-spacing:.5px;margin:12px 0 14px;color:#222}
+  .meta{display:flex;justify-content:space-between;gap:12px;border:1px solid #ccc;background:#f7f9f7;padding:9px 11px;margin-bottom:12px}
+  .section{border:1px solid #cfd6d0;border-radius:3px;margin:10px 0;break-inside:avoid}
+  .section h3{font-size:12px;margin:0;padding:7px 9px;background:#edf4ee;border-bottom:1px solid #cfd6d0;color:#205c31}
+  .content{padding:8px 10px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 18px}.item{overflow-wrap:anywhere}.label{font-weight:bold}
+  .total-row{grid-column:1 / -1;border-top:1px solid #ddd;padding-top:7px;display:flex;justify-content:space-between;align-items:center}
+  .family-grid,.couple-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .family-card{border:1px solid #d5d9d5;padding:8px 9px;min-width:0}
+  .family-card h4{text-align:center;font-size:11px;color:#205c31;background:#edf4ee;margin:-8px -9px 7px;padding:6px;border-bottom:1px solid #d5d9d5}
+  .family-card p{margin:5px 0;font-size:11px}.family-card .family-data{min-height:38px;font-weight:600;color:#222}
+  .couple-grid{margin-top:9px}.couple-grid>div{border:1px solid #d5d9d5;text-align:center;padding:8px}
+  .couple-grid .label{display:block;color:#205c31;font-size:11px;margin-bottom:4px}
+  .couple-grid p{font-weight:bold;font-size:13px;overflow-wrap:anywhere}
+  .money{font-weight:bold;color:#b42318;font-size:14px}
+  .note{height:42px;border-bottom:1px dotted #888;margin-top:5px}
+  .signatures{display:grid;grid-template-columns:1fr 1fr;gap:25px;text-align:center;margin-top:24px;break-inside:avoid}
+  .muted{color:#555;font-size:10px}.no-print{margin:0 0 14px;text-align:center}.no-print button{padding:9px 14px;border:0;border-radius:4px;background:#287342;color:white;cursor:pointer}
+  @media print{.no-print{display:none!important}body{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+  </style></head><body><div class="sheet"><div class="no-print"><button onclick="window.print()">🖨️ In / Lưu PDF</button> <button onclick="window.close()">Đóng</button></div>
+  <header class="brand"><h1>THIỆP CƯỚI NGỌC THƯƠNG</h1><p>PHIẾU THEO DÕI VÀ XỬ LÝ ĐƠN HÀNG</p></header>
+  <h2 class="doc-title">PHIẾU XÁC NHẬN ĐƠN HÀNG</h2>
+  <div class="meta"><div><span class="label">Mã đơn hàng:</span> ${orderId}</div><div><span class="label">Thời gian đặt:</span> ${safe(d.thoi_gian)}</div></div>
+  <section class="section"><h3>1. THÔNG TIN KHÁCH HÀNG</h3><div class="content grid"><div class="item"><span class="label">Họ và tên:</span> ${safe(d.ten_khach)}</div><div class="item"><span class="label">Số điện thoại:</span> ${safe(d.so_dien_thoai)}</div><div class="item"><span class="label">Địa chỉ nhận hàng:</span> ${safe(d.dia_chi_nguoi_dat)}</div><div class="item"><span class="label">Email:</span> ${safe(d.email_khach_hang || 'Không cung cấp')}</div></div></section>
+  <section class="section"><h3>2. THÔNG TIN SẢN PHẨM</h3><div class="content grid"><div class="item"><span class="label">Mẫu thiệp:</span> ${safe(d.mau_thiep)}</div><div class="item"><span class="label">Số lượng:</span> ${safe(d.so_luong)} cái</div><div class="item"><span class="label">Đơn giá:</span> ${safe(getUnitPrice(d))}</div><div class="item"><span class="label">Trạng thái:</span> ${safe(d.trang_thai || 'Chờ xử lý')}</div><div class="item total-row"><span class="label">TỔNG TIỀN:</span> <span class="money">${safe(d.tong_tien)}</span></div></div></section>
+  <section class="section"><h3>3. HÌNH THỨC THANH TOÁN</h3><div class="content grid"><div class="item"><span class="label">Hình thức:</span> ${safe(d.hinh_thuc_thanh_toan || d.phuong_thuc_thanh_toan || 'Chưa ghi nhận')}</div><div class="item"><span class="label">Số tiền:</span> ${safe(formatVND(d.so_tien_thanh_toan || d.tong_tien))}</div>${isBankTransfer(d) ? `<div class="item"><span class="label">Ngân hàng:</span> Sacombank</div><div class="item"><span class="label">Số tài khoản:</span> 050160157019</div><div class="item"><span class="label">Chủ tài khoản:</span> LÊ MINH THÔNG</div><div class="item"><span class="label">Nội dung CK:</span> ${safe(d.noi_dung_chuyen_khoan || ('Thanh toan thiep Ngoc Thuong ' + (d.id_don_hang || '')))}</div><div class="item" style="grid-column:1/-1;text-align:center"><img src="${escapeHtml(paymentQrUrl(d))}" alt="Mã VietQR" style="width:125px;height:auto;max-width:100%"></div>` : ''}</div></section>
+  ${weddingOrder ? `<section class="section"><h3>4. THÔNG TIN CÔ DÂU, CHÚ RỂ VÀ GIA ĐÌNH</h3><div class="content">
+  <div style="text-align:center; font-weight:bold; color:#d93838; margin-bottom:8px;">${safe(d.loai_le)}</div>
+  <div class="family-grid">
+    <div class="family-card"><h4>HỌ NHÀ TRAI</h4><p class="family-data">${familyInfoHtml(d.cha_me_nha_trai)}</p></div>
+    <div class="family-card"><h4>HỌ NHÀ GÁI</h4><p class="family-data">${familyInfoHtml(d.cha_me_nha_gai)}</p></div>
+  </div>
+  <div class="couple-grid">
+    <div><span class="label">CHÚ RỂ</span><p>${safe(d.ten_chu_re)}</p></div>
+    <div><span class="label">CÔ DÂU</span><p>${safe(d.ten_co_dau)}</p></div>
+  </div></div></section>
+  <section class="section"><h3>5. CHI TIẾT HÔN LỄ VÀ TIỆC CƯỚI</h3><div class="content"><div class="item"><span class="label">Nơi cử hành hôn lễ:</span> ${safe(d.dia_diem_hon_le)}</div><div class="grid" style="margin-top:5px"><div class="item"><span class="label">Ngày DL:</span> ${safe(d.ngay_dl_hon_le)}</div><div class="item"><span class="label">Ngày AL:</span> ${safe(d.ngay_al_hon_le)}</div></div><hr style="border:0;border-top:1px solid #ddd;margin:9px 0"><div class="item"><span class="label">Địa điểm đãi tiệc:</span> ${safe(d.dia_diem_tiec)}</div><div class="grid" style="margin-top:5px"><div class="item"><span class="label">Ngày DL:</span> ${safe(d.ngay_dl_tiec)}</div><div class="item"><span class="label">Ngày AL:</span> ${safe(d.ngay_al_tiec)}</div></div></div></section>` : `<section class="section"><h3>4. THÔNG TIN VÀ NỘI DUNG THIỆP</h3><div class="content"><div class="item"><span class="label">Loại thiệp:</span> ${invitationType}</div><div class="item" style="margin-top:6px"><span class="label">Tên sự kiện:</span> ${safe(d.ten_su_kien)}</div><div class="item" style="margin-top:6px"><span class="label">Ngày giờ:</span> ${safe(d.ngay_gio_su_kien)}</div><div class="item" style="margin-top:6px"><span class="label">Địa điểm:</span> ${safe(d.dia_diem_su_kien)}</div><div class="item" style="margin-top:9px"><span class="label">NỘI DUNG IN:</span><div style="white-space:pre-wrap;border:1px solid #ddd;padding:9px;margin-top:5px">${safe(d.noi_dung_in_thiep)}</div></div></div></section>`}
+  <section class="section"><h3>${weddingOrder ? '6' : '5'}. GHI CHÚ XỬ LÝ ĐƠN</h3><div class="content"><div class="muted">Ghi chú bổ sung:</div><div class="note"></div><div class="note"></div></div></section>
+  <div class="signatures"><div><strong>NGƯỜI TIẾP NHẬN</strong><p class="muted">(Ký và ghi rõ họ tên)</p><br><br><br>................................</div><div><strong>NGƯỜI XÁC NHẬN</strong><p class="muted">(Ký và ghi rõ họ tên)</p><br><br><br>................................</div></div>
+  </div><script>window.onload=()=>{setTimeout(()=>window.print(),300)};<\/script></body></html>`;
+  printWindow.document.open();
+  printWindow.document.write(html);
+  printWindow.document.close();
+}
+
+ordersList.addEventListener('click', async event => {
+  const printButton = event.target.closest('button[data-print-id]');
+  if (printButton) {
+    printOrder(printButton.dataset.printId);
+    return;
+  }
+  const deleteButton = event.target.closest('button[data-delete-id]');
+  if (!deleteButton) return;
+
+  const user = auth.currentUser;
+  if (!user || !user.email || user.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+    showMessage(pageMessage, 'Bạn cần đăng nhập bằng tài khoản quản trị để xóa đơn hàng.', true);
+    return;
+  }
+
+  const docId = deleteButton.dataset.deleteId;
+  const orderNumber = deleteButton.dataset.orderNumber || docId;
+  if (!window.confirm(`Xác nhận XÓA VĨNH VIỄN đơn hàng ${orderNumber}?`)) return;
+
+  deleteButton.disabled = true;
+  deleteButton.textContent = 'Đang xóa...';
+  try {
+    await db.collection('orders').doc(docId).delete();
+    ordersCache.delete(docId);
+    orderSequence = orderSequence.filter(id => id !== docId);
+    renderOrders();
+    showMessage(pageMessage, `Đã xóa đơn hàng ${orderNumber}.`);
+  } catch (error) {
+    console.error('Lỗi xóa đơn:', error);
+    showMessage(pageMessage, 'Không xóa được đơn hàng.', true);
+    deleteButton.disabled = false;
+    deleteButton.textContent = '🗑️ Xóa đơn';
+  }
+});
+
+ordersList.addEventListener('change', async event => {
+  const select = event.target.closest('select[data-doc-id]');
+  if (!select || !select.value) return;
+  const user = auth.currentUser;
+  if (!user || !user.email || user.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+    showMessage(pageMessage, 'Bạn cần đăng nhập bằng tài khoản quản trị.', true); return;
+  }
+  const docId = select.dataset.docId;
+  const newStatus = select.value;
+  select.disabled = true;
+  try {
+    await db.collection('orders').doc(docId).update({trang_thai:newStatus, cap_nhat_luc:firebase.firestore.FieldValue.serverTimestamp()});
+    const updated = ordersCache.get(docId) || {};
+    updated.trang_thai = newStatus;
+    ordersCache.set(docId, updated);
+    renderOrders();
+    showMessage(pageMessage, 'Đã cập nhật trạng thái đơn hàng.');
+  } catch (error) {
+    console.error('Lỗi cập nhật:', error);
+    showMessage(pageMessage, 'Không cập nhật được trạng thái.', true);
+    await loadOrdersFromFirebase();
+  } finally {
+    select.disabled = false;
+  }
+});
+</script>
+</body>
+</html>

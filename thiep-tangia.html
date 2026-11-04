@@ -505,6 +505,75 @@ z-index: 10;
                 color: #bbb;
             }
         }
+             @media (max-width: 768px) {
+    /* Giữ nguyên cấu trúc ẩn desktop */
+    .main-menu, .banner, .footer, .menu-item, .banner-search, .vung-chua-2-box { 
+        display: none !important; 
+    }
+
+    /* Thanh Menu Mobile Chính */
+    .navbar-mobile {
+        display: flex !important;
+        justify-content: space-around;
+        align-items: center;
+        background: #526456;
+        padding: 8px 5px;
+        position: sticky;
+        top: 0;
+        z-index: 999;
+    }
+
+    .navbar-mobile > a, 
+    .mobile-dropdown-btn {
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14.5px;
+        cursor: pointer;
+        list-style: none; /* Xóa dấu mũi tên mặc định của summary */
+        user-select: none;
+    }
+
+    .mobile-dropdown-btn::-webkit-details-marker {
+        display: none; /* Xóa mũi tên mặc định trên Safari/Chrome */
+    }
+
+    /* Khung chứa Menu Con Xổ Xuống */
+    .mobile-dropdown {
+        position: relative;
+    }
+
+    .mobile-dropdown-content {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #435247; /* Tông màu tối hơn menu chính để phân biệt */
+        min-width: 200px;
+        box-shadow: 0px 8px 16px rgba(0,0,0,0.25);
+        border-radius: 6px;
+        margin-top: 8px;
+        overflow: hidden;
+        z-index: 1000;
+    }
+
+    .mobile-dropdown-content a {
+        color: #ffffff;
+        padding: 10px 16px;
+        text-decoration: none;
+        display: block;
+        font-size: 13.5px;
+        font-weight: normal;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .mobile-dropdown-content a:last-child {
+        border-bottom: none;
+    }
+
+    .mobile-dropdown-content a:active {
+        background-color: #687b6c;
+    }
+}
     </style>
 </head>
 <body>
@@ -554,12 +623,30 @@ z-index: 10;
         </ul>
         </nav>
 
-    <!-- BẢN MENU THU GỌN DÀNH CHO ĐIỆN THOẠI -->
+   <!-- BẢN MENU DÀNH CHO ĐIỆN THOẠI (CÓ MENU CON XỔ XUỐNG) -->
     <nav class="navbar-mobile">
-        <a href="thiepcuoi-hiendai.html">Hiện Đại</a>
-        <a href="thiepcuoi-truyenthong.html">Truyền Thống</a>
-        <a href="thiepcuoi-docquyen.html">Độc Quyền</a>
+        <details class="mobile-dropdown">
+            <summary class="mobile-dropdown-btn">Sản Phẩm ▾</summary>
+            <div class="mobile-dropdown-content">
+                <a href="index.html">📌 Tất Cả Mẫu Thiệp</a>
+                <a href="thiepcuoi-hiendai.html">Mẫu Thiệp Hiện Đại</a>
+                <a href="thiepcuoi-truyenthong.html">Mẫu Thiệp Truyền Thống</a>
+                <a href="thiepcuoi-docquyen.html">Mẫu Thiệp Độc Quyền KTS</a>
+                <a href="thiepcuoi-dq-25.html">Mẫu Thiệp DQ_25</a>
+                <a href="thiep-tangia.html">Thiệp Tân Gia</a>
+                <a href="thiep-sinhnhat.html">Thiệp Sinh Nhật</a>
+                <a href="thiep-taon.html">Thiệp Công Giáo</a>
+            </div>
+        </details>
         <a href="thiepcuoi-online.html">Thiệp Online</a>
+        <details class="mobile-dropdown">
+            <summary class="mobile-dropdown-btn">hướng dẫn ▾</summary>
+            <div class="mobile-dropdown-content">
+                <a href="huong-dan-dat-thiep.html">Hướng dẫn đặt thiệp</a>
+                <a href="huong-dan-viet-thiep.html">Hướng dẫn viết thiệp cưới</a>
+                </div>
+                 </details>
+        <a href="lienhe.html">Liên Hệ</a>
     </nav>
 
     <!-- 3. KHU VỰC HIỂN THỊ SẢN PHẨM CHÍNH -->

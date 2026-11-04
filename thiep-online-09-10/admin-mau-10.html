@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin - Quản Lý Thiệp Cưới Online</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-dark: #1e1b18;
+  --panel-bg: #ffffff;
+  --accent: #d4a373;
+  --text-main: #2b211e;
+  --border: #e2dad1;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #f5f2ed; color: var(--text-main); font-family: "Montserrat", sans-serif; padding-bottom: 60px; }
+
+header {
+  background: var(--bg-dark); color: #fff; padding: 20px 40px;
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+}
+header h1 { font-size: 20px; font-weight: 500; letter-spacing: 0.05em; }
+
+main { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+.card {
+  background: var(--panel-bg); border-radius: 12px; padding: 32px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.04); border: 1px solid var(--border); margin-bottom: 24px;
+}
+h2 { font-size: 18px; font-weight: 600; margin-bottom: 20px; border-bottom: 2px solid var(--accent); display: inline-block; padding-bottom: 4px; }
+
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.full { grid-column: 1 / -1; }
+
+label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 6px; }
+input, textarea, select {
+  width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 6px;
+  font-size: 13px; font-family: inherit; outline: none; transition: border-color 0.3s; background: #fff;
+}
+input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+
+.btn {
+  background: var(--bg-dark); color: #fff; padding: 14px 28px; border: none;
+  border-radius: 6px; font-size: 12px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; cursor: pointer; transition: background 0.3s;
+  display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
+}
+.btn:hover { background: var(--accent); }
+.btn-secondary { background: #eee; color: #333; margin-left: 10px; }
+.btn-secondary:hover { background: #ddd; color: #000; }
+
+#authStatus { font-size: 12px; margin-top: 10px; color: #666; }
+
+.success-box {
+  background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px;
+  padding: 16px; margin-top: 20px; display: none;
+}
+.success-box h4 { color: #166534; margin-bottom: 8px; font-size: 14px; }
+.link-preview-group { display: flex; gap: 10px; align-items: center; margin-top: 8px; }
+
+.table-wrapper { width: 100%; overflow-x: auto; margin-top: 10px; }
+table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+th, td { padding: 12px 14px; border-bottom: 1px solid var(--border); }
+th { background: #f8f6f0; font-weight: 600; color: #555; }
+tr:hover { background: #faf8f5; }
+.no-data { text-align: center; color: #888; padding: 20px; }
+
+.template-selector {
+  background: #f8f6f0; padding: 16px; border-radius: 8px; margin-bottom: 24px;
+  border: 1px dashed var(--accent); display: flex; align-items: center; gap: 15px;
+}
+.template-selector label { margin-bottom: 0; white-space: nowrap; font-size: 13px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>✿ Thiệp Cưới Online Mẫu 10</h1>
+  <div style="display: flex; gap: 15px;"> 
+    <a href="thiep-online-mau-10.html" target="_blank" style="color:#fdfdfd; text-decoration:none; font-size:13px; font-weight: 600;">Mở Mẫu 10 (Mới) ↗</a>
+  </div>
+</header>
+
+<main>
+  <!-- AUTH SECTION -->
+  <section class="card" id="authSection">
+    <h2>Đăng Nhập Quản Trị</h2>
+    <div class="grid">
+      <div>
+        <label>Email Admin</label>
+        <input id="adminEmail" type="email" placeholder="admin@gmail.com">
+      </div>
+      <div>
+        <label>Mật Khẩu</label>
+        <input id="adminPassword" type="password" placeholder="****">
+      </div>
+    </div>
+    <button class="btn" id="loginBtn">Đăng Nhập</button>
+    <button class="btn btn-secondary" id="logoutBtn" style="display:none;">Đăng Xuất</button>
+    <div id="authStatus">Trạng thái: Chưa đăng nhập.</div>
+  </section>
+
+  <!-- FORM SECTION -->
+  <section class="card" id="editorSection" style="display:none;">
+    <h2>Cấu Hình Nội Dung Thiệp Cưới</h2>
+    
+    <!-- Bộ chọn mẫu thiệp -->
+    <div class="template-selector">
+      <label><strong>Đang chỉnh sửa cho:</strong></label>
+      <select id="selectedTemplate" onchange="switchTemplate()">
+        <option value="mau_07">Mẫu 07 (Truyền Thống)</option>
+        <option value="mau_10" selected>Mẫu 10 (Hiện Đại Đỏ Đồ)</option>
+      </select>
+    </div>
+
+    <form id="adminForm">
+      <div class="grid">
+        <div>
+          <label>Tên Chú Rể</label>
+          <input id="groom_name" value="Minh Thông">
+        </div>
+        <div>
+          <label>Tên Cô Dâu</label>
+          <input id="bride_name" value="Ngọc Thương">
+        </div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label>Ngày Hiển Thị (vd: 15 · 06 · 2027)</label>
+          <input id="display_date" value="15 · 06 · 2027">
+        </div>
+        <div>
+          <label>Thời Gian Chuẩn (Tính đếm ngược)</label>
+          <input id="event_datetime" type="datetime-local" value="2027-06-15T09:00">
+        </div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label>Thông Tin Nhà Trai</label>
+          <textarea id="groom_parents" rows="2">Gia đình chú rể Minh Thông</textarea>
+        </div>
+        <div>
+          <label>Thông Tin Nhà Gái</label>
+          <textarea id="bride_parents" rows="2">Gia đình cô dâu Ngọc Thương</textarea>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="full">
+          <label>Lời Ngỏ / Lời Mời</label>
+          <textarea id="invitation_text" rows="3">Trân trọng kính mời bạn đến chung vui trong ngày hạnh phúc của chúng mình.</textarea>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label>Thời Gian Tổ Chức</label>
+          <input id="event_time" value="09:00 · Ngày 15 tháng 06 năm 2027">
+        </div>
+        <div>
+          <label>Tên Địa Điểm / Nhà Hàng</label>
+          <input id="event_address" value="Trung tâm Hội nghị & Tiệc cưới">
+        </div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label>Địa Chỉ Chi Tiết</label>
+          <input id="event_detail" value="Số 123 Đường ABC, Quận XYZ">
+        </div>
+        <div>
+          <label>Link Google Maps</label>
+          <input id="google_maps_link" placeholder="https://maps.google.com/...">
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="full">
+          <label>Link Ảnh Bìa Hero (HTTPS direct link)</label>
+          <input id="hero_image" placeholder="https://images.unsplash.com/...">
+        </div>
+      </div>
+
+       <div class="grid">
+        <div class="full">
+          <label>Link Ảnh Out Happyday</label>
+          <input id="out_happyday" placeholder="https://images.unsplash.com/...">
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="full">
+          <label>Link Nhạc Nền (File MP3 trực tiếp)</label>
+          <input id="music_url" placeholder="https://.../music.mp3">
+        </div>
+      </div>
+
+      <h3 style="font-size: 14px; margin: 20px 0 10px;">Link Album Ảnh (Max 6 ảnh)</h3>
+      <div class="grid">
+        <input id="img1" placeholder="Link ảnh 1 (https://...)">
+        <input id="img2" placeholder="Link ảnh 2 (https://...)">
+        <input id="img3" placeholder="Link ảnh 3 (https://...)">
+        <input id="img4" placeholder="Link ảnh 4 (https://...)">
+        <input id="img5" placeholder="Link ảnh 5 (https://...)">
+        <input id="img6" placeholder="Link ảnh 6 (https://...)">
+      </div>
+
+      <div style="margin-top: 24px;">
+        <button type="button" class="btn" id="saveBtn">Lưu Thiệp</button>
+        <span id="saveStatus" style="margin-left: 15px; font-size: 13px;"></span>
+      </div>
+
+      <div class="success-box" id="successBox">
+        <h4>✓ Lưu Thiệp Thành Công!</h4>
+        <p style="font-size: 12px; color: #444;">Đường link thiệp cưới của bạn đã sẵn sàng:</p>
+        <div class="link-preview-group">
+          <input id="cardUrlInput" readonly>
+          <a id="viewCardBtn" href="#" target="_blank" class="btn">Xem Thiệp ↗</a>
+          <button type="button" class="btn btn-secondary" onclick="copyCardUrl()">Sao Chép Link</button>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  <!-- WISHES LIST SECTION -->
+  <section class="card" id="wishesSection" style="display:none;">
+    <h2>Danh Sách Lời Chúc Từ Khách Mời</h2>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 50px;">STT</th>
+            <th style="width: 180px;">Tên Người Gửi</th>
+            <th>Lời Chúc</th>
+            <th style="width: 160px;">Thời Gian</th>
+          </tr>
+        </thead>
+        <tbody id="wishesTableBody">
+          <tr><td colspan="4" class="no-data">Đang tải danh sách lời chúc...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBZ-DeRjsQ8Fh16IYreXkJqD7cFfuk7JQg",
+  authDomain: "du-lieu-thiep-online-02.firebaseapp.com",
+  projectId: "du-lieu-thiep-online-02",
+  storageBucket: "du-lieu-thiep-online-02.firebasestorage.app",
+  messagingSenderId: "629898873128",
+  appId: "1:629898873128:web:e330b74b2bba82afbf681d"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+const $ = id => document.getElementById(id);
+
+let unsubscribeWishes = null;
+
+const fields = [
+  'groom_name', 'bride_name', 'display_date', 'event_datetime',
+  'groom_parents', 'bride_parents', 'invitation_text', 'event_time',
+  'event_address', 'event_detail', 'google_maps_link', 'hero_image','out_happyday','music_url'
+];
+
+auth.onAuthStateChanged(user => {
+  if (user) {
+    $('authStatus').textContent = "Đã đăng nhập: " + user.email;
+    $('editorSection').style.display = 'block';
+    $('wishesSection').style.display = 'block';
+    $('logoutBtn').style.display = 'inline-block';
+    loadData();
+  } else {
+    $('authStatus').textContent = "Chưa đăng nhập.";
+    $('editorSection').style.display = 'none';
+    $('wishesSection').style.display = 'none';
+    $('logoutBtn').style.display = 'none';
+  }
+});
+
+$('loginBtn').onclick = async () => {
+  try {
+    await auth.signInWithEmailAndPassword($('adminEmail').value.trim(), $('adminPassword').value);
+  } catch (e) {
+    alert("Lỗi đăng nhập: " + e.message);
+  }
+};
+
+$('logoutBtn').onclick = () => auth.signOut();
+
+function switchTemplate() {
+  $('successBox').style.display = 'none';
+  loadData();
+}
+
+async function loadData() {
+  const currentDocId = $('selectedTemplate').value;
+  fields.forEach(f => { if ($(f)) $(f).value = ''; });
+  for(let i=1; i<=6; i++) { if($('img'+i)) $('img'+i).value = ''; }
+
+  const doc = await db.collection("thiep_online").doc(currentDocId).get();
+  if (doc.exists) {
+    const data = doc.data();
+    fields.forEach(f => { if ($(f) && data[f]) $(f).value = data[f]; });
+    if (data.gallery_images && Array.isArray(data.gallery_images)) {
+      data.gallery_images.forEach((img, idx) => {
+        if ($('img' + (idx + 1))) $('img' + (idx + 1)).value = img;
+      });
+    }
+  }
+  listenToWishes(currentDocId);
+}
+
+function listenToWishes(docId) {
+  if (unsubscribeWishes) unsubscribeWishes();
+
+  unsubscribeWishes = db.collection("thiep_online").doc(docId).collection("wishes")
+    .orderBy("createdAt", "desc")
+    .onSnapshot(snapshot => {
+      const tbody = $('wishesTableBody');
+      if (snapshot.empty) {
+        tbody.innerHTML = `<tr><td colspan="4" class="no-data">Chưa có lời chúc nào cho mẫu này.</td></tr>`;
+        return;
+      }
+
+      let html = '';
+      let index = 1;
+      snapshot.forEach(doc => {
+        const item = doc.data();
+        let timeStr = "Chưa rõ";
+        if (item.createdAt && item.createdAt.toDate) {
+          const date = item.createdAt.toDate();
+          timeStr = date.toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'}) + ' ' + date.toLocaleDateString('vi-VN');
+        }
+
+        html += `
+          <tr>
+            <td>${index++}</td>
+            <td><strong>${escapeHtml(item.name || 'Khách ẩn danh')}</strong></td>
+            <td>${escapeHtml(item.message || '')}</td>
+            <td style="color: #666; font-size: 12px;">${timeStr}</td>
+          </tr>
+        `;
+      });
+      tbody.innerHTML = html;
+    });
+}
+
+function escapeHtml(text) {
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}
+
+$('saveBtn').onclick = async () => {
+  const currentDocId = $('selectedTemplate').value;
+  $('saveStatus').textContent = "Đang lưu...";
+  const data = {};
+  fields.forEach(f => data[f] = $(f).value.trim());
+  data.gallery_images = [
+    $('img1').value.trim(), $('img2').value.trim(), $('img3').value.trim(),
+    $('img4').value.trim(), $('img5').value.trim(), $('img6').value.trim()
+  ].filter(Boolean);
+  data.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+
+  try {
+    await db.collection("thiep_online").doc(currentDocId).set(data, { merge: true });
+    $('saveStatus').textContent = "Đã lưu thành công!";
+    $('saveStatus').style.color = "green";
+
+    const fileName = currentDocId === 'mau_10' ? 'thiep-online-mau-10.html' : 'thiep-online-mau-07.html';
+    const cardUrl = new URL(fileName, window.location.href).href;
+    $('cardUrlInput').value = cardUrl;
+    $('viewCardBtn').href = cardUrl;
+    $('successBox').style.display = "block";
+  } catch (e) {
+    $('saveStatus').textContent = "Lỗi khi lưu: " + e.message;
+    $('saveStatus').style.color = "red";
+  }
+};
+
+function copyCardUrl() {
+  const urlInput = $('cardUrlInput');
+  urlInput.select();
+  navigator.clipboard.writeText(urlInput.value);
+  alert("Đã sao chép link thiệp thành công!");
+}
+</script>
+</body>
+</html>

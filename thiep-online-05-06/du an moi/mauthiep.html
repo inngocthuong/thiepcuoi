@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thiệp Cưới Online Realtime</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }
+        body { background: #2D0B10; color: #F3E5E8; min-height: 100vh; scroll-behavior: smooth; }
+        .hidden { display: none !important; }
+        .mode-bar { position: fixed; top: 0; inset-inline: 0; height: 40px; background: #111; z-index: 100; display: flex; justify-content: center; align-items: center; gap: 20px; }
+        .mode-btn { background: #444; color: white; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .mode-btn.active { background: #b91c1c; font-weight: bold; }
+        #clientPage { padding-top: 40px; }
+        #envelopeCover { position: fixed; top: 40px; inset-inline: 0; bottom: 0; z-index: 80; background: #4A0E17; display: flex; align-items: center; justify-content: center; border: 8px solid rgba(217,119,6,0.3); transition: all 0.6s ease-in-out; }
+        .cover-box { text-align: center; max-width: 350px; margin: 0 16px; background: rgba(74,14,23,0.95); padding: 24px; border-radius: 16px; border: 1px solid rgba(245,158,11,0.2); }
+        .wax-seal { width: 70px; height: 70px; margin: 16px auto; border-radius: 50%; background: linear-gradient(135deg, #fbbf24, #d97706); border: 3px solid #fcd34d; color: black; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        #mainContent { max-width: 440px; margin: 0 auto; padding: 20px 16px 80px; display: flex; flex-direction: column; gap: 20px; opacity: 0; transition: opacity 0.6s; }
+        section { background: #3D121A; padding: 20px; border-radius: 12px; border: 1px solid rgba(245,158,11,0.1); text-align: center; }
+        .grid-2 { display: grid; grid-template-cols: 1fr 1fr; gap: 10px; }
+        .p-box { background: #3D121A; padding: 12px; border-radius: 8px; border: 1px solid rgba(245,158,11,0.1); font-size: 11px; }
+        .p-grid { display: grid; grid-template-cols: repeat(2, 1fr); gap: 6px; }
+        .p-box-img { aspect-ratio: 1/1; border-radius: 6px; overflow: hidden; }
+        .p-box-img img { width: 100%; height: 100%; object-fit: cover; }
+        .f-grp { text-align: left; margin-bottom: 10px; font-size: 11px; }
+        .f-grp label { display: block; color: #fcd34d; margin-bottom: 3px; font-weight: bold; }
+        .f-grp input, .f-grp select, .f-grp text-area, .f-grp textarea { width: 100%; background: #2D0B10; border: 1px solid rgba(245,158,11,0.2); border-radius: 6px; padding: 6px; color: white; font-size: 12px; outline: none; }
+        .btn-g { width: 100%; background: #f59e0b; color: black; font-weight: bold; padding: 8px; border-radius: 6px; border: none; cursor: pointer; text-transform: uppercase; font-size: 11px; }
+        #floatMusic { position: fixed; top: 50px; right: 16px; z-index: 90; background: #f59e0b; color: black; border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 14px; display: none; }
+        #adminPage { padding-top: 50px; color: #1f2937; display: flex; justify-content: center; }
+        .ad-container { max-width: 850px; width: 100%; display: grid; grid-template-cols: 1fr; gap: 16px; padding: 0 16px; }
+        @media(min-width: 768px) { .ad-container { grid-template-cols: 1.2fr 0.8fr; } }
+        .ad-card { background: white; padding: 16px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .t-l { font-size: 16px; font-weight: bold; border-bottom: 2px solid #f3f4f6; padding-bottom: 4px; color: #b91c1c; margin-bottom: 10px; }
+        .t-r { font-size: 16px; font-weight: bold; border-bottom: 2px solid #f3f4f6; padding-bottom: 4px; color: #047857; margin-bottom: 10px; }
+        .r-item { padding: 8px; border-radius: 6px; margin-bottom: 6px; font-size: 11px; border: 1px solid #e5e7eb; }
+        .r-y { background: #ecfdf5; border-color: #a7f3d0; }
+        .r-n { background: #fef2f2; border-color: #fecaca; }
+    </style>
+</head>
+<body>
+    <div class="mode-bar">
+        <button id="bClient" class="mode-btn active" onclick="sw('client')">Xem Giao Diện Thiệp</button>
+        <button id="bAdmin" class="mode-btn" onclick="sw('admin')">Trang Quản Trị Admin</button>
+    </div>
+    <!-- GIAO DIỆN THIỆP CƯỚI -->
+    <div id="clientPage">
+        <canvas id="bCvs" style="position: fixed; inset: 40px 0 0 0; pointer-events: none; z-index: 75;"></canvas>
+        <button id="floatMusic">🎵</button><audio id="bgAud" loop></audio>
+        <div id="envelopeCover">
+            <div class="cover-box">
+                <p style="color:#fbbf24; font-size:10px; text-transform:uppercase;">Wedding Invitation</p>
+                <h1 id="lblNames" style="font-family:cursive; font-size:32px; color:#fcd34d; margin:10px 0;">Loading...</h1>
+                <p id="lblDate" style="font-size:12px; color:rgba(253,211,77,0.8); margin-bottom:16px;">--/--/----</p>
+                <button id="btnOpen" class="wax-seal"><span id="lblWax">T&G</span></button>
+                <span style="font-size:9px; color:rgba(245,158,11,0.7); display:block; margin-top:10px;">CHẠM DẤU SÁP ĐỂ MỞ THIỆP</span>
+            </div>
+        </div>
+        <div id="mainContent">
+            <section>
+                <h2 style="font-family:cursive; font-size:24px; color:#f59e0b; margin-bottom:4px;">Lời Ngỏ</h2>
+                <p id="lblTxt" style="font-size:12px; white-space:pre-line; color:rgba(243,229,232,0.9);">Đang tải...</p>
+            </section>
+            <div class="grid-2">
+                <div class="p-box">
+                    <h3 style="color:#f59e0b; font-weight:bold;">NHÀ TRAI</h3>
+                    <p id="lblGParents" style="color:rgba(243,229,232,0.7); white-space:pre-line;"></p>
+                    <div id="lblGName" style="font-family:cursive; font-size:16px; color:#fcd34d; margin-top:4px;"></div>
+                </div>
+                <div class="p-box">
+                    <h3 style="color:#f59e0b; font-weight:bold;">NHÀ GÁI</h3>
+                    <p id="lblBParents" style="color:rgba(243,229,232,0.7); white-space:pre-line;"></p>
+                    <div id="lblBName" style="font-family:cursive; font-size:16px; color:#fcd34d; margin-top:4px;"></div>
+                </div>
+            </div>
+            <section>
+                <h2 style="font-family:cursive; font-size:24px; color:#f59e0b; margin-bottom:10px;">Thời Gian & Địa Điểm</h2>
+                <div style="margin-bottom:8px;"><p style="color:#fcd34d; font-size:10px; font-weight:bold;">THỜI GIAN</p><p id="lblTime" style="font-size:13px; font-weight:600;"></p></div>
+                <div><p style="color:#fcd34d; font-size:10px; font-weight:bold;">ĐỊA ĐIỂM</p><p id="lblAddr" style="font-size:12px; margin-bottom:8px;"></p><a id="lnkMaps" href="#" target="_blank" class="btn-g" style="text-decoration:none; display:inline-block; width:auto; padding:6px 12px;">Xem Bản Đồ</a></div>
+            </section>
+            <section>
+                <h2 style="font-family:cursive; font-size:24px; color:#f59e0b; margin-bottom:10px;">Album Cưới</h2>
+                <div id="photoGrid" class="p-grid"></div>
+            </section>
+            <section>
+                <h2 style="font-family:cursive; font-size:24px; color:#f59e0b; margin-bottom:10px;">Xác Nhận Tham Dự</h2>
+                <form id="fRsvp">
+                    <div class="f-grp"><label>Tên của bạn *</label><input type="text" id="rName" required placeholder="Nhập họ tên..."></div>
+                    <div class="grid-2">
+                        <div class="f-grp"><label>Tham dự *</label><select id="rGo"><option value="yes">Sẽ đến dự tiệc</option><option value="no">Không thể đến</option></select></div>
+                        <div class="f-grp"><label>Số người đi cùng</label><select id="rCount"><option value="1">1 người</option><option value="2">2 người</option><option value="3">3 người</option></select></div>
+                    </div>
+                    <div class="f-grp"><label>Lời chúc</label><textarea id="rWish" rows="2" placeholder="Chúc hạnh phúc..."></textarea></div>
+                    <button type="submit" class="btn-g">Gửi Xác Nhận</button>
+                </form>
+            </section>
+        </div>
+    </div>
+    <!-- TRANG ADMIN -->
+    <div id="adminPage" class="hidden">
+        <div class="ad-container">
+            <div class="ad-card">
+                <h2 class="t-l">Cấu Hình Nội Dung Thiệp</h2>
+                <form id="fAdmin">
+                    <div class="f-grp"><label>Link Ảnh Bìa Thay Thế (URL)</label><input type="text" id="cImg"></div>
+                    <div class="f-grp"><label>Ký Tự Dấu Sáp (Ví dụ: A&B)</label><input type="text" id="cWax"></div>
+                    <div class="f-grp"><label>Link Nhạc Nền MP3 (URL)</label><input type="text" id="cMus"></div>
+                    <div class="grid-2">
+                        <div class="f-grp"><label>Họ Tên Chú Rể</label><input type="text" id="cGName"></div>
+                        <div class="f-grp"><label>Họ Tên Cô Dâu</label><input type="text" id="cBName"></div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="f-grp"><label>Cha Mẹ Nhà Trai</label><textarea id="cGParents" rows="2"></textarea></div>
+                        <div class="f-grp"><label>Cha Mẹ Nhà Gái</label><textarea id="cBParents" rows="2"></textarea></div>
+                    </div>
+                    <div class="f-grp"><label>Lời Ngỏ Mời Khách</label><textarea id="cInv" rows="2"></textarea></div>
+                    <div class="f-grp"><label>Thời Gian Tổ Chức</label><input type="text" id="cTime" placeholder="Ví dụ: 11:00 - 25/12/2026"></div>
+                    <div class="f-grp"><label>Địa Chỉ Nhà Hàng</label><input type="text" id="cAddr"></div>
+                    <div class="f-grp"><label>Link Bản Đồ Google Maps</label><input type="text" id="cMaps"></div>
+                    <div class="f-grp"><label>Link Album (Mỗi dòng 1 link ảnh)</label><textarea id="cAlbum" rows="2" placeholder="http://link1.com&#10;http://link2.com"></textarea></div>
+                    <button type="submit" class="btn-admin-submit">Lưu & ĐỒNG BỘ THIỆP TIẾP THEO</button>
+                </form>
+            </div>
+            <div class="ad-card">
+                <h2 class="t-r">Danh Sách Khách Khai Báo LIVE</h2>
+                <div id="rsvpList"><p style="font-size:11px; color:#9ca3af;">Đang tải danh sách...</p></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://gstatic.com";
+        import { getFirestore, doc, onSnapshot, collection, addDoc, setDoc, query, orderBy } from "https://gstatic.com";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyApc8T6Co4_M6Va-QFQ2nAMtiMyeEaziNE",
+            authDomain: "://firebaseapp.com",
+            projectId: "du-lieu-thiep-online",
+            storageBucket: "du-lieu-thiep-online.firebasestorage.app",
+            messagingSenderId: "22302636953",
+            appId: "1:22302636953:web:f5117fe652f16148b37108"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const rDoc = doc(db, "wedding_cards", "card_demo");
+
+        onSnapshot(rDoc, (snap) => {
+            if (snap.exists()) {
+                const data = snap.data();
+                document.getElementById('lblNames').innerText = `${data.groom_name.split(' ').pop()} & ${data.bride_name.split(' ').pop()}`;
+                document.getElementById('lblDate').innerText = data.event_time.split('-').pop() || '';
+                if(data.wax_seal_text) document.getElementById('lblWax').innerText = data.wax_seal_text;
+                if(data.cover_image) document.getElementById('envelopeCover').style.backgroundImage = `linear-gradient(rgba(74,14,23,0.8), rgba(74,14,23,0.8)), url('${data.cover_image}')`;
+                
+                document.getElementById('lblTxt').innerText = data.invitation_text;
+                document.getElementById('lblGParents').innerText = data.groom_parents;
+                document.getElementById('lblBParents').innerText = data.bride_parents;
+                document.getElementById('lblGName').innerText = data.groom_name;
+                document.getElementById('lblBName').innerText = data.bride_name;
+                document.getElementById('lblTime').innerText = data.event_time;
+                document.getElementById('lblAddr').innerText = data.event_address;
+                document.getElementById('lnkMaps').href = data.google_maps_link;
+                document.getElementById('bgAud').src = data.background_music;
+
+                const g = document.getElementById('photoGrid'); g.innerHTML = '';
+                if(data.album_images) {
+                    data.album_images.slice(0,6).forEach(url => {
+                        const cell = document.createElement('div'); cell.className = "p-box-img";
+                        cell.innerHTML = `<img src="${url}">`; g.appendChild(cell);
+                    });
+                }
+
+                document.getElementById('cImg').value = data.cover_image || '';
+                document.getElementById('cWax').value = data.wax_seal_text || '';
+                document.getElementById('cMus').value = data.background_music || '';
+                document.getElementById('cGName').value = data.groom_name || '';
+                document.getElementById('cBName').value = data.bride_name || '';
+                document.getElementById('cGParents').value = data.groom_parents || '';
+                document.getElementById('cBParents').value = data.bride_parents || '';
+                document.getElementById('cInv').value = data.invitation_text || '';
+                document.getElementById('cTime').value = data.event_time || '';
+                document.getElementById('cAddr').value = data.event_address || '';
+                document.getElementById('cMaps').value = data.google_maps_link || '';
+                if(data.album_images) document.getElementById('cAlbum').value = data.album_images.join('\n');
+            }
+        });
+
+        document.getElementById('btnOpen').addEventListener('click', () => {
+            document.getElementById('envelopeCover').style.transform = 'translateY(-100%)';
+            document.getElementById('envelopeCover').style.opacity = '0';
+            document.getElementById('mainContent').style.opacity = '1';
+            document.getElementById('floatMusic').style.display = 'block';
+            document.getElementById('bgAud').play().catch(e => console.log(e));
+        });
+
+        document.getElementById('floatMusic').addEventListener('click', () => {
+            const a = document.getElementById('bgAud');
+            if(a.paused) { a.play(); } else { a.pause(); }
+        });
+
+        document.getElementById('fRsvp').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                await addDoc(collection(db, "rsvps"), {
+                    guest_name: document.getElementById('rName').value,
+                    is_attending: document.getElementById('rGo').value === 'yes',
+                    guest_count: parseInt(document.getElementById('rCount').value),
+                    wishes: document.getElementById('rWish').value,
+                    timestamp: new Date()
+                });
+                alert("Gửi thành công! ❤️"); document.getElementById('fRsvp').reset();
+            } catch(e) { alert("Lỗi kết nối mạng!"); }
+        });
+
+        document.getElementById('fAdmin').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const imgs = document.getElementById('cAlbum').value.split('\n').filter(l => l.trim() !== '');
+            try {
+                await setDoc(rDoc, {
+                    cover_image: document.getElementById('cImg').value,
+                    wax_seal_text: document.getElementById('cWax').value,
+                    background_music: document.getElementById('cMus').value,
+                    groom_name: document.getElementById('cGName').value,
+                    bride_name: document.getElementById('cBName').value,
+                    groom_parents: document.getElementById('cGParents').value,
+                    bride_parents: document.getElementById('cBParents').value,
+                    invitation_text: document.getElementById('cInv').value,
+                    event_time: document.getElementById('cTime').value,
+                    event_address: document.getElementById('cAddr').value,
+                    google_maps_link: document.getElementById('cMaps').value,
+                    album_images: imgs
+                }, { merge: true });
+                alert("Đã đồng bộ lên thiệp thành công!");
+            } catch(err) { alert("Lỗi Firebase!"); }
+        });
+
+        const qRsvp = query(collection(db, "rsvps"), orderBy("timestamp", "desc"));
+        onSnapshot(qRsvp, (snap) => {
+            const container = document.getElementById('rsvpList'); container.innerHTML = '';
+            if(snap.empty) { container.innerHTML = '<p style="font-size:11px;color:#9ca3af;">Chưa có phản hồi.</p>'; return; }
+            snap.forEach(doc => {
+                const r = doc.data(); const node = document.createElement('div');
+                node.className = `r-item ${r.is_attending ? 'r-y' : 'r-n'}`;
+                node.innerHTML = `<div style="display:flex;justify-content:between;"><b>👤 ${r.guest_name}</b><span>${r.is_attending?`Đi ${r.guest_count}ng` : 'Bận'}</span></div>${r.wishes?`<p style="color:#555;margin-top:2px;">"${r.wishes}"</p>`:''}`;
+                container.appendChild(node);
+            });
+        });
+    </script>
+    <script>
+        const cvs = document.getElementById('bCvs'); const ctx = cvs.getContext('2d'); let flakes = [];
+        function rz() { cvs.width = window.innerWidth; cvs.height = window.innerHeight - 40; }
+        window.addEventListener('resize', rz); rz();
+        function cFlk() { return { x: Math.random() * cvs.width, y: Math.random() * -cvs.height, r: Math.random() * 2 + 1, s: Math.random() * 0.8 + 0.4, op: Math.random() * 0.4 + 0.2, sw: Math.random() * 2 }; }
+        for(let i=0; i<15; i++) flakes.push(cFlk());
+        function draw() {
+            ctx.clearRect(0, 0, cvs.width, cvs.height);
+            flakes.forEach(f => {
+                ctx.beginPath(); ctx.fillStyle = `rgba(254, 200, 216, ${f.op})`; ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2); ctx.fill();
+                f.y += f.s; f.x += Math.sin(f.sw) * 0.2; f.sw += 0.01;
+                if(f.y > cvs.height) { f.y = -20; f.x = Math.random() * cvs.width; }
+            });
+            requestAnimationFrame(draw);
+        }
+        draw();
+        window.sw = function(t) {
+            document.getElementById('clientPage').classList.toggle('hidden', t !== 'client');
+            document.getElementById('adminPage').classList.toggle('hidden', t !== 'admin');
+            document.getElementById('bClient').classList.toggle('active', t === 'client');
+            document.getElementById('bAdmin').classList.toggle('active', t === 'admin');
+        }
+    </script>
+</body>
+</html>

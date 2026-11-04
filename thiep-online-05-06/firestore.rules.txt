@@ -1,0 +1,15 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.email == "YOUR_ADMIN_EMAIL@example.com";
+    }
+    match /invitations/{inviteId} {
+      // Public guests can read one invitation when they have its ID.
+      allow get: if true;
+      // Only Admin can list all invitations or create/edit/delete them.
+      allow list, create, update, delete: if isAdmin();
+    }
+  }
+}

@@ -1,0 +1,27 @@
+HUONG DAN — BAN THIEP CUOI HTML DUNG THU TRUOC KHI DUA LEN GITHUB
+
+Tệp:
+- admin-thiep-cuoi-firebase.html: đăng nhập email/mật khẩu Firebase Auth; sau đăng nhập mới hiện form; tạo/cập nhật thiệp Firestore; hiện link và nút sao chép.
+- thiep-cuoi-firebase.html: đọc thiệp theo ?id=...; có album tối đa 6 URL ảnh.
+- firestore.rules.txt: quy tắc Firestore. Thay YOUR_ADMIN_EMAIL@example.com bằng email Admin thật trước khi Publish.
+
+THỬ BẰNG FILE HTML:
+1. Giải nén toàn bộ vào một thư mục.
+2. Thử mở admin-thiep-cuoi-firebase.html bằng nhấp đúp. Bản này dùng Firebase compat SDK để có cơ hội hoạt động trực tiếp bằng file://; nếu Chrome chặn kết nối hoặc lỗi CORS, dùng máy chủ cục bộ ở bước 3.
+3. Máy Windows: mở thư mục, bấm thanh địa chỉ File Explorer, gõ cmd rồi Enter. Gõ: py -m http.server 8000 (hoặc python -m http.server 8000). Giữ cửa sổ đó mở.
+4. Vào http://localhost:8000/admin-thiep-cuoi-firebase.html
+5. Đăng nhập bằng email/mật khẩu đã tạo trong Firebase Authentication. Form chỉ hiện sau đăng nhập thành công.
+6. Nhập thông tin và link ảnh bìa, MP3, 6 link album (URL ảnh công khai). Bấm “Lưu thiệp lên Firebase”.
+7. Khi lưu thành công, mã thiệp và link sẽ hiện ra. Nếu đang ở file:// hoặc localhost, link chỉ dùng thử trên máy; không chia sẻ được cho khách bên ngoài.
+
+BẢO MẬT:
+- Firestore Database phải được tạo và Email/Password phải bật trong Authentication.
+- Thay email trong firestore.rules.txt rồi dán tab Firestore > Rules > Publish.
+- Quy tắc cho phép khách đọc từng thiệp theo ID, không cho khách liệt kê danh sách hay ghi/sửa/xóa.
+- Không dùng Rules cho phép tất cả ghi dữ liệu.
+
+GIỚI HẠN HIỆN TẠI:
+- Album dùng link ảnh công khai, chưa upload ảnh từ máy lên Firebase Storage.
+- RSVP chỉ là giao diện mẫu, chưa lưu câu trả lời vào Firestore.
+- Để có link HTTPS công khai, đưa cả hai file HTML lên hosting. GitHub Pages có thể phục vụ file HTML tĩnh, nhưng phải kiểm tra Firebase Authentication authorized domains nếu đăng nhập từ tên miền GitHub Pages.
+- Sau khi deploy, mở Admin bằng link HTTPS rồi tạo/cập nhật thiệp để link trả về là link công khai.

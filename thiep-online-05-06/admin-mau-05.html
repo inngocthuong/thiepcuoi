@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin Thiệp Cưới — Bản chạy trên máy</title>
+<style>
+:root{
+  --wine:#650d20;
+  --wine2:#8d1a32;
+  --gold:#c6a15b;
+  --cream:#fff8ef;
+  --ink:#45232a;
+  --line:#e4d2b5}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#f7f1e9;
+  color:var(--ink);
+  font-family:Arial,sans-serif}
+
+header{
+  background:linear-gradient(120deg,#4d0717,#85172d);
+  color:#fff1d4;
+  padding:24px max(18px,calc((100% - 1120px)/2));
+  border-bottom:3px solid var(--gold)}
+
+header h1{
+  font-family:Georgia,serif;
+  font-weight:normal;
+  margin:0 0 8px;
+  font-size:30px}
+  
+header p{margin:0;
+  opacity:.9;
+  font-size:14px}
+
+main{
+  max-width:1120px;
+  margin:24px auto;
+  padding:0 16px;
+  display:grid;
+  grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr);
+  gap:20px}
+
+.card{
+  background:white;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:22px;
+  box-shadow:0 8px 24px #38121a0b}
+
+h2{
+  font-family:serif;
+  color:var(--wine);
+  font-weight:normal;
+  margin:0 0 18px;
+  font-size:25px}
+
+h3{
+  font-family:serif;
+  color:var(--wine);
+  font-weight:normal;
+  margin:22px 0 12px}
+
+label{
+  display:block;
+  font-size:13px;
+  font-weight:700;
+  margin:12px 0 6px}
+
+input,textarea,select{
+  width:100%;border:1px solid #d9c7a9;
+  border-radius:8px;
+  padding:11px;
+  background:#fffdf9;
+  font:14px Arial,sans-serif;
+  color:var(--ink)}
+
+textarea{
+  resize:vertical;
+  min-height:75px}
+  
+.grid{display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px}
+button{
+  border:1px solid var(--gold);
+  border-radius:999px;
+  padding:11px 17px;
+  background:var(--wine);
+  color:#fff4df;
+  font-weight:700;
+  cursor:pointer}
+
+button.secondary{
+  background:#fffaf1;
+  color:var(--wine)}
+
+button.gold{
+  background:var(--gold);
+  color:#35101a}
+
+.actions{
+  display:flex;
+  gap:8px;flex-wrap:wrap;
+  margin-top:18px}
+  
+.action-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--gold);
+  border-radius:999px;
+  padding:11px 17px;
+  background:#fffaf1;
+  color:var(--wine);
+  font-weight:700;
+  text-decoration:none;
+  font-size:13px}
+
+.note{
+  font-size:12px;
+  line-height:1.6;
+  color:#806b60;
+  background:#fff7e9;
+  border-radius:8px;
+  padding:10px;
+  margin-top:12px}
+
+#status{
+  font-size:13px;
+  color:#17623a;
+  min-height:20px;
+  margin-top:10px}
+
+.preview{
+  position:sticky;
+  top:15px;
+  align-self:start;
+  overflow:hidden;
+  border-radius:16px;
+  background:#5a0a1b;
+  color:#fff1d4;
+  text-align:center;
+  min-height:540px;
+  padding:22px;display:flex;
+  align-items:center;
+  justify-content:center}
+
+.preview-inner{
+  border:1px solid var(--gold);
+  outline:1px solid #c6a15b77;
+  outline-offset:6px;
+  padding:35px 16px;
+  width:100%;
+  position:relative}
+
+.preview .kicker{
+  font-size:11px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:#e6c77d}
+
+.preview h2{
+  font-family:Georgia,serif;
+  color:#fff0ce;
+  font-size:clamp(30px,4vw,48px);
+  line-height:1.1;
+  margin:22px 0;
+  font-style:italic}
+  
+.preview .amp{color:var(--gold);
+  font-size:.7em}
+  
+.preview .date{
+  letter-spacing:.12em;
+  font-size:13px}
+  
+.preview img{max-width:100%;
+  max-height:180px;
+  object-fit:cover;
+  border-radius:6px;
+  margin:12px auto}
+
+.small{
+  font-size:12px;
+  color:#806b60;
+  line-height:1.6}
+  
+.saved{margin-top:16px;
+  border-top:1px solid var(--line);
+  padding-top:14px}
+  
+.saved button{margin:4px 4px 4px 0}
+@media(max-width:800px){
+  main{grid-template-columns:1fr}
+  
+.preview{position:static;
+ min-height:420px}.grid{grid-template-columns:1fr}}
+
+   .home-btn { 
+            
+            color: rgb(85, 4, 4); 
+            text-decoration: none; 
+            padding: 8px 15px; 
+            border-radius: 10px; 
+            font-weight: Medium; }
+
+</style>
+</head>
+<body>
+
+<header>
+ 
+  <h1>✿ Quản trị thiệp online</h1>
+  <p>Bản kết nối Firebase · Đỏ đô & vàng ánh kim</p>
+</header>
+<a href="../thiepcuoi-online.html" class="home-btn">⬅ Quay Về Trang Chủ</a>
+<section class="card" style="max-width:1120px;margin:20px auto 0;padding:18px 22px">
+<h2>Đăng nhập quản trị Admin</h2>
+<p class="small">Trước tiên, bật Email/Password trong Firebase Authentication và tạo tài khoản Admin trong Firebase Console.</p>
+<div class="grid"><div>
+  <label for="adminEmail">Email Admin</label>
+  <input id="adminEmail" type="email" placeholder="email@gmail.com"></div>
+  <div>
+  <label for="adminPassword">Mật khẩu</label>
+  <input id="adminPassword" type="password" placeholder="Mật khẩu "></div>
+</div>
+<div class="actions">
+  <button type="button" id="loginBtn">Đăng nhập</button>
+  <button type="button" class="secondary" id="logoutBtn">Đăng xuất</button>
+</div>
+<div id="authStatus" class="small" aria-live="polite">Chưa đăng nhập.</div>
+</section>
+
+<main id="adminWorkspace" style="display:none">
+<section class="card">
+<h2>Thông tin thiệp</h2>
+
+<form id="adminForm">
+<div class="grid"><div>
+  <label for="bride">Tên Chú Rể *</label>
+  <input id="bride" required value="Minh Thông"></div><div>
+  <label for="groom">Tên Cô Dâu *</label>
+  <input id="groom" required value="Ngọc Thương"></div></div>
+
+<div class="grid"><div>
+  <label for="date">Ngày tổ chức</label>
+  <input id="date" type="date" value="2027-06-15"></div><div>
+  <label for="time">Giờ</label>
+  <input id="time" type="time" value="09:00"></div></div>
+
+<label for="cover">Link ảnh bìa (nếu có)</label>
+<input id="cover" type="url" placeholder="https://...">
+<label for="coverFile">Hoặc chọn ảnh bìa từ máy</label>
+<input id="coverFile" type="file" accept="image/*">
+
+<h3>Thông tin hai họ & lời ngỏ</h3>
+<div class="grid"><div>
+  <label for="familyBride">Thông tin nhà Trai</label>
+  <textarea id="familyBride">Gia đình chú rể Minh Thông</textarea></div>
+  <div>
+  <label for="familyGroom">Thông tin nhà Gái</label>
+  <textarea id="familyGroom">Gia đình cô dâu Ngọc Thương</textarea></div>
+</div>
+<label for="message">Lời ngỏ / lời mời</label>
+<textarea id="message">Trân trọng kính mời bạn đến chung vui trong ngày hạnh phúc của chúng mình.</textarea>
+
+<h3>Thời gian & địa điểm</h3>
+<div class="grid"><div>
+  <label for="ceremony">Địa điểm lễ thành hôn</label>
+  <input id="ceremony" placeholder="Tên địa điểm / địa chỉ"></div><div>
+  <label for="ceremonyMap">Link Google Maps lễ</label>
+  <input id="ceremonyMap" type="url" placeholder="https://maps.google.com/..."></div>
+</div>
+
+<div class="grid"><div>
+  <label for="reception">Địa điểm đãi tiệc</label>
+  <input id="reception" placeholder="Tên nhà hàng / địa chỉ"></div>
+  <div>
+  <label for="receptionMap">Link Google Maps tiệc</label>
+  <input id="receptionMap" type="url" placeholder="https://maps.google.com/..."></div>
+</div>
+
+<h3>Album cưới (tối đa 6 ảnh)</h3>
+<p class="small">Dán link ảnh trực tiếp (URL bắt đầu bằng https://). Dùng link ảnh công khai; chọn file từ máy chưa tự tải lên Firebase.</p>
+<div class="grid">
+  <div>
+
+  <label for="album1">Link ảnh 1</label>
+  <input id="album1" type="url" placeholder="https://..."></div>
+  <div>
+
+  <label for="album2">Link ảnh 2</label>
+  <input id="album2" type="url" placeholder="https://..."></div>
+  <div>
+
+  <label for="album3">Link ảnh 3</label>
+  <input id="album3" type="url" placeholder="https://..."></div>
+  <div>
+
+  <label for="album4">Link ảnh 4</label>
+  <input id="album4" type="url" placeholder="https://..."></div>
+  <div>
+
+  <label for="album5">Link ảnh 5</label>
+  <input id="album5" type="url" placeholder="https://..."></div>
+  <div>
+
+  <label for="album6">Link ảnh 6</label>
+  <input id="album6" type="url" placeholder="https://..."></div>
+  </div>
+
+<label for="music">Link MP3 trực tiếp (nếu có)</label>
+<input id="music" type="url" placeholder="https://.../nhac-cuoi.mp3">
+
+<div class="actions">
+  <button type="button" id="saveOnlineBtn">Tạo Thiệp</button>
+  <button class="secondary" type="button" id="previewBtn">Cập nhật xem trước</button>
+</div>
+<div id="status" aria-live="polite"></div>
+</form>
+
+<div class="saved">
+  <h3>Thiệp đã lưu trực tuyến</h3>
+  <div id="onlineList" class="small">Đăng nhập để quản lý thiệp trên Firebase.</div>
+</div>
+</section>
+
+<aside>
+<div class="preview">
+  <div class="preview-inner">
+  <div class="kicker">Trân trọng kính mời</div>
+  <div id="coverPhoto">
+  </div>
+  <h2><span id="pBride">Trần Lan</span><br><span class="amp">&</span><br><span id="pGroom">Nguyễn Minh</span></h2>
+  <div>❧ ✧ ❧</div>
+  <p class="date" id="pDate">15 · 06 · 2027 &nbsp; | &nbsp; 09:00</p>
+  <p id="pMessage">Trân trọng kính mời bạn đến chung vui trong ngày hạnh phúc của chúng mình.</p>
+</div>
+</div>
+<p class="small">Đây là bản xem trước tĩnh trong Admin, chưa phải link thiệp công khai. Bước tiếp theo sẽ kết nối biểu mẫu này với trang thiệp và cơ sở dữ liệu.</p>
+</aside>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyApc8T6Co4_M6Va-QFQ2nAMtiMyeEaziNE",
+  authDomain: "du-lieu-thiep-online.firebaseapp.com",
+  projectId: "du-lieu-thiep-online",
+  storageBucket: "du-lieu-thiep-online.firebasestorage.app",
+  messagingSenderId: "22302636953",
+  appId: "1:22302636953:web:f5117fe652f16148b37108"
+};
+firebase.initializeApp(firebaseConfig);
+const auth=firebase.auth(), db=firebase.firestore();
+const $=id=>document.getElementById(id); 
+let currentUser=null, editingId=null;
+const ids=['bride','groom','date','time','cover','familyBride','familyGroom',
+'message','ceremony','ceremonyMap','reception','receptionMap',
+'music','album1','album2','album3','album4','album5','album6'];
+function data(){const d={};ids
+.forEach(id=>d[id]=$(id).value.trim());d.albumImages=ids.filter(x=>x
+.startsWith('album')).map(id=>$(id).value.trim())
+.filter(Boolean);d.updatedAt=firebase.firestore.FieldValue
+.serverTimestamp();return d}
+function fmtDate(s){if(!s)return 'Ngày giờ sẽ được cập nhật';
+const a=s.split('-');return `${a[2]} · ${a[1]} · ${a[0]}`}
+function render(){
+const d=data();$('pBride')
+.textContent=d.bride||'Tên cô dâu';$('pGroom')
+.textContent=d.groom||'Tên chú rể';$('pDate')
+.textContent=fmtDate(d.date)+' | '+(d.time||'Giờ sẽ cập nhật');$('pMessage')
+.textContent=d.message||'Trân trọng kính mời';$('coverPhoto')
+.innerHTML='';const src=d.cover;if(src){const img=document
+.createElement('img');img.alt='Ảnh bìa thiệp cưới';img.src=src;$('coverPhoto').appendChild(img)}}
+function setStatus(t){$('status').textContent=t}
+async function renderOnline(){const el=$('onlineList');el
+.innerHTML='';if(!currentUser){el
+.textContent='Vui lòng đăng nhập Admin.';return}try{
+const snap=await db
+.collection('invitations').get();if(snap.empty){el
+.textContent='Chưa có thiệp trực tuyến.';return}snap
+.forEach(s=>{const d=s.data(), row=document
+.createElement('div');row.style.margin='8px 0';const b=document
+.createElement('button');b
+.className='secondary';
+b.textContent=(d.bride||'Cô dâu')+' & '+(d.groom||'Chú rể')+' · '+(d.date||'');
+b.onclick=()=>{editingId=s.id;ids.forEach(id=>{if($(id))$(id).value=d[id]||''})
+;render();setStatus('Đã nạp thiệp '+s.id+'. Nhấn Tạo/Cập nhật thiệp để lưu thay đổi.')};
+row.appendChild(b);const a=document.createElement('a');a.href='thiep-online-mau-05.html?id='+encodeURIComponent(s.id);
+a.target='_blank';a.rel='noopener';
+a.textContent=' Mở link';a.style.marginLeft='8px';row.appendChild(a);
+el.appendChild(row)})}catch(e){
+el.textContent='Không tải được danh sách: '+e.message}}
+$('previewBtn').addEventListener('click',()=>{render();setStatus('Đã cập nhật xem trước.')});
+
+ids.forEach(id=>$(id).addEventListener('input',render));render();
+$('loginBtn').addEventListener('click',async()=>{$('authStatus')
+.textContent='Đang đăng nhập…';
+try{await auth.signInWithEmailAndPassword($('adminEmail').value.trim(),$('adminPassword').value);
+$('adminPassword').value=''}catch(e){$('authStatus')
+.textContent='Đăng nhập thất bại: '+e.code+' — '+e.message}});
+$('logoutBtn').addEventListener('click',async()=>{try{await auth.signOut()}catch(e){$('authStatus').textContent=e.message}});
+
+auth.onAuthStateChanged(async user=>{currentUser=user;
+  $('adminWorkspace').style.display=user?'grid':'none';
+  $('authStatus').textContent=user?'Đã đăng nhập: '+user.email:'Chưa đăng nhập. Hãy nhập email và mật khẩu Admin.';
+  $('logoutBtn').style.display=user?'inline-block':'none';
+  if(user)await renderOnline();
+  else $('onlineList').textContent='Đăng nhập để quản lý thiệp trên Firebase.'});
+
+$('saveOnlineBtn')
+.addEventListener('click',async()=>{if(!currentUser){setStatus('Bạn cần đăng nhập Admin trước.');
+return}const btn=$('saveOnlineBtn');btn.disabled=true;setStatus('Đang lưu thiệp lên Firestore…');
+try{const d=data();let id=editingId;if(id){await db.collection('invitations')
+.doc(id).update(d)}else{d.createdBy=currentUser.uid;d.createdAt=firebase.firestore.FieldValue.serverTimestamp();
+const ref=await db.collection('invitations').add(d);id=ref.id;editingId=id}
+const publicUrl=new URL('thiep-online-mau-05.html?id='+encodeURIComponent(id),location.href).href;$('status').innerHTML='';
+const p=document.createElement('p');p.textContent='Đã lưu thành công lên Firestore! Mã thiệp: '+id;$('status').appendChild(p);
+const actions=document.createElement('div');actions.className='actions';actions.style.marginTop='8px';
+const link=document.createElement('a');link.
+className='action-link';link.href=publicUrl;link.target='_blank';link.rel='noopener';link.textContent='Mở / xem thiệp';
+actions.appendChild(link);const copy=document.createElement('button');
+copy.type='button';copy.className='secondary';
+copy.textContent='Sao chép link thiệp';
+copy.onclick=async()=>{try{await navigator.clipboard.writeText(publicUrl);
+setStatus(location.protocol==='file:'?'Đã sao chép link thử trên máy. Link này chưa chia sẻ được cho khách; sau khi đưa lên hosting cần tạo lại link HTTPS.':'Đã sao chép link thiệp!')}
+catch(e){window.prompt('Sao chép đường link này:',publicUrl)}};actions
+.appendChild(copy);$('status').appendChild(actions);
+if(location.protocol==='file:'){const note=document
+.createElement('p');note.className='small';note.textContent='Bạn đang chạy bằng file HTML: link này chỉ là link thử trên máy tính. Sau khi đăng lên GitHub Pages/hosting, mở Admin từ link HTTPS và tạo/cập nhật để có link chia sẻ thật.';
+$('status').appendChild(note)}await renderOnline()}catch(e){setStatus('Lỗi lưu Firestore: '+e.code+' — '+e.message+' | Kiểm tra Security Rules, tên collection invitations và email Admin.')}finally{btn.disabled=false}});
+</script>
+</body>
+</html>

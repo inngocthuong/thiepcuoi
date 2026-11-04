@@ -1,0 +1,541 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f4f0e7"><title>Thiệp cưới · Modern Botanical Contemporary</title><style>
+:root{
+  --bg:#f4f0e7;
+  --ink:#2f3930;
+  --accent:#536e5b;
+  --soft:#e1e8dc}
+  *{box-sizing:border-box}html{scroll-behavior:smooth}
+  
+body{
+  margin:0;background:var(--bg);
+  color:var(--ink);
+  font-family:Georgia,'Times New Roman',serif}
+  
+a{
+  color:inherit}
+  
+.hero{
+  min-height:94vh;display:grid;
+  place-items:center;
+  padding:24px;
+  background:linear-gradient(#17171333,#17171344),var(--hero) center/cover no-repeat;position:relative;
+  text-align:center;
+  color:white}
+
+.hero-inner{
+  width:min(760px,100%);
+  padding:52px 22px;
+  border:1px solid #ffffff99;
+  backdrop-filter:blur(2px);
+  background:#16171321}
+  
+.eyebrow{letter-spacing:.25em;
+  text-transform:uppercase;
+  font:11px/1.7 system-ui,sans-serif}
+  
+.hero h1{
+  font-weight:400;
+  font-size:clamp(42px,9vw,86px);
+  line-height:1.03;
+  margin:22px 0}
+  
+.amp{
+  color:#f3dfbd;
+  font-style:italic;
+  font-size:.75em}
+  
+.hero p{font:14px/1.8 system-ui,sans-serif;
+  letter-spacing:.08em}
+  
+.music{position:fixed;
+  z-index:5;
+  top:14px;
+  right:14px;
+  border:1px solid var(--accent);
+  background:var(--bg);
+  color:var(--accent);
+  border-radius:50px;
+  padding:11px 15px;
+  cursor:pointer;
+  box-shadow:0 4px 18px #0001}
+  
+main{max-width:1000px;
+  margin:auto;
+  padding:34px 18px 80px}
+  
+section{padding:58px 0;
+  border-bottom:1px solid #b6ad9e77}
+  
+.kicker{text-align:center;
+  font:11px system-ui,sans-serif;
+  letter-spacing:.24em;
+  text-transform:uppercase;
+  color:var(--accent)}
+
+h2{
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size:clamp(30px,5vw,46px);
+  font-weight:400;
+  text-align:center;
+  margin:12px 0 30px}
+  
+.intro{max-width:680px;
+  text-align:center;
+  line-height:1.9;
+  margin:0 auto 30px}
+  
+.family{display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px}
+  
+.family-card,.event{
+  border:1px solid #b6ad9e99;
+  padding:26px;
+  text-align:center;
+  background:#ffffff55}
+  
+.family-card h3{
+  font-size:24px;
+  font-weight:400;
+  margin:4px 0 14px}
+  
+.family-card p{
+  line-height:1.7;
+  margin:7px 0}
+  
+.names{text-align:center;
+  font-size:clamp(30px,6vw,56px);
+  line-height:1.35;
+  margin:24px 0}
+  
+.events{display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px}
+  
+.event h3{color:var(--accent);
+  font-size:23px;
+  font-weight:400}
+  
+.event p{line-height:1.7}
+.mapbtn,.send{display:inline-block;
+  background:var(--accent);
+  color:white;
+  text-decoration:none;
+  border:0;
+  padding:12px 18px;
+  border-radius:3px;
+  font:12px system-ui,sans-serif;
+  letter-spacing:.08em;cursor:pointer}
+  
+.gallery{display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px}
+  
+.gallery img{
+  width:100%;
+  height:290px;
+  object-fit:cover;
+  background:var(--soft)}
+  
+.rsvp{max-width:620px;
+  margin:auto;
+  padding:24px;
+  background:#fff9;
+  border:1px solid #b6ad9e99}
+  
+label{
+  display:block;
+  font:13px system-ui,sans-serif;
+  margin:13px 0 6px}
+  
+input,select,textarea{
+  width:100%;
+  padding:12px;
+  border:1px solid #b6ad9e;
+  background:#fffdf8;
+  color:#222;
+  font:15px system-ui,sans-serif}
+  
+textarea{min-height:90px}
+.rsvp button{
+  width:100%;
+  margin-top:18px}
+.note{font:12px/1.7 system-ui,sans-serif;
+  text-align:center;
+  color:#6f6b63}
+  
+footer{padding:35px 15px;
+  text-align:center;
+  color:var(--accent)}
+  
+.quick{position:fixed;
+  bottom:14px;
+  left:14px;z-index:4;
+  background:var(--bg);
+  border:1px solid #b6ad9e;
+  padding:9px 12px;
+  border-radius:30px;
+  font:12px system-ui,sans-serif}
+  
+  @media(max-width:650px){
+    
+.family,.events{
+  grid-template-columns:1fr}
+  
+.hero{min-height:82vh}
+.hero-inner{padding:38px 14px}
+.gallery{grid-template-columns:repeat(2,1fr);gap:8px}
+.gallery img{height:190px}section{padding:42px 0}
+.family-card,.event{padding:22px 16px}}
+
+/* REDESIGN v2 — Modern Botanical contemporary */
+:root{--bg:#f4f2e9;--ink:#283b30;--accent:#587360;--soft:#dce4d8}
+body{
+  background:#f4f2e9;
+  color:#283b30;
+  font-family:system-ui,-apple-system,'Segoe UI',sans-serif}
+
+.hero{
+  min-height:94vh;
+  padding:30px;display:grid;
+  place-items:center;
+  text-align:center;
+  color:#fff;
+  background:linear-gradient(120deg,
+  rgba(34,59,44,.58),
+  rgba(34,59,44,.14)),var(--hero) center/cover no-repeat;}
+
+.hero-inner{
+
+  width:min(720px,100%);
+  padding:clamp(30px,6vw,70px) clamp(20px,5vw,58px);
+  border:1px solid #ffffffaa;
+  outline:1px solid #ffffff55;
+  outline-offset:9px;
+  background:rgba(29,54,39,.3);
+  backdrop-filter:blur(3px);
+  color:#fff}
+
+.hero .eyebrow{
+  letter-spacing:.28em;
+  font-size:10px}
+
+.hero h1{
+  font-family: "Alex Brush", Georgia, serif;
+  font-size:clamp(42px,8vw,84px);
+  line-height:1.02;letter-spacing:normal;word-spacing:normal;
+  margin:25px 0}
+
+.hero .amp{
+  color:#dce7d5;
+  font-size:.68em}
+
+.hero p{
+  font-size:11px;
+  letter-spacing:.18em}
+
+.hero .mapbtn{
+  background:#f4f2e9!important;
+  color:#35513e!important;
+  border-radius:30px;
+  padding:14px 24px;
+  letter-spacing:.12em}
+
+main{
+  max-width:1060px;
+  padding:36px 24px 90px}
+
+section{
+  padding:72px 0;
+  border-bottom:1px solid #cbd5c7;
+  position:relative}
+
+.kicker{
+  color:#587360;
+  letter-spacing:.22em;
+  font-size:15px}
+/*
+h2{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(32px,5vw,54px);
+  color:#283b30;margin:14px 0 34px}
+*/
+.intro{
+  max-width:670px;
+  font-size:16px;
+  color:#59695c}
+
+.family{gap:22px}
+.family-card{
+  border:1px solid #cbd5c7;
+  border-radius:120px 120px 14px 14px;
+  padding:46px 25px 30px;
+  background:#e9eee5;
+  position:relative}
+
+.family-card:before{
+  content:'✦';display:grid;
+  place-items:center;
+  position:absolute;
+  top:13px;left:calc(50% - 14px);
+  width:28px;height:28px;
+  color:#587360;
+  border:1px solid #a9bca8;
+  border-radius:50%;
+  background:#f4f2e9}
+
+.family-card h3{
+  font-family:'Allura',serif;
+  font-size:25px;color:#35513e}
+
+.names{
+  font-family: "Cormorant Garamond", serif;
+  font-size:clamp(34px,6vw,62px);
+  color:#35513e;margin:45px 0}
+
+.events{gap:20px}
+.event{
+  border:0;
+  border-radius:18px;
+  background:#e4eadf;
+  padding:30px;
+  box-shadow:0 12px 30px #263d2b0b}
+
+.event:nth-child(2){background:#ece8dc}
+
+.event h3{
+  font-family:'Allura',serif;
+  font-size:35px;color:#35513e}
+
+.mapbtn,.send{background:#35513e;
+  color:#fff;border:0;
+  border-radius:30px;
+  padding:13px 19px}
+
+.gallery{
+  grid-template-columns:1fr 1.25fr 1fr;
+  gap:14px;align-items:center}
+
+.gallery img{
+  height:clamp(220px,30vw,350px);
+  border-radius:90px 90px 12px 12px;
+  box-shadow:0 12px 28px #263d2b16}
+
+.gallery img:nth-child(2){
+  height:clamp(280px,38vw,430px);
+  border-radius:12px 12px 90px 90px}
+
+.rsvp{
+  max-width:680px;
+  border:1px solid #cbd5c7;
+  border-radius:22px;
+  background:#e9eee5;
+  padding:clamp(22px,4vw,40px)}
+
+input,select,textarea{
+  border:1px solid #c5d1c2;
+  border-radius:10px;
+  background:#fbfcf8}
+
+.quick{
+  background:#fbfcf8;
+  border:1px solid #cbd5c7;
+  border-radius:30px;
+  box-shadow:0 8px 24px #263d2b12}
+
+footer{
+  background:#283b30;
+  color:#e9eee5;
+  padding:55px 20px}
+
+footer a{color:#e9eee5}
+@media(max-width:650px){
+  .hero{min-height:84vh;
+    padding:25px;
+    background:linear-gradient(120deg,rgba(34,59,44,.55),rgba(34,59,44,.24)),var(--hero) center/cover no-repeat}
+  .hero-inner{padding:36px 18px}
+  .hero h1{font-size:clamp(40px,11vw,64px)}main{padding:24px 17px 70px}section{padding:50px 0}
+  .family,.events{
+    grid-template-columns:1fr}
+
+  .family-card{
+    border-radius:90px 90px 14px 14px;
+    padding:42px 20px 25px}
+    
+  .gallery{grid-template-columns:1fr 1fr;
+    gap:9px}
+    
+  .gallery img,.gallery img:nth-child(2){
+    height:220px;
+    border-radius:70px 70px 10px 10px}
+    
+  .gallery img:first-child{
+    grid-column:span 2;
+    height:260px}
+    
+  .gallery img:nth-child(2){border-radius:10px 10px 70px 70px}}
+
+
+.hero-invite{
+    letter-spacing:.25em;
+    text-transform:uppercase;
+    text-align:center;
+    font:16px/1.7 system-ui,sans-serif}
+
+.hero-date{display:none}
+
+@media(max-width:650px){
+  .hero .hero-invite{
+    font-size:10px;
+    letter-spacing:.1em;
+    line-height:1.7;
+    text-align:left;
+    margin-left:0;
+    margin-right:0}
+    
+  .hero .hero-date{display:none}}
+
+</style>
+</head>
+<link rel="preconnect" href="https://googleapis.com">
+<link rel="preconnect" href="https://gstatic.com" crossorigin>
+<link href="https://googleapis.com/css2?family=Alex+Brush&family=Playfair+Display:ital,wght@0,400..950;1,400..950&display=swap" rel="stylesheet"> 
+<link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap" rel="stylesheet">      
+<link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&display=swap&subset=vietnamese" rel="stylesheet">
+<body>
+
+<button class="music" id="musicToggle" type="button">♫ Bật nhạc</button>
+<audio id="bgMusic" loop preload="auto"></audio>
+
+<header class="hero" id="top" style="--hero:linear-gradient(120deg,#536e5b99,#2f393055),url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=85')">
+  <div class="hero-inner">
+    <div class="eyebrow">Trân trọng kính mời · Wedding invitation</div>
+    <h1><span id="heroGroom">Chú Rể</span><br><span class="amp">&amp;</span><br><span id="heroBride">Cô Dâu</span></h1>
+
+    <p class="hero-invite" id="heroInvite">TRÂN TRỌNG KÍNH MỜI BẠN ĐẾN CHUNG VUI</p>
+    <div class="hero-date" id="heroDate"></div>
+    <a class="mapbtn" href="#invitation" style="background:#ffffff;color:#536e5b">MỞ THIỆP ↓</a>
+  </div>
+</header>
+
+<div class="quick">
+  <a href="#gallery">Album</a> · <a href="#events">Địa điểm</a> · <a href="#rsvp">RSVP</a></div><main>
+
+<section id="invitation">
+  <div class="kicker">With our families</div>
+  <h2>Trân trọng kính mời</h2>
+  <p class="intro" id="story">Hai chúng tôi rất hạnh phúc được chia sẻ ngày đặc biệt này cùng gia đình và bạn bè. Sự hiện diện của quý khách là niềm vui của chúng tôi.</p>
+  <div class="family">
+    <article class="family-card">
+      <div class="kicker">Nhà trai</div>
+      <h3 id="groomFamily">Gia đình chú rể</h3>
+      <p id="groomParents"></p>
+      <p id="groomAddress"></p>
+    </article>
+    <article class="family-card">
+      <div class="kicker">Nhà gái</div>
+      <h3 id="brideFamily">Gia đình cô dâu</h3>
+      <p id="brideParents"></p>
+      <p id="brideAddress"></p>
+    </article>
+  </div>
+  <div class="names">
+    <span id="mainGroom">Chú Rể</span><span class="amp">&amp;</span> <span id="mainBride">Cô Dâu</span></div>
+  </section>
+<section id="events">
+  <div class="kicker">Save the date</div>
+  <h2>Ngày vui của chúng tôi</h2>
+  <div class="events">
+  <article class="event">
+    <div class="kicker">Hôn lễ</div>
+    <h3>Lễ thành hôn</h3>
+    <p id="churchTime">Thời gian sẽ được cập nhật</p>
+    <p id="churchLoc">Địa điểm sẽ được cập nhật</p>
+    <a id="churchMap" class="mapbtn" target="_blank" rel="noopener">Mở bản đồ lễ cưới ↗</a>
+
+  </article><article class="event">
+    <div class="kicker">Tiệc mừng</div>
+    <h3>Tiệc chung vui</h3><p id="partyTime">Thời gian sẽ được cập nhật</p>
+    <p id="partyLoc">Địa điểm sẽ được cập nhật</p>
+    <a id="partyMap" class="mapbtn" target="_blank" rel="noopener">Mở bản đồ tiệc cưới ↗</a>
+  </article>
+</div>
+</section>
+
+<section id="gallery">
+  <div class="kicker">Our moments</div>
+  <h2>Album kỷ niệm</h2>
+  <div class="gallery" id="galleryGrid">
+    <img src="https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=800&q=80" alt="Ảnh cưới">
+    <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80" alt="Khoảnh khắc yêu thương">
+    <img src="https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=800&q=80" alt="Kỷ niệm">
+  </div>
+  </section>
+
+<section id="rsvp">
+  <div class="kicker">Kindly reply</div>
+  <h2>Xác nhận tham dự</h2>
+  <p class="intro">Anh chị vui lòng cho chúng tôi biết để gia đình được đón tiếp chu đáo.</p>
+  <form class="rsvp" id="rsvpForm">
+    <label for="guestName">Họ và tên</label>
+    <input id="guestName" required maxlength="120" placeholder="Tên của anh/chị">
+    <label for="attendance">Anh/chị có tham dự không?</label>
+    <select id="attendance">
+      <option value="yes">Có, tôi sẽ tham dự</option>
+      <option value="no">Rất tiếc, tôi không thể tham dự</option>
+    </select>
+    <label for="guestCount">Số người tham dự</label>
+    <select id="guestCount">
+      <option value="1">1 người</option>
+      <option value="2">2 người</option>
+      <option value="3">3 người</option>
+      <option value="4">4 người</option>
+      <option value="5">5 người</option>
+    </select>
+
+    <label for="guestMessage">Lời chúc (không bắt buộc)</label>
+    <textarea id="guestMessage" maxlength="1000" placeholder="Gửi lời chúc đến cô dâu chú rể..."></textarea>
+    <button class="send" id="sendBtn">GỬI XÁC NHẬN</button>
+    <p class="note" id="rsvpStatus">Cảm ơn anh/chị đã dành tình cảm cho chúng tôi.</p>
+  </form>
+</section>
+
+<section id="share">
+  <div class="kicker">Share the joy</div>
+  <h2>Chia sẻ thiệp cưới</h2>
+  <p class="intro">Hân hạnh được đón tiếp quý khách trong ngày vui của gia đình chúng tôi.</p>
+  <div style="text-align:center">
+  <img id="qr" alt="Mã QR thiệp cưới" width="150" height="150" style="background:white;
+   padding:8px;display:none">
+   <p><button class="send" id="shareBtn" type="button">CHIA SẺ THIỆP ↗</button></p>
+  </div></section></main><footer><div class="eyebrow">Made with love</div>
+    <p id="footerNames">Chú Rể & Cô Dâu</p><a href="#top">Trở về đầu trang ↑</a>
+  </footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyDPD83vGC5S6aNhyak_ktUpuMCPIku1Y_M",
+  authDomain: "quan-ly-don-hang-95135.firebaseapp.com",
+  projectId: "quan-ly-don-hang-95135",
+  storageBucket: "quan-ly-don-hang-95135.firebasestorage.app",
+  messagingSenderId: "714410069417",
+  appId: "1:714410069417:web:657bf33f23c88bf50f88b8",
+  measurementId: "G-PPHHVF478K"
+};
+const TEMPLATE='4',DOC='mau04_details',RSVP='mau04_rsvp';let db=null;try{if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);db=firebase.firestore()}catch(e){console.error(e)}
+const $=id=>document.getElementById(id);function text(id,v,fallback=''){$(id).textContent=v||fallback}function mapUrl(v){if(!v)return '';if(/^https?:\/\//i.test(v))return v;return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(v)}
+function setMap(id,v){const a=$(id),u=mapUrl(v);a.href=u||'#';a.style.display=u?'inline-block':'none'}
+function setMusic(url){const audio=$('bgMusic');if(url&&audio.src!==url){audio.src=url;audio.load()}}
+let musicStarted=false;async function tryMusic(){const a=$('bgMusic');if(!a.src||musicStarted)return;try{await a.play();musicStarted=true;$('musicToggle').textContent='♫ Tắt nhạc'}catch(e){/* Browser may require a user gesture; button remains available. */}}
+['pointerdown','touchstart','keydown','wheel','click'].forEach(ev=>document.addEventListener(ev,()=>tryMusic(),{once:true,passive:true}));$('musicToggle').addEventListener('click',async()=>{const a=$('bgMusic');if(!a.src){alert('Gia đình chưa thêm link nhạc MP3 trong trang quản trị.');return}if(a.paused){try{await a.play();musicStarted=true;$('musicToggle').textContent='♫ Tắt nhạc'}catch(e){alert('Không phát được nhạc. Anh/chị hãy kiểm tra lại link MP3.')}}else{a.pause();musicStarted=false;$('musicToggle').textContent='♫ Bật nhạc'}});
+function render(d){text('heroGroom',d.groomName,'Chú Rể');text('mainGroom',d.groomName,'Chú Rể');text('heroBride',d.brideName,'Cô Dâu');text('mainBride',d.brideName,'Cô Dâu');text('heroDate','','');text('story',d.storyText,'Hai chúng tôi rất hạnh phúc được chia sẻ ngày đặc biệt này cùng gia đình và bạn bè.');text('groomParents',[d.groomFather&&('Ông: '+d.groomFather),d.groomMother&&('Bà: '+d.groomMother)].filter(Boolean).join(' · '));text('groomAddress',d.groomAddress);text('brideParents',[d.brideFather&&('Ông: '+d.brideFather),d.brideMother&&('Bà: '+d.brideMother)].filter(Boolean).join(' · '));text('brideAddress',d.brideAddress);text('churchTime',d.timeChurch,'Thời gian sẽ được cập nhật');text('churchLoc',d.locChurch,'Địa điểm sẽ được cập nhật');text('partyTime',[d.weddingDate&&('Ngày: '+d.weddingDate),d.timeParty&&('Giờ: '+d.timeParty)].filter(Boolean).join(' · '),'Ngày và giờ sẽ được cập nhật');text('partyLoc',d.locParty,'Địa điểm sẽ được cập nhật');text('footerNames',(d.groomName||'Chú Rể')+' & '+(d.brideName||'Cô Dâu'));setMap('churchMap',d.ceremonyMapQuery||d.locChurch);setMap('partyMap',d.partyMapQuery||d.locParty);setMusic(d.musicUrl);if(d.coverPhoto)$('top').style.setProperty('--hero','url("'+d.coverPhoto.replace(/"/g,'%22')+'")');if(d.galleryUrls){const urls=d.galleryUrls.split(/\r?\n/).map(s=>s.trim()).filter(Boolean).slice(0,18);if(urls.length){$('galleryGrid').innerHTML='';urls.forEach((u,i)=>{const img=document.createElement('img');img.src=u;img.alt='Ảnh kỷ niệm '+(i+1);img.loading='lazy';$('galleryGrid').appendChild(img)})}}$('qr').src='https://api.qrserver.com/v1/create-qr-code/?size=180x180&data='+encodeURIComponent(location.href);$('qr').style.display='inline-block'}
+if(db)db.collection('online_invitations').doc(DOC).onSnapshot(s=>{if(s.exists)render(s.data())},e=>console.error('Firestore read:',e));
+$('rsvpForm').addEventListener('submit',async e=>{e.preventDefault();if(!db){text('rsvpStatus','Chưa kết nối được cơ sở dữ liệu.');return}const b=$('sendBtn');b.disabled=true;text('rsvpStatus','Đang gửi xác nhận...');try{await db.collection(RSVP).add({guestName:$('guestName').value.trim(),attendance:$('attendance').value,guestCount:Number($('guestCount').value),guestMessage:$('guestMessage').value.trim(),createdAt:firebase.firestore.FieldValue.serverTimestamp()});text('rsvpStatus','Cảm ơn anh/chị! Xác nhận đã được gửi thành công.');$('rsvpForm').reset()}catch(err){text('rsvpStatus','Chưa gửi được. Vui lòng thử lại sau.');console.error(err)}finally{b.disabled=false}});
+$('shareBtn').onclick=async()=>{const data={title:'Thiệp cưới '+($('footerNames').textContent||''),text:'Trân trọng kính mời bạn xem thiệp cưới',url:location.href};try{if(navigator.share)await navigator.share(data);else{await navigator.clipboard.writeText(location.href);alert('Đã sao chép liên kết thiệp!')}}catch(e){}};
+</script></body></html>

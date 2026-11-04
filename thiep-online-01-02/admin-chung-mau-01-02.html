@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Thiệp Cưới Ngọc Thương</title>
+    <style>
+        body { 
+            font-family: sans-serif; 
+            background: #f4f6f9; 
+            padding: 20px; 
+            color: #333; }
+
+        .container { 
+            max-width: 800px; 
+            margin: 0 auto; }
+
+        .card { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+            margin-bottom: 20px; }
+        .form-group { 
+            margin-bottom: 12px; }
+
+        label { 
+            display: block; 
+            font-weight: bold; 
+            margin-bottom: 5px; }
+
+        input[type="text"], input[type="email"], input[type="password"] { 
+            width: 100%; 
+            padding: 10px; 
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+            box-sizing: border-box; }
+
+        button { 
+            background: #3498db; 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-size: 16px; }
+
+        button:hover { background: #2980b9; }
+        .hidden { display: none !important; }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 15px; }
+
+        th, td { 
+            padding: 10px; 
+            text-align: left; 
+            border-bottom: 1px solid #ddd; }
+
+        th { 
+            background: #f8f9fa; 
+            font-weight: bold; }
+
+        .home-btn { 
+            background-color: #526456; 
+            color: white; 
+            text-decoration: none; 
+            padding: 8px 15px; 
+            border-radius: 10px; 
+            font-weight: Medium; }
+            
+    </style>
+</head>
+<body>
+    <a href="../thiepcuoi-online.html" class="home-btn">⬅ Quay Về Trang Chủ</a>
+<div class="container">
+
+    <!-- MÀN HÌNH ĐĂNG NHẬP -->
+    <div id="loginSection" class="card">
+        <h2>Đăng Nhập Hệ Thống</h2>
+        <div class="form-group">
+            <label>Email Admin</label>
+            <input type="email" id="loginEmail" placeholder="Nhập email...">
+        </div>
+        <div class="form-group">
+            <label>Mật khẩu</label>
+            <input type="password" id="loginPassword" placeholder="Nhập mật khẩu...">
+        </div>
+        <button type="button" onclick="handleLogin()">Đăng Nhập</button>
+    </div>
+
+    <!-- MÀN HÌNH QUẢN TRỊ CHÍNH -->
+    <div id="adminSection" class="hidden">
+        <button type="button" onclick="handleLogout()" style="background:#e74c3c; float:right;">Đăng Xuất</button>
+        <h1>Quản Trị Thiệp Cưới Online</h1>
+        
+        
+        <div class="card">
+            <h2>Chỉnh Sửa Thông Tin Thiệp</h2>
+            <div class="form-group" style="max-width:420px;">
+                <label>Chọn mẫu thiệp cần quản lý</label>
+                <select id="templateSelect" onchange="switchTemplate()" style="width:100%;padding:10px;border:1px solid #ccc;border-radius:4px;">
+                    <option value="main_details">Mẫu 1 - Thiệp nền đỏ rượu vang</option>
+                    <option value="mau_02_details">Mẫu 2 - Thiệp hồng phấn, ảnh chữ nhật</option>
+                </select>
+                <small style="display:block;margin-top:6px;color:#666;">Mỗi mẫu lưu dữ liệu riêng, không ghi đè thông tin của mẫu còn lại.</small>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="form-group"><label>Tên Chú Rể</label><input type="text" id="groomName"></div>
+                <div class="form-group"><label>Tên Cô Dâu</label><input type="text" id="brideName"></div>
+                <div class="form-group"><label>Bố Chú Rể</label><input type="text" id="groomFather"></div>
+                <div class="form-group"><label>Mẹ Chú Rể</label><input type="text" id="groomMother"></div>
+                <div class="form-group" style="grid-column: span 2;"><label>Địa chỉ Nhà Trai</label><input type="text" id="groomAddress"></div>
+                <div class="form-group"><label>Bố Cô Dâu</label><input type="text" id="brideFather"></div>
+                <div class="form-group"><label>Mẹ Cô Dâu</label><input type="text" id="brideMother"></div>
+                <div class="form-group" style="grid-column: span 2;"><label>Địa chỉ Nhà Gái</label><input type="text" id="brideAddress"></div>
+                <div class="form-group"><label>Thời gian làm lễ</label><input type="text" id="timeChurch"></div>
+                <div class="form-group"><label>Địa điểm làm lễ</label><input type="text" id="locChurch"></div>
+                <div class="form-group"><label>Thời gian tiệc mừng</label><input type="text" id="timeParty"></div>
+                <div class="form-group"><label>Địa điểm tiệc mừng</label><input type="text" id="locParty"></div>
+                <div class="form-group" style="grid-column: span 2;"><label>Link Nhạc Nền (.mp3)</label><input type="text" id="musicUrl"></div>
+                 <div class="form-group" style="grid-column: span 2;"><label>URL ảnh bìa (để trống nếu chưa dùng)</label><input type="text" id="coverPhoto"></div>
+                <div class="form-group" style="grid-column: span 2;"><label>Album ảnh (mỗi URL một dòng)</label><textarea id="galleryUrls" style="width:100%;min-height:90px"></textarea></div>
+                <div class="form-group" style="grid-column: span 2;"><label>Địa chỉ Google Maps lễ cưới</label><input type="text" id="ceremonyMapQuery"></div>
+                <div class="form-group" style="grid-column: span 2;"><label>Địa chỉ Google Maps tiệc mừng</label><input type="text" id="partyMapQuery"></div>
+                <div class="form-group" style="grid-column: span 2;"><label>Lời giới thiệu</label><textarea id="storyText" style="width:100%;min-height:80px"></textarea></div>
+            </div>
+            <button type="button" onclick="handleUpdate()" style="background:#2ecc71; margin-top:10px;">Tạo Thiệp</button>
+            <div id="inviteLinkBox" class="card hidden" style="margin-top:16px;background:#f5fbff;border:1px solid #c9e5f7;">
+                <h3 style="margin-top:0;">Đường link thiệp</h3>
+                <p style="color:#666;">Sau khi lưu thành công, bạn có thể mở thiệp hoặc sao chép đường link để gửi khách.</p>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+                    <input type="url" id="inviteLink" readonly aria-label="Đường link thiệp" style="flex:1;min-width:220px;padding:10px;border:1px solid #ccc;border-radius:4px;">
+                    <button type="button" onclick="copyInviteLink()">Sao chép link</button>
+                    <button type="button" onclick="openInviteLink()" style="background:#526d5b;">Mở thiệp</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Danh Sách Khách Tham Dự (RSVP)</h2>
+            <p id="txtSummary">Đang tải danh sách phản hồi...</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Họ và Tên</th>
+                        <th>Trạng thái</th>
+                        <th>Số người đi cùng</th>
+                        <th>Lời chúc</th>
+                    </tr>
+                </thead>
+                <tbody id="rsvpTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- DÁN ĐÈ TOÀN BỘ ĐOẠN NÀY VÀO DÒNG 85 TRỞ XUỐNG ĐẾN HẾT FILE TRONG VS CODE -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+
+<script>
+    // Cấu hình Firebase đã sửa lỗi authDomain
+ const firebaseConfig = {
+  apiKey: "AIzaSyBoBxJvJ1eo6KniFtzC7tTgEOrgxmckndk",
+  authDomain: "thiep-cuoi-online-fa5d4.firebaseapp.com",
+  projectId: "thiep-cuoi-online-fa5d4",
+  storageBucket: "thiep-cuoi-online-fa5d4.firebasestorage.app",
+  messagingSenderId: "677765348842",
+  appId: "1:677765348842:web:001834792642097f5e4693"
+};
+
+    // Khởi tạo các dịch vụ Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    let currentTemplate = 'main_details';
+    let unsubscribeRSVP = null;
+
+    // Lắng nghe trạng thái tài khoản quản trị
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('adminSection').classList.remove('hidden');
+            loadWeddingInfo();
+            listenToRSVP();
+        } else {
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('adminSection').classList.add('hidden');
+        }
+    });
+
+    function handleLogin() {
+        const email = document.getElementById('loginEmail').value.trim();
+        const pass = document.getElementById('loginPassword').value;
+        if (!email || !pass) { alert('Vui lòng điền đầy đủ Email và Mật khẩu!'); return; }
+        auth.signInWithEmailAndPassword(email, pass)
+            .then(() => alert('Đăng nhập quản trị thành công!'))
+            .catch(error => alert('Lỗi đăng nhập: ' + error.message));
+    }
+    function handleLogout() { auth.signOut().then(() => location.reload()); }
+
+    function switchTemplate() {
+        currentTemplate = document.getElementById('templateSelect').value;
+        document.getElementById('inviteLinkBox').classList.add('hidden');
+        loadWeddingInfo();
+        listenToRSVP();
+    }
+    function rsvpCollectionName() {
+        return currentTemplate === 'mau_02_details' ? 'rsvp_responses_mau02' : 'rsvp_responses';
+    }
+    function loadWeddingInfo() {
+        currentTemplate = document.getElementById('templateSelect').value || 'main_details';
+        db.collection('wedding_info').doc(currentTemplate).get().then(docSnap => {
+            const data = docSnap.exists ? docSnap.data() : {};
+            const fields = {
+                groomName:'groom_name', brideName:'bride_name', groomFather:'groom_father',
+                groomMother:'groom_mother', groomAddress:'groom_address', brideFather:'bride_father',
+                brideMother:'bride_mother', brideAddress:'bride_address', timeChurch:'time_church',
+                locChurch:'location_church', timeParty:'time_party', locParty:'location_party',
+                musicUrl:'music_url', coverPhoto:'cover_photo', galleryUrls:'gallery_urls',
+                ceremonyMapQuery:'ceremony_map_query', partyMapQuery:'party_map_query', storyText:'story_text'
+            };
+            Object.entries(fields).forEach(([id,key]) => {
+                const el = document.getElementById(id);
+                if (el) el.value = data[key] || '';
+            });
+        }).catch(err => {
+            console.error('Lỗi tải thông tin thiệp:', err);
+            alert('Không tải được dữ liệu mẫu thiệp: ' + err.message);
+        });
+    }
+    // Tạo link xem thiệp theo mẫu đang được chọn.
+    // Nếu tên file trang thiệp trên GitHub khác, sửa hai tên file bên dưới.
+    function showInviteLink() {
+        const template = document.getElementById('templateSelect').value || 'main_details';
+        const fileName = template === 'mau_02_details'
+            ? 'thiep-online-mau-02.html'
+            : 'thiep-online-mau-01.html';
+        const url = new URL(fileName, window.location.href);
+        const input = document.getElementById('inviteLink');
+        input.value = url.href;
+        document.getElementById('inviteLinkBox').classList.remove('hidden');
+    }
+
+    async function copyInviteLink() {
+        const input = document.getElementById('inviteLink');
+        try {
+            await navigator.clipboard.writeText(input.value);
+            alert('Đã sao chép đường link thiệp!');
+        } catch (err) {
+            input.focus();
+            input.select();
+            const copied = document.execCommand('copy');
+            alert(copied
+                ? 'Đã sao chép đường link thiệp!'
+                : 'Bạn hãy chọn đường link trong ô rồi nhấn Ctrl+C để sao chép.');
+        }
+    }
+
+    function openInviteLink() {
+        const url = document.getElementById('inviteLink').value;
+        if (url) window.open(url, '_blank', 'noopener');
+    }
+
+    function handleUpdate() {
+        currentTemplate = document.getElementById('templateSelect').value || 'main_details';
+        const data = {
+            groom_name: document.getElementById('groomName').value.trim(),
+            bride_name: document.getElementById('brideName').value.trim(),
+            groom_father: document.getElementById('groomFather').value.trim(),
+            groom_mother: document.getElementById('groomMother').value.trim(),
+            groom_address: document.getElementById('groomAddress').value.trim(),
+            bride_father: document.getElementById('brideFather').value.trim(),
+            bride_mother: document.getElementById('brideMother').value.trim(),
+            bride_address: document.getElementById('brideAddress').value.trim(),
+            time_church: document.getElementById('timeChurch').value.trim(),
+            location_church: document.getElementById('locChurch').value.trim(),
+            time_party: document.getElementById('timeParty').value.trim(),
+            location_party: document.getElementById('locParty').value.trim(),
+            music_url: document.getElementById('musicUrl').value.trim(),
+            cover_photo: document.getElementById('coverPhoto').value.trim(),
+            gallery_urls: document.getElementById('galleryUrls').value.trim(),
+            ceremony_map_query: document.getElementById('ceremonyMapQuery').value.trim(),
+            party_map_query: document.getElementById('partyMapQuery').value.trim(),
+            story_text: document.getElementById('storyText').value.trim(),
+            updated_at: firebase.firestore.FieldValue.serverTimestamp()
+        };
+        db.collection('wedding_info').doc(currentTemplate).set(data, {merge:true}).then(() => {
+            showInviteLink();
+            alert('Đã lưu dữ liệu cho ' + (currentTemplate === 'main_details' ? 'Mẫu 1' : 'Mẫu 2') + '. Đường link thiệp đã hiện trong trang quản trị.');
+        }).catch(error => alert('Lỗi khi lưu dữ liệu: ' + error.message));
+    }
+
+    function listenToRSVP() {
+        if (unsubscribeRSVP) { unsubscribeRSVP(); unsubscribeRSVP = null; }
+        document.getElementById('txtSummary').textContent = 'Đang tải danh sách phản hồi...';
+        unsubscribeRSVP = db.collection(rsvpCollectionName()).onSnapshot(snapshot => {
+            const tbody = document.getElementById('rsvpTableBody');
+            tbody.innerHTML = '';
+            let total = 0, count = 0;
+            snapshot.forEach(doc => {
+                const rsvp = doc.data(); count++;
+                const attending = rsvp.is_attending !== undefined ? rsvp.is_attending : rsvp.attendance === 'yes';
+                if (attending) total += Number(rsvp.guests_count || rsvp.guestCount || 1);
+                const statusText = rsvp.attendance === 'maybe' ? 'Sẽ xác nhận sau' : (attending ? 'Có tham dự' : 'Không đến');
+                const tr = document.createElement('tr');
+                [rsvp.guest_name || rsvp.guestName || 'Ẩn danh', statusText, attending ? (rsvp.guests_count || rsvp.guestCount || 0) : 0, rsvp.wishes || rsvp.wish || ''].forEach(value => {
+                    const td = document.createElement('td'); td.textContent = value; tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+            document.getElementById('txtSummary').innerText = `Mẫu ${currentTemplate === 'main_details' ? '1' : '2'} — Tổng phản hồi: ${count} lượt | Khách tham dự: ${total} người`;
+        }, err => {
+            console.error('Lỗi đồng bộ RSVP:', err);
+            document.getElementById('txtSummary').textContent = 'Không tải được RSVP. Kiểm tra quyền truy cập Firebase.';
+        });
+    }
+
+</script>
+</body>
+</html>

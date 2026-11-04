@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Quản Lý Mẫu 01 (Thiệp Cưới Ngọc Thương)</title>
+    <style>
+        body { font-family: sans-serif; background: #f4f6f9; padding: 20px; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        input[type="text"], input[type="email"], input[type="password"], textarea { 
+            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-family: inherit;
+        }
+        button { background: #5b101b; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #741822; }
+        .hidden { display: none !important; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #f8f9fa; font-weight: bold; }
+        .home-btn { background-color: #5b101b; color: white; text-decoration: none; padding: 8px 15px; border-radius: 10px; font-weight: 500; display: inline-block; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+<a href="thiep-online-mau-01.html" class="home-btn">⬅ Xem Mẫu 01</a>
+<div class="container">
+
+    <!-- ĐĂNG NHẬP -->
+    <div id="loginSection" class="card">
+        <h2>Đăng Nhập Quản Trị — Mẫu 01</h2>
+        <div class="form-group"><label>Email Admin</label><input type="email" id="loginEmail" placeholder="Nhập email..."></div>
+        <div class="form-group"><label>Mật khẩu</label><input type="password" id="loginPassword" placeholder="Nhập mật khẩu..."></div>
+        <button type="button" onclick="handleLogin()">Đăng Nhập</button>
+    </div>
+
+    <!-- QUẢN TRỊ MẪU 01 -->
+    <div id="adminSection" class="hidden">
+        <button type="button" onclick="handleLogout()" style="background:#e74c3c; float:right;">Đăng Xuất</button>
+        <h1>Quản Trị Thiệp Cưới — Mẫu 01</h1>
+        
+        <div class="card">
+            <h2>Chỉnh Sửa Thông Tin Mẫu 01</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="form-group"><label>Tên Chú Rể</label><input type="text" id="groomName"></div>
+                <div class="form-group"><label>Tên Cô Dâu</label><input type="text" id="brideName"></div>
+                
+                <!-- Bổ sung phần cấu hình thời gian hiển thị trên bìa -->
+                <div class="form-group"><label>Thứ (vd: THỨ BẢY)</label><input type="text" id="heroDayOfWeek" placeholder="THỨ BẢY"></div>
+                <div class="form-group"><label>Ngày (vd: 25)</label><input type="text" id="heroDayNumber" placeholder="25"></div>
+                <div class="form-group"><label>Tháng & Năm (vd: THÁNG 10 &lt;br&gt; 2026)</label><input type="text" id="heroMonthYear" placeholder="THÁNG 10<br>2026"></div>
+                <div class="form-group"><label>Giờ (vd: 10:30)</label><input type="text" id="heroTime" placeholder="10:30"></div>
+
+                <div class="form-group"><label>Bố Chú Rể</label><input type="text" id="groomFather"></div>
+                <div class="form-group"><label>Mẹ Chú Rể</label><input type="text" id="groomMother"></div>
+                <div class="form-group" style="grid-column: span 2;"><label>Địa chỉ Nhà Trai</label><input type="text" id="groomAddress"></div>
+                <div class="form-group"><label>Bố Cô Dâu</label><input type="text" id="brideFather"></div>
+                <div class="form-group"><label>Mẹ Cô Dâu</label><input type="text" id="brideMother"></div>
+                <div class="form-group" style="grid-column: span 2;"><label>Địa chỉ Nhà Gái</label><input type="text" id="brideAddress"></div>
+                
+                <div class="form-group"><label>Thời gian làm lễ</label><input type="text" id="timeChurch"></div>
+                <div class="form-group"><label>Địa điểm làm lễ</label><input type="text" id="locChurch"></div>
+                <div class="form-group"><label>Thời gian tiệc mừng</label><input type="text" id="timeParty"></div>
+                <div class="form-group"><label>Địa điểm tiệc mừng</label><input type="text" id="locParty"></div>
+                
+                <div class="form-group" style="grid-column: span 2;"><label>Link Nhạc Nền (.mp3)</label><input type="text" id="musicUrl"></div>
+                <div class="form-group" style="grid-column: span 2;"><label>URL ảnh bìa (để trống nếu dùng ảnh mặc định)</label><input type="text" id="coverPhoto"></div>
+                <div class="form-group" style="grid-column: span 2;"><label>URL ảnh Our happy day</label><input type="text" id="imgSpecialDay"></div>
+                <div class="form-group" style="grid-column: span 2;"><label>Album ảnh (mỗi URL một dòng)</label><textarea id="galleryUrls" style="min-height:90px"></textarea></div>
+                <div class="form-group" style="grid-column: span 2;"><label>Địa chỉ Google Maps lễ cưới</label><input type="text" id="ceremonyMapQuery"></div>
+                <div class="form-group" style="grid-column: span 2;"><label>Địa chỉ Google Maps tiệc mừng</label><input type="text" id="partyMapQuery"></div>
+                <div class="form-group" style="grid-column: span 2;"><label>Lời giới thiệu</label><textarea id="storyText" style="min-height:80px"></textarea></div>
+            </div>
+            <button type="button" onclick="handleUpdate()" style="margin-top:10px;">Lưu Thay Đổi Mẫu 01</button>
+            
+            <div id="inviteLinkBox" class="card hidden" style="margin-top:16px;background:#f5fbff;border:1px solid #c9e5f7;">
+                <h3 style="margin-top:0;">Đường link thiệp Mẫu 01</h3>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+                    <input type="url" id="inviteLink" readonly style="flex:1;min-width:220px;padding:10px;border:1px solid #ccc;border-radius:4px;">
+                    <button type="button" onclick="copyInviteLink()" style="background:#3498db;">Sao chép link</button>
+                    <button type="button" onclick="openInviteLink()" style="background:#526d5b;">Mở thiệp</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Danh Sách Khách Tham Dự Mẫu 01 (RSVP)</h2>
+            <p id="txtSummary">Đang tải danh sách phản hồi...</p>
+            <table>
+                <thead>
+                    <tr><th>Họ và Tên</th><th>Trạng thái</th><th>Số người</th><th>Lời chúc</th></tr>
+                </thead>
+                <tbody id="rsvpTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBoBxJvJ1eo6KniFtzC7tTgEOrgxmckndk",
+      authDomain: "thiep-cuoi-online-fa5d4.firebaseapp.com",
+      projectId: "thiep-cuoi-online-fa5d4",
+      storageBucket: "thiep-cuoi-online-fa5d4.firebasestorage.app",
+      messagingSenderId: "677765348842",
+      appId: "1:677765348842:web:001834792642097f5e4693"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('adminSection').classList.remove('hidden');
+            loadData();
+            listenToRSVP();
+        } else {
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('adminSection').classList.add('hidden');
+        }
+    });
+
+    function handleLogin() {
+        const email = document.getElementById('loginEmail').value.trim();
+        const pass = document.getElementById('loginPassword').value;
+        if (!email || !pass) { alert('Vui lòng điền đầy đủ Email và Mật khẩu!'); return; }
+        auth.signInWithEmailAndPassword(email, pass).catch(error => alert('Lỗi đăng nhập: ' + error.message));
+    }
+    function handleLogout() { auth.signOut().then(() => location.reload()); }
+
+    function loadData() {
+        db.collection('wedding_info').doc('main_details').get().then(docSnap => {
+            const data = docSnap.exists ? docSnap.data() : {};
+            document.getElementById('groomName').value = data.groom_name || '';
+            document.getElementById('brideName').value = data.bride_name || '';
+            document.getElementById('heroDayOfWeek').value = data.hero_day_of_week || 'THỨ BẢY';
+            document.getElementById('heroDayNumber').value = data.hero_day_number || '25';
+            document.getElementById('heroMonthYear').value = data.hero_month_year || 'THÁNG 10<br>2026';
+            document.getElementById('heroTime').value = data.hero_time || '10:30';
+            document.getElementById('groomFather').value = data.groom_father || '';
+            document.getElementById('groomMother').value = data.groom_mother || '';
+            document.getElementById('groomAddress').value = data.groom_address || '';
+            document.getElementById('brideFather').value = data.bride_father || '';
+            document.getElementById('brideMother').value = data.bride_mother || '';
+            document.getElementById('brideAddress').value = data.bride_address || '';
+            document.getElementById('timeChurch').value = data.time_church || '';
+            document.getElementById('locChurch').value = data.location_church || '';
+            document.getElementById('timeParty').value = data.time_party || '';
+            document.getElementById('locParty').value = data.location_party || '';
+            document.getElementById('musicUrl').value = data.music_url || '';
+            document.getElementById('coverPhoto').value = data.cover_photo || '';
+            document.getElementById('imgSpecialDay').value = data.img_SpecialDay || '';
+            document.getElementById('galleryUrls').value = data.gallery_urls || '';
+            document.getElementById('ceremonyMapQuery').value = data.ceremony_map_query || '';
+            document.getElementById('partyMapQuery').value = data.party_map_query || '';
+            document.getElementById('storyText').value = data.story_text || '';
+        });
+    }
+
+    function showInviteLink() {
+        const url = new URL('thiep-online-mau-01.html', window.location.href);
+        document.getElementById('inviteLink').value = url.href;
+        document.getElementById('inviteLinkBox').classList.remove('hidden');
+    }
+    function copyInviteLink() {
+        navigator.clipboard.writeText(document.getElementById('inviteLink').value);
+        alert('Đã sao chép đường link!');
+    }
+    function openInviteLink() {
+        window.open(document.getElementById('inviteLink').value, '_blank');
+    }
+
+    function handleUpdate() {
+        const data = {
+            groom_name: document.getElementById('groomName').value.trim(),
+            bride_name: document.getElementById('brideName').value.trim(),
+            hero_day_of_week: document.getElementById('heroDayOfWeek').value.trim(),
+            hero_day_number: document.getElementById('heroDayNumber').value.trim(),
+            hero_month_year: document.getElementById('heroMonthYear').value.trim(),
+            hero_time: document.getElementById('heroTime').value.trim(),
+            groom_father: document.getElementById('groomFather').value.trim(),
+            groom_mother: document.getElementById('groomMother').value.trim(),
+            groom_address: document.getElementById('groomAddress').value.trim(),
+            bride_father: document.getElementById('brideFather').value.trim(),
+            bride_mother: document.getElementById('brideMother').value.trim(),
+            bride_address: document.getElementById('brideAddress').value.trim(),
+            time_church: document.getElementById('timeChurch').value.trim(),
+            location_church: document.getElementById('locChurch').value.trim(),
+            time_party: document.getElementById('timeParty').value.trim(),
+            location_party: document.getElementById('locParty').value.trim(),
+            music_url: document.getElementById('musicUrl').value.trim(),
+            cover_photo: document.getElementById('coverPhoto').value.trim(),
+            img_SpecialDay: document.getElementById('imgSpecialDay').value.trim(),
+            gallery_urls: document.getElementById('galleryUrls').value.trim(),
+            ceremony_map_query: document.getElementById('ceremonyMapQuery').value.trim(),
+            party_map_query: document.getElementById('partyMapQuery').value.trim(),
+            story_text: document.getElementById('storyText').value.trim(),
+            updated_at: firebase.firestore.FieldValue.serverTimestamp()
+        };
+        db.collection('wedding_info').doc('main_details').set(data, {merge:true}).then(() => {
+            showInviteLink();
+            alert('Đã lưu dữ liệu Mẫu 01 thành công!');
+        }).catch(error => alert('Lỗi: ' + error.message));
+    }
+
+    function listenToRSVP() {
+        db.collection('rsvp_responses').onSnapshot(snapshot => {
+            const tbody = document.getElementById('rsvpTableBody');
+            tbody.innerHTML = '';
+            let total = 0, count = 0;
+            snapshot.forEach(doc => {
+                const rsvp = doc.data(); count++;
+                const attending = rsvp.is_attending !== undefined ? rsvp.is_attending : rsvp.attendance === 'yes';
+                if (attending) total += Number(rsvp.guests_count || rsvp.guestCount || 1);
+                const statusText = rsvp.attendance === 'maybe' ? 'Sẽ xác nhận sau' : (attending ? 'Có tham dự' : 'Không đến');
+                const tr = document.createElement('tr');
+                [rsvp.guest_name || rsvp.guestName || 'Ẩn danh', statusText, attending ? (rsvp.guests_count || rsvp.guestCount || 0) : 0, rsvp.wishes || rsvp.wish || ''].forEach(value => {
+                    const td = document.createElement('td'); td.textContent = value; tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+            document.getElementById('txtSummary').innerText = `Tổng phản hồi: ${count} lượt | Khách tham dự: ${total} người`;
+        });
+    }
+</script>
+</body>
+</html>

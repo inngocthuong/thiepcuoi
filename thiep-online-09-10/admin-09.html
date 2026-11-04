@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin - Quản Lý Thiệp Cưới Mẫu 09</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-dark: #253023;
+  --panel-bg: #ffffff;
+  --accent: #d4a373;
+  --text-main: #2b211e;
+  --border: #e2dad1;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #f5f2ed; color: var(--text-main); font-family: "Montserrat", sans-serif; padding-bottom: 60px; }
+
+header {
+  background: var(--bg-dark); color: #fff; padding: 20px 40px;
+  display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+header h1 { font-size: 20px; font-weight: 500; letter-spacing: 0.05em; color: var(--accent); }
+
+main { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+.card {
+  background: var(--panel-bg); border-radius: 12px; padding: 32px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.04); border: 1px solid var(--border); margin-bottom: 24px;
+}
+h2 { font-size: 18px; font-weight: 600; margin-bottom: 20px; border-bottom: 2px solid var(--accent); display: inline-block; padding-bottom: 4px; color: var(--text-main); }
+
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.full { grid-column: 1 / -1; }
+
+label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 6px; color: var(--text-main); }
+input, textarea {
+  width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 6px;
+  font-size: 13px; font-family: inherit; outline: none; background: #fffdf9; color: var(--text-main); transition: border-color 0.3s;
+}
+input:focus, textarea:focus { border-color: var(--accent); }
+
+.btn {
+  background: var(--bg-dark); color: #fff; padding: 14px 28px; border: none;
+  border-radius: 6px; font-size: 12px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; cursor: pointer; transition: background 0.3s;
+}
+.btn:hover { background: var(--accent); color: #253023; }
+.btn-secondary { background: #eee; color: #333; margin-left: 10px; }
+
+#authStatus { font-size: 12px; margin-top: 10px; color: #666; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>✿ Quản Trị Thiệp Cưới Online — Mẫu 09</h1>
+  <a href="thiep-online-mau-09.html" target="_blank" style="color:var(--accent); text-decoration:none; font-size:13px;">Mở Trang Thiệp Khách Xem ↗</a>
+</header>
+
+<main>
+  <!-- AUTH SECTION -->
+  <section class="card" id="authSection">
+    <h2>Đăng Nhập Quản Trị</h2>
+    <div class="grid">
+      <div>
+        <label>Email Admin</label>
+        <input id="adminEmail" type="email" placeholder="admin@gmail.com">
+      </div>
+      <div>
+        <label>Mật Khẩu</label>
+        <input id="adminPassword" type="password" placeholder="******">
+      </div>
+    </div>
+    <button class="btn" id="loginBtn">Đăng Nhập</button>
+    <button class="btn btn-secondary" id="logoutBtn" style="display:none;">Đăng Xuất</button>
+    <div id="authStatus">Trạng thái: Chưa đăng nhập.</div>
+  </section>
+
+  <!-- FORM SECTION -->
+  <section class="card" id="editorSection" style="display:none;">
+    <h2>Cấu Hình Nội Dung Thiệp (Mẫu 08)</h2>
+    <form id="adminForm">
+      <div class="grid">
+        <div>
+          <label>Tên Chú Rể</label>
+          <input id="groom_name" value="Minh Thông">
+        </div>
+        <div>
+          <label>Tên Cô Dâu</label>
+          <input id="bride_name" value="Ngọc Thương">
+        </div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label>Ngày Hiển Thị (vd: 15 · 06 · 2027)</label>
+          <input id="display_date" value="15 · 06 · 2027">
+        </div>
+        <div>
+          <label>Thời Gian Chuẩn (Đếm ngược)</label>
+          <input id="event_datetime" type="datetime-local" value="2027-06-15T09:00">
+        </div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label>Thông Tin Nhà Trai</label>
+          <textarea id="groom_parents" rows="2">Gia đình chú rể Minh Thông</textarea>
+        </div>
+        <div>
+          <label>Thông Tin Nhà Gái</label>
+          <textarea id="bride_parents" rows="2">Gia đình cô dâu Ngọc Thương</textarea>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="full">
+          <label>Lời Ngỏ / Lời Mời</label>
+          <textarea id="invitation_text" rows="3">Trân trọng kính mời bạn đến chung vui trong ngày hạnh phúc của chúng mình.</textarea>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label>Thời Gian Tổ Chức</label>
+          <input id="event_time" value="09:00 · Ngày 15 tháng 06 năm 2027">
+        </div>
+        <div>
+          <label>Tên Địa Điểm / Nhà Hàng</label>
+          <input id="event_address" value="Trung tâm Hội nghị & Tiệc cưới">
+        </div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label>Địa Chỉ Chi Tiết</label>
+          <input id="event_detail" value="Số 123 Đường ABC, Quận XYZ">
+        </div>
+        <div>
+          <label>Link Google Maps</label>
+          <input id="google_maps_link" placeholder="https://maps.google.com/...">
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="full">
+          <label>Link Ảnh Bìa Hero Trái (HTTPS direct link)</label>
+          <input id="hero_image" placeholder="https://images.unsplash.com/...">
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="full">
+          <label>Link Ảnh Nền / Họa Tiết Bìa Rêu (Tùy chọn thay thế)</label>
+          <input id="cover_bg_color" placeholder="https://... (Để trống sẽ giữ nguyên màu xanh rêu đậm nguyên bản)">
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="full">
+          <label>Link Nhạc Nền (File MP3 trực tiếp)</label>
+          <input id="music_url" placeholder="https://.../music.mp3">
+        </div>
+      </div>
+
+      <h3 style="font-size: 14px; margin: 20px 0 10px; color: var(--bg-dark);">Link Album Ảnh (Max 6 ảnh)</h3>
+      <div class="grid">
+        <input id="img1" placeholder="Link ảnh 1 (https://...)">
+        <input id="img2" placeholder="Link ảnh 2 (https://...)">
+        <input id="img3" placeholder="Link ảnh 3 (https://...)">
+        <input id="img4" placeholder="Link ảnh 4 (https://...)">
+        <input id="img5" placeholder="Link ảnh 5 (https://...)">
+        <input id="img6" placeholder="Link ảnh 6 (https://...)">
+      </div>
+
+      <div style="margin-top: 24px;">
+        <button type="button" class="btn" id="saveBtn">Lưu Thiệp Mẫu 08</button>
+        <span id="saveStatus" style="margin-left: 15px; font-size: 13px;"></span>
+      </div>
+    </form>
+  </section>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBZ-DeRjsQ8Fh16IYreXkJqD7cFfuk7JQg",
+  authDomain: "du-lieu-thiep-online-02.firebaseapp.com",
+  projectId: "du-lieu-thiep-online-02",
+  storageBucket: "du-lieu-thiep-online-02.firebasestorage.app",
+  messagingSenderId: "629898873128",
+  appId: "1:629898873128:web:e330b74b2bba82afbf681d"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+const $ = id => document.getElementById(id);
+
+const fields = [
+  'groom_name', 'bride_name', 'display_date', 'event_datetime',
+  'groom_parents', 'bride_parents', 'invitation_text', 'event_time',
+  'event_address', 'event_detail', 'google_maps_link', 'hero_image', 'cover_bg_color', 'music_url'
+];
+
+auth.onAuthStateChanged(user => {
+  if (user) {
+    $('authStatus').textContent = "Đã đăng nhập: " + user.email;
+    $('editorSection').style.display = 'block';
+    $('logoutBtn').style.display = 'inline-block';
+    loadData();
+  } else {
+    $('authStatus').textContent = "Chưa đăng nhập.";
+    $('editorSection').style.display = 'none';
+    $('logoutBtn').style.display = 'none';
+  }
+});
+
+$('loginBtn').onclick = async () => {
+  try {
+    await auth.signInWithEmailAndPassword($('adminEmail').value.trim(), $('adminPassword').value);
+  } catch (e) {
+    alert("Lỗi đăng nhập: " + e.message);
+  }
+};
+
+$('logoutBtn').onclick = () => auth.signOut();
+
+async function loadData() {
+  const doc = await db.collection("thiep_online").doc("mau_09").get();
+  if (doc.exists) {
+    const data = doc.data();
+    fields.forEach(f => { if ($(f) && data[f]) $(f).value = data[f]; });
+    if (data.gallery_images && Array.isArray(data.gallery_images)) {
+      data.gallery_images.forEach((img, idx) => {
+        if ($('img' + (idx + 1))) $('img' + (idx + 1)).value = img;
+      });
+    }
+  }
+}
+
+$('saveBtn').onclick = async () => {
+  $('saveStatus').textContent = "Đang lưu...";
+  const data = {};
+  fields.forEach(f => data[f] = $(f).value.trim());
+  data.gallery_images = [
+    $('img1').value.trim(), $('img2').value.trim(), $('img3').value.trim(),
+    $('img4').value.trim(), $('img5').value.trim(), $('img6').value.trim()
+  ].filter(Boolean);
+  data.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+
+  try {
+    await db.collection("thiep_online").doc("mau_09").set(data, { merge: true });
+    $('saveStatus').textContent = "Đã lưu thành công lên Mẫu 09!";
+    $('saveStatus').style.color = "green";
+  } catch (e) {
+    $('saveStatus').textContent = "Lỗi khi lưu: " + e.message;
+    $('saveStatus').style.color = "red";
+  }
+};
+</script>
+</body>
+</html>

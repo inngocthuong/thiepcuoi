@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f7f5ef">
+<title>Our Day — Quản trị thiệp cưới</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#f7f5ef;--ink:#222b24;--olive:#52634b;--olive-dark:#344232;--sage:#dfe5d8;--clay:#c17d61;--line:#d9ddd2;--muted:#697166;--white:#fffefa;--shadow:0 18px 50px #28332912}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:"DM Sans",sans-serif}button,input,textarea,select{font:inherit}button,a{-webkit-tap-highlight-color:transparent}button{cursor:pointer}img{max-width:100%;display:block}.serif{font-family:"Playfair Display",Georgia,serif}.eyebrow{text-transform:uppercase;letter-spacing:.19em;font-size:10px;font-weight:700;color:var(--olive)}.hidden{display:none!important}
+.topbar{height:58px;padding:0 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #d9ddd280;background:#f7f5efed;position:sticky;top:0;z-index:20;backdrop-filter:blur(12px)}.brand{font-family:"Playfair Display",serif;font-size:18px;letter-spacing:.04em}.top-actions{display:flex;gap:8px}.quiet-btn,.solid-btn,.outline-btn{border:1px solid var(--olive);border-radius:999px;padding:10px 16px;font-size:11px;font-weight:700;letter-spacing:.03em;background:transparent;color:var(--olive-dark)}.solid-btn{background:var(--olive-dark);color:white;border-color:var(--olive-dark)}.quiet-btn{border-color:var(--line)}.hero{max-width:1240px;margin:0 auto;padding:28px 22px 64px}.hero-card{position:relative;min-height:min(720px,calc(100svh - 90px));overflow:hidden;background:#a5a995;border-radius:5px;display:flex;align-items:center;justify-content:center;text-align:center;color:white}.hero-card:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#17221921 0%,#17221918 35%,#17221988 100%);z-index:1}.hero-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 45%}.hero-inner{position:relative;z-index:2;width:min(760px,100%);padding:42px 20px}.hero .eyebrow{color:#f3e9d9}.hero-kicker{font-size:11px;letter-spacing:.27em;text-transform:uppercase;margin:0 0 24px}.hero-names{font-family:"Playfair Display",serif;font-weight:400;font-size:clamp(54px,10vw,112px);line-height:.98;letter-spacing:-.055em;margin:0}.hero-names .amp{display:block;font-size:.43em;font-style:italic;line-height:1.25;color:#e9d8bd}.hero-date{font-size:12px;letter-spacing:.18em;margin:28px 0 26px;text-transform:uppercase}.hero-cta{border:1px solid #ffffffb8;border-radius:999px;background:#ffffff12;color:white;padding:13px 22px;font-size:11px;letter-spacing:.13em;text-transform:uppercase;backdrop-filter:blur(8px)}.hero-cta:hover{background:#fff;color:var(--olive-dark)}
+.content{max-width:1000px;margin:0 auto;padding:0 22px}.intro{padding:44px 0 80px;text-align:center;max-width:700px;margin:auto}.intro .eyebrow{margin-bottom:20px}.intro h2{font-size:clamp(32px,5vw,50px);font-weight:400;line-height:1.15;margin:0 0 20px}.intro p{font-size:14px;line-height:1.9;color:var(--muted);margin:0 auto;max-width:580px;white-space:pre-line}
+.section{padding:60px 0;border-top:1px solid var(--line)}.section-heading{text-align:center;margin-bottom:32px}.section-heading .eyebrow{margin-bottom:12px}.section-heading h2{font-size:clamp(30px,4vw,42px);font-weight:400;margin:0}.family-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.family-card{background:var(--white);border:1px solid var(--line);padding:30px 22px;text-align:center}.family-card .label{font-size:10px;letter-spacing:.17em;color:var(--olive);font-weight:700}.family-card .family{font-size:12px;color:var(--muted);white-space:pre-line;line-height:1.8;margin:16px 0}.family-card h3{font-size:27px;font-weight:400;margin:0}
+.event-card{display:grid;grid-template-columns:1fr 1fr;background:var(--sage);border-radius:4px;overflow:hidden}.event-side{padding:40px 28px;text-align:center}.event-side+ .event-side{border-left:1px solid #bdc8b5}.event-icon{width:42px;height:42px;margin:0 auto 17px;border:1px solid #a8b49f;border-radius:50%;display:grid;place-items:center;color:var(--olive-dark);font-size:17px}.event-side h3{font-size:25px;font-weight:400;margin:0 0 12px}.event-side p{font-size:13px;color:#53604f;line-height:1.8;margin:5px 0;white-space:pre-line}.event-side a{display:inline-block;margin-top:16px;color:var(--olive-dark);font-size:11px;font-weight:700;text-underline-offset:4px}
+.countdown{display:flex;justify-content:center;gap:clamp(12px,4vw,40px);margin:30px 0 0}.count-item{min-width:52px;text-align:center}.count-item strong{font-family:"Playfair Display",serif;font-size:34px;font-weight:400;display:block}.count-item span{font-size:9px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
+.gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.gallery-item{aspect-ratio:4/5;overflow:hidden;background:var(--sage)}.gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform .7s}.gallery-item:hover img{transform:scale(1.04)}.gallery-empty{grid-column:1/-1;text-align:center;padding:28px;color:var(--muted);font-size:13px;background:#efeee7}
+.rsvp-wrap{max-width:700px;margin:0 auto;background:var(--white);border:1px solid var(--line);padding:clamp(22px,5vw,46px);box-shadow:var(--shadow)}.rsvp-form{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}.field label{font-size:11px;font-weight:700;color:var(--olive-dark)}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:2px;background:#fffefa;padding:12px;color:var(--ink);outline:none;font-size:13px}.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--olive)}.field textarea{resize:vertical}.form-submit{grid-column:1/-1;width:100%;padding:14px}.status{font-size:12px;line-height:1.6;margin:0}.status.error{color:#a63e32}.status.success{color:#3e6846}.footer{text-align:center;padding:55px 20px 75px;background:#e9ece3}.footer .monogram{font-family:"Playfair Display",serif;font-size:38px;color:var(--olive)}.footer p{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.admin-shell{max-width:1100px;margin:0 auto;padding:30px 20px 70px}.admin-header{margin:0 0 22px}.admin-header h1{font-family:"Playfair Display",serif;font-weight:400;font-size:36px;margin:8px 0}.admin-header p{color:var(--muted);font-size:13px;line-height:1.7}.admin-grid{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(280px,.85fr);gap:18px;align-items:start}.admin-card{background:var(--white);border:1px solid var(--line);padding:22px;min-width:0}.admin-card h2{font-size:19px;font-weight:500;margin:0 0 16px}.admin-form{display:grid;grid-template-columns:1fr 1fr;gap:14px}.admin-form .field.full{grid-column:1/-1}.admin-form .field input,.admin-form .field textarea{border-radius:2px}.admin-help{font-size:12px;line-height:1.7;color:var(--muted)}.guest-list{display:grid;gap:9px}.guest-row{border:1px solid var(--line);padding:12px;font-size:12px;line-height:1.6}.guest-row.yes{background:#f0f4ed}.guest-row.no{background:#fbf0ec}.guest-row strong{display:block}.admin-status{margin-top:12px}.login-box{max-width:460px;margin:20px auto;background:var(--white);border:1px solid var(--line);padding:26px}.login-box h2{font-family:"Playfair Display",serif;font-weight:400;font-size:30px;margin-top:0}.login-form{display:grid;gap:14px}.admin-only-note{padding:12px;background:#f0f1eb;font-size:12px;line-height:1.7;color:var(--muted)}
+@media(max-width:700px){.topbar{padding:0 14px;height:54px}.brand{font-size:16px}.top-actions{gap:5px}.quiet-btn,.solid-btn{padding:9px 11px;font-size:10px}.hero{padding:12px 12px 38px}.hero-card{min-height:calc(88svh - 54px);}.hero-names{font-size:clamp(52px,14vw,84px)}.hero-inner{padding:36px 14px}.content{padding:0 16px}.intro{padding:35px 0 55px}.section{padding:44px 0}.family-grid{gap:8px}.family-card{padding:24px 10px}.family-card h3{font-size:22px}.event-card{grid-template-columns:1fr}.event-side{padding:30px 18px}.event-side+.event-side{border-left:0;border-top:1px solid #bdc8b5}.gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.rsvp-form{grid-template-columns:1fr}.field.full,.form-submit{grid-column:auto}.rsvp-wrap{padding:22px 16px}.admin-grid{grid-template-columns:1fr}.admin-form{grid-template-columns:1fr}.admin-form .field.full{grid-column:auto}.admin-card{padding:17px}.admin-shell{padding:24px 13px 50px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">OUR DAY <span style="color:var(--clay)">✳</span> <span style="font:500 11px 'DM Sans',sans-serif;color:var(--muted)">/ QUẢN TRỊ</span></div>
+  <div class="top-actions"><a class="quiet-btn" href="thiep-online-mau-06.html" style="text-decoration:none">Xem thiệp ↗</a></div>
+</header>
+<main id="adminPage">
+  <div class="admin-shell">
+    <div class="admin-header"><p class="eyebrow">Private workspace</p><h1>Quản trị thiệp cưới</h1><p>Chỉnh sửa nội dung và theo dõi xác nhận tham dự. Các thay đổi được lưu vào Firebase và đồng bộ lên thiệp.</p></div>
+    <div id="loginBox" class="login-box">
+      <h2>Đăng nhập</h2><p class="admin-help">Sử dụng tài khoản quản trị đã tạo trong Firebase Authentication.</p>
+      <form id="loginForm" class="login-form">
+        <div class="field"><label for="adminEmail">EMAIL</label><input id="adminEmail" type="email" autocomplete="username" required></div>
+        <div class="field"><label for="adminPassword">MẬT KHẨU</label><input id="adminPassword" type="password" autocomplete="current-password" required></div>
+        <button class="solid-btn" type="submit">ĐĂNG NHẬP ADMIN</button><p id="loginStatus" class="status" role="status"></p>
+      </form>
+    </div>
+    <div id="adminWorkspace" class="admin-grid hidden">
+      <section class="admin-card">
+        <h2>Nội dung thiệp</h2><p id="adminIdentity" class="admin-help"></p><button class="quiet-btn" id="logoutBtn" type="button" style="margin-bottom:18px">Đăng xuất</button>
+        <form id="cardForm" class="admin-form">
+          <div class="field full"><label for="aHero">ẢNH BÌA</label><input id="aHero" type="text" placeholder="img/bia-thiep.jpg hoặc https://..."></div>
+          <div class="field"><label for="aGroom">TÊN CHÚ RỂ</label><input id="aGroom" required maxlength="100"></div>
+          <div class="field"><label for="aBride">TÊN CÔ DÂU</label><input id="aBride" required maxlength="100"></div>
+          <div class="field"><label for="aDate">NGÀY HIỂN THỊ</label><input id="aDate" placeholder="20 · 12 · 2026"></div>
+          <div class="field"><label for="aDateISO">NGÀY GIỜ ĐẾM NGƯỢC</label><input id="aDateISO" type="datetime-local"></div>
+          <div class="field"><label for="aGParents">GIA ĐÌNH NHÀ TRAI</label><textarea id="aGParents" rows="3"></textarea></div>
+          <div class="field"><label for="aBParents">GIA ĐÌNH NHÀ GÁI</label><textarea id="aBParents" rows="3"></textarea></div>
+          <div class="field full"><label for="aInvite">LỜI NGỎ</label><textarea id="aInvite" rows="4"></textarea></div>
+          <div class="field full"><label for="aTime">THỜI GIAN TỔ CHỨC</label><input id="aTime"></div>
+          <div class="field"><label for="aAddress">TÊN ĐỊA ĐIỂM</label><input id="aAddress"></div>
+          <div class="field"><label for="aDetail">ĐỊA CHỈ CHI TIẾT</label><input id="aDetail"></div>
+
+          
+          <div class="field full"><label for="aMaps">LINK HOẶC TỪ KHÓA GOOGLE MAPS</label><input id="aMaps" type="text" placeholder="Địa chỉ hoặc link bản đồ"></div>
+          
+          <div class="field full"><label for="aGallery">ALBUM ẢNH (MỖI DÒNG MỘT TÊN FILE HOẶC URL, TỐI ĐA 9 ẢNH)</label><textarea id="aGallery" rows="5" placeholder="anh-01.jpg&#10;anh-02.jpg"></textarea></div>
+          
+          
+          <div class="field full">
+            <label for="aMusic">NHẠC NỀN</label>
+            <input id="aMusic" type="text" placeholder="audio/nhac-nen.mp3 hoặc https://..."></div>
+
+
+          <button id="saveCardBtn" class="solid-btn form-submit" type="submit">LƯU & ĐỒNG BỘ THIỆP</button>
+          <p id="saveStatus" class="status full admin-status" role="status"></p>
+        </form>
+        <div class="admin-only-note" style="margin-top:18px">
+          <strong>Đường link chia sẻ thiệp</strong>
+          <p class="admin-help">Sau khi đưa hai file lên cùng website hosting, bạn có thể sao chép link dưới đây để gửi khách mời.</p>
+          <input id="shareUrl" type="url" readonly aria-label="Đường link thiệp" style="width:100%;padding:11px;border:1px solid var(--line);margin:5px 0 9px;background:#fffefa">
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="quiet-btn" id="copyShareBtn" type="button">Sao chép link</button>
+            <button class="solid-btn" id="openShareBtn" type="button">Mở thiệp ↗</button></div>
+            <p id="shareStatus" class="status" role="status" style="margin-top:8px"></p></div>
+      </section>
+      <section class="admin-card">
+        <h2>Phản hồi khách mời</h2><p class="admin-help">Chỉ tài khoản Admin được phép xem danh sách này nếu Firestore Rules đã thiết lập đúng.</p>
+        <div id="guestList" class="guest-list"><p class="admin-help">Đăng nhập để xem phản hồi.</p></div>
+      </section>
+    </div>
+  </div>
+</main>
+
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { getFirestore, doc, onSnapshot, setDoc, collection, query, orderBy } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+/*
+ FIREBASE: dự án cũ trong file bạn gửi là du-lieu-thiep-online.
+ Các trường bên dưới được lấy từ cấu hình trong file cũ, nhưng authDomain phải được
+ xác nhận trong Firebase Console > Project settings > General > Your apps.
+ Nếu Firebase Console hiển thị giá trị khác, hãy dùng chính xác giá trị ở đó.
+*/
+const firebaseConfig = {
+  apiKey: "AIzaSyApc8T6Co4_M6Va-QFQ2nAMtiMyeEaziNE",
+  authDomain: "du-lieu-thiep-online.firebaseapp.com",
+  projectId: "du-lieu-thiep-online",
+  storageBucket: "du-lieu-thiep-online.firebasestorage.app",
+  messagingSenderId: "22302636953",
+  appId: "1:22302636953:web:f5117fe652f16148b37108"
+};
+// BẮT BUỘC: thay chuỗi bên dưới bằng User UID của tài khoản quản trị
+// trong Firebase Console > Authentication > Users.
+const ADMIN_UIDS = ["cBI8UMwS5UanAGb3uhYXdbZunWt1"];
+// Dùng document mới để không sửa đè thiệp cũ: wedding_cards/modern_invitation
+const CARD_REF_PATH = ["thiep_online", "mau_06"];
+const RSVP_COLLECTION = "loi_nhan";
+
+
+const DEFAULTS = {
+  groom_name:"Minh Anh", bride_name:"Gia Linh", display_date:"20 · 12 · 2026",
+  event_datetime:"2026-12-20T11:00", groom_parents:"Ông bà / Cha mẹ",
+  bride_parents:"Ông bà / Cha mẹ",
+  invitation_text:"Chúng mình rất hạnh phúc khi được chia sẻ khoảnh khắc đặc biệt này cùng những người thân yêu. Sự hiện diện của bạn sẽ làm ngày vui của chúng mình thêm trọn vẹn.",
+  event_time:"11:00 · Chủ nhật, 20 tháng 12, 2026", event_address:"Tên nhà hàng / địa điểm tổ chức",
+  event_detail:"Địa chỉ sẽ được cập nhật", google_maps_link:"",
+  hero_image:"https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1800&q=85",
+  gallery_images:[], music_url:""
+};
+
+
+
+
+const $ = (id) => document.getElementById(id);
+let db=null,auth=null,currentUser=null,cardData={...DEFAULTS},stopGuests=null;
+function setStatus(id,text,type=""){const el=$(id);el.textContent=text;el.className="status"+(type?" "+type:"");}
+function str(v){return typeof v==="string"?v:"";}
+
+
+
+
+// Cho phép chấp nhận cả đường dẫn local (../anh/...) lẫn link https://
+function validHttps(value, allowEmpty = true) {
+  const v = str(value).trim();
+  if (!v) return allowEmpty;
+  if (v.startsWith("http://") || v.startsWith("https://") || v.startsWith("../") || v.startsWith("./") || v.startsWith("/")) {
+    return true;
+  }
+  // Nếu chỉ gõ tên file đơn giản, tự động hợp lệ
+  return true;
+}
+
+
+
+
+function configReady(){return Object.values(firebaseConfig).every(v=>typeof v==="string"&&v.trim()&&!v.startsWith("THAY_BANG_"));}
+function isAdmin(user){return !!user&&ADMIN_UIDS.some(uid=>uid&&uid!=="THAY_BANG_UID_ADMIN"&&uid===user.uid);}
+function fillForm(d){
+ $("aHero").value=str(d.hero_image);$("aGroom").value=str(d.groom_name);$("aBride").value=str(d.bride_name);
+ $("aDate").value=str(d.display_date);$("aDateISO").value=str(d.event_datetime);
+ $("aGParents").value=str(d.groom_parents);$("aBParents").value=str(d.bride_parents);
+ $("aInvite").value=str(d.invitation_text);$("aTime").value=str(d.event_time);
+ $("aAddress").value=str(d.event_address);$("aDetail").value=str(d.event_detail);
+ $("aMaps").value=str(d.google_maps_link);$("aGallery").value=Array.isArray(d.gallery_images)?d.gallery_images.join("\n"):"";$("aMusic").value=str(d.music_url);
+}
+function stopGuestFeed(){if(stopGuests)stopGuests();stopGuests=null;}
+function loadGuests(){
+ stopGuestFeed();$("guestList").textContent="Đang tải phản hồi...";
+ stopGuests=onSnapshot(query(collection(db,RSVP_COLLECTION),orderBy("timestamp","desc")),snapshot=>{
+  const list=$("guestList");list.replaceChildren();
+  if(snapshot.empty){const p=document.createElement("p");p.className="admin-help";p.textContent="Chưa có phản hồi nào.";list.appendChild(p);return;}
+  snapshot.forEach(snap=>{const r=snap.data(),row=document.createElement("article");row.className="guest-row "+(r.is_attending?"yes":"no");const name=document.createElement("strong");name.textContent=str(r.guest_name)||"Khách mời";const meta=document.createElement("div");meta.textContent=r.is_attending?`Sẽ tham dự · ${Number(r.guest_count)||1} người`:"Không thể tham dự";row.append(name,meta);if(r.wishes){const wish=document.createElement("p");wish.style.cssText="margin:7px 0 0;white-space:pre-wrap;color:var(--muted)";wish.textContent="“"+str(r.wishes)+"”";row.appendChild(wish);}list.appendChild(row);});
+ },err=>{console.error(err);$("guestList").textContent="Không tải được danh sách. Kiểm tra quyền đọc collection rsvpss trong Firestore Rules."; });
+}
+$("loginForm").addEventListener("submit",async e=>{
+ e.preventDefault();if(!auth){setStatus("loginStatus","Firebase chưa cấu hình xong. Hãy cập nhật firebaseConfig và UID Admin.","error");return;}
+ setStatus("loginStatus","Đang đăng nhập...");
+ try{await signInWithEmailAndPassword(auth,$("adminEmail").value.trim(),$("adminPassword").value);setStatus("loginStatus","Đăng nhập thành công.","success");}
+ catch(err){console.error(err);setStatus("loginStatus","Đăng nhập thất bại. Kiểm tra email, mật khẩu và Email/Password trong Firebase Authentication.","error");}
+});
+$("logoutBtn").addEventListener("click",async()=>{try{if(auth)await signOut(auth);}catch(err){console.error(err);}});
+
+
+
+
+$("cardForm").addEventListener("submit", async e => {
+  e.preventDefault();
+  if (!db || !isAdmin(currentUser)) {
+    setStatus("saveStatus", "Tài khoản hiện tại chưa được cấp quyền Admin.", "error");
+    return;
+  }
+  
+  const hero = $("aHero").value.trim();
+  const maps = $("aMaps").value.trim();
+  const urls = $("aGallery").value.split(/\r?\n/).map(x => x.trim()).filter(Boolean).slice(0, 9);
+  const music = $("aMusic").value.trim();
+  
+  const btn = $("saveCardBtn");
+  btn.disabled = true;
+  setStatus("saveStatus", "Đang lưu...");
+  
+  const payload = {
+    hero_image: hero,
+    groom_name: $("aGroom").value.trim(),
+    bride_name: $("aBride").value.trim(),
+    display_date: $("aDate").value.trim(),
+    event_datetime: $("aDateISO").value,
+    groom_parents: $("aGParents").value.trim(),
+    bride_parents: $("aBParents").value.trim(),
+    invitation_text: $("aInvite").value.trim(),
+    event_time: $("aTime").value.trim(),
+    event_address: $("aAddress").value.trim(),
+    event_detail: $("aDetail").value.trim(),
+    google_maps_link: maps,
+    gallery_images: urls,
+    music_url: music,
+    updated_at: new Date()
+  };
+  
+  try {
+    await setDoc(doc(db, ...CARD_REF_PATH), payload, { merge: true });
+    setStatus("saveStatus", "Đã lưu nội dung. Thiệp đang đồng bộ dữ liệu mới.", "success");
+    updateShareLink();
+  } catch (err) {
+    console.error(err);
+    setStatus("saveStatus", "Không lưu được. Kiểm tra Firestore Rules và UID Admin.", "error");
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+
+
+
+function updateShareLink(){const field=$("shareUrl");if(field)field.value=new URL("thiep-online-mau-06.html",window.location.href).href;}
+updateShareLink();
+$("copyShareBtn")?.addEventListener("click",async()=>{try{await navigator.clipboard.writeText($("shareUrl").value);setStatus("shareStatus","Đã sao chép đường link thiệp.","success");}catch{ $("shareUrl").focus();$("shareUrl").select();setStatus("shareStatus","Trình duyệt chưa cho phép sao chép tự động. Hãy sao chép link đang được chọn.","error");}});
+$("openShareBtn")?.addEventListener("click",()=>window.open(new URL("thiep-online-mau-06.html",window.location.href).href,"_blank","noopener,noreferrer"));
+if(!configReady())setStatus("loginStatus","Chưa cấu hình xong Firebase. Hãy thay authDomain bằng giá trị đúng trong Firebase Console và điền UID Admin.","error");
+else{try{const app=initializeApp(firebaseConfig);db=getFirestore(app);auth=getAuth(app);
+ onSnapshot(doc(db,...CARD_REF_PATH),snap=>{cardData={...DEFAULTS,...(snap.exists()?snap.data():{})};if(isAdmin(currentUser))fillForm(cardData);},err=>{console.error(err);setStatus("loginStatus","Không tải được dữ liệu thiệp. Kiểm tra Firebase project mới và quyền đọc tài liệu loi_nhan/online_invitation.","error");});
+ onAuthStateChanged(auth,user=>{
+   currentUser=user;
+   const uidConfigured=ADMIN_UIDS.some(uid=>uid&&uid!=="THAY_BANG_UID_ADMIN");
+   const allowed=isAdmin(user);
+   $("loginBox").classList.toggle("hidden",allowed);
+   $("adminWorkspace").classList.toggle("hidden",!allowed);
+   $("adminIdentity").textContent=allowed?`Đang đăng nhập: ${user.email||user.uid}`:"";
+   if(allowed){
+     fillForm(cardData);loadGuests();updateShareLink();
+   }else{
+     stopGuestFeed();
+     $("guestList").textContent="Đăng nhập bằng tài khoản Admin được cấp quyền để xem phản hồi.";
+     if(user){
+       if(!uidConfigured){
+         setStatus("loginStatus",`Đăng nhập thành công nhưng chưa cấu hình UID Admin. UID tài khoản hiện tại: ${user.uid}. Hãy sao chép UID này vào ADMIN_UIDS trong admin.html, tải file lên lại rồi đăng nhập lại.`, "error");
+       }else{
+         setStatus("loginStatus","Tài khoản đã đăng nhập nhưng UID chưa được cấp quyền Admin. Hãy kiểm tra ADMIN_UIDS.", "error");
+         signOut(auth).catch(console.error);
+       }
+     }
+   }
+ });
+ }catch(err){console.error(err);setStatus("loginStatus","Không khởi tạo được Firebase. Hãy kiểm tra firebaseConfig.","error");}}
+
+</script>
+</body>
+</html>

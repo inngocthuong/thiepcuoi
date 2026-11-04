@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Admin Quản Lý Mẫu Thiệp</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f3f4f6; margin: 0; padding: 20px; color: #333; }
+        .box { max-width: 750px; background: white; margin: 20px auto; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); box-sizing: border-box; }
+        h2, h3 { color: #800020; text-align: center; margin-top: 0; }
+        .section-title { font-weight: bold; color: #800020; border-bottom: 2px solid #f0d5da; padding-bottom: 5px; margin: 20px 0 10px 0; font-size: 16px; }
+        .form-group { margin-bottom: 14px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        label { display: block; font-weight: 600; margin-bottom: 4px; color: #444; font-size: 13px; }
+        input, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
+        input:focus, textarea:focus { border-color: #800020; outline: none; }
+        button { width: 100%; padding: 14px; background-color: #800020; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        button:hover { background-color: #590015; }
+        #adminPanel { display: none; }
+        .result-box { display: none; background-color: #e6fffa; border: 2px dashed #319795; padding: 20px; border-radius: 8px; margin-top: 20px; text-align: center; }
+        .qr-output { display: flex; justify-content: center; margin-top: 15px; }
+        .btn-link-view { display: block; margin: 10px auto; background-color:#319795; color:white; padding:10px 20px; text-decoration:none; font-weight:bold; border-radius:6px; max-width:200px; text-align:center;}
+        @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+<div class="box" id="loginBox">
+    <h2>Hệ Thống Quản Lý Thiệp Cưới</h2>
+    <div class="form-group">
+        <label>Nhập Mật Khẩu Quản Trị:</label>
+        <input type="password" id="adminPass" placeholder="Mật khẩu:******">
+    </div>
+    <button id="btnLogin">ĐĂNG NHẬP VÀO HỆ THỐNG</button>
+</div>
+
+<div class="box" id="adminPanel">
+    <h3>Cấu Hình Nội Dung Mẫu Thiệp</h3>
+    
+    <div class="section-title">1. Thông Tin Cơ Bản & Bìa Thiệp</div>
+    <div class="grid-2">
+        <div class="form-group"><label>Tên Chú Rể:</label><input type="text" id="groom" placeholder="VD: Thành Đạt"></div>
+        <div class="form-group"><label>Tên Cô Dâu:</label><input type="text" id="bride" placeholder="VD: Thúy Kiều"></div>
+    </div>
+    <div class="grid-2">
+        <div class="form-group"><label>Ngày Cưới (Đếm ngược):</label><input type="date" id="weddingDate"></div>
+        <div class="form-group"><label>Link Ảnh Bìa Thiệp (Không bắt buộc):</label><input type="text" id="coverBg" placeholder="https://..."></div>
+    </div>
+    
+    <div class="form-group">
+        <label>Link Ảnh "Ngày Vui Của Chúng Tôi":</label>
+        <input type="text" id="specialDayImg" placeholder="Link hình ảnh chính hiển thị trên mục Lời Ngỏ">
+    </div>
+
+    <div class="form-group"><label>Lời Ngỏ Trân Trọng:</label><textarea id="message" rows="2" placeholder="Trân trọng kính mời..."></textarea></div>
+
+    <div class="section-title">2. Thông Tin Hai Họ</div>
+    <div class="grid-2">
+        <div style="background: #fafafa; padding: 10px; border-radius: 6px; border: 1px solid #eee;">
+            <strong style="color: #800020; font-size:14px;">HỌ NHÀ TRAI</strong>
+            <div class="form-group" style="margin-top:8px;"><label>Ông (Bố chú rể):</label><input type="text" id="groomFather" placeholder="Nguyễn Văn A"></div>
+            <div class="form-group"><label>Bà (Mẹ chú rể):</label><input type="text" id="groomMother" placeholder="Nguyễn Thị B"></div>
+            <div class="form-group"><label>Địa chỉ nhà trai:</label><input type="text" id="groomAddress" placeholder="Xuân Đông - TP. Đồng Nai"></div>
+        </div>
+        <div style="background: #fafafa; padding: 10px; border-radius: 6px; border: 1px solid #eee;">
+            <strong style="color: #800020; font-size:14px;">HỌ NHÀ GÁI</strong>
+            <div class="form-group" style="margin-top:8px;"><label>Ông (Bố cô dâu):</label><input type="text" id="brideFather" placeholder="Trần Văn A"></div>
+            <div class="form-group"><label>Bà (Mẹ cô dâu):</label><input type="text" id="brideMother" placeholder="Hoàng Thị B"></div>
+            <div class="form-group"><label>Địa chỉ nhà gái:</label><input type="text" id="brideAddress" placeholder="Xuân Tây - TP. Đồng Nai"></div>
+        </div>
+    </div>
+
+    <div class="section-title">3. Thời Gian & Địa Điểm Tổ Chức</div>
+    <div class="grid-2">
+        <div style="background: #fafafa; padding: 10px; border-radius: 6px; border: 1px solid #eee;">
+            <strong style="color: #800020; font-size:14px;">LỄ THÀNH HÔN</strong>
+            <div class="form-group" style="margin-top:8px;"><label>Thời gian:</label><input type="text" id="ceremonyTime" placeholder="Vào lúc 09:00, Ngày 22/12/2026"></div>
+            <div class="form-group"><label>Địa điểm:</label><input type="text" id="ceremonyAddress" placeholder="Tại Tư Gia Nhà Nam"></div>
+            <div class="form-group"><label>Link Map Lễ Thành Hôn:</label><input type="text" id="ceremonyMap" placeholder="https://maps.google.com/..."></div>
+        </div>
+        <div style="background: #fafafa; padding: 10px; border-radius: 6px; border: 1px solid #eee;">
+            <strong style="color: #800020; font-size:14px;">TIỆC CƯỚI</strong>
+            <div class="form-group" style="margin-top:8px;"><label>Thời gian:</label><input type="text" id="partyTime" placeholder="Vào lúc 17:00, Ngày 22/12/2026"></div>
+            <div class="form-group"><label>Địa điểm:</label><input type="text" id="partyAddress" placeholder="Nhà Hàng Châu Loan"></div>
+            <div class="form-group"><label>Link Map Tiệc Cưới:</label><input type="text" id="partyMap" placeholder="https://maps.google.com/..."></div>
+        </div>
+    </div>
+
+    <div class="section-title">4. Nhạc Nền & Album Ảnh Cưới</div>
+    <div class="form-group"><label>Đường Link Nhạc Nền (.mp3 online):</label><input type="text" id="musicLink" placeholder="https://domain.com/music.mp3"></div>
+    <div class="form-group">
+        <label>Album Ảnh Cưới (Nhập tối đa 6 link ảnh online):</label>
+        <div class="grid-2">
+            <input type="text" id="img1" placeholder="Link ảnh 1" style="margin-bottom:6px;">
+            <input type="text" id="img2" placeholder="Link ảnh 2" style="margin-bottom:6px;">
+            <input type="text" id="img3" placeholder="Link ảnh 3" style="margin-bottom:6px;">
+            <input type="text" id="img4" placeholder="Link ảnh 4" style="margin-bottom:6px;">
+            <input type="text" id="img5" placeholder="Link ảnh 5" style="margin-bottom:6px;">
+            <input type="text" id="img6" placeholder="Link ảnh 6" style="margin-bottom:6px;">
+        </div>
+    </div>
+
+    <button id="btnSave" style="margin-top:15px;">🎉 TẠO & ĐỒNG BỘ THIỆP CƯỚI</button>
+    <p id="statusText" style="text-align:center; font-weight:bold; color:orange;"></p>
+
+    <div class="result-box" id="resultBox">
+        <h4 style="margin:0; color:#234e52;">✨ THIỆP CƯỚI ĐÃ SẴN SÀNG KHỞI TẠO!</h4>
+        <p style="font-size:14px; margin:10px 0;">Đường link thiệp gửi tặng khách hàng:</p>
+        <input type="text" id="outputLink" readonly style="text-align:center; font-weight:bold; color:#2b6cb0;">
+        <a href="#" id="viewBtn" target="_blank" class="btn-link-view">XEM THIỆP CƯỚI</a>
+        <div class="qr-output" id="qrcode"></div>
+    </div>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<!-- QRCode JS Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyApc8T6Co4_M6Va-QFQ2nAMtiMyeEaziNE",
+      authDomain: "du-lieu-thiep-online.firebaseapp.com",
+      projectId: "du-lieu-thiep-online",
+      storageBucket: "du-lieu-thiep-online.firebasestorage.app",
+      messagingSenderId: "22302636953",
+      appId: "1:22302636953:web:f5117fe652f16148b37108"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    document.getElementById('btnLogin').addEventListener('click', function() {
+        if(document.getElementById('adminPass').value === "Thong@121976") {
+            document.getElementById('loginBox').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+            loadCurrentData();
+        } else { alert("Mật khẩu không chính xác!"); }
+    });
+
+    function loadCurrentData() {
+        db.collection("thiep-cuoi").doc("info").get().then((docSnap) => {
+            if(docSnap.exists) {
+                const d = docSnap.data();
+                document.getElementById('groom').value = d.groomName || "";
+                document.getElementById('bride').value = d.brideName || "";
+                document.getElementById('weddingDate').value = d.date || "";
+                document.getElementById('coverBg').value = d.coverBg || "";
+                document.getElementById('specialDayImg').value = d.specialDayImg || "";
+                document.getElementById('message').value = d.welcomeMessage || "";
+                
+                document.getElementById('groomFather').value = d.groomFather || "";
+                document.getElementById('groomMother').value = d.groomMother || "";
+                document.getElementById('groomAddress').value = d.groomAddress || "";
+                document.getElementById('brideFather').value = d.brideFather || "";
+                document.getElementById('brideMother').value = d.brideMother || "";
+                document.getElementById('brideAddress').value = d.brideAddress || "";
+
+                document.getElementById('ceremonyTime').value = d.ceremonyTime || "";
+                document.getElementById('ceremonyAddress').value = d.ceremonyAddress || "";
+                document.getElementById('ceremonyMap').value = d.ceremonyMap || "";
+                
+                document.getElementById('partyTime').value = d.partyTime || "";
+                document.getElementById('partyAddress').value = d.partyAddress || "";
+                document.getElementById('partyMap').value = d.partyMap || "";
+
+                document.getElementById('musicLink').value = d.musicLink || "";
+                document.getElementById('img1').value = d.img1 || "";
+                document.getElementById('img2').value = d.img2 || "";
+                document.getElementById('img3').value = d.img3 || "";
+                document.getElementById('img4').value = d.img4 || "";
+                document.getElementById('img5').value = d.img5 || "";
+                document.getElementById('img6').value = d.img6 || "";
+            }
+        });
+    }
+
+    document.getElementById('btnSave').addEventListener('click', function() {
+        document.getElementById('statusText').innerText = "Đang đồng bộ cơ sở dữ liệu...";
+        const payload = {
+            groomName: document.getElementById('groom').value,
+            brideName: document.getElementById('bride').value,
+            date: document.getElementById('weddingDate').value,
+            coverBg: document.getElementById('coverBg').value,
+            specialDayImg: document.getElementById('specialDayImg').value,
+            welcomeMessage: document.getElementById('message').value,
+            
+            groomFather: document.getElementById('groomFather').value,
+            groomMother: document.getElementById('groomMother').value,
+            groomAddress: document.getElementById('groomAddress').value,
+            brideFather: document.getElementById('brideFather').value,
+            brideMother: document.getElementById('brideMother').value,
+            brideAddress: document.getElementById('brideAddress').value,
+
+            ceremonyTime: document.getElementById('ceremonyTime').value,
+            ceremonyAddress: document.getElementById('ceremonyAddress').value,
+            ceremonyMap: document.getElementById('ceremonyMap').value,
+
+            partyTime: document.getElementById('partyTime').value,
+            partyAddress: document.getElementById('partyAddress').value,
+            partyMap: document.getElementById('partyMap').value,
+
+            musicLink: document.getElementById('musicLink').value,
+            img1: document.getElementById('img1').value,
+            img2: document.getElementById('img2').value,
+            img3: document.getElementById('img3').value,
+            img4: document.getElementById('img4').value,
+            img5: document.getElementById('img5').value,
+            img6: document.getElementById('img6').value
+        };
+
+        db.collection("thiep-cuoi").doc("info").set(payload).then(() => {
+            document.getElementById('statusText').innerText = "";
+            document.getElementById('resultBox').style.display = 'block';
+            
+            const folderPath = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
+            const targetLink = folderPath + "thiep-online-mau-11.html";
+
+            document.getElementById('outputLink').value = targetLink;
+            document.getElementById('viewBtn').href = targetLink;
+
+            document.getElementById('qrcode').innerHTML = "";
+            new QRCode(document.getElementById("qrcode"), { text: targetLink, width: 140, height: 140 });
+        }).catch(err => {
+            document.getElementById('statusText').innerText = "Lỗi đồng bộ: " + err.message;
+        });
+    });
+</script>
+</body>
+</html>

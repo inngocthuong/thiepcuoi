@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thiệp cưới | Nguyễn Minh & Trần Lan</title>
+<style>
+:root{
+  --wine:#650d20;
+  --wine2:#8e1830;
+  --gold:#c6a15b;
+  --cream:#fff8ef;
+  --ink:#4a2026}
+
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;
+  background:var(--cream);
+  color:var(--ink);
+  font-family:'Times New Roman',serif}
+
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.cover{
+  min-height:100svh;
+  display:grid;
+  place-items:center;
+  text-align:center;
+  padding:28px;
+  background:radial-gradient(ellipse at center,#8b2034 0,#5a0a1b 65%,#320510 100%);
+  color:#fff4df;
+  position:relative;
+  overflow:hidden}
+
+.cover:before,.cover:after{
+  content:"✿ ❧ ✧ ❧ ✿";
+  position:absolute;color:#d7b56c;
+  opacity:.55;
+  font-size:clamp(24px,5vw,54px);
+  letter-spacing:12px;
+  max-width:90%;
+  pointer-events:none}
+
+.cover:before{
+  top:5%;left:4%;
+  transform:rotate(-15deg)}
+.cover:after{bottom:5%;
+  right:4%;
+  transform:rotate(165deg)}
+
+.cover-card{border:1px solid var(--gold);
+  outline:1px solid #c6a15b66;
+  outline-offset:9px;
+  padding:clamp(28px,6vw,64px) 22px;
+  max-width:580px;width:min(100%,580px);
+  background:#4c071b77;position:relative}
+
+.kicker{letter-spacing:.25em;
+  text-transform:uppercase;
+  font:12px Arial,sans-serif;
+  color:#e3c77e}
+
+.names {
+  font-size: clamp(40px, 9vw, 76px);
+  font-family: "Alex Brush", cursive;
+  letter-spacing: 6px;
+  font-weight: normal;
+  font-style: italic;
+  line-height: 1.08;
+  margin: 22px 0;
+  color: #fff0ce;
+}
+
+  .amp{color:var(--gold);
+    font-size:.7em}.date{letter-spacing:.16em;
+    margin:22px 0}
+  
+  .btn{border:1px solid var(--gold);
+    border-radius:999px;
+    padding:12px 22px;
+    background:var(--wine);
+    color:#fff4df}
+  .btn:hover{background:var(--wine2)}
+  .btn.gold{background:var(--gold);color:#3e1019;
+    border-color:var(--gold);
+    font-weight:bold}
+
+#invitation{display:none}
+.nav{position:sticky;
+  top:0;z-index:5;
+  background:#fff9f0ee;
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid #e5d4b5;
+  display:flex;gap:8px;
+  justify-content:center;
+  flex-wrap:wrap;padding:10px}
+
+.nav a,.nav button{font:13px Arial,sans-serif;
+  color:var(--wine);
+  text-decoration:none;
+  padding:8px 10px;border:0;
+  background:transparent}
+
+.section{
+  max-width:900px;
+  margin:auto;
+  padding:68px 22px;
+  text-align:center}
+.eyebrow{font:12px Arial,sans-serif;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  color:#956b2d}
+
+.section h2{font-weight:normal;
+  color:var(--wine);
+  font-size:clamp(30px,5vw,44px);
+  margin:12px 0}
+  
+.rule{color:var(--gold);
+  font-size:24px}
+  
+.intro{font-size:18px;
+  line-height:1.8;
+  max-width:650px;
+  margin:22px auto}
+
+  .two{display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:18px}
+    
+  .panel{border:1px solid #dfc99d;
+    padding:24px;
+    background:#fffdf8}
+    
+  .panel h3{color:var(--wine);
+    font-weight:normal;
+    font-size:24px}
+    
+  .muted{font:14px/1.7 Arial,sans-serif;
+    color:#775c56}
+
+  .event{background:#f5e9d9}
+  .event .two{margin-top:28px}
+  .album{display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:12px;margin-top:26px}
+  
+    .photo{aspect-ratio:4/5;
+      border:1px solid #d5b878;
+      background:linear-gradient(145deg,#7c1a2c,#f4d9b5);
+      display:grid;
+      place-items:center;
+      color:#fff3d4;
+      font:13px Arial,sans-serif;
+      overflow:hidden}
+      
+    .photo img{width:100%;
+      height:100%;object-fit:cover}
+
+    .form{max-width:520px;
+      margin:24px auto;
+      text-align:left}
+
+    .form label{display:block;
+      font:13px Arial,sans-serif;
+      margin:12px 0 6px}
+
+    .form input,.form select,.form textarea{width:100%;
+      padding:12px;
+      border:1px solid #d7c4a2;
+      background:#fffdf8;
+      border-radius:8px;
+      color:var(--ink)}
+    .form button{margin-top:18px}
+    .share{display:flex;gap:10px;
+      justify-content:center;
+      flex-wrap:wrap}
+      
+    .footer{background:var(--wine);
+      color:#f8e6c3;
+      text-align:center;
+      padding:38px 20px}
+    
+    .petal{position:fixed;
+      top:-30px;z-index:8;
+      pointer-events:none;
+      color:#d9a4a4;
+      animation:fall linear forwards;
+      opacity:.8}
+      
+  @keyframes fall{to{transform:translateY(110vh) rotate(540deg);
+    opacity:0}}.toast{font:14px Arial,sans-serif;
+    margin-top:12px;min-height:20px;color:#6b1828}
+  @media(max-width:600px){
+    .two{grid-template-columns:1fr}
+    .album{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .section{padding:50px 16px}
+    .nav{gap:0}.nav a,.nav button{padding:8px 7px;font-size:12px}}
+    
+</style>
+<!-- Nhúng thư viện font chữ viết tay hoàng gia từ Google Fonts -->
+<link rel="preconnect" href="https://googleapis.com">
+<link rel="preconnect" href="https://gstatic.com" crossorigin>
+<link href="https://googleapis.com/css2?family=Alex+Brush&family=Playfair+Display:ital,wght@0,400..950;1,400..950&display=swap" rel="stylesheet">
+
+  
+<link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
+ 
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap" rel="stylesheet">
+       
+<link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&display=swap&subset=vietnamese" rel="stylesheet">
+
+</head>
+<body>
+<section class="cover" id="cover">
+ <div class="cover-card">
+  <div class="kicker">Trân trọng kính mời</div>
+
+  <div class="names">
+    <span id="wBride">Trần Lan</span>
+    <br><span class="amp">&</span><br>
+    <span id="wGroom">Nguyễn Minh</span>
+  </div>
+
+  <div class="rule">❧ ✧ ❧</div>
+  <p class="date" id="wCoverDate">15 · 06 · 2027 &nbsp; | &nbsp; 09:00</p>
+  <p style="line-height:1.7"><span id="wCoverMessage">Một ngày đặc biệt, một lời hẹn trăm năm. Rất mong được đón tiếp bạn.</span></p>
+  <button class="btn gold" id="openInvite">Mở thiệp cưới ♡</button>
+  <p style="font:12px Arial,sans-serif;opacity:.8"></p>
+ 
+ </div>
+
+</section>
+<main id="invitation">
+ <nav class="nav">
+  <button id="backToCover" type="button">⌂ Trang bìa</button>
+  <a href="#loingo">Lời ngỏ</a>
+  <a href="#giadinh">Hai họ</a>
+  <a href="#sukien">Thời gian & địa điểm</a>
+  <a href="#album">Album</a>
+  <a href="#rsvp">Xác nhận</a>
+  <a href="#chiase">Chia sẻ</a>
+  <button id="musicToggle" aria-pressed="false">♫ Bật nhạc</button>
+ </nav>
+ <section class="section" id="loingo">
+  <div class="eyebrow">Save the date</div>
+  <h2>Trân trọng kính mời</h2>
+  <div class="rule">❧ ✧ ❧</div>
+ 
+  <p class="intro" id="wMessage">Tình yêu là hành trình đẹp nhất khi có gia đình và bạn bè cùng chứng kiến. Chúng mình hân hạnh mời bạn đến chung vui trong ngày thành hôn.</p>
+</section>
+ <section class="section event" id="giadinh">
+  <div class="eyebrow">Hai gia đình</div>
+  <h2>Thông tin hai họ</h2>
+  <div class="two">
+  <div class="panel">
+    <h3>Nhà gái</h3>
+    <p class="muted" id="wFamilyBride">Gia đình cô dâu Trần Lan<br>Địa chỉ: vui lòng cập nhật</p>
+  </div>
+  <div class="panel">
+    <h3>Nhà trai</h3>
+    <p class="muted" id="wFamilyGroom">Gia đình chú rể Nguyễn Minh<br>Địa chỉ: vui lòng cập nhật</p>
+  </div>
+</div>
+</section>
+
+ <section class="section" id="sukien">
+  <div class="eyebrow">The wedding day</div>
+  <h2>Thời gian & địa điểm</h2>
+  <div class="two">
+  <div class="panel">
+    <h3>Lễ thành hôn</h3>
+    <p><strong id="wCeremonyTime">09:00 · 15/06/2027</strong></p>
+    <p class="muted" id="wCeremony">Địa điểm tổ chức lễ — cập nhật địa chỉ</p>
+    <a class="btn" id="wCeremonyMap" href="https://maps.google.com/" target="_blank" rel="noopener">Mở Google Maps</a>
+  </div>
+  <div class="panel">
+    <h3>Tiệc cưới</h3>
+    <p><strong id="wReceptionTime">11:00 · 15/06/2027</strong></p>
+    <p class="muted" id="wReception">Nhà hàng — cập nhật địa chỉ</p>
+    <a class="btn" id="wReceptionMap" href="https://maps.google.com/" target="_blank" rel="noopener">Mở Google Maps</a>
+  </div>
+</div>
+</section>
+
+ <section class="section" id="album">
+  <div class="eyebrow">Our memories</div>
+  <h2>Album cưới</h2>
+  <p class="muted">Thay các ô mẫu bằng tối đa 6 ảnh cưới của bạn.</p>
+  <div class="album">
+ <div class="photo">Ảnh cưới 01</div>
+ <div class="photo">Ảnh cưới 02</div>
+ <div class="photo">Ảnh cưới 03</div>
+ <div class="photo">Ảnh cưới 04</div>
+ <div class="photo">Ảnh cưới 05</div>
+ <div class="photo">Ảnh cưới 06</div>
+ </div>
+</section>
+
+ <section class="section event" id="rsvp">
+  <div class="eyebrow">Kindly reply</div>
+  <h2>Xác nhận tham dự</h2>
+  <p class="muted">Trong bản demo này, thông tin chỉ hiển thị trên trình duyệt, chưa được gửi lên máy chủ.</p>
+
+ <form class="form" id="rsvpForm">
+  <label for="guest">Tên khách mời *</label>
+  <input id="guest" required placeholder="Nhập họ và tên">
+  <label for="attendance">Bạn có thể tham dự không?</label>
+  <select id="attendance">
+    <option value="yes">Mình sẽ tham dự</option>
+    <option value="no">Rất tiếc, mình không thể tham dự</option>
+    <option value="maybe">Mình sẽ xác nhận sau</option>
+  </select>
+  <label for="count">Số người tham dự</label>
+  <select id="count"><option>1</option><option>2</option><option>3</option><option>4</option></select>
+  <label for="message">Lời chúc (không bắt buộc)</label>
+  <textarea id="message" rows="3" placeholder="Gửi lời chúc đến cô dâu chú rể"></textarea>
+  <button class="btn gold" type="submit">Gửi xác nhận</button>
+  <div class="toast" id="formMessage" aria-live="polite"></div>
+</form>
+
+ </section>
+ <section class="section" id="chiase">
+  <div class="eyebrow">Share the love</div>
+  <h2>Chia sẻ thiệp cưới</h2>
+  <p class="intro">Cảm ơn bạn đã là một phần trong ngày vui của chúng mình.</p>
+  <div class="share">
+    <button class="btn" id="copyLink">Sao chép đường link</button>
+    <button class="btn" id="nativeShare">Chia sẻ thiệp</button>
+  </div>
+  <div class="toast" id="shareMessage" aria-live="polite"></div>
+</section>
+
+ <footer class="footer">
+  <div class="rule">♡</div>
+  <p id="wFooterNames" style="font-size:25px;font-style:italic">Trần Lan & Nguyễn Minh</p>
+  <p>Trân trọng cảm ơn và hẹn gặp bạn!</p>
+</footer>
+
+</main>
+<audio id="bgMusic" loop preload="none"></audio>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyApc8T6Co_M4k6Va-QFQ2nAMtiMyeEaziNE",
+  authDomain: "du-lieu-thiep-online.firebaseapp.com",
+  projectId: "du-lieu-thiep-online",
+  storageBucket: "du-lieu-thiep-online.firebasestorage.app",
+  messagingSenderId: "22302636953",
+  appId: "1:22302636953:web:f5117fe652f16148b37108"
+};
+firebase.initializeApp(firebaseConfig); const db=firebase.firestore();
+function safeText(id,value){const el=document.getElementById(id);if(el)el.textContent=value||''}
+function loadWeddingData(d){const date=d.date||'',parts=date.split('-'),pretty=parts.length===3?`${parts[2]} · ${parts[1]} · ${parts[0]}`:'Ngày giờ sẽ được cập nhật';safeText('wBride',d.bride||'Tên cô dâu');safeText('wGroom',d.groom||'Tên chú rể');safeText('wCoverDate',pretty+' | '+(d.time||'Giờ sẽ cập nhật'));safeText('wCoverMessage',d.message||'Một ngày đặc biệt, một lời hẹn trăm năm. Rất mong được đón tiếp bạn.');safeText('wMessage',d.message||'Trân trọng kính mời bạn đến chung vui trong ngày hạnh phúc của chúng mình.');safeText('wFamilyBride',d.familyBride||'Thông tin nhà gái sẽ được cập nhật');safeText('wFamilyGroom',d.familyGroom||'Thông tin nhà trai sẽ được cập nhật');safeText('wCeremonyTime',(d.time||'Giờ sẽ cập nhật')+' · '+(date?date.split('-').reverse().join('/'): 'Ngày sẽ cập nhật'));safeText('wReceptionTime',(d.time||'Giờ sẽ cập nhật')+' · '+(date?date.split('-').reverse().join('/'): 'Ngày sẽ cập nhật'));safeText('wCeremony',d.ceremony||'Địa điểm tổ chức lễ sẽ được cập nhật');safeText('wReception',d.reception||'Địa điểm đãi tiệc sẽ được cập nhật');const cm=document.getElementById('wCeremonyMap');if(cm&&d.ceremonyMap)cm.href=d.ceremonyMap;const rm=document.getElementById('wReceptionMap');if(rm&&d.receptionMap)rm.href=d.receptionMap;safeText('wFooterNames',(d.bride||'Cô dâu')+' & '+(d.groom||'Chú rể'));const cover=document.getElementById('cover'),src=d.cover;if(src&&cover){cover.style.backgroundImage=`linear-gradient(#5a0a1b99,#320510cc),url("${src.replace(/"/g,'%22')}")`;cover.style.backgroundSize='cover';cover.style.backgroundPosition='center'}if(d.music)document.getElementById('bgMusic').src=d.music;const album=document.querySelector('#album .album');if(album){album.innerHTML='';const imgs=Array.isArray(d.albumImages)?d.albumImages:[];for(let i=0;i<6;i++){const div=document.createElement('div');div.className='photo';if(imgs[i]){const img=document.createElement('img');img.src=imgs[i];img.alt='Ảnh cưới '+(i+1);img.loading='lazy';div.appendChild(img)}else div.textContent='Ảnh cưới 0'+(i+1);album.appendChild(div)}}}
+(async()=>{const params=new URLSearchParams(location.search),inviteId=params.get('id');if(inviteId){try{const snap=await db.collection('invitations').doc(inviteId).get();if(snap.exists)loadWeddingData(snap.data());else console.error('Không tìm thấy thiệp:',inviteId)}catch(e){console.error('Không tải được thiệp từ Firebase:',e.code,e.message)}}})();
+</script>
+<script>
+const openButton=document.getElementById('openInvite');
+const invitation=document.getElementById('invitation');
+const cover=document.getElementById('cover');
+const music=document.getElementById('bgMusic');
+const musicToggle=document.getElementById('musicToggle');
+let musicOn=false;
+openButton.addEventListener('click',()=>{cover.style.display='none';invitation.style.display='block';window.scrollTo(0,0);petalBurst();});
+document.getElementById('backToCover').addEventListener('click',()=>{invitation.style.display='none';cover.style.display='grid';window.scrollTo(0,0);});
+musicToggle.addEventListener('click',async()=>{
+ if(!music.src){document.getElementById('shareMessage').textContent='Để phát nhạc, hãy gắn URL MP3 trực tiếp vào phần cấu hình của website.';return;}
+ try{if(musicOn){music.pause();musicOn=false;}else{await music.play();musicOn=true;}musicToggle.textContent=musicOn?'♫ Tắt nhạc':'♫ Bật nhạc';musicToggle.setAttribute('aria-pressed',String(musicOn));}catch(e){musicOn=false;musicToggle.textContent='♫ Bật nhạc';}
+});
+function petalBurst(){for(let i=0;i<22;i++){const p=document.createElement('span');p.className='petal';p.textContent=['✿','❀','♥'][Math.floor(Math.random()*3)];p.style.left=Math.random()*100+'vw';p.style.fontSize=(12+Math.random()*18)+'px';p.style.animationDuration=(5+Math.random()*6)+'s';document.body.appendChild(p);setTimeout(()=>p.remove(),12000);}}
+document.getElementById('rsvpForm').addEventListener('submit',e=>{e.preventDefault();document.getElementById('formMessage').textContent='Cảm ơn '+document.getElementById('guest').value+'! Bản demo chưa lưu RSVP trực tuyến; cần kết nối cơ sở dữ liệu để nhận xác nhận thật.';});
+document.getElementById('copyLink').addEventListener('click',async()=>{const msg=document.getElementById('shareMessage');try{await navigator.clipboard.writeText(location.href);msg.textContent='Đã sao chép link trang demo.';}catch(e){msg.textContent='Bạn hãy sao chép địa chỉ trên thanh trình duyệt để chia sẻ.';}});
+document.getElementById('nativeShare').addEventListener('click',async()=>{const msg=document.getElementById('shareMessage');if(navigator.share){try{await navigator.share({title:document.title,text:'Trân trọng mời bạn xem thiệp cưới',url:location.href});}catch(e){}}else{msg.textContent='Trình duyệt này chưa hỗ trợ chia sẻ trực tiếp. Bạn có thể sao chép đường link.';}});
+</script>
+</body></html>

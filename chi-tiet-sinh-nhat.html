@@ -403,6 +403,76 @@ z-index: 10;
                 color: #bbb;
             }
         }
+               @media (max-width: 768px) {
+    /* Giữ nguyên cấu trúc ẩn desktop */
+    .main-menu, .banner, .footer, .menu-item, .banner-search, .vung-chua-2-box { 
+        display: none !important; 
+    }
+
+    /* Thanh Menu Mobile Chính */
+    .navbar-mobile {
+        display: flex !important;
+        justify-content: space-around;
+        align-items: center;
+        background: #526456;
+        padding: 8px 5px;
+        position: sticky;
+        top: 0;
+        z-index: 999;
+    }
+
+    .navbar-mobile > a, 
+    .mobile-dropdown-btn {
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14.5px;
+        cursor: pointer;
+        list-style: none; /* Xóa dấu mũi tên mặc định của summary */
+        user-select: none;
+    }
+
+    .mobile-dropdown-btn::-webkit-details-marker {
+        display: none; /* Xóa mũi tên mặc định trên Safari/Chrome */
+    }
+
+    /* Khung chứa Menu Con Xổ Xuống */
+    .mobile-dropdown {
+        position: relative;
+    }
+
+    .mobile-dropdown-content {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #435247; /* Tông màu tối hơn menu chính để phân biệt */
+        min-width: 200px;
+        box-shadow: 0px 8px 16px rgba(0,0,0,0.25);
+        border-radius: 6px;
+        margin-top: 8px;
+        overflow: hidden;
+        z-index: 1000;
+    }
+
+    .mobile-dropdown-content a {
+        color: #ffffff;
+        padding: 10px 16px;
+        text-decoration: none;
+        display: block;
+        font-size: 13.5px;
+        font-weight: normal;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .mobile-dropdown-content a:last-child {
+        border-bottom: none;
+    }
+
+    .mobile-dropdown-content a:active {
+        background-color: #687b6c;
+    }
+}
+   
     </style>
 </head>
 <body>

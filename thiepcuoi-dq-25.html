@@ -351,7 +351,123 @@
         .footer-links a { color: #000; text-decoration: none; }
         .footer-links a:hover { color: #03692a; }
         .footer-copyright { text-align: center; border-top: 1px solid #bab6b6; margin-top: 20px; padding-top: 20px; font-size: 0.8rem; color: #000; width: 100%; }
-    </style>
+       /* =========================================================
+   1. ĐỊNH DẠNG MẶC ĐỊNH (KHI XEM TRÊN MÁY TÍNH PC)
+========================================================= */
+/* Mặc định trên máy tính: HIỆN giao diện PC và ẨN giao diện Điện thoại đi */
+.navbar-mobile,
+.banner-mobile,
+.footer-mobile {
+    display: none !important;
+}
+
+/* =========================================================
+   2. ĐỊNH DẠNG KHI CHUYỂN SANG MÀN HÌNH ĐIỆN THOẠI (DƯỚI 768PX)
+========================================================= */
+@media (max-width: 768px) {
+    /* ➔ BẤT CÔNG TẮC: ẨN sạch sẽ giao diện máy tính dài dòng đi */
+    .navbar,
+    .banner,
+    footer,
+    .menu-item,
+    .banner-search 
+    {
+        display: none !important;
+    }
+
+    /* ➔ BẬT CÔNG TẮC: HIỆN giao diện điện thoại thu gọn lên */
+    .navbar-mobile {
+        display: flex !important;
+        justify-content: space-around;
+        background: #526456; /* Màu xanh lá Giáo xứ */
+        padding: 12px 5px;
+        position: sticky;
+        top: 0;
+        z-index: 999;
+    }
+    .navbar-mobile a {
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 14.5px;
+    }
+
+    /* Thiết kế riêng cho ảnh Banner điện thoại */
+    .banner-mobile {
+        display: block !important;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .banner-mobile img {
+        width: 100%;
+        height: auto; /* Tự co giãn vừa vặn màn hình dọc */
+        display: block;
+    }
+
+    /* Thiết kế riêng cho Chân web di động siêu ngắn gọn */
+    .footer-mobile {
+        display: block !important;
+        background: #115e07;
+        color: #ffffff;
+        text-align: center;
+        padding: 15px 10px;
+        font-size: 13px;
+        line-height: 1.6;
+        margin-top: 30px;
+    }
+}
+
+     /* --- PHẦN CSS RIÊNG CHO FOOTER MOBILE --- */
+        .footer-mobile {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .footer-mobile {
+                display: block !important;
+                background: #526456;
+                color: #ffffff;
+                text-align: center;
+                padding: 25px 15px;
+                font-size: 13.5px;
+                line-height: 1.6;
+                margin-top: 30px;
+            }
+            .footer-mobile h4 {
+                color: #ffffff;
+                font-size: 15px;
+                margin-bottom: 10px;
+                text-transform: uppercase;
+            }
+            .footer-mobile p {
+                margin-bottom: 8px;
+            }
+            .footer-mobile-actions {
+                display: flex;
+                justify-content: center;
+                gap: 15px;
+                margin: 15px 0;
+            }
+            .footer-mobile-actions a {
+                background: #ffffff;
+                color: #526456;
+                padding: 8px 16px;
+                border-radius: 20px;
+                text-decoration: none;
+                font-weight: bold;
+                font-size: 13px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            }
+            .footer-mobile-copy {
+                border-top: 1px solid rgba(255,255,255,0.1);
+                margin-top: 15px;
+                padding-top: 12px;
+                font-size: 12px;
+                color: #bbb;
+            }
+        }
+   
+   </style>
 </head>
 <body>
 

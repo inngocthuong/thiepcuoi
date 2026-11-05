@@ -14,13 +14,10 @@
         .banner img { display: block; width: 100%; height: auto; }
         .banner-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; color: white; text-align: center; }
 
-        .banner-giua-trang { max-width: 1200px; margin: 10px auto; padding: 0 15px; width: 100%; box-sizing: border-box; }
-        .banner-giua-trang img { width: 100%; height: auto; display: block; border-radius: 6px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); transition: transform 0.2s ease; }
-
         .banner-search { position: absolute; top: 50%; right: 50px; transform: translateY(-50%); z-index: 10; }
         .banner-search form { display: flex; align-items: center; width: 260px; height: 40px; background: #fff; border: 1px solid #ead4cc; border-radius: 25px; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); }
         .banner-search input { flex: 1; min-width: 0; height: 100%; padding: 0 14px; border: none; outline: none; background: transparent; color: #333; font-size: 14px; }
-        .banner-search button { height: 100%; padding: 0 13px; border: none; background: #fff; color: white; cursor: pointer; font-size: 16px; }
+        .banner-search button { height: 100%; padding: 0 13px; border: none; background: #fff; cursor: pointer; font-size: 16px; }
 
         @media (max-width: 600px) {
             .banner-search { top: 8px; right: 8px; }
@@ -55,43 +52,12 @@
         .btn-order-now:hover { background-color: #b82828; }
 
         /* --- CSS CHO KHUNG PHÓNG TO ẢNH (LIGHTBOX) --- */
-        .image-modal {
-            display: none;
-            position: fixed;
-            z-index: 9999;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .image-modal img {
-            max-width: 90%;
-            max-height: 90vh;
-            border-radius: 6px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.5);
-            object-fit: contain;
-            background: #fff;
-        }
-        .image-modal .close-modal {
-            position: absolute;
-            top: 20px;
-            right: 35px;
-            color: #fff;
-            font-size: 40px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-        .image-modal .close-modal:hover {
-            color: #d93838;
-        }
+        .image-modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
+        .image-modal img { max-width: 90%; max-height: 90vh; border-radius: 6px; box-shadow: 0 5px 25px rgba(0,0,0,0.5); object-fit: contain; background: #fff; }
+        .image-modal .close-modal { position: absolute; top: 20px; right: 35px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer; transition: color 0.2s; }
+        .image-modal .close-modal:hover { color: #d93838; }
 
-        /* --- TÁI TẠO CHUẨN GIAO DIỆN HOÀNG HẢI YẾN CHO PHẦN "CÙNG LOẠI" --- */
+        /* --- PHẦN "CÙNG LOẠI" --- */
         .related-section { max-width: 1200px; margin: 0 auto 50px auto; padding: 0 15px; box-sizing: border-box; }
         .related-title { color: #6a0716; font-size: 24px; margin-bottom: 25px; border-bottom: 2px solid currentColor; padding-bottom: 8px; text-align: left; text-transform: uppercase; font-weight: bold; }
 
@@ -145,6 +111,11 @@
             .footer-mobile-actions a { background: #ffffff; color: #526456; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 13px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
             .footer-mobile-copy { border-top: 1px solid rgba(255,255,255,0.1); margin-top: 15px; padding-top: 12px; font-size: 12px; color: #bbb; }
             footer { display: none !important; }
+            
+            .mobile-dropdown-btn::-webkit-details-marker { display: none; }
+            .mobile-dropdown { position: relative; }
+            .mobile-dropdown-content { position: absolute; top: 100%; left: 0; background-color: #435247; min-width: 200px; box-shadow: 0px 8px 16px rgba(0,0,0,0.25); border-radius: 6px; margin-top: 8px; overflow: hidden; z-index: 1000; }
+            .mobile-dropdown-content a { color: #ffffff; padding: 10px 16px; text-decoration: none; display: block; font-size: 13.5px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
         }
     </style>
 </head>
@@ -172,7 +143,7 @@
         <ul class="main-menu">
             <li class="menu-item"><a href="index.html">Trang Chủ</a></li>
             <li class="menu-item">
-                <a href="mauthiepcuoi.html">Mẫu Thiệp Cưới ▾</a>
+                <a href="thiepcuoi-docquyen.html">Mẫu Thiệp Cưới ▾</a>
                 <ul class="dropdown-menu">
                     <li><a href="thiepcuoi-hiendai.html">Thiệp Cưới Hiện Đại</a></li>
                     <li><a href="thiepcuoi-truyenthong.html">Thiệp Cưới Truyền Thống</a></li>
@@ -181,7 +152,7 @@
                 </ul>
             </li>
             <li class="menu-item">
-                <a href="thiep-moi.html">Thiệp Mời ▾</a>
+                <a href="thiep-tangia.html">Thiệp Mời ▾</a>
                 <ul class="dropdown-menu">
                     <li><a href="thiep-tangia.html">Thiệp Tân Gia</a></li>
                     <li><a href="thiep-sinhnhat.html">Thiệp Sinh Nhật</a></li>
@@ -189,12 +160,18 @@
                 </ul>
             </li>
             <li class="menu-item"><a href="thiepcuoi-online.html">Thiệp Cưới Online</a></li>
-            <li class="menu-item"><a href="huong-dan.html">Hướng Dẫn</a></li>
+            <li class="menu-item">
+                <a href="huong-dan-dat-thiep.html">Hướng Dẫn ▾</a>
+                <ul class="dropdown-menu">
+                    <li><a href="huong-dan-dat-thiep.html">Hướng dẫn đặt thiệp</a></li>
+                    <li><a href="huong-dan-viet-thiep.html">Hướng dẫn viết thiệp cưới</a></li>
+                </ul>
+            </li>
             <li class="menu-item"><a href="lienhe.html">Liên Hệ</a></li>
         </ul>
     </nav>
 
-  <!-- BẢN MENU DÀNH CHO ĐIỆN THOẠI (CÓ MENU CON XỔ XUỐNG) -->
+    <!-- MENU MOBILE -->
     <nav class="navbar-mobile">
         <details class="mobile-dropdown">
             <summary class="mobile-dropdown-btn">Sản Phẩm ▾</summary>
@@ -211,19 +188,17 @@
         </details>
         <a href="thiepcuoi-online.html">Thiệp Online</a>
         <details class="mobile-dropdown">
-            <summary class="mobile-dropdown-btn">hướng dẫn ▾</summary>
+            <summary class="mobile-dropdown-btn">Hướng dẫn ▾</summary>
             <div class="mobile-dropdown-content">
                 <a href="huong-dan-dat-thiep.html">Hướng dẫn đặt thiệp</a>
                 <a href="huong-dan-viet-thiep.html">Hướng dẫn viết thiệp cưới</a>
-                </div>
-                 </details>
+            </div>
+        </details>
         <a href="lienhe.html">Liên Hệ</a>
     </nav>
-
     <!-- 3. KHU VỰC CHI TIẾT SẢN PHẨM CHÍNH -->
     <main class="product-detail-container">
         <div class="detail-gallery">
-            <!-- Thêm sự kiện click để phóng to ảnh -->
             <img src="" alt="Hình ảnh thiệp cưới" id="prod-image" onclick="openImageModal(this.src)" title="Click để phóng to ảnh">
         </div>
         <div class="detail-content">
@@ -252,7 +227,7 @@
         <h3 class="related-title">Mẫu Thiệp cùng Loại</h3>
         
         <div class="product_noibat_box" id="product-list">
-            <!-- Sản phẩm được render tự động qua JavaScript -->
+            <!-- Sản phẩm được render tự động qua JavaScript từ file data-hiendai.js -->
         </div>
 
         <!-- Thanh phân trang -->
@@ -299,104 +274,18 @@
         </div>
     </div>
 
-    <!-- 6. JAVASCRIPT XỬ LÝ DỮ LIỆU, PHÂN TRANG VÀ PHÓNG TO ẢNH -->
+    <!-- 6. NHÚNG FILE DỮ LIỆU JS RIÊNG VÀ SCRIPT XỬ LÝ -->
+    <script src="san-pham/chi-tiet/data-chitiet-truyenthong.js"></script>
     <script>
-        const products = [
-           { img: "https://cdn.upanhlaylink.com/i/LA4ilurn.jpg", 
-   name: "Mẫu thiệp HHY-9401", 
-   price: "3.000 đ", 
-   desc: "Bao thư giấy fo150g-Lót đôi giấy fo210g" },
-
-{ img: "https://cdn.upanhlaylink.com/i/OxIkz6lG.jpg", 
-   name: "Mẫu thiệp kỷ thuật số hhy-kts-9102", 
-   price: "3.000 đ", 
-   desc: "Bao thư giấy fo150g-Lót đôi giấy fo210gt" },
-
-{ img: "https://cdn.upanhlaylink.com/i/r7ai7rrI.jpg", 
-   name: "Mẫu thiệp kỷ thuật số hhy-kts-9103", 
-   price: "3.000 đ", 
-   desc: "Bao thư giấy fo150g-Lót đôi giấy fo210g" },
-
-{ img: "https://cdn.upanhlaylink.com/i/MoqNfJpx.jpg", 
-   name: "Mẫu thiệp kỷ thuật số hhy-kts-9104", 
-   price: "3.000 đ", 
-   desc: "Bao thư giấy fo150g-Lót đôi giấy fo210g" },
-
-{ img: "https://cdn.upanhlaylink.com/i/JLUCv7Ap.jpg", 
-   name: "Mẫu thiệp kỷ thuật số hhy-kts-9105", 
-   price: "3.000 đ", 
-   desc: "Bao thư giấy fo150g-Lót đôi giấy fo210g" },
-
-{ img: "https://cdn.upanhlaylink.com/i/KiCqxfkA.jpg", 
-   name: "Mẫu thiệp kỷ thuật số hhy-kts-9106", 
-   price: "3.000 đ", 
-   desc: "Bao thư giấy fo150g-Lót đôi giấy fo210g" },
-
-{ img: "https://cdn.upanhlaylink.com/i/ftElnjSD.jpg", 
-   name: "Mẫu thiệp kỷ thuật số hhy-kts-9107", 
-   price: "3.000 đ", 
-   desc: "Bao thư giấy fo150g-Lót đôi giấy fo210g" },
-
-{ img: "https://cdn.upanhlaylink.com/i/LilV9pQE.jpg", 
-   name: "Mẫu thiệp kỷ thuật số hhy-kts-9108", 
-   price: "3.000 đ", 
-   desc: "Bao thư giấy fo150g-Lót đôi giấy fo210g" },
-
-{ img: "https://cdn.upanhlaylink.com/i/SIYWXVZI.jpg", 
-   name: "Mẫu thiệp kỷ thuật số hhy-kts-9109", 
-   price: "3.000 đ", 
-   desc: "Bao thư giấy fo150g-Lót đôi giấy fo210g" },
-
-{ img: "https://cdn.upanhlaylink.com/i/8txxkfQ9.jpg", 
-   name: "Mẫu thiệp kỷ thuật số hhy-kts-9110", 
-   price: "3.000 đ", 
-   desc: "Bao thư giấy fo150g-Lót đôi giấy fo210g" },
-
-{ img: "https://cdn.upanhlaylink.com/i/b8KsaHnW.jpg", 
-   name: "Mẫu thiệp kỷ thuật số hhy-kts-9111", 
-   price: "3.000 đ", 
-   desc: "Bao thư giấy fo150g-Lót đôi giấy fo210g" },
-
-{ img: "https://cdn.upanhlaylink.com/i/hec8lkka.jpg", 
-   name: "Mẫu thiệp kỷ thuật số hhy-kts-9112", 
-   price: "3.000 đ", 
-   desc: "Bao thư giấy fo150g-Lót đôi giấy fo210g" },
-
-{ img: "https://cdn.upanhlaylink.com/i/LOQByDqD.jpg", 
-   name: "Mẫu thiệp kỷ thuật số hhy-kts-9113", 
-   price: "3.000 đ", 
-   desc: "Bao thư giấy fo150g-Lót đôi giấy fo210gt" },
-
-{ img: "https://cdn.upanhlaylink.com/i/ydiNNdDV.jpg", 
-   name: "Mẫu thiệp kỷ thuật số hhy-kts-9114", 
-   price: "3.000 đ", 
-   desc: "Bao thư giấy fo150g-Lót đôi giấy fo210g" },
-
-{ img: "https://cdn.upanhlaylink.com/i/OeoSJkHb.jpg", 
-   name: "Mẫu thiệp kỷ thuật số hhy-kts-9115", 
-   price: "3.000 đ", 
-   desc: "Bao thư giấy fo150g-Lót đôi giấy fo210g" },
-
-{ img: "https://cdn.upanhlaylink.com/i/SV3xnGX1.jpg", 
-   name: "Mẫu thiệp kỷ thuật số hhy-kts-9116", 
-   price: "3.000 đ", 
-   desc: "Bao thư giấy fo150g-Lót đôi giấy fo210g" },
-
-{ img: "https://cdn.upanhlaylink.com/i/sJ8rcN9W.jpg", 
-   name: "Mẫu thiệp kỷ thuật số hhy-kts-9117", 
-   price: "3.000 đ", 
-   desc: "Bao thư giấy fo150g-Lót đôi giấy fo210g" },
-
-
-
-        ];
-
         const itemsPerPage = 20;
         let currentPage = 1;
 
         window.onload = function() {
-            if (products.length > 0) {
-                var firstProd = products[0];
+            // Kiểm tra xem file data-hiendai.js có tồn tại mảng products không
+            const allProducts = typeof Ttproducts !== 'undefined' ? Ttproducts : [];
+
+            if (allProducts.length > 0) {
+                var firstProd = allProducts[0];
                 var name = localStorage.getItem('clickProdName') || firstProd.name;
                 var price = localStorage.getItem('clickProdPrice') || firstProd.price;
                 var imgUrl = localStorage.getItem('clickProdImg') || firstProd.img;
@@ -420,9 +309,10 @@
 
         function renderPage(page) {
             currentPage = page;
+            const allProducts = typeof Ttproducts !== 'undefined' ? Ttproducts : [];
             const start = (page - 1) * itemsPerPage;
             const end = start + itemsPerPage;
-            const paginatedItems = products.slice(start, end);
+            const paginatedItems = allProducts.slice(start, end);
 
             const productListHTML = paginatedItems.map(item => `
                 <div class="product_noibat_item" data-description="${escapeHtml(item.desc)}">
@@ -439,7 +329,8 @@
         }
 
         function renderPagination() {
-            const pageCount = Math.ceil(products.length / itemsPerPage);
+            const allProducts = typeof Ttproducts !== 'undefined' ? Ttproducts : [];
+            const pageCount = Math.ceil(allProducts.length / itemsPerPage);
             let paginationHTML = '';
 
             for (let i = 1; i <= pageCount; i++) {
@@ -484,7 +375,6 @@
             document.querySelector('.product-detail-container').scrollIntoView({ behavior: "smooth", block: "center" });
         }
 
-        // --- HÀM XỬ LÝ PHÓNG TO / THU NHỎ ẢNH ---
         function openImageModal(imgSrc) {
             var modal = document.getElementById("imageModal");
             var modalImg = document.getElementById("modalImage");

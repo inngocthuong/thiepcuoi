@@ -6,286 +6,42 @@
     <title>Chi Tiết Tạ Ơn</title>
     <style>
         /* --- NHÚNG TOÀN BỘ CSS ĐỒNG BỘ TỪ TRANG CHỦ --- */
-        * { margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            font-family: 'Segoe UI', Arial, sans-serif; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+        body { background-color: #f5f6f9; color: #333; }
 
-        body { 
-            background-color: #f5f6f9; 
-            color: #333; }
+        /* --- 2. PHẦN BANNER --- */
+        .banner { position: relative; width: 100%; }
+        .banner img { display: block; width: 100%; height: auto; }
+        .banner-content { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; color: white; text-align: center; }
 
+        .banner-search { position: absolute; top: 50%; right: 50px; transform: translateY(-50%); z-index: 10; }
+        .banner-search form { display: flex; align-items: center; width: 260px; height: 40px; background: #fff; border: 1px solid #ead4cc; border-radius: 25px; overflow: hidden; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); }
+        .banner-search input { flex: 1; min-width: 0; height: 100%; padding: 0 14px; border: none; outline: none; background: transparent; color: #333; font-size: 14px; }
+        .banner-search button { height: 100%; padding: 0 13px; border: none; background: #fff; cursor: pointer; font-size: 16px; }
 
-
-        /* --- 2. PHẦN BANNER MỚI --- */
-
-        .banner {
-    position: relative;
-    width: 100%;
-}
-
-.banner img {
-    display: block;
-    width: 100%;
-    height: auto;
-}
-
-.banner-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90%;
-    color: white;
-    text-align: center;
-}
-
-/* Khung bọc giới hạn độ rộng bằng thanh ngang tiêu đề */
-.banner-giua-trang {
-    max-width: 1200px;       /* Ép độ rộng tối đa bằng đúng khung nội dung */
-    margin: 10px auto;       /* Tự động căn giữa và tạo khoảng cách 30px với khối trên/dưới */
-    padding: 0 15px;         /* Khoảng đệm an toàn khi xem trên điện thoại */
-    width: 100%;
-    box-sizing: border-box;
-}
-
-/* Định dạng cho tấm ảnh bên trong tự động co giãn mềm mại */
-.banner-giua-trang img {
-    width: 100%;             /* Ép ảnh luôn rộng hết 100% lề của cái hộp 1200px */
-    height: auto;            /* Tự động tính chiều cao theo tỷ lệ gốc để ảnh không bị méo */
-    display: block;          /* Xóa khoảng trống thừa dưới đáy ảnh của trình duyệt */
-    border-radius: 6px;      /* Bo tròn nhẹ 4 góc ảnh cho mềm mại giống các hộp box */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* Tạo bóng đổ nhẹ xung quanh tấm ảnh cho sang trọng */
-    transition: transform 0.2s ease; /* Hiệu ứng mượt mà khi rê chuột */
-}
-
-/* Thanh tìm kiếm ở góc phải banner */
-.banner {
-    position: relative;
-}
-
-.banner-search {
-position: absolute;
-top: 50%;
-right: 50px;
-transform: translateY(-50%);
-z-index: 10;
-}
-
-.banner-search form {
-    display: flex;
-    align-items: center;
-    width: 260px;
-    height: 40px;
-    background: #fff;
-    border: 1px solid #ead4cc;
-    border-radius: 25px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-.banner-search input {
-    flex: 1;
-    min-width: 0;
-    height: 100%;
-    padding: 0 14px;
-    border: none;
-    outline: none;
-    background: transparent;
-    color: #333;
-    font-size: 14px;
-}
-
-.banner-search button {
-    height: 100%;
-    padding: 0 13px;
-    border: none;
-    background: #fff;
-    color: white;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.banner-search button:hover {
-    background: #fff;
-}
-
-/* Hiển thị phù hợp trên điện thoại */
-@media (max-width: 600px) {
-    .banner-search {
-        top: 8px;
-        right: 8px;
-    }
-
-    .banner-search form {
-        width: 190px;
-        height: 34px;
-    }
-}
-
-            
-
-        /* --- 3. THANH MENU NGANG SHOPPING --- */
-        .navbar {
-            background-color: #526456;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        @media (max-width: 600px) {
+            .banner-search { top: 8px; right: 8px; }
+            .banner-search form { width: 190px; height: 34px; }
         }
 
-        .main-menu {
-            list-style: none;
-            display: flex;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+        /* --- 3. THANH MENU NGANG --- */
+        .navbar { background-color: #526456; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .main-menu { list-style: none; display: flex; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .menu-item { position: relative; }
+        .menu-item a { display: block; color: #e5e7eb; text-decoration: none; padding: 18px 22px; font-weight: 500; transition: all 0.3s; }
+        .menu-item:hover > a { background-color: #687b6c; color: #ffffff; }
 
-        .menu-item {
-            position: relative;
-        }
-
-        .menu-item a {
-            display: block;
-            color: #e5e7eb;
-            text-decoration: none;
-            padding: 18px 22px;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .menu-item:hover > a {
-            background-color: #687b6c;
-            color: #ffffff;
-        }
-
-        /* --- 4. DROPDOWN DANH MỤC SẢN PHẨM --- */
-        .dropdown-menu {
-            list-style: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background-color: #526456;
-            min-width: 220px;
-            display: none;
-            box-shadow: 0px 8px 16px rgba(0,0,0,0.15);
-        }
-
-        .dropdown-menu a {
-            padding: 12px 20px;
-            font-size: 0.95rem;
-            border-bottom: 1px solid #1a3038;
-        }
-
-        .dropdown-menu a:hover {
-            background-color: #687b6c;
-            padding-left: 25px;
-        }
-
-        .menu-item:hover .dropdown-menu {
-            display: block;
-        }
-
-        /* =========================================================
-   TỰ ĐỘNG CHUYỂN ĐỔI GIAO DIỆN ĐIỆN THOẠI (DƯỚI 768_PIXEL)
-========================================================= */
-@media (max-width: 768px) {
-    
-    /* 1. Biến các hàng ngang bọc 3 box thành hàng dọc để lướt vuốt */
-    .vung-chua-3-box,
-    .trang-chu-container,
-    .box-flex {
-        display: flex !important;
-        flex-direction: column !important; /* Ép xếp dọc từ trên xuống */
-        height: auto !important;           /* Hủy chiều cao cố định để không bị vỡ khung */
-        gap: 15px !important;
-    }
-
-    /* 2. Ép các ô iframe mở rộng hết 100% chiều ngang màn hình điện thoại */
-    iframe {
-        width: 100% !important;
-        height: 750px !important; /* Đặt chiều cao vừa vặn cho 1 màn hình dọc di động */
-        flex: none !important;
-    }
-
-    /* 3. Tối ưu lại kích thước chữ Menu trên điện thoại cho khỏi dính nhau */
-    .navbar a {
-        padding: 10px 8px !important;
-        font-size: 14px !important;
-    }
-}
-
-/* =========================================================
-   1. ĐỊNH DẠNG MẶC ĐỊNH (KHI XEM TRÊN MÁY TÍNH PC)
-========================================================= */
-/* Mặc định trên máy tính: HIỆN giao diện PC và ẨN giao diện Điện thoại đi */
-.navbar-mobile,
-.banner-mobile,
-.footer-mobile {
-    display: none !important;
-}
-
-/* =========================================================
-   2. ĐỊNH DẠNG KHI CHUYỂN SANG MÀN HÌNH ĐIỆN THOẠI (DƯỚI 768PX)
-========================================================= */
-@media (max-width: 768px) {
-    /* ➔ BẤT CÔNG TẮC: ẨN sạch sẽ giao diện máy tính dài dòng đi */
-    .navbar,
-    .banner,
-    .footer,
-    .menu-item,
-    .banner-search 
-    {
-        display: none !important;
-    }
-
-    /* ➔ BẬT CÔNG TẮC: HIỆN giao diện điện thoại thu gọn lên */
-    .navbar-mobile {
-        display: flex !important;
-        justify-content: space-around;
-        background: #526456; /* Màu xanh lá Giáo xứ */
-        padding: 12px 5px;
-        position: sticky;
-        top: 0;
-        z-index: 999;
-    }
-    .navbar-mobile a {
-        color: #ffffff;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 14.5px;
-    }
-
-    /* Thiết kế riêng cho ảnh Banner điện thoại */
-    .banner-mobile {
-        display: block !important;
-        width: 100%;
-        margin-bottom: 10px;
-    }
-    .banner-mobile img {
-        width: 100%;
-        height: auto; /* Tự co giãn vừa vặn màn hình dọc */
-        display: block;
-    }
-
-    /* Thiết kế riêng cho Chân web di động siêu ngắn gọn */
-    .footer-mobile {
-        display: block !important;
-        background: #115e07;
-        color: #ffffff;
-        text-align: center;
-        padding: 15px 10px;
-        font-size: 13px;
-        line-height: 1.6;
-        margin-top: 30px;
-    }
-}
+        /* --- 4. DROPDOWN DANH MỤC --- */
+        .dropdown-menu { list-style: none; position: absolute; top: 100%; left: 0; background-color: #526456; min-width: 220px; display: none; box-shadow: 0px 8px 16px rgba(0,0,0,0.15); }
+        .dropdown-menu a { padding: 12px 20px; font-size: 0.95rem; border-bottom: 1px solid #1a3038; }
+        .dropdown-menu a:hover { background-color: #687b6c; padding-left: 25px; }
+        .menu-item:hover .dropdown-menu { display: block; }
 
         /* --- CSS RIÊNG TRANG CHI TIẾT SẢN PHẨM --- */
-        .product-detail-container { max-width: 1200px; margin: 40px auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; flex-wrap: wrap; gap: 40px; }
+        .product-detail-container { max-width: 1200px; margin: 40px auto 20px auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; flex-wrap: wrap; gap: 40px; box-sizing: border-box; }
         .detail-gallery { flex: 1.2; min-width: 350px; }
-        .detail-gallery img { width: 100%; max-height: 500px; object-fit: contain; background-color: #fafafa; border-radius: 6px; border: 1px solid #eef0f5; }
+        .detail-gallery img { width: 100%; max-height: 500px; object-fit: contain; background-color: #fafafa; border-radius: 6px; border: 1px solid #eef0f5; cursor: zoom-in; transition: opacity 0.2s; }
+        .detail-gallery img:hover { opacity: 0.95; }
         .detail-content { flex: 1; min-width: 350px; display: flex; flex-direction: column; }
         .detail-title { font-size: 1.8rem; font-weight: 600; margin-bottom: 15px; color: #111; }
         .detail-price { font-size: 1.8rem; color: #d93838; font-weight: bold; margin-bottom: 5px; }
@@ -295,234 +51,127 @@ z-index: 10;
         .btn-order-now { background-color: #d93838; color: white; text-align: center; padding: 15px 35px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 1.1rem; transition: background 0.2s; cursor: pointer; border: none; display: inline-block; width: fit-content; }
         .btn-order-now:hover { background-color: #b82828; }
 
-    /* --- 6. PHẦN CHÂN TRANG (FOOTER) --- */
-        footer {
-            background-color: #e0e1e0;
-            color: #000;
-            font-size: 0.9rem;
-            line-height: 1.8;
-            padding: 40px 0 20px 0;
-            margin-top: 60px;
-        }
+        /* --- CSS CHO KHUNG PHÓNG TO ẢNH (LIGHTBOX) --- */
+        .image-modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
+        .image-modal img { max-width: 90%; max-height: 90vh; border-radius: 6px; box-shadow: 0 5px 25px rgba(0,0,0,0.5); object-fit: contain; background: #fff; }
+        .image-modal .close-modal { position: absolute; top: 20px; right: 35px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer; transition: color 0.2s; }
+        .image-modal .close-modal:hover { color: #d93838; }
 
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
+        /* --- PHẦN "CÙNG LOẠI" --- */
+        .related-section { max-width: 1200px; margin: 0 auto 50px auto; padding: 0 15px; box-sizing: border-box; }
+        .related-title { color: #6a0716; font-size: 24px; margin-bottom: 25px; border-bottom: 2px solid currentColor; padding-bottom: 8px; text-align: left; text-transform: uppercase; font-weight: bold; }
 
-        .footer-col {
-            flex: 1;
-            min-width: 280px;
-            margin-bottom: 30px;
-            padding-right: 20px;
-        }
+        .product_noibat_box { display: flex; flex-wrap: wrap; margin-right: -10px; margin-left: -10px; }
+        .product_noibat_item { position: relative; width: 25%; padding-right: 10px; padding-left: 10px; margin-bottom: 20px; box-sizing: border-box; }
+        .product_noibat_item .img_pro { position: relative; display: block; width: 100%; overflow: hidden; background: #f7f7f7; border-radius: 4px; margin-bottom: 10px; cursor: pointer; }
+        .product_noibat_item .img_pro img { width: 100%; height: 220px; display: block; object-fit: cover; transition: transform 0.3s ease; }
+        .product_noibat_item .img_pro:hover img { transform: scale(1.05); }
+        .product_noibat_item h3 { margin: 0 0 5px 0; display: block; font-size: 14px; font-weight: 500; line-height: 1.4; height: 40px; overflow: hidden; }
+        .product_noibat_item h3 a { color: #333; text-decoration: none; transition: color 0.2s ease; cursor: pointer; }
+        .product_noibat_item h3 a:hover { color: #2980b9; }
+        .text-split { overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .product_noibat_item .box_price_box { font-size: 14px; margin-top: 5px; }
+        .product_noibat_item .box_price_box strong { color: #e74c3c; font-weight: bold; margin: 0; }
 
-        .footer-col h3 {
-            color: #000;
-            font-size: 1.1rem;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
+        /* --- PHÂN TRANG CSS --- */
+        .pagination { display: flex; justify-content: center; gap: 8px; margin-top: 30px; }
+        .pagination button { padding: 8px 14px; border: 1px solid #ddd; background: #fff; color: #333; font-weight: 600; border-radius: 4px; cursor: pointer; transition: all 0.2s; }
+        .pagination button:hover { background: #526456; color: #fff; border-color: #526456; }
+        .pagination button.active { background: #526456; color: #fff; border-color: #526456; }
 
+        /* --- FOOTER & RESPONSIVE --- */
+        footer { background-color: #e0e1e0; color: #000; font-size: 0.9rem; line-height: 1.8; padding: 40px 0 20px 0; margin-top: 60px; }
+        .footer-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; justify-content: space-between; }
+        .footer-col { flex: 1; min-width: 280px; margin-bottom: 30px; padding-right: 20px; }
+        .footer-col h3 { color: #000; font-size: 1.1rem; margin-bottom: 20px; text-transform: uppercase; }
         .footer-col p { margin-bottom: 10px; }
-        .footer-col strong { color: #000; }
-
         .footer-links { list-style: none; padding: 0; margin: 0; }
         .footer-links li { margin-bottom: 8px; }
         .footer-links a { color: #000; text-decoration: none; }
         .footer-links a:hover { color: #03692a; }
+        .footer-copyright { text-align: center; border-top: 1px solid #bab6b6; margin-top: 20px; padding-top: 20px; font-size: 0.8rem; color: #000; width: 100%; }
 
-        .footer-copyright {
-            text-align: center;
-            border-top: 1px solid #bab6b6;
-            margin-top: 20px;
-            padding-top: 20px;
-            font-size: 0.8rem;
-            color: #000;
-            width: 100%;
+        .navbar-mobile, .banner-mobile, .footer-mobile { display: none !important; }
+
+        @media (max-width: 992px) {
+            .product_noibat_item { width: 33.333%; }
         }
 
         @media (max-width: 768px) {
-            .main-menu { flex-direction: column; padding: 0; }
-            .dropdown-menu { position: static; width: 100%; }
-            .footer-container { flex-direction: column; }
-            .footer-col { padding-right: 0; }
+            .product_noibat_item { width: 50%; }
+            .main-menu, .banner, .footer, .menu-item, .banner-search { display: none !important; }
+            .navbar-mobile { display: flex !important; justify-content: space-around; background: #526456; padding: 12px 5px; position: sticky; top: 0; z-index: 999; }
+            .navbar-mobile a { color: #ffffff; text-decoration: none; font-weight: bold; font-size: 14.5px; }
+            .banner-mobile { display: block !important; width: 100%; margin-bottom: 10px; }
+            .banner-mobile img { width: 100%; height: auto; display: block; }
+            .footer-mobile { display: block !important; background: #526456; color: #ffffff; text-align: center; padding: 25px 15px; font-size: 13.5px; line-height: 1.6; margin-top: 30px; }
+            .footer-mobile h4 { color: #ffffff; font-size: 15px; margin-bottom: 10px; text-transform: uppercase; }
+            .footer-mobile p { margin-bottom: 8px; }
+            .footer-mobile-actions { display: flex; justify-content: center; gap: 15px; margin: 15px 0; }
+            .footer-mobile-actions a { background: #ffffff; color: #526456; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 13px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+            .footer-mobile-copy { border-top: 1px solid rgba(255,255,255,0.1); margin-top: 15px; padding-top: 12px; font-size: 12px; color: #bbb; }
             footer { display: none !important; }
+            
+            .mobile-dropdown-btn::-webkit-details-marker { display: none; }
+            .mobile-dropdown { position: relative; }
+            .mobile-dropdown-content { position: absolute; top: 100%; left: 0; background-color: #435247; min-width: 200px; box-shadow: 0px 8px 16px rgba(0,0,0,0.25); border-radius: 6px; margin-top: 8px; overflow: hidden; z-index: 1000; }
+            .mobile-dropdown-content a { color: #ffffff; padding: 10px 16px; text-decoration: none; display: block; font-size: 13.5px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
         }
-
-        /* --- PHẦN CSS RIÊNG CHO FOOTER MOBILE --- */
-        .footer-mobile {
-            display: none !important;
-        }
-
-        @media (max-width: 768px) {
-            .footer-mobile {
-                display: block !important;
-                background: #526456;
-                color: #ffffff;
-                text-align: center;
-                padding: 25px 15px;
-                font-size: 13.5px;
-                line-height: 1.6;
-                margin-top: 30px;
-            }
-            .footer-mobile h4 {
-                color: #ffffff;
-                font-size: 15px;
-                margin-bottom: 10px;
-                text-transform: uppercase;
-            }
-            .footer-mobile p {
-                margin-bottom: 8px;
-            }
-            .footer-mobile-actions {
-                display: flex;
-                justify-content: center;
-                gap: 15px;
-                margin: 15px 0;
-            }
-            .footer-mobile-actions a {
-                background: #ffffff;
-                color: #526456;
-                padding: 8px 16px;
-                border-radius: 20px;
-                text-decoration: none;
-                font-weight: bold;
-                font-size: 13px;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            }
-            .footer-mobile-copy {
-                border-top: 1px solid rgba(255,255,255,0.1);
-                margin-top: 15px;
-                padding-top: 12px;
-                font-size: 12px;
-                color: #bbb;
-            }
-        }
-               @media (max-width: 768px) {
-    /* Giữ nguyên cấu trúc ẩn desktop */
-    .main-menu, .banner, .footer, .menu-item, .banner-search, .vung-chua-2-box { 
-        display: none !important; 
-    }
-
-    /* Thanh Menu Mobile Chính */
-    .navbar-mobile {
-        display: flex !important;
-        justify-content: space-around;
-        align-items: center;
-        background: #526456;
-        padding: 8px 5px;
-        position: sticky;
-        top: 0;
-        z-index: 999;
-    }
-
-    .navbar-mobile > a, 
-    .mobile-dropdown-btn {
-        color: #ffffff;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 14.5px;
-        cursor: pointer;
-        list-style: none; /* Xóa dấu mũi tên mặc định của summary */
-        user-select: none;
-    }
-
-    .mobile-dropdown-btn::-webkit-details-marker {
-        display: none; /* Xóa mũi tên mặc định trên Safari/Chrome */
-    }
-
-    /* Khung chứa Menu Con Xổ Xuống */
-    .mobile-dropdown {
-        position: relative;
-    }
-
-    .mobile-dropdown-content {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        background-color: #435247; /* Tông màu tối hơn menu chính để phân biệt */
-        min-width: 200px;
-        box-shadow: 0px 8px 16px rgba(0,0,0,0.25);
-        border-radius: 6px;
-        margin-top: 8px;
-        overflow: hidden;
-        z-index: 1000;
-    }
-
-    .mobile-dropdown-content a {
-        color: #ffffff;
-        padding: 10px 16px;
-        text-decoration: none;
-        display: block;
-        font-size: 13.5px;
-        font-weight: normal;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .mobile-dropdown-content a:last-child {
-        border-bottom: none;
-    }
-
-    .mobile-dropdown-content a:active {
-        background-color: #687b6c;
-    }
-}
-   
     </style>
 </head>
 <body>
 
-   <!-- 1. BANNER CỬA HÀNG -->
-<div class="banner-mobile">
-    <a href="index.html"><img src="anh/banner-mobile.png" alt="Banner Điện Thoại"></a>
-</div>
+    <!-- 1. BANNER CỬA HÀNG -->
+    <div class="banner-mobile">
+        <a href="index.html"><img src="anh/banner-mobile.png" alt="Banner Điện Thoại"></a>
+    </div>
 
     <div class="banner">
         <img src="anh/banner.png" alt="Banner">
         <div class="banner-content">
-        <div class="banner-search">
-        <form action="index.html" method="get">
-        <input type="text" id="search-input" placeholder="Tìm thiệp cưới...">
-        <button type="button">🔍</button>
-        </form>
+            <div class="banner-search">
+                <form action="index.html" method="get">
+                    <input type="text" id="search-input" placeholder="Tìm thiệp cưới...">
+                    <button type="button">🔍</button>
+                </form>
+            </div>
         </div>
-        </div>
-        </div>
+    </div>
 
     <!-- 2. THANH MENU HÀNG HÓA -->
-
     <nav class="navbar">
         <ul class="main-menu">
-        <li class="menu-item"><a href="index.html">Trang Chủ</a></li>
-        <li class="menu-item">
-                <a href="mauthiepcuoi.html">Mẫu Thiệp Cưới ▾</a>
+            <li class="menu-item"><a href="index.html">Trang Chủ</a></li>
+            <li class="menu-item">
+                <a href="thiepcuoi-docquyen.html">Mẫu Thiệp Cưới ▾</a>
                 <ul class="dropdown-menu">
-                <li><a href="thiepcuoi-hiendai.html">Thiệp Cưới Hiện Đại</a></li>
-                <li><a href="thiepcuoi-truyenthong.html">Thiệp Cưới Truyền Thống</a></li>
-                <li><a href="thiepcuoi-docquyen.html">Thiệp Cưới Độc Quyền KTS</a></li>
-                <li><a href="thiepcuoi-dq-25.html">Thiệp Cưới DQ_25</a></li>
+                    <li><a href="thiepcuoi-hiendai.html">Thiệp Cưới Hiện Đại</a></li>
+                    <li><a href="thiepcuoi-truyenthong.html">Thiệp Cưới Truyền Thống</a></li>
+                    <li><a href="thiepcuoi-docquyen.html">Thiệp Cưới Độc Quyền KTS</a></li>
+                    <li><a href="thiepcuoi-dq-25.html">Thiệp Cưới DQ_25</a></li>
                 </ul>
-                </li>
-         <li class="menu-item">
-                <a href="thiep-moi.html">Thiệp Mời ▾</a>
+            </li>
+            <li class="menu-item">
+                <a href="thiep-tangia.html">Thiệp Mời ▾</a>
                 <ul class="dropdown-menu">
-                <li><a href="thiep-tangia.html">Thiệp Tân Gia</a></li>
-                <li><a href="thiep-sinhnhat.html">Thiệp Sinh Nhật</a></li>
-                <li><a href="thiep-taon.html">Thiệp Công Giáo</a></li>
+                    <li><a href="thiep-tangia.html">Thiệp Tân Gia</a></li>
+                    <li><a href="thiep-sinhnhat.html">Thiệp Sinh Nhật</a></li>
+                    <li><a href="thiep-taon.html">Thiệp Công Giáo</a></li>
                 </ul>
-                </li>
-        <li class="menu-item"><a href="thiepcuoi-online.html">Thiệp Cưới Online</a></li>
-        <li class="menu-item"><a href="huong-dan.html">Hướng Dẫn</a></li>
-        <li class="menu-item"><a href="lienhe.html">Liên Hệ</a></li>
+            </li>
+            <li class="menu-item"><a href="thiepcuoi-online.html">Thiệp Cưới Online</a></li>
+            <li class="menu-item">
+                <a href="huong-dan-dat-thiep.html">Hướng Dẫn ▾</a>
+                <ul class="dropdown-menu">
+                    <li><a href="huong-dan-dat-thiep.html">Hướng dẫn đặt thiệp</a></li>
+                    <li><a href="huong-dan-viet-thiep.html">Hướng dẫn viết thiệp cưới</a></li>
+                </ul>
+            </li>
+            <li class="menu-item"><a href="lienhe.html">Liên Hệ</a></li>
         </ul>
-        </nav>
+    </nav>
 
-  <!-- BẢN MENU DÀNH CHO ĐIỆN THOẠI (CÓ MENU CON XỔ XUỐNG) -->
+    <!-- MENU MOBILE -->
     <nav class="navbar-mobile">
         <details class="mobile-dropdown">
             <summary class="mobile-dropdown-btn">Sản Phẩm ▾</summary>
@@ -539,23 +188,20 @@ z-index: 10;
         </details>
         <a href="thiepcuoi-online.html">Thiệp Online</a>
         <details class="mobile-dropdown">
-            <summary class="mobile-dropdown-btn">hướng dẫn ▾</summary>
+            <summary class="mobile-dropdown-btn">Hướng dẫn ▾</summary>
             <div class="mobile-dropdown-content">
                 <a href="huong-dan-dat-thiep.html">Hướng dẫn đặt thiệp</a>
                 <a href="huong-dan-viet-thiep.html">Hướng dẫn viết thiệp cưới</a>
-                </div>
-                 </details>
+            </div>
+        </details>
         <a href="lienhe.html">Liên Hệ</a>
     </nav>
 
-    <!-- 3. KHU VỰC CHI TIẾT SẢN PHẨM -->
+    <!-- 3. KHU VỰC CHI TIẾT SẢN PHẨM CHÍNH -->
     <main class="product-detail-container">
-        <!-- Vùng hiển thị ảnh -->
         <div class="detail-gallery">
-            <img src="" alt="Hình ảnh thiệp cưới" id="prod-image">
+            <img src="" alt="Hình ảnh thiệp cưới" id="prod-image" onclick="openImageModal(this.src)" title="Click để phóng to ảnh">
         </div>
-
-        <!-- Khối hiển thị thông tin chữ -->
         <div class="detail-content">
             <h2 class="detail-title" id="prod-title">Đang tải tên sản phẩm...</h2>
             <div>
@@ -565,130 +211,31 @@ z-index: 10;
             <p class="price-note">(* Giá đã bao gồm đầy đủ thiết kế bản vẽ và công in thành phẩm)</p>
             
             <div class="detail-desc-title">Thông số & Chất liệu:</div>
-            <div class="detail-desc" id="prod-desc">
-                <!-- Mô tả chi tiết từng mẫu thiệp sẽ tự chèn vào đây thông qua JS -->
-            </div>
+            <div class="detail-desc" id="prod-desc"></div>
 
             <button class="btn-order-now" onclick="transferDataToOrderPage()">TIẾN HÀNH ĐẶT IN</button>
         </div>
     </main>
 
-   
-    <!-- KHU VỰC 4 SẢN PHẨM LIÊN QUAN NẰM NGANG CỐ ĐỊNH SỬ DỤNG LINK ẢNH TRỰC TIẾP -->
-    <section style="max-width: 1200px; margin: 50px auto; padding: 0 20px;">
-        <h3 style="color: #1a3038; font-size: 1.5rem; margin-bottom: 25px; border-bottom: 2px solid #1a3038; padding-bottom: 8px; text-align: left; text-transform: uppercase; font-weight: bold;">
-            Các Mẫu Thiệp Cưới Nổi Bật Khác
-        </h3>
+    <!-- KHUNG LIGHTBOX PHÓNG TO ẢNH -->
+    <div id="imageModal" class="image-modal" onclick="closeImageModal()">
+        <span class="close-modal">&times;</span>
+        <img id="modalImage" src="" alt="Phóng to thiệp cưới">
+    </div>
+
+    <!-- 4. KHU VỰC SẢN PHẨM CÙNG LOẠI CÓ PHÂN TRANG -->
+    <section class="related-section">
+        <h3 class="related-title">Mẫu Thiệp cùng Loại</h3>
         
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px;">
-
-            
-            <!-- Sản phẩm 1 -->
-            <div class="product-card" style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #eef0f5; display: flex; flex-direction: column; text-align: left;">
-                <img src="thieptaon/to123.jpg" style="width:100%; height:220px; object-fit:cover;">
-                <div style="padding: 15px; display: flex; flex-direction: column; flex-grow: 1;">
-                    <h4 style="font-size:1rem; font-weight:600; margin-bottom:8px; height:44px; overflow:hidden; color:#222; line-height: 1.4;">Mẫu Thiệp c9306-1100</h4>         
-                    <div style="color:#d93838; font-weight:bold; margin-bottom:15px; font-size:1.1rem;">4.000 đ</div>
-                    <a href="chi-tiet-ta-on.html" onclick="event.preventDefault(); hienThiSanPham('Mẫu Thiệp c9306-1100', '4.000 đ', 
-                    'thieptaon/to123.jpg', 
-                    'Ruột 20x20cm c200 in 2 mặt - Bao thứ 12x22cm')" style="background:#1a3038; color:white; text-align:center; padding:10px; text-decoration:none; 
-                     border-radius:4px; font-size:0.9rem; font-weight:500; margin-top:auto; display:block;">Xem Chi Tiết</a>
-                </div>
-            </div>
-
-        <!-- Sản phẩm 2 -->
-            <div class="product-card" style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #eef0f5; display: flex; flex-direction: column; text-align: left;">
-                <img src="thieptaon/to135.jpg" style="width:100%; height:220px; object-fit:cover;">
-                <div style="padding: 15px; display: flex; flex-direction: column; flex-grow: 1;">
-                    <h4 style="font-size:1rem; font-weight:600; margin-bottom:8px; height:44px; overflow:hidden; color:#222; line-height: 1.4;">Mẫu Thiệp c9306-1100</h4>         
-                    <div style="color:#d93838; font-weight:bold; margin-bottom:15px; font-size:1.1rem;">4.000 đ</div>
-                    <a href="chi-tiet-ta-on.html" onclick="event.preventDefault(); hienThiSanPham('Mẫu Thiệp c9306-1100', '4.000 đ', 
-                    'thieptaon/to135.jpg', 
-                    'Ruột 26x13cm c200 in 2 mặt - Bao thứ 12x22cm')" style="background:#1a3038; color:white; text-align:center; padding:10px; text-decoration:none; 
-                     border-radius:4px; font-size:0.9rem; font-weight:500; margin-top:auto; display:block;">Xem Chi Tiết</a>
-                </div>
-            </div>
-      <!-- Sản phẩm 3 -->
-            <div class="product-card" style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #eef0f5; display: flex; flex-direction: column; text-align: left;">
-                <img src="thieptaon/to145.jpg" style="width:100%; height:220px; object-fit:cover;">
-                <div style="padding: 15px; display: flex; flex-direction: column; flex-grow: 1;">
-                    <h4 style="font-size:1rem; font-weight:600; margin-bottom:8px; height:44px; overflow:hidden; color:#222; line-height: 1.4;">Mẫu Thiệp c9306-1100</h4>         
-                    <div style="color:#d93838; font-weight:bold; margin-bottom:15px; font-size:1.1rem;">4.000 đ</div>
-                    <a href="chi-tiet-ta-on.html" onclick="event.preventDefault(); hienThiSanPham('Mẫu Thiệp c9306-1100', '4.000 đ', 
-                    'thieptaon/to145.jpg', 
-                    'Ruột 20x20cm c200 in 2 mặt - Bao thứ 12x22cm')" style="background:#1a3038; color:white; text-align:center; padding:10px; text-decoration:none; 
-                     border-radius:4px; font-size:0.9rem; font-weight:500; margin-top:auto; display:block;">Xem Chi Tiết</a>
-                </div>
-            </div>       
-   <!-- Sản phẩm 4 -->
-            <div class="product-card" style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #eef0f5; display: flex; flex-direction: column; text-align: left;">
-                <img src="thieptaon/to247.jpg" style="width:100%; height:220px; object-fit:cover;">
-                <div style="padding: 15px; display: flex; flex-direction: column; flex-grow: 1;">
-                    <h4 style="font-size:1rem; font-weight:600; margin-bottom:8px; height:44px; overflow:hidden; color:#222; line-height: 1.4;">Mẫu Thiệp c9306-1100</h4>         
-                    <div style="color:#d93838; font-weight:bold; margin-bottom:15px; font-size:1.1rem;">4.000 đ</div>
-                    <a href="chi-tiet-ta-on.html" onclick="event.preventDefault(); hienThiSanPham('Mẫu Thiệp c9306-1100', '4.000 đ', 
-                    'thieptaon/to247.jpg', 
-                    'Ruột 26x13cm c200 in 2 mặt - Bao thứ 12x22cm')" style="background:#1a3038; color:white; text-align:center; padding:10px; text-decoration:none; 
-                     border-radius:4px; font-size:0.9rem; font-weight:500; margin-top:auto; display:block;">Xem Chi Tiết</a>
-                </div>
-            </div> 
-   <!-- Sản phẩm 5 -->
-            <div class="product-card" style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #eef0f5; display: flex; flex-direction: column; text-align: left;">
-                <img src="thieptaon/to337.jpg" style="width:100%; height:220px; object-fit:cover;">
-                <div style="padding: 15px; display: flex; flex-direction: column; flex-grow: 1;">
-                    <h4 style="font-size:1rem; font-weight:600; margin-bottom:8px; height:44px; overflow:hidden; color:#222; line-height: 1.4;">Mẫu Thiệp c9306-1100</h4>         
-                    <div style="color:#d93838; font-weight:bold; margin-bottom:15px; font-size:1.1rem;">4.000 đ</div>
-                    <a href="chi-tiet-ta-on.html" onclick="event.preventDefault(); hienThiSanPham('Mẫu Thiệp c9306-1100', '4.000 đ', 
-                    'thieptaon/to337.jpg', 
-                    'Ruột 20x20cm c200 in 2 mặt - Bao thứ 12x22cm')" style="background:#1a3038; color:white; text-align:center; padding:10px; text-decoration:none; 
-                     border-radius:4px; font-size:0.9rem; font-weight:500; margin-top:auto; display:block;">Xem Chi Tiết</a>
-                </div>
-            </div> 
- <!-- Sản phẩm 6 -->
-            <div class="product-card" style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #eef0f5; display: flex; flex-direction: column; text-align: left;">
-                <img src="thieptaon/to446.jpg" style="width:100%; height:220px; object-fit:cover;">
-                <div style="padding: 15px; display: flex; flex-direction: column; flex-grow: 1;">
-                    <h4 style="font-size:1rem; font-weight:600; margin-bottom:8px; height:44px; overflow:hidden; color:#222; line-height: 1.4;">Mẫu Thiệp c9306-1100</h4>         
-                    <div style="color:#d93838; font-weight:bold; margin-bottom:15px; font-size:1.1rem;">4.000 đ</div>
-                    <a href="chi-tiet-ta-on.html" onclick="event.preventDefault(); hienThiSanPham('Mẫu Thiệp c9306-1100', '4.000 đ', 
-                    'thieptaon/to446.jpg', 
-                    'Ruột 20x20cm c200 in 2 mặt - Bao thứ 12x22cm')" style="background:#1a3038; color:white; text-align:center; padding:10px; text-decoration:none; 
-                     border-radius:4px; font-size:0.9rem; font-weight:500; margin-top:auto; display:block;">Xem Chi Tiết</a>
-                </div>
-            </div> 
-            <!-- Sản phẩm 7 -->
-            <div class="product-card" style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #eef0f5; display: flex; flex-direction: column; text-align: left;">
-                <img src="thieptaon/to487.jpg" style="width:100%; height:220px; object-fit:cover;">
-                <div style="padding: 15px; display: flex; flex-direction: column; flex-grow: 1;">
-                    <h4 style="font-size:1rem; font-weight:600; margin-bottom:8px; height:44px; overflow:hidden; color:#222; line-height: 1.4;">Mẫu Thiệp c9306-1100</h4>         
-                    <div style="color:#d93838; font-weight:bold; margin-bottom:15px; font-size:1.1rem;">4.000 đ</div>
-                    <a href="chi-tiet-ta-on.html" onclick="event.preventDefault(); hienThiSanPham('Mẫu Thiệp c9306-1100', '4.000 đ', 
-                    'thieptaon/to487.jpg', 
-                    'Ruột 20x20cm c200 in 2 mặt - Bao thứ 12x22cm')" style="background:#1a3038; color:white; text-align:center; padding:10px; text-decoration:none; 
-                     border-radius:4px; font-size:0.9rem; font-weight:500; margin-top:auto; display:block;">Xem Chi Tiết</a>
-                </div>
-            </div> 
-            <!-- Sản phẩm 8 -->
-            <div class="product-card" style="background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #eef0f5; display: flex; flex-direction: column; text-align: left;">
-                <img src="thieptaon/to889.jpg" style="width:100%; height:220px; object-fit:cover;">
-                <div style="padding: 15px; display: flex; flex-direction: column; flex-grow: 1;">
-                    <h4 style="font-size:1rem; font-weight:600; margin-bottom:8px; height:44px; overflow:hidden; color:#222; line-height: 1.4;">Mẫu Thiệp c9306-1100</h4>         
-                    <div style="color:#d93838; font-weight:bold; margin-bottom:15px; font-size:1.1rem;">4.000 đ</div>
-                    <a href="chi-tiet-ta-on.html" onclick="event.preventDefault(); hienThiSanPham('Mẫu Thiệp c9306-1100', '4.000 đ', 
-                    'thieptaon/to889.jpg', 
-                    'Ruột 20x20cm c200 in 2 mặt - Bao thứ 12x22cm')" style="background:#1a3038; color:white; text-align:center; padding:10px; text-decoration:none; 
-                     border-radius:4px; font-size:0.9rem; font-weight:500; margin-top:auto; display:block;">Xem Chi Tiết</a>
-                </div>
-            </div> 
-
-
-
+        <div class="product_noibat_box" id="product-list">
+            <!-- Sản phẩm được render tự động qua JavaScript từ file data-hiendai.js -->
         </div>
+
+        <!-- Thanh phân trang -->
+        <div class="pagination" id="pagination"></div>
     </section>
 
-
-
-    <!-- 4. FOOTER ĐỒNG BỘ CỦA CỬA HÀNG (Đã cập nhật thông tin nhà in Ngọc Thương) -->
+    <!-- 5. FOOTER -->
     <footer>
         <div class="footer-container">
             <div class="footer-col">
@@ -714,7 +261,8 @@ z-index: 10;
             <p>© 2026 Thiệp Cưới Ngọc Thương - Tinh Tế Trong Từng Đường Nét</p>
         </div>
     </footer>
-      <!-- KHU VỰC FOOTER THU GỌN RIÊNG CHO ĐIỆN THOẠI (FOOTER MOBILE) -->
+
+    <!-- FOOTER DI ĐỘNG -->
     <div class="footer-mobile">
         <h4>THIỆP CƯỚI NGỌC THƯƠNG</h4>
         <p>📍 123 Nguyễn Trãi, Quận 1, TP.HCM</p>
@@ -727,51 +275,96 @@ z-index: 10;
         </div>
     </div>
 
-    <!-- 5. TẬP LỆNH JAVASCRIPT GIỮ NGUYÊN LOGIC CŨ CỦA BẠN -->
-        <!-- TẬP LỆNH CHỈ LÀM NHIỆM VỤ ĐỔ ẢNH LÊN KHỐI CHÍNH - CỐ ĐỊNH 4 SẢN PHẨM DƯỚI -->
+    <!-- 6. NHÚNG FILE DỮ LIỆU JS RIÊNG VÀ SCRIPT XỬ LÝ -->
+    <script src="san-pham/chi-tiet/data-chitiet-taon.js"></script>
     <script>
-        // Khi trang chi tiết được mở lên, tự động lấy dữ liệu từ bộ nhớ ra hiển thị lên khối chính
-        window.onload = function() {
-            var name = localStorage.getItem('clickProdName');
-            var price = localStorage.getItem('clickProdPrice');
-            var imgUrl = localStorage.getItem('clickProdImg');
-            var description = localStorage.getItem('clickProdDesc') || 'Chưa cập nhật';
+        const itemsPerPage = 20;
+        let currentPage = 1;
 
-            // Nếu có dữ liệu, đổ trực tiếp vào giao diện chính phía trên
-            if (name && price && imgUrl) {
+        window.onload = function() {
+            // Kiểm tra xem file data-hiendai.js có tồn tại mảng products không
+            const allProducts = typeof Toproducts !== 'undefined' ? Toproducts : [];
+
+            if (allProducts.length > 0) {
+                var firstProd = allProducts[0];
+                var name = localStorage.getItem('clickProdName') || firstProd.name;
+                var price = localStorage.getItem('clickProdPrice') || firstProd.price;
+                var imgUrl = localStorage.getItem('clickProdImg') || firstProd.img;
+                var description = localStorage.getItem('clickProdDesc') || firstProd.desc;
+
                 document.getElementById("prod-title").innerText = name;
                 document.getElementById("prod-price").innerText = price;
                 document.getElementById("prod-image").src = imgUrl;
                 
-                               // Tự động tạo mô tả có chèn thẻ <strong> để in đậm tiêu đề
                 document.getElementById("prod-desc").innerHTML = 
-                    "<p><strong> Tên sản phẩm:</strong> " + escapeHtml(name) + ".</p>" +
-                    "<p><strong> Chi tiết:</strong> " + escapeHtml(description) + ".</p>" +
-                    "<p><strong> Đơn giá hoàn thiện:</strong> " + escapeHtml(price) + " (Bao gồm bao thư + ruột thiệp).</p>" +
-                    "<p><strong> Chất liệu giấy:</strong> Giấy mỹ thuật cao cấp dày dặn, có vân mịn sang trọng.</p>" +
-                    "<p><strong> Công nghệ in:</strong> Kỹ thuật số độ phân giải cao, mực in sắc nét không phai.</p>" +
-                    "<p><strong> Ứng dụng:</strong> Phù hợp làm thiệp đám cưới, tiệc thành hôn, tiệc báo hỷ.</p>";
-
-            } else {
-                document.getElementById("prod-title").innerText = "Chưa chọn mẫu thiệp cưới";
+                    "<p><strong>Tên sản phẩm:</strong> " + escapeHtml(name) + ".</p>" +
+                    "<p><strong>Chi tiết:</strong> " + escapeHtml(description) + ".</p>" +
+                    "<p><strong>Đơn giá hoàn thiện:</strong> " + escapeHtml(price) + " (Bao gồm bao thư + ruột thiệp).</p>" +
+                    "<p><strong>Chất liệu giấy:</strong> Giấy mỹ thuật cao cấp dày dặn, có vân mịn sang trọng.</p>" +
+                    "<p><strong>Công nghệ in:</strong> Kỹ thuật số độ phân giải cao, mực in sắc nét không phai.</p>" +
+                    "<p><strong>Ứng dụng:</strong> Phù hợp làm thiệp đám cưới, tiệc thành hôn, tiệc báo hỷ.</p>";
             }
+
+            renderPage(currentPage);
         }
 
-               // Tránh để ký tự trong tên/mô tả làm hỏng HTML khi hiển thị
+        function renderPage(page) {
+            currentPage = page;
+            const allProducts = typeof Toproducts !== 'undefined' ? Toproducts : [];
+            const start = (page - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const paginatedItems = allProducts.slice(start, end);
+
+            const productListHTML = paginatedItems.map(item => `
+                <div class="product_noibat_item" data-description="${escapeHtml(item.desc)}">
+                    <a class="img_pro" href="#" onclick="event.preventDefault(); chonMau(this, '${escapeHtml(item.price)}', '${escapeHtml(item.desc)}');">
+                        <img src="${item.img}" alt="${escapeHtml(item.name)}">
+                    </a>
+                    <h3><a href="#" class="text-split" onclick="event.preventDefault(); chonMau(this, '${escapeHtml(item.price)}', '${escapeHtml(item.desc)}');">${escapeHtml(item.name)}</a></h3>
+                    <div class="box_price_box"><strong>${escapeHtml(item.price)}</strong></div>
+                </div>
+            `).join('');
+
+            document.getElementById('product-list').innerHTML = productListHTML;
+            renderPagination();
+        }
+
+        function renderPagination() {
+            const allProducts = typeof Toproducts !== 'undefined' ? Toproducts : [];
+            const pageCount = Math.ceil(allProducts.length / itemsPerPage);
+            let paginationHTML = '';
+
+            for (let i = 1; i <= pageCount; i++) {
+                paginationHTML += `<button class="${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+            }
+
+            document.getElementById('pagination').innerHTML = paginationHTML;
+        }
+
+        function changePage(page) {
+            renderPage(page);
+            document.querySelector('.related-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
         function escapeHtml(value) {
             return String(value).replace(/[&<>"']/g, function(ch) {
                 return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[ch];
             });
         }
 
-        // Hàm nhận dữ liệu và cập nhật ngay sản phẩm chính khi bấm sản phẩm liên quan.
-        function hienThiSanPham(ten, gia, linkAnhMang, moTa) {
-            luuBoNhoTruyenDi(ten, gia, linkAnhMang, moTa);
+        function chonMau(element, gia, moTa) {
+            var item = element.closest('.product_noibat_item');
+            var ten = item.querySelector('h3 a').innerText;
+            var linkAnh = item.querySelector('img').src;
+
+            localStorage.setItem('clickProdName', ten);
+            localStorage.setItem('clickProdPrice', gia);
+            localStorage.setItem('clickProdImg', linkAnh);
+            localStorage.setItem('clickProdDesc', moTa || 'Chưa cập nhật');
 
             document.getElementById("prod-title").innerText = ten;
             document.getElementById("prod-price").innerText = gia;
-            document.getElementById("prod-image").src = linkAnhMang;
-            document.getElementById("prod-image").alt = ten;
+            document.getElementById("prod-image").src = linkAnh;
             document.getElementById("prod-desc").innerHTML =
                 "<p><strong>Tên sản phẩm:</strong> " + escapeHtml(ten) + ".</p>" +
                 "<p><strong>Chi tiết:</strong> " + escapeHtml(moTa || 'Chưa cập nhật') + ".</p>" +
@@ -780,20 +373,20 @@ z-index: 10;
                 "<p><strong>Công nghệ in:</strong> Kỹ thuật số độ phân giải cao, mực in sắc nét không phai.</p>" +
                 "<p><strong>Ứng dụng:</strong> Phù hợp làm thiệp đám cưới, tiệc thành hôn, tiệc báo hỷ.</p>";
 
-            // Đưa khách trở lại phần thông tin sản phẩm để thấy ngay mẫu vừa chọn.
-            document.getElementById("prod-title").scrollIntoView({ behavior: "smooth", block: "center" });
+            document.querySelector('.product-detail-container').scrollIntoView({ behavior: "smooth", block: "center" });
         }
 
-        function luuBoNhoTruyenDi(ten, gia, linkAnhMang, moTa) {
-            localStorage.setItem('clickProdName', ten);
-            localStorage.setItem('clickProdPrice', gia);
-            localStorage.setItem('clickProdImg', linkAnhMang);
-            localStorage.setItem('clickProdDesc', moTa || 'Chưa cập nhật');
+        function openImageModal(imgSrc) {
+            var modal = document.getElementById("imageModal");
+            var modalImg = document.getElementById("modalImage");
+            modal.style.display = "flex";
+            modalImg.src = imgSrc;
         }
 
-        
+        function closeImageModal() {
+            document.getElementById("imageModal").style.display = "none";
+        }
 
-        // Hàm chuyển dữ liệu thông tin thiệp sang trang điền form in ấn (dat-hang.html)
         function transferDataToOrderPage() {
             var templateName = document.getElementById("prod-title").innerText;
             var templatePrice = document.getElementById("prod-price").innerText;
@@ -804,9 +397,5 @@ z-index: 10;
             window.location.href = "trang-dat-hang-v03.html";
         }
     </script>
-
-    
-
 </body>
-
 </html>

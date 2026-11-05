@@ -142,6 +142,18 @@ body {
   font-weight: 600; }
 
 
+  /* Canvas hiệu ứng sao rơi */
+#starCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 999;
+}
+
+
 
 </style>
 </head>
@@ -151,6 +163,11 @@ body {
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&display=swap&subset=vietnamese" rel="stylesheet">
 
 <body>
+
+<canvas id="starCanvas"></canvas>
+
+
+
 <audio id="bgMusic" loop autoplay>
     <source src="https://www.image2url.com/r2/default/audio/1792836324218-f37fe37a-5e05-4dc2-a857-833acad9e785.mp3" type="audio/mpeg">
 </audio>
@@ -169,7 +186,10 @@ body {
     <span>VÀO LÚC<br><b>10:30</b></span>
 </div>
 
-<a class="gold-button" href="#family">MỞ THIỆP &nbsp; ♥</a>
+<!-- Đổi thẻ <a> cũ thành nút có onclick="openInvitation()" -->
+<button class="gold-button" onclick="openInvitation()" type="button" style="border:1px solid var(--gold); border-radius:999px; padding:13px 28px; background:#741822bf; color:#fff7e8; cursor:pointer;">
+    MỞ THIỆP &nbsp; ♥
+</button>
 <span class="scroll-hint">&nbsp; CUỘN XUỐNG ĐỂ XEM THÊM</span>
 </div>
 </section>
@@ -527,6 +547,106 @@ if (typeof data.gallery_urls === "string") {
             else { await navigator.clipboard.writeText(location.href); alert("Đã sao chép link!"); }
         } catch (e) {}
     });
+
+    // ==========================================
+// 1. HIỆU ỨNG SAO RƠI / LẤP LÁNH (CANVAS)
+// ==========================================
+(function initStars() {
+    const canvas = document.getElementById('starCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+    });
+
+    const starCount = 45; // Số lượng sao rơi trên màn hình
+    const stars = [];
+
+    for (let i = 0; i < starCount; i++) {
+        stars.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            radius: Math.random() * 1.8 + 0.5,
+            speedY: Math.random() * 0.8 + 0.3,
+            speedX: (Math.random() - 0.5) * 0.3,
+            opacity: Math.random() * 0.8 + 0.2,
+            pulse: Math.random() * 0.02 + 0.005
+        });
+    }
+
+    function render() {
+        ctx.clearRect(0, 0, width, height);
+        stars.forEach(star => {
+            star.y += star.speedY;
+            star.x += star.speedX;
+            star.opacity += Math.sin(Date.now() * star.pulse) * 0.01;
+
+            if (star.y > height) {
+                star.y = -10;
+                star.x = Math.random() * width;
+            }
+            if (star.x > width) star.x = 0;
+            if (star.x < 0) star.x = width;
+
+            ctx.beginPath();
+            ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(244, 223, 180, ${Math.abs(star.opacity)})`;
+            ctx.shadowBlur = 6;
+            ctx.shadowColor = '#d8b477';
+            ctx.fill();
+        });
+        requestAnimationFrame(render);
+    }
+    render();
+})();
+
+// ==========================================
+// 2. TỰ ĐỘNG CUỘN VÀ TỰ DỪNG KHI TÁC ĐỘNG
+// ==========================================
+let autoScrollInterval = null;
+
+function stopAutoScroll() {
+    if (autoScrollInterval) {
+        clearInterval(autoScrollInterval);
+        autoScrollInterval = null;
+        // Gỡ lắng nghe sự kiện dừng sau khi đã dừng
+        ['wheel', 'touchstart', 'mousedown', 'keydown'].forEach(evt => {
+            window.removeEventListener(evt, stopAutoScroll);
+        });
+    }
+}
+
+function openInvitation() {
+    // 1. Phát nhạc nền nếu trình duyệt cho phép
+    if (typeof playAudioWithSound === 'function') {
+        playAudioWithSound();
+    }
+
+    // 2. Nếu đang chạy cuộn tự động thì hủy cái cũ trước
+    stopAutoScroll();
+
+    // 3. Đăng ký các sự kiện phát hiện tác động người dùng để dừng cuộn ngay
+    ['wheel', 'touchstart', 'mousedown', 'keydown'].forEach(evt => {
+        window.addEventListener(evt, stopAutoScroll, { passive: true });
+    });
+
+    // 4. Bắt đầu cuộn tự động với tốc độ mượt mà
+    const scrollSpeed = 1.5; // Điền số pixel cuộn mỗi chu kỳ (tăng/giảm để chỉnh tốc độ)
+    const intervalTime = 16;  // ~60 FPS
+
+    autoScrollInterval = setInterval(() => {
+        window.scrollBy(0, scrollSpeed);
+
+        // Tự dừng khi đã cuộn tới đáy trang
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 5) {
+            stopAutoScroll();
+        }
+    }, intervalTime);
+}
     
 </script>
 </body>

@@ -8,9 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&display=swap&subset=vietnamese" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap&subset=vietnamese" rel="stylesheet">
 
 <style>
 :root {
@@ -85,7 +83,6 @@ body {
   position: absolute; inset: 0;
   background-image: var(--custom-cover-bg, none);
   background-size: cover; background-position: center;
-  
 }
 .cover-wrapper {
   max-width: 1100px; margin: 0 auto;
@@ -217,9 +214,22 @@ footer p { font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; co
   border-radius: 12px; border: 3px solid #03243a;
   margin-top: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.08);
 }
+
+/* Canvas hiệu ứng sao rơi lấp lánh */
+#starCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 99999;
+}
 </style>
 </head>
 <body>
+
+  <canvas id="starCanvas"></canvas>
 
 <header class="topbar">
   <div class="brand-logo serif">Wedding Invitation</div>
@@ -249,7 +259,7 @@ footer p { font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; co
         <span id="heroBride">Ngọc Thương</span>
       </h1>
       <p id="heroDate" class="cover-date">15 · 06 · 2027</p>
-      <a href="#welcome" class="btn-cover">Mở Thiệp</a>
+      <a href="#welcome" class="btn-cover" id="openCardBtn">Mở Thiệp</a>
     </div>
   </div>
 </section>
@@ -404,7 +414,6 @@ function setStatus(id, text, color = "") {
   el.style.color = color || 'inherit';
 }
 
-// 💡 HÀM XỬ LÝ ĐƯỜNG DẪN ẢNH LINH HOẠT (HỖ TRỢ CẢ URL LẪN THƯ MỤC CỤC BỘ)
 function formatImgSrc(path) {
   const v = (path || "").trim();
   if (!v) return "";
@@ -446,7 +455,6 @@ function renderCard(d) {
   $("eventAddress").textContent = cardData.event_address || DEFAULTS.event_address;
   $("eventDetail").textContent = cardData.event_detail || DEFAULTS.event_detail;
 
-  // Ảnh Our Happy Day
   const specialDayImg = document.getElementById("img_happyDay");
   if (specialDayImg) {
     const happyDaySrc = formatImgSrc(cardData.img_happyDay);
@@ -458,12 +466,10 @@ function renderCard(d) {
     }
   }
 
-  // Ảnh bìa Hero
   if (cardData.hero_image) {
     $("heroPhoto").src = formatImgSrc(cardData.hero_image);
   }
 
-  // Ảnh nền / họa tiết bìa rêu tùy chọn
   const coverSec = $("coverSection");
   if (coverSec) {
     const bgUrl = formatImgSrc(cardData.cover_bg_color);
@@ -542,6 +548,60 @@ $("musicToggle").addEventListener("click", async () => {
   } catch (err) {}
 });
 
+// ==========================================
+// TÍNH NĂNG TỰ ĐỘNG CUỘN VÀ TỰ DỪNG KHI TƯƠNG TÁC (MẪU 09)
+// ==========================================
+let autoScrollInterval = null;
+
+function stopAutoScroll() {
+    if (autoScrollInterval) {
+        clearInterval(autoScrollInterval);
+        autoScrollInterval = null;
+        ['wheel', 'touchstart', 'mousedown', 'keydown'].forEach(evt => {
+            window.removeEventListener(evt, stopAutoScroll);
+        });
+    }
+}
+
+async function handleOpenCard(e) {
+  e.preventDefault();
+  
+  // 1. Phát nhạc nền
+  const audio = $("bgMusic"), button = $("musicToggle");
+  if (currentMusicUrl && audio.paused) {
+    try {
+      await audio.play();
+      button.textContent = "♫ Tắt Nhạc";
+      button.setAttribute("aria-pressed", "true");
+    } catch (err) {}
+  }
+
+  // 2. Cuộn mượt sang phần Lời ngỏ (#welcome)
+  const target = $("welcome");
+  if (target) {
+    target.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // 3. Chạy cuộn tự động tiếp tục
+  stopAutoScroll();
+  ['wheel', 'touchstart', 'mousedown', 'keydown'].forEach(evt => {
+      window.addEventListener(evt, stopAutoScroll, { passive: true });
+  });
+
+  const scrollSpeed = 1.2;
+  autoScrollInterval = setInterval(() => {
+      window.scrollBy(0, scrollSpeed);
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
+          stopAutoScroll();
+      }
+  }, 16);
+}
+
+const openBtn = $("openCardBtn");
+if (openBtn) {
+  openBtn.addEventListener("click", handleOpenCard);
+}
+
 async function autoPlayMusicOnInteraction() {
   const audio = $("bgMusic"), button = $("musicToggle");
   if (!audio || !currentMusicUrl || !audio.paused) return;
@@ -551,12 +611,10 @@ async function autoPlayMusicOnInteraction() {
     button.setAttribute("aria-pressed", "true");
     document.removeEventListener("pointerdown", autoPlayMusicOnInteraction);
     document.removeEventListener("keydown", autoPlayMusicOnInteraction);
-    document.removeEventListener("scroll", autoPlayMusicOnInteraction);
   } catch (e) {}
 }
 document.addEventListener("pointerdown", autoPlayMusicOnInteraction);
 document.addEventListener("keydown", autoPlayMusicOnInteraction);
-document.addEventListener("scroll", autoPlayMusicOnInteraction);
 
 $("rsvpForm").addEventListener("submit", async e => {
   e.preventDefault();
@@ -599,6 +657,62 @@ try {
 } catch (e) {
   renderCard(DEFAULTS);
 }
+
+// ==========================================
+// HIỆU ỨNG SAO RƠI / LẤP LÁNH TÔNG VÀNG (CANVAS)
+// ==========================================
+(function initStars() {
+    const canvas = document.getElementById('starCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+    });
+
+    const starCount = 200;
+    const stars = [];
+
+    for (let i = 0; i < starCount; i++) {
+        stars.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            radius: Math.random() * 1.8 + 0.5,
+            speedY: Math.random() * 0.7 + 0.3,
+            speedX: (Math.random() - 0.5) * 0.3,
+            opacity: Math.random() * 0.8 + 0.2,
+            pulse: Math.random() * 0.02 + 0.005
+        });
+    }
+
+    function render() {
+        ctx.clearRect(0, 0, width, height);
+        stars.forEach(star => {
+            star.y += star.speedY;
+            star.x += star.speedX;
+            star.opacity += Math.sin(Date.now() * star.pulse) * 0.01;
+
+            if (star.y > height) {
+                star.y = -10;
+                star.x = Math.random() * width;
+            }
+            if (star.x > width) star.x = 0;
+            if (star.x < 0) star.x = width;
+
+            ctx.beginPath();
+            ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(243, 229, 171, ${Math.abs(star.opacity)})`;
+            ctx.shadowBlur = 6;
+            ctx.shadowColor = '#d4af37';
+            ctx.fill();
+        });
+        requestAnimationFrame(render);
+    }
+    render();
+})();
 </script>
 </body>
 </html>

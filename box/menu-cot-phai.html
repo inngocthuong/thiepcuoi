@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <style>
+           /* Hộp danh mục bên phải (Các Giáo Họ, Thông Báo...) */
+             body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+            /* Đẩy nội dung xuống 60px để không bị thanh menu cố định che mất */
+            padding-top: 60px; 
+        }
+
+        .hop-danh-muc {
+            background: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .tieu-de-danh-muc {
+            background: #526456;
+            color: #ffffff;
+            padding: 8px 12px;
+            font-weight: bold;
+            font-size: 16px;
+            text-align:center;
+            margin: 0;
+        }
+        .danh-sach-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .danh-sach-links li {
+            border-bottom: 1px dashed #eee;
+        }
+        .danh-sach-links a {
+            display: block;
+            padding: 8px 12px;
+            color: #333;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        .danh-sach-links a:hover {
+            background-color: #f9f9f9;
+            color: #17720b;
+        }
+                /* Khung bọc tiêu đề danh mục bóp gọn bằng chiều rộng của khối nội dung bên dưới */
+.cum-tieu-de-danh-muc {
+    max-width: 1200px; /* Bạn có thể chỉnh lại số này trùng với max-width khối nội dung của bạn */
+    margin: 30px auto 25px auto; /* Khoảng cách trên và dưới dòng tiêu đề */
+    padding: 0 15px;
+    width: 100%;
+    box-sizing: border-box;
+}
+/* Định dạng cho chữ h2 bên trong khối */
+.cum-tieu-de-danh-muc h2 {
+    font-weight: bold;
+    text-transform: uppercase; /* Ép chữ luôn viết hoa */
+    margin: 0;
+    padding-bottom: 10px; /* Khoảng cách giữa chữ và đường gạch dưới */
+    
+    /* ĐƯỜNG GẠCH NGANG DÀI HẾT KHUNG NỘI DUNG */
+    /* Lệnh currentColor giúp đường gạch tự động đổi màu theo màu của chữ h2 bên trên */
+    border-bottom: 2px solid currentColor; 
+}
+        </style>
+    <style>
+        body { background: transparent; margin: 0; padding: 0; }
+    </style>
+</head>
+<body>
+
+    <!-- ĐOẠN CODE MENU CỘT PHẢI NẰM GỌN TRONG THẺ BODY -->
+    <div class="cot-ben-phai" style="width: 100%;">
+
+        <!-- 5 Phut loi Chua -->
+        <div class="hop-danh-muc">
+            <h3 class="tieu-de-danh-muc">Sản Phẩm</h3>
+            <ul class="danh-sach-links">
+                <li><a href="../thiepcuoi-hiendai.html"target="_parent">▶ Thiệp Cưới Hiện Đại</a></li>
+                <li><a href="../thiepcuoi-truyenthong.html"target="_parent">▶ Thiệp Cưới Truyền Thống</a></li>
+                <li><a href="../thiepcuoi-docquyen.html"target="_parent">▶ Thiệp Cưới Độc Quyền KTS</a></li>
+                <li><a href="../thiepcuoi-dq-25.html"target="_parent">▶ Thiệp Cưới DQ_25</a></li>
+                <li><a href="../thiep-tangia.html"target="_parent">▶ Thiệp Tân Gia</a></li>
+                <li><a href="../thiep-sinhnhat.html"target="_parent">▶ Thiệp Sinh Nhật</a></li>
+                <li><a href="../thiep-taon.html"target="_parent">▶ Thiệp Công Giáo</a></li>
+               
+            </ul>
+               
+            </ul>
+            </div>
+        
+       
+
+    </div> <!-- Đóng thẻ div lớn -->
+
+</body>
+</html>
+

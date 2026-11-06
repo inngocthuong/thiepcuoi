@@ -597,7 +597,7 @@ async function handleOpenCard(e) {
     target.scrollIntoView({ behavior: 'smooth' });
   }
 
-  // 3. Kích hoạt cuộn tự động tiếp bằng requestAnimationFrame (mượt trên mọi điện thoại)
+  // 3. Kích hoạt cuộn tự động
   stopAutoScroll();
   ['wheel', 'touchstart', 'mousedown', 'keydown'].forEach(evt => {
       window.addEventListener(evt, stopAutoScroll, { passive: true });
@@ -606,7 +606,11 @@ async function handleOpenCard(e) {
   setTimeout(() => {
       let currentY = window.pageYOffset;
       const maxScrollY = document.body.scrollHeight - window.innerHeight;
-      const speed = 1.0; // Tốc độ tự động trượt
+      
+      // TỰ ĐỘNG NHẬN BIẾT MOBILE ĐỂ TĂNG TỐC ĐỘ
+      // Nếu là màn hình điện thoại (chiều rộng < 768px), cho tốc độ 2.8 - 3.5, máy tính giữ 1.5
+      const isMobile = window.innerWidth <= 768;
+      const speed = isMobile ? 3.0 : 1.5; // <-- BẠN CÓ THỂ TĂNG SỐ 3.0 NÀY LÊN 3.5 HOẶC 4.0 NẾU MUỐN NHANH NỮA
 
       function stepAutoScroll() {
           if (!autoScrollReq) return;

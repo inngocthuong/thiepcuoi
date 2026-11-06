@@ -551,22 +551,22 @@ const firebaseConfig = {
     render();
 })();
 // ==========================================
-// HIỆU ỨNG NHẢY VÀO TRONG & TỰ ĐỘNG CUỘN (TỐI ƯU MOBILE)
+// HIỆU ỨNG NHẢY VÀO TRONG & TỰ ĐỘNG CUỘN (TỐI ƯU CỰC TỐT CHO MOBILE)
 // ==========================================
-let autoScrollInterval = null;
+let isAutoScrolling = false;
 
 function stopAutoScroll() {
-    if (autoScrollInterval) {
-        clearInterval(autoScrollInterval);
-        autoScrollInterval = null;
-        ['wheel', 'touchstart', 'mousedown', 'keydown'].forEach(evt => {
-            window.removeEventListener(evt, stopAutoScroll);
-        });
+    if (isAutoScrolling) {
+        isAutoScrolling = false;
+        window.removeEventListener('wheel', stopAutoScroll);
+        window.removeEventListener('touchstart', stopAutoScroll);
+        window.removeEventListener('mousedown', stopAutoScroll);
+        window.removeEventListener('keydown', stopAutoScroll);
     }
 }
 
 function openInvitation() {
-    // 1. Phát nhạc nền (Đảm bảo gọi trực tiếp bên trong sự kiện click của người dùng để mobile không chặn)
+    // 1. Phát nhạc nền
     if (typeof playAudioWithSound === 'function') {
         playAudioWithSound();
     }
@@ -576,30 +576,42 @@ function openInvitation() {
 
     // 3. Nhảy nhanh đến phần thông tin gia đình ngay lập tức
     const familySection = document.getElementById('family');
-    if (familySection) {
-        familySection.scrollIntoView({ behavior: 'auto' });
-    }
+    if (!familySection) return;
+    
+    const targetY = familySection.offsetTop;
+    window.scrollTo({ top: targetY, behavior: 'auto' });
 
-    // 4. Lắng nghe hành động chạm/cuộn của người dùng để dừng tự động cuộn khi họ muốn
+    // 4. Lắng nghe hành động chạm/cuộn của người dùng để dừng ngay lập tức nếu họ tác động
+    isAutoScrolling = true;
     ['wheel', 'touchstart', 'mousedown', 'keydown'].forEach(evt => {
         window.addEventListener(evt, stopAutoScroll, { passive: true });
     });
 
-    // 5. Sử dụng setTimeout nhỏ để chờ màn hình mobile render xong vị trí rồi mới kích hoạt cuộn từ từ
-    setTimeout(() => {
-        const scrollSpeed = 1.2; // Tốc độ cuộn (trên mobile có thể chỉnh 1.0 - 1.5)
+    // 5. Sử dụng requestAnimationFrame để tự động cuộn từ từ (Rất mượt trên Mobile và không bị trình duyệt chặn)
+    let currentY = targetY;
+    const maxScrollY = document.body.scrollHeight - window.innerHeight;
+    const speed = 0.8; // Tốc độ cuộn (có thể chỉnh từ 0.6 đến 1.2 cho phù hợp)
+
+    function step() {
+        if (!isAutoScrolling) return;
         
-        autoScrollInterval = setInterval(() => {
-            window.scrollBy(0, scrollSpeed);
+        currentY += speed;
+        window.scrollTo(0, currentY);
 
-            // Dừng khi đã cuộn tới cuối trang
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 5) {
-                stopAutoScroll();
-            }
-        }, 20); // Tăng lên 20ms giúp chip xử lý trên điện thoại nhẹ nhàng hơn, tránh bị giật khung hình (lag)
-    }, 100);
+        if (currentY < maxScrollY && currentY < document.body.scrollHeight) {
+            requestAnimationFrame(step);
+        } else {
+            stopAutoScroll();
+        }
+    }
+
+    // Chờ 150ms để điện thoại ổn định khung hình rồi bắt đầu chạy tiếp
+    setTimeout(() => {
+        if (isAutoScrolling) {
+            requestAnimationFrame(step);
+        }
+    }, 150);
 }
-
 </script>
 </body>
 </html>

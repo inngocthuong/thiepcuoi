@@ -564,7 +564,7 @@ $("musicToggle").addEventListener("click", async () => {
 });
 
 // ==========================================
-// TÍNH NĂNG TỰ ĐỘNG CUỘN & TỰ DỪNG AN TOÀN (KHÔNG BỊ KẸT)
+// TÍNH NĂNG TỰ ĐỘNG CUỘN (CHUẨN NHƯ MẪU 11 - SIÊU MƯỢT TRÊN MOBILE & PC)
 // ==========================================
 let autoScrollInterval = null;
 
@@ -573,12 +573,10 @@ function stopAutoScroll() {
         clearInterval(autoScrollInterval);
         autoScrollInterval = null;
     }
-    // Gỡ bỏ toàn bộ sự kiện sau khi đã dừng để giải phóng bộ nhớ
-    window.removeEventListener('wheel', stopAutoScroll, { passive: true });
-    window.removeEventListener('touchstart', stopAutoScroll, { passive: true });
-    window.removeEventListener('touchmove', stopAutoScroll, { passive: true });
-    window.removeEventListener('pointerdown', stopAutoScroll, { passive: true });
-    window.removeEventListener('keydown', stopAutoScroll, { passive: true });
+    // Gỡ bỏ sự kiện sau khi đã dừng
+    ['wheel', 'touchstart', 'touchmove', 'pointerdown', 'keydown'].forEach(evt => {
+        window.removeEventListener(evt, stopAutoScroll, { passive: true });
+    });
 }
 
 async function handleOpenCard(e) {
@@ -594,25 +592,20 @@ async function handleOpenCard(e) {
     } catch (err) {}
   }
 
-  // 2. Nhảy mượt đến phần Lời ngỏ (#welcome)
-  const target = $("welcome");
-  if (target) {
-    target.scrollIntoView({ behavior: 'smooth' });
-  }
-
-  // 3. Dừng bộ cuộn cũ nếu đang chạy dở
+  // 2. Dừng bộ cuộn cũ nếu đang chạy dở
   stopAutoScroll();
 
-  // 4. Lắng nghe mọi hành động tương tác của người dùng để DỪNG NGAY LẬP TỨC
+  // 3. Lắng nghe thao tác chạm/cuộn của người dùng để DỪNG NGAY LẬP TỨC khi họ muốn
   ['wheel', 'touchstart', 'touchmove', 'pointerdown', 'keydown'].forEach(evt => {
       window.addEventListener(evt, stopAutoScroll, { passive: true });
   });
 
-  // 5. Bắt đầu tự động cuộn nhẹ nhàng bằng setInterval
+  // 4. Kích hoạt tự động cuộn đều đặn từ trên xuống dưới y hệt mẫu 11
+  // (Đợi 300ms để trình duyệt định hình xong khung nhìn trên mobile)
   setTimeout(() => {
       const isMobile = window.innerWidth <= 768;
       const scrollStep = isMobile ? 3 : 2; // Tốc độ cuộn (mobile: 3, PC: 2)
-      const intervalTime = 20; // Nhịp lặp 20ms giúp máy không bị giật lag
+      const intervalTime = 16;             // Nhịp lặp 16ms giúp mượt như 60FPS
 
       autoScrollInterval = setInterval(() => {
           window.scrollBy(0, scrollStep);
@@ -622,7 +615,7 @@ async function handleOpenCard(e) {
               stopAutoScroll();
           }
       }, intervalTime);
-  }, 350);
+  }, 300);
 }
 
 $("openCardBtn").addEventListener("click", handleOpenCard);

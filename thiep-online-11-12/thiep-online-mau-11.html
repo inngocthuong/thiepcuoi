@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thiệp Mời</title>
+    <title>Thiệp Mời Cưới/title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Montserrat:wght@300;400;600&family=Allura&display=swap" rel="stylesheet">
@@ -610,6 +610,7 @@
     // Mở Thiệp
 // Biến lưu trạng thái tự động cuộn
 // Biến lưu trạng thái tự động cuộn
+// Biến lưu trạng thái tự động cuộn
 let autoScrollInterval = null;
 
 function stopAutoScroll() {
@@ -622,7 +623,7 @@ function stopAutoScroll() {
     }
 }
 
-// Bắt sự kiện bấm nút Mở Thiệp Cưới (Tối ưu cho cả PC và Mobile)
+// Bắt sự kiện bấm nút Mở Thiệp Cưới (Tối ưu riêng cho Mobile & PC)
 document.getElementById('btnOpenWedding').addEventListener('click', function() {
     // 1. Ẩn trang bìa mượt mà
     const cover = document.getElementById('wedding-cover');
@@ -638,35 +639,34 @@ document.getElementById('btnOpenWedding').addEventListener('click', function() {
         mainContent.style.opacity = '1'; 
     }, 50);
     
-    // 3. Xử lý phát nhạc riêng biệt (An toàn với chính sách của Mobile Safari/Chrome)
-    musicBtn.style.display = 'flex';
-    if (music.src) {
+    // 3. Phát nhạc nền an toàn trên mobile
+    if (typeof music !== 'undefined' && music.src) {
         music.play().then(() => {
             isPlaying = true;
-            musicBtn.innerText = "🎵";
+            if (typeof musicBtn !== 'undefined') musicBtn.innerText = "🎵";
         }).catch(e => {
-            console.log("Trình duyệt chặn autoplay âm thanh: " + e);
-            musicBtn.innerText = "🔇";
-            isPlaying = false;
+            console.log("Trình duyệt chặn phát nhạc tự động: " + e);
         });
     }
     
-    // 4. Kích hoạt hiệu ứng hoa rơi
-    setInterval(createPetal, 450);
+    // 4. Kích hoạt hiệu ứng hoa rơi (nếu có)
+    if (typeof createPetal === 'function') {
+        setInterval(createPetal, 450);
+    }
 
-    // 5. KÍCH HOẠT TỰ ĐỘNG CUỘN (Có độ trễ nhẹ giúp mobile load xong layout)
+    // 5. KÍCH HOẠT TỰ ĐỘNG CUỘN (Có độ trễ để mobile kịp render layout)
     stopAutoScroll();
     
-    // Lắng nghe hành động chạm/cuộn để dừng tự động cuộn khi khách muốn xem thủ công
+    // Lắng nghe hành động chạm/cuộn của người dùng để dừng tự động cuộn khi họ muốn xem thủ công
     ['wheel', 'touchstart', 'touchmove', 'mousedown', 'keydown'].forEach(evt => {
         window.addEventListener(evt, stopAutoScroll, { passive: true });
     });
 
     setTimeout(() => {
-        const scrollSpeed = 1.0; // Giảm nhẹ tốc độ (1.0 pixel) giúp mượt hơn trên màn hình tần số quét cao của điện thoại
+        const scrollSpeed = 1.0; // Tốc độ cuộn từ từ, mượt mà trên điện thoại
         autoScrollInterval = setInterval(() => {
             window.scrollBy(0, scrollSpeed);
-            // Tự dừng khi cuộn tới gần chân trang
+            // Tự dừng khi cuộn tới chân trang
             if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
                 stopAutoScroll();
             }

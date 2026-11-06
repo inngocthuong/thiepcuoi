@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#fdfbf7">
-<title>Wedding Invitation — Mẫu 07</title>
+<title>Wedding Invitation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -81,7 +81,6 @@ body {
   width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;
 }
 
-/* Phần khung thông tin bên phải (Hỗ trợ đổi background/họa tiết tùy chọn) */
 .hero-content {
   padding: 40px 30px; text-align: center;
   background-color: transparent;
@@ -268,7 +267,9 @@ footer p { font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; co
       <div class="hero-image-box">
         <img id="heroPhoto" src="../anh/bia-thiep.jpg" alt="Ảnh Cưới">
       </div>
+      
       <div class="hero-content" id="heroContentBox">
+        <a href="#welcome" class="btn-editorial" id="openCardBtn">Mở Thiệp</a>
         <p class="hero-subtitle">Save The Date</p>
         <h1 class="hero-title serif">
           <span id="heroGroom">Minh Thông</span>
@@ -276,7 +277,7 @@ footer p { font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; co
           <span id="heroBride">Ngọc Thương</span>
         </h1>
         <p id="heroDate" class="hero-date">15 · 06 · 2027</p>
-        <a href="#welcome" class="btn-editorial" id="openCardBtn">Mở Thiệp</a>
+        
       </div>
     </div>
   </section>
@@ -563,14 +564,14 @@ $("musicToggle").addEventListener("click", async () => {
 });
 
 // ==========================================
-// TÍNH NĂNG TỰ ĐỘNG CUỘN VÀ TỰ DỪNG KHI TƯƠNG TÁC
+// TÍNH NĂNG TỰ ĐỘNG CUỘN & TỰ DỪNG KHI TƯƠNG TÁC (TỐI ƯU MOBILE)
 // ==========================================
-let autoScrollInterval = null;
+let autoScrollReq = null;
 
 function stopAutoScroll() {
-    if (autoScrollInterval) {
-        clearInterval(autoScrollInterval);
-        autoScrollInterval = null;
+    if (autoScrollReq) {
+        cancelAnimationFrame(autoScrollReq);
+        autoScrollReq = null;
         ['wheel', 'touchstart', 'mousedown', 'keydown'].forEach(evt => {
             window.removeEventListener(evt, stopAutoScroll);
         });
@@ -590,26 +591,36 @@ async function handleOpenCard(e) {
     } catch (err) {}
   }
 
-  // 2. Cuộn mượt đến phần Lời ngỏ (#welcome)
+  // 2. Nhảy mượt đến phần Lời ngỏ (#welcome)
   const target = $("welcome");
   if (target) {
     target.scrollIntoView({ behavior: 'smooth' });
   }
 
-  // 3. Kích hoạt tính năng tự động cuộn tiếp xuống dưới
+  // 3. Kích hoạt cuộn tự động tiếp bằng requestAnimationFrame (mượt trên mọi điện thoại)
   stopAutoScroll();
   ['wheel', 'touchstart', 'mousedown', 'keydown'].forEach(evt => {
       window.addEventListener(evt, stopAutoScroll, { passive: true });
   });
 
-  const scrollSpeed = 1.2; // Tốc độ cuộn (pixel mỗi nhịp)
-  autoScrollInterval = setInterval(() => {
-      window.scrollBy(0, scrollSpeed);
-      // Tự dừng khi cuộn đến gần chân trang
-      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
-          stopAutoScroll();
+  setTimeout(() => {
+      let currentY = window.pageYOffset;
+      const maxScrollY = document.body.scrollHeight - window.innerHeight;
+      const speed = 1.0; // Tốc độ tự động trượt
+
+      function stepAutoScroll() {
+          if (!autoScrollReq) return;
+          currentY += speed;
+          window.scrollTo(0, currentY);
+
+          if (currentY < maxScrollY && currentY < document.body.scrollHeight) {
+              autoScrollReq = requestAnimationFrame(stepAutoScroll);
+          } else {
+              stopAutoScroll();
+          }
       }
-  }, 16);
+      autoScrollReq = requestAnimationFrame(stepAutoScroll);
+  }, 350);
 }
 
 $("openCardBtn").addEventListener("click", handleOpenCard);

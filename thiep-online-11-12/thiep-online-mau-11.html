@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thiệp Mời Cưới</title>
+    <title>Thiệp Mời Đám Cưới</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&family=Montserrat:wght@300;400;600&family=Allura&display=swap" rel="stylesheet">
     
     <style>
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: auto; }
     body { 
         margin: 0; 
         padding: 0; 
@@ -623,7 +623,21 @@ function stopAutoScroll() {
     }
 }
 
-// Bắt sự kiện bấm nút Mở Thiệp Cưới (Tối ưu riêng cho Mobile & PC)
+// ==========================================
+// KÍCH HOẠT MỞ THIỆP & TỰ ĐỘNG CUỘN (TỐI ƯU CHO CẢ PC & MOBILE)
+// ==========================================
+let autoScrollReq = null;
+
+function stopAutoScroll() {
+    if (autoScrollReq) {
+        cancelAnimationFrame(autoScrollReq);
+        autoScrollReq = null;
+        ['wheel', 'touchstart', 'mousedown', 'keydown'].forEach(evt => {
+            window.removeEventListener(evt, stopAutoScroll);
+        });
+    }
+}
+
 document.getElementById('btnOpenWedding').addEventListener('click', function() {
     // 1. Ẩn trang bìa mượt mà
     const cover = document.getElementById('wedding-cover');
@@ -639,39 +653,46 @@ document.getElementById('btnOpenWedding').addEventListener('click', function() {
         mainContent.style.opacity = '1'; 
     }, 50);
     
-    // 3. Phát nhạc nền an toàn trên mobile
-    if (typeof music !== 'undefined' && music.src) {
+    // 3. Hiển thị nút nhạc và phát nhạc nền (đáp ứng tương tác người dùng)
+    musicBtn.style.display = 'flex';
+    if (music.src) {
         music.play().then(() => {
             isPlaying = true;
-            if (typeof musicBtn !== 'undefined') musicBtn.innerText = "🎵";
-        }).catch(e => {
-            console.log("Trình duyệt chặn phát nhạc tự động: " + e);
-        });
+            musicBtn.innerText = "🎵";
+        }).catch(e => console.log("Audio block: " + e));
     }
     
-    // 4. Kích hoạt hiệu ứng hoa rơi (nếu có)
-    if (typeof createPetal === 'function') {
-        setInterval(createPetal, 450);
-    }
+    // 4. Kích hoạt hiệu ứng hoa rơi
+    setInterval(createPetal, 450);
 
-    // 5. KÍCH HOẠT TỰ ĐỘNG CUỘN (Có độ trễ để mobile kịp render layout)
+    // 5. KÍCH HOẠT TỰ ĐỘNG CUỘN TỪ TỪ (TỐI ƯU TRÊN MOBILE & PC)
     stopAutoScroll();
-    
-    // Lắng nghe hành động chạm/cuộn của người dùng để dừng tự động cuộn khi họ muốn xem thủ công
-    ['wheel', 'touchstart', 'touchmove', 'mousedown', 'keydown'].forEach(evt => {
+    ['wheel', 'touchstart', 'mousedown', 'keydown'].forEach(evt => {
         window.addEventListener(evt, stopAutoScroll, { passive: true });
     });
 
+    // Đợi 400ms để trang web render xong bố cục nội dung bên trong rồi mới bắt đầu trượt
     setTimeout(() => {
-        const scrollSpeed = 1.0; // Tốc độ cuộn từ từ, mượt mà trên điện thoại
-        autoScrollInterval = setInterval(() => {
-            window.scrollBy(0, scrollSpeed);
-            // Tự dừng khi cuộn tới chân trang
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
+        let currentY = window.pageYOffset;
+        const maxScrollY = document.body.scrollHeight - window.innerHeight;
+        const speed = 1.0; // Tốc độ cuộn (có thể điều chỉnh từ 0.8 đến 1.5)
+
+        function stepAutoScroll() {
+            if (!autoScrollReq) return;
+            
+            currentY += speed;
+            window.scrollTo(0, currentY);
+
+            // Tiếp tục cuộn nếu chưa đến cuối trang
+            if (currentY < maxScrollY && currentY < document.body.scrollHeight) {
+                autoScrollReq = requestAnimationFrame(stepAutoScroll);
+            } else {
                 stopAutoScroll();
             }
-        }, 16);
-    }, 900); // Đợi 900ms để hiệu ứng ẩn bìa hoàn tất rồi mới bắt đầu trượt
+        }
+
+        autoScrollReq = requestAnimationFrame(stepAutoScroll);
+    }, 400);
 });
 
     // Mở lại trang Bìa

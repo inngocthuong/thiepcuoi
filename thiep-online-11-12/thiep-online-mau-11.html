@@ -609,54 +609,69 @@
 
     // Mở Thiệp
 // Biến lưu trạng thái tự động cuộn
+// Biến lưu trạng thái tự động cuộn
 let autoScrollInterval = null;
 
 function stopAutoScroll() {
     if (autoScrollInterval) {
         clearInterval(autoScrollInterval);
         autoScrollInterval = null;
-        ['wheel', 'touchstart', 'mousedown', 'keydown'].forEach(evt => {
+        ['wheel', 'touchstart', 'touchmove', 'mousedown', 'keydown'].forEach(evt => {
             window.removeEventListener(evt, stopAutoScroll);
         });
     }
 }
 
-// Bắt sự kiện bấm nút Mở Thiệp Cưới
+// Bắt sự kiện bấm nút Mở Thiệp Cưới (Tối ưu cho cả PC và Mobile)
 document.getElementById('btnOpenWedding').addEventListener('click', function() {
-    // 1. Ẩn trang bìa
-    document.getElementById('wedding-cover').style.opacity = '0';
-    setTimeout(() => { document.getElementById('wedding-cover').style.display = 'none'; }, 800);
+    // 1. Ẩn trang bìa mượt mà
+    const cover = document.getElementById('wedding-cover');
+    cover.style.opacity = '0';
+    setTimeout(() => { 
+        cover.style.display = 'none'; 
+    }, 800);
     
     // 2. Hiện nội dung chính
-    document.getElementById('mainContent').style.display = 'block';
-    setTimeout(() => { document.getElementById('mainContent').style.opacity = '1'; }, 50);
+    const mainContent = document.getElementById('mainContent');
+    mainContent.style.display = 'block';
+    setTimeout(() => { 
+        mainContent.style.opacity = '1'; 
+    }, 50);
     
-    // 3. Hiển thị nút nhạc và phát nhạc nền
+    // 3. Xử lý phát nhạc riêng biệt (An toàn với chính sách của Mobile Safari/Chrome)
     musicBtn.style.display = 'flex';
     if (music.src) {
         music.play().then(() => {
             isPlaying = true;
             musicBtn.innerText = "🎵";
-        }).catch(e => console.log("Audio block: " + e));
+        }).catch(e => {
+            console.log("Trình duyệt chặn autoplay âm thanh: " + e);
+            musicBtn.innerText = "🔇";
+            isPlaying = false;
+        });
     }
     
     // 4. Kích hoạt hiệu ứng hoa rơi
     setInterval(createPetal, 450);
 
-    // 5. KÍCH HOẠT TỰ ĐỘNG CUỘN NỘI DUNG
+    // 5. KÍCH HOẠT TỰ ĐỘNG CUỘN (Có độ trễ nhẹ giúp mobile load xong layout)
     stopAutoScroll();
-    ['wheel', 'touchstart', 'mousedown', 'keydown'].forEach(evt => {
+    
+    // Lắng nghe hành động chạm/cuộn để dừng tự động cuộn khi khách muốn xem thủ công
+    ['wheel', 'touchstart', 'touchmove', 'mousedown', 'keydown'].forEach(evt => {
         window.addEventListener(evt, stopAutoScroll, { passive: true });
     });
 
-    const scrollSpeed = 1.2; // Tốc độ cuộn (pixel mỗi nhịp, có thể tăng giảm tùy ý)
-    autoScrollInterval = setInterval(() => {
-        window.scrollBy(0, scrollSpeed);
-        // Tự dừng khi cuộn tới gần chân trang
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
-            stopAutoScroll();
-        }
-    }, 16);
+    setTimeout(() => {
+        const scrollSpeed = 1.0; // Giảm nhẹ tốc độ (1.0 pixel) giúp mượt hơn trên màn hình tần số quét cao của điện thoại
+        autoScrollInterval = setInterval(() => {
+            window.scrollBy(0, scrollSpeed);
+            // Tự dừng khi cuộn tới gần chân trang
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
+                stopAutoScroll();
+            }
+        }, 16);
+    }, 900); // Đợi 900ms để hiệu ứng ẩn bìa hoàn tất rồi mới bắt đầu trượt
 });
 
     // Mở lại trang Bìa

@@ -550,9 +550,8 @@ const firebaseConfig = {
     }
     render();
 })();
-
 // ==========================================
-// 2. HIỆU ỨNG NHẢY VÀO TRONG & TỰ ĐỘNG CUỘN
+// HIỆU ỨNG NHẢY VÀO TRONG & TỰ ĐỘNG CUỘN (TỐI ƯU MOBILE)
 // ==========================================
 let autoScrollInterval = null;
 
@@ -567,7 +566,7 @@ function stopAutoScroll() {
 }
 
 function openInvitation() {
-    // 1. Phát nhạc nền
+    // 1. Phát nhạc nền (Đảm bảo gọi trực tiếp bên trong sự kiện click của người dùng để mobile không chặn)
     if (typeof playAudioWithSound === 'function') {
         playAudioWithSound();
     }
@@ -581,24 +580,26 @@ function openInvitation() {
         familySection.scrollIntoView({ behavior: 'auto' });
     }
 
-    // 4. Lắng nghe hành động của người dùng để dừng cuộn tự động nếu họ chủ động cuộn
+    // 4. Lắng nghe hành động chạm/cuộn của người dùng để dừng tự động cuộn khi họ muốn
     ['wheel', 'touchstart', 'mousedown', 'keydown'].forEach(evt => {
         window.addEventListener(evt, stopAutoScroll, { passive: true });
     });
 
-    // 5. Bắt đầu hiệu ứng tự động cuộn từ từ lên tiếp các phần tiếp theo
-    const scrollSpeed = 1.2; // Tốc độ cuộn (tăng số này nếu muốn cuộn nhanh hơn)
-    const intervalTime = 16;  // ~60 FPS
+    // 5. Sử dụng setTimeout nhỏ để chờ màn hình mobile render xong vị trí rồi mới kích hoạt cuộn từ từ
+    setTimeout(() => {
+        const scrollSpeed = 1.2; // Tốc độ cuộn (trên mobile có thể chỉnh 1.0 - 1.5)
+        
+        autoScrollInterval = setInterval(() => {
+            window.scrollBy(0, scrollSpeed);
 
-    autoScrollInterval = setInterval(() => {
-        window.scrollBy(0, scrollSpeed);
-
-        // Dừng khi cuộn tới cuối trang
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 5) {
-            stopAutoScroll();
-        }
-    }, intervalTime);
+            // Dừng khi đã cuộn tới cuối trang
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 5) {
+                stopAutoScroll();
+            }
+        }, 20); // Tăng lên 20ms giúp chip xử lý trên điện thoại nhẹ nhàng hơn, tránh bị giật khung hình (lag)
+    }, 100);
 }
+
 </script>
 </body>
 </html>

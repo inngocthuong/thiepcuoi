@@ -37,6 +37,100 @@
         .dropdown-menu a:hover { background-color: #687b6c; padding-left: 25px; }
         .menu-item:hover .dropdown-menu { display: block; }
 
+           /* Responsive Mobile */
+        .navbar-mobile, .banner-mobile, .footer-mobile { display: none !important; }
+
+        @media (max-width: 768px) {
+            .product_noibat_item { width: 50%; }
+            .navbar, .banner, footer, .menu-item, .banner-search { display: none !important; }
+            .navbar-mobile {
+                display: flex !important;
+                justify-content: space-around;
+                align-items: center;
+                background: #526456;
+                padding: 8px 5px;
+                position: sticky;
+                top: 0;
+                z-index: 999;
+            }
+            .navbar-mobile > a, .mobile-dropdown-btn {
+                color: #ffffff;
+                text-decoration: none;
+                font-weight: bold;
+                font-size: 14.5px;
+                cursor: pointer;
+                list-style: none;
+                user-select: none;
+            }
+            .mobile-dropdown-btn::-webkit-details-marker { display: none; }
+            .mobile-dropdown { position: relative; }
+            .mobile-dropdown-content {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                background-color: #435247;
+                min-width: 200px;
+                box-shadow: 0px 8px 16px rgba(0,0,0,0.25);
+                border-radius: 6px;
+                margin-top: 8px;
+                overflow: hidden;
+                z-index: 1000;
+            }
+            .mobile-dropdown-content a {
+                color: #ffffff;
+                padding: 10px 16px;
+                text-decoration: none;
+                display: block;
+                font-size: 13.5px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            }
+            .banner-mobile { display: block !important; width: 100%; margin-bottom: 10px; }
+            .banner-mobile img { width: 100%; height: auto; display: block; }
+            .footer-mobile {
+                display: block !important;
+                background: #526456;
+                color: #ffffff;
+                text-align: center;
+                padding: 25px 15px;
+                font-size: 13.5px;
+                line-height: 1.6;
+                margin-top: 30px;
+            }
+            .footer-mobile h4 { color: #ffffff; font-size: 15px; margin-bottom: 10px; text-transform: uppercase; }
+            .footer-mobile p { margin-bottom: 8px; }
+            .footer-mobile-actions { display: flex; justify-content: center; gap: 15px; margin: 15px 0; }
+            .footer-mobile-actions a {
+                background: #ffffff; color: #526456; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: bold; font-size: 13px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            }
+            .footer-mobile-copy { border-top: 1px solid rgba(255,255,255,0.1); margin-top: 15px; padding-top: 12px; font-size: 12px; color: #bbb; }
+        }
+
+        footer {
+            background-color: #e0e1e0;
+            color: #000;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            padding: 40px 0 20px 0;
+            margin-top: 60px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .footer-col { flex: 1; min-width: 280px; margin-bottom: 30px; padding-right: 20px; }
+        .footer-col h3 { color: #000; font-size: 1.1rem; margin-bottom: 20px; text-transform: uppercase; }
+        .footer-col p { margin-bottom: 10px; }
+        .footer-links { list-style: none; padding: 0; margin: 0; }
+        .footer-links li { margin-bottom: 8px; }
+        .footer-links a { color: #000; text-decoration: none; }
+        .footer-copyright { text-align: center; border-top: 1px solid #bab6b6; margin-top: 20px; padding-top: 20px; font-size: 0.8rem; color: #000; width: 100%; }
+
         /* --- CSS RIÊNG TRANG CHI TIẾT SẢN PHẨM --- */
         .product-detail-container { max-width: 1200px; margin: 40px auto 20px auto; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; flex-wrap: wrap; gap: 40px; box-sizing: border-box; }
         .detail-gallery { flex: 1.2; min-width: 350px; }
@@ -117,6 +211,8 @@
             .mobile-dropdown-content { position: absolute; top: 100%; left: 0; background-color: #435247; min-width: 200px; box-shadow: 0px 8px 16px rgba(0,0,0,0.25); border-radius: 6px; margin-top: 8px; overflow: hidden; z-index: 1000; }
             .mobile-dropdown-content a { color: #ffffff; padding: 10px 16px; text-decoration: none; display: block; font-size: 13.5px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
         }
+
+        
     </style>
 </head>
 <body>

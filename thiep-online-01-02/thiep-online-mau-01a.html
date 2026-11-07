@@ -2,513 +2,96 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#5b101b"><title>Thiệp Cưới Ngọc Thương</title>
+<meta name="theme-color" content="#30070e">
+<title>Wedding Invitation - Pattern 02</title>
 <style>
-:root{
-    --wine:#5b101b;
-    --dark:#30070e;
-    --gold:#d8b477;
-    --pale:#f4dfb4;
-    --cream:#fff8ef;
-    --ink:#4b2023}
-
+:root{--wine:#5b101b;--dark:#30070e;--gold:#d8b477;--pale:#f4dfb4;--cream:#fff8ef;--ink:#4b2023}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{margin:0;
-    background:var(--cream);
-    color:var(--ink);
-    font-family:Georgia,"Times New Roman",serif}
-
-.hero{
-    min-height:100svh;
-    position:relative;
-    display:grid;
-    place-items:center;
-    overflow:hidden;
-    color:var(--cream);
-    text-align:center;
-    padding:90px 20px 54px;
-    background:linear-gradient(115deg,
-    rgba(54,3,11,.83),
-    rgba(91,16,27,.65) 47%,
-    rgba(32,5,10,.55)),
-    url("https://i.ibb.co/2Yc32xF9/bia-thiep.jpg") center/cover}
-
-.hero:before{
-    content:"";
-    position:absolute;
-    inset:18px;
-    border:1px solid #e8c584b3;
-    pointer-events:none}
-
-.hero-inner{
-    position:relative;
-    z-index:1;
-    max-width:760px}
-
- .music{
-    position:absolute;
-    top:28px;
-    left:30px;
-    z-index:2;
-    border:1px solid #f4dfb4b3;
-    background:#30070ebd;
-    color:var(--pale);
-    border-radius:999px;
-    padding:10px 15px;
-    cursor:pointer}
-
-.eyebrow{
-    letter-spacing:.22em;
-    text-transform:uppercase;
-    font-size:.90rem;
-    color:var(--pale)} 
-.eyebrows{
-    letter-spacing:.22em;
-    text-transform:uppercase;
-    font-size:2.1rem;
-    color:var(--pale)}
-
-.tiny-heart{
-    color:var(--gold);
-    font-size:1.5rem;
-    margin:18px 0}
-
-h1 {
-  font-family: "Great Vibes", cursive;
-  font-size: clamp(4rem, 9vw, 7rem);
-  font-weight: 400;
-  line-height: 1.3;
-  letter-spacing: 0;
-  margin: 12px 0;
-  color: #fff6e8;
-  font-style: normal;
-  text-shadow: 0 5px 24px #27040a;
-}
-
-.amp{font-size:clamp(1.7rem,4vw,2.5rem);color:var(--pale);margin:12px}
-.hero-note{letter-spacing:.12em;text-transform:uppercase;font-size:.85rem;line-height:1.8}.date-line{display:flex;justify-content:center;align-items:center;gap:22px;margin:28px auto 26px;color:var(--pale)}.date-line span{font-size:.78rem;letter-spacing:.12em}.date-line strong{font-size:2.5rem;font-weight:400;border-left:1px solid var(--gold);border-right:1px solid var(--gold);padding:0 22px;line-height:1.05}.date-line small{display:block;font-size:.75rem;margin-top:5px}
-.gold-button{display:inline-block;border:1px solid var(--gold);border-radius:999px;padding:13px 28px;background:#741822bf;color:#fff7e8;text-decoration:none;letter-spacing:.1em;cursor:pointer;transition:.2s}.gold-button:hover{background:var(--gold);color:var(--dark)}.scroll-hint{display:block;margin-top:32px;color:var(--pale);font-size:.72rem;letter-spacing:.14em}
-main{max-width:1120px;margin:auto;padding:64px 22px}.section{margin:0 auto 68px;scroll-margin-top:24px}.section-head{text-align:center;margin-bottom:28px}.section-head .eyebrow{color:#9b6b35}h2{font-size:clamp(2rem,5vw,3rem);font-weight:400;color:var(--wine);margin:12px 0}.ornament{color:#b58b50;letter-spacing:.35em}.intro{text-align:center;max-width:700px;margin:0 auto 28px;line-height:1.9;color:#76565a}
-.family-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}.family-card{position:relative;background:#fffdf9;border:1px solid #dfc28f;padding:30px 26px;text-align:center;box-shadow:0 18px 55px #24040a22}.family-card:before{content:"";position:absolute;inset:7px;border:1px solid #ead9b9;pointer-events:none}.family-label{letter-spacing:.2em;font-size:.82rem;color:#9a6a35}.family-card h3{font-size:1.55rem;color:var(--wine);font-weight:400;margin:13px 0 18px}.parent-name{font-size:1.12rem;line-height:1.8;margin:6px 0}.address{font-family:Arial,sans-serif;font-size:.9rem;line-height:1.7;color:#806568;margin:16px 0 0}
-.couple-panel{background:linear-gradient(135deg,var(--dark),var(--wine),#79202c);color:var(--cream);text-align:center;padding:38px 24px;box-shadow:0 18px 55px #24040a22}.couple-panel h2{color:var(--pale);font-style:italic;font-size:clamp(2rem,5vw,3.5rem)}.couple-panel p{line-height:1.8;color:#fff1df}
-.event-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}.event-card{background:#fffdf9;border:1px solid #e6d3b1;padding:28px;text-align:center}.event-card h3{color:var(--wine);font-size:1.35rem;font-weight:400}.event-card p{line-height:1.8}.map-link{color:var(--wine);font-weight:bold}
-.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.gallery img{display:block;width:100%;height:280px;object-fit:cover;border:4px solid white;box-shadow:0 6px 20px #4b20231c}
-.rsvp{max-width:650px;margin:auto;background:#fffdf9;border:1px solid #dfc28f;padding:30px;box-shadow:0 18px 55px #24040a22}.rsvp label{display:block;font-family:Arial,sans-serif;font-size:.9rem;margin:15px 0 7px}.rsvp input,.rsvp select,.rsvp textarea{width:100%;padding:12px;border:1px solid #dbc9ae;background:#fffaf3;color:#492127;border-radius:4px;font:inherit}.rsvp textarea{min-height:90px;resize:vertical}.rsvp .gold-button{margin-top:18px;width:100%}.rsvp-note{font-size:.82rem;line-height:1.6;color:#8a6b6c}
-footer{text-align:center;padding:30px 20px 48px;background:var(--dark);color:var(--pale);line-height:1.8}.quick-links{position:fixed;right:16px;top:50%;transform:translateY(-50%);z-index:5;display:grid;gap:9px}.quick-links a{width:42px;height:42px;display:grid;place-items:center;border-radius:50%;text-decoration:none;color:var(--pale);background:#30070edb;border:1px solid var(--gold);font-family:Arial,sans-serif}
-@media(max-width:680px){.hero{padding:88px 26px 45px;background-position:58% center}.hero:before{inset:10px}.music{top:18px;left:18px;font-size:.85rem}.date-line{gap:12px}.date-line strong{padding:0 13px;font-size:2.1rem}.date-line span{font-size:.65rem}main{padding:48px 16px}.family-grid,.event-grid{grid-template-columns:1fr}.family-card{padding:26px 18px}.gallery{grid-template-columns:repeat(2,1fr);gap:8px}.gallery img{height:190px}.quick-links{right:8px;top:auto;bottom:12px;transform:none;display:flex}.quick-links a{width:37px;height:37px}.rsvp{padding:22px 18px}}
-body {
-  font-family: "Cormorant Garamond", Georgia, serif;
-}
-
- .home-btn { 
-            background-color: #a53d4c; 
-            color: rgb(250, 250, 250); 
-            font-family:'Times New Roman',serif;
-            font-size: 20px;
-            text-decoration: none; 
-            padding: 12px 20px; 
-            border-radius: 30px; 
-            font-weight: Medium;   display:table;
-            margin:20px auto 0;       
-        }
-
-                /* MỤC NGÀY VUI CỦA CHÚNG TÔI */
-        .special-day-img {
-            width: 100%;
-            max-height: 480px;
-            object-fit: cover;
-            border-radius: 12px;
-            border: 3px solid #03243a;
-            margin-top: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-        }
-  .info-title { 
-            font-family: 'Great Vibes', serif;
-            font-size: 26px; 
-            font-weight: 600; 
-            color: #d4a373; 
-            margin-bottom: 15px; 
-            padding-bottom: 10px; 
-           
-            letter-spacing: 1px;
-        }
-  .section-header1 span { 
-   font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 20px; 
-  text-transform: uppercase; 
-  letter-spacing: 0.25em; 
-  color: var(--accent); 
-  font-weight: 600; }
-
-
-
+body{margin:0;background:var(--cream);color:var(--ink);font-family:Georgia,"Times New Roman",serif}
+.hero{min-height:100vh;position:relative;display:grid;place-items:center;overflow:hidden;color:var(--cream);text-align:center;padding:90px 20px 54px;background:linear-gradient(115deg,rgba(54,3,11,.83),rgba(91,16,27,.65) 47%,rgba(32,5,10,.55)),url("https://i.ibb.co/2Yc32xF9/bia-thiep.jpg") center/cover}
+.hero-inner{position:relative;z-index:1;max-width:760px}
+.gold-button{display:inline-block;border:1px solid var(--gold);border-radius:999px;padding:13px 28px;background:#741822bf;color:#fff7e8;text-decoration:none;letter-spacing:.1em;cursor:pointer;transition:.2s}
+.gold-button:hover{background:var(--gold);color:var(--dark)}
+main{max-width:1120px;margin:auto;padding:64px 22px}
+.section{margin:0 auto 68px;scroll-margin-top:24px}
+.family-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.family-card{background:#fffdf9;border:1px solid #dfc28f;padding:30px 26px;text-align:center}
 </style>
 </head>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Great+Vibes&display=swap&subset=vietnamese" rel="stylesheet">
-
 <body>
-<audio id="bgMusic" loop autoplay>
-    <source src="https://www.image2url.com/r2/default/audio/1792836324218-f37fe37a-5e05-4dc2-a857-833acad9e785.mp3" type="audio/mpeg">
-</audio>
 <section class="hero" id="top">
-<button class="music" id="musicToggle" type="button" aria-pressed="false">♫ Nhạc nền: Tắt</button>
-<div class="hero-inner"><div class="eyebrows">Save The Day</div><div class="tiny-heart">♡ ───────── ♥ ───────── ♡</div>
-<p style="font-style:italic;font-size:1.15rem;margin-bottom:8px"></p>
-<h1 id="groomHero">Minh Tú</h1>
-<div class="amp">&amp;</div>
-<h1 id="brideHero">Yến Nhi</h1>
-<p class="hero-note">Cùng chia sẻ niềm vui và chúc phúc<br>cho chúng tôi</p>
-
-<div class="date-line">
-    <span>THỨ BẢY</span>
-    <strong>25<small>THÁNG 10<br>2026</small></strong>
-    <span>VÀO LÚC<br><b>10:30</b></span>
-</div>
-
-<a class="gold-button" href="#family">MỞ THIỆP &nbsp; ♥</a>
-<span class="scroll-hint">&nbsp; CUỘN XUỐNG ĐỂ XEM THÊM</span>
-</div>
+  <div class="hero-inner">
+    <h1>Minh Tú &amp; Yến Nhi</h1>
+    <a class="gold-button" id="btnOpenCard" href="#family">MỞ THIỆP &nbsp; ♥</a>
+  </div>
 </section>
-
-<nav class="quick-links" aria-label="Liên kết nhanh">
-    <a href="#gallery" title="Album ảnh">▧</a>
-    <a href="#location" title="Bản đồ">⌖</a>
-    <a href="#rsvp" title="Xác nhận tham dự">♥</a>
-    <a href="#share" title="Chia sẻ">↗</a>
-</nav>
 
 <main>
- 
 <section class="section" id="family">
-    <div class="section-head">
-        <div class="eyebrow">Trăm năm tình viên mãn</div>
-        <h2>Thông Tin Hai Họ</h2>
-        <div class="ornament">✦ ❦ ✦</div>
-    </div>
-<p class="intro" id="storyTextDisplay">Trong niềm vui và hồng ân của tình yêu, hai gia đình trân trọng báo tin lễ thành hôn của con chúng tôi và kính mời quý khách đến chung vui.</p>
-<div class="family-grid">
-<article class="family-card">
-    <div class="family-label">ĐẠI DIỆN NHÀ TRAI</div>
-    <h3>Gia Đình Họ Nhà Trai</h3>
-    <p class="parent-name">Ông: <strong id="groomFather">Nguyễn Văn An</strong></p>
-    <p class="parent-name">Bà: <strong id="groomMother">Trần Thị Hoa</strong></p>
-    <p class="address"><strong>Địa chỉ</strong><br><span id="groomAddress">Ấp …, xã …, tỉnh …</span></p>
-</article>
-
-<article class="family-card">
-    <div class="family-label">ĐẠI DIỆN NHÀ GÁI</div>
-    <h3>Gia Đình Họ Nhà Gái</h3>
-    <p class="parent-name">Ông: <strong id="brideFather">Lê Văn Bình</strong></p>
-    <p class="parent-name">Bà: <strong id="brideMother">Phạm Thị Mai</strong></p>
-    <p class="address"><strong>Địa chỉ</strong><br><span id="brideAddress">Ấp …, xã …, tỉnh …</span></p>
-</article>
-</div>
-</section>
-
-<section class="section couple-panel">
-    <div class="eyebrow">Ngày vui của chúng tôi</div>
-    <h2 id="coupleMid">Minh Tú <span style="color:#fff1df">&amp;</span> Yến Nhi</h2>
-    <p>“Tình yêu không phải là nhìn nhau, mà là cùng nhìn về một hướng.”</p>
-    <p>Chúng tôi rất mong được đón tiếp quý khách trong ngày hạnh phúc này.</p>
-</section>
-
+  <h2>Thông Tin Hai Họ</h2>
+  <div class="family-grid">
+    <div class="family-card"><h3>Nhà Trai</h3><p>Nguyễn Văn An &amp; Trần Thị Hoa</p></div>
+    <div class="family-card"><h3>Nhà Gái</h3><p>Lê Văn Bình &amp; Phạm Thị Mai</p></div>
   </div>
-     <div class="section-head">
-    <div class="eyebrow">Our happy day</div>
-      <img id="imgSpecialDay" class="special-day-img" src="https://omni.vn/wp-content/uploads/2024/11/mau-album-anh-cuoi-8.jpg" alt="Ngày Vui Của Chúng Tôi">
-  </div>
-    </div>
-  
-  <div class="section-head">
-      <div class="eyebrow">Invitation</div>
-      <h2 class="serif">Lời Ngỏ Trân Trọng</h2>
-    <p class="intro" id="storyTextDisplay">Trân trọng kính mời bạn đến chung vui trong ngày hạnh phúc của chúng mình. 
-        Sự hiện diện của bạn là niềm vinh hạnh lớn nhất đối với gia đình hai bên.</p>
-   <div class="ornament">✦ ❦ ✦</div>
-</div>
-</div> 
 </section>
 
-<section class="section" id="location">
-    <div class="section-head">
-    <div class="eyebrow">Hân hoan đón tiếp</div>
-    <h2>Thời Gian &amp; Địa Điểm</h2>
-    <div class="ornament">✦ ❦ ✦</div>
-</div>
-
-<div class="event-grid">
-<article class="event-card">
-    <div class="family-label">LỄ THÀNH HÔN</div>
-    <h3>Thánh Đường / Nơi Cử Hành</h3>
-    <p><strong id="timeChurchTxt">10:30 · Thứ Bảy, 25/10/2026</strong></p>
-    <p id="ceremonyAddress">Thánh Đường Giáo Xứ …</p>
-    <a class="map-link" id="ceremonyMap" href="https://maps.google.com/" target="_blank" rel="noopener">Xem đường đi ↗</a>
-</article>
-
-<article class="event-card">
-    <div class="family-label">TIỆC MỪNG</div>
-    <h3>Trân Trọng Kính Mời</h3>
-    <p><strong id="timePartyTxt">11:30 · Thứ Bảy, 25/10/2026</strong></p>
-    <p id="partyAddress">Nhà hàng …, địa chỉ …</p>
-    <a class="map-link" id="partyMap" href="https://maps.google.com/" target="_blank" rel="noopener">Xem đường đi ↗</a>
-</article>
-</div>
-
+<section class="section" id="details" style="min-height:800px;">
+  <h2>Thời Gian &amp; Địa Điểm</h2>
+  <p>10:30 - Thứ Bảy, 25/10/2026</p>
+  <p>Nhà hàng tiệc cưới sang trọng...</p>
 </section>
-<section class="section" id="gallery">
-    <div class="section-head">
-        <div class="eyebrow">Khoảnh khắc yêu thương</div>
-        <h2>Album Ảnh Cưới</h2>
-        <div class="ornament">✦ ❦ ✦</div>
-    </div>
-
-<div class="gallery">
-<img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=85" alt="Khoảnh khắc ngày cưới" loading="lazy">
-<img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=900&q=85" alt="Ảnh cưới lãng mạn" loading="lazy">
-<img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=900&q=85" alt="Ảnh cưới lãng mạn" loading="lazy">
-<img src="https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=900&q=85" alt="Cô dâu chú rể" loading="lazy">
-<img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=900&q=85" alt="Ảnh cưới lãng mạn" loading="lazy">
-<img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=900&q=85" alt="Ảnh cưới lãng mạn" loading="lazy">
-</div>
-<p class="intro" style="margin-top:18px">Thay ảnh minh họa bằng đường dẫn album ảnh thật của cô dâu chú rể.</p>
-</section>
-
-<section class="section" id="rsvp">
-    <div class="section-head">
-    <div class="eyebrow">Sự hiện diện của quý khách là niềm vui của chúng tôi</div>
-    <h2>Xác Nhận Tham Dự</h2>
-    <div class="ornament">✦ ❦ ✦</div>
-</div>
-
-<form class="rsvp" id="rsvpForm">
-    <label for="guestName">Họ và tên</label>
-    <input id="guestName" name="guestName" required placeholder="Nhập họ tên của bạn">
-    <label for="attendance">Bạn có thể tham dự không?</label>
-    <select id="attendance" name="attendance" required>
-        <option value="yes">Vâng, tôi sẽ tham dự</option>
-        <option value="no">Rất tiếc, tôi không thể tham dự</option>
-    </select>
-    <label for="guestCount">Số người tham dự</label>
-    <select id="guestCount" name="guestCount">
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
-        <option>5</option>
-    </select>
-    <label for="guestMessage">Lời chúc (không bắt buộc)</label>
-    <textarea id="guestMessage" name="guestMessage" placeholder="Gửi lời chúc đến cô dâu chú rể...">
-    </textarea>
-    <button class="gold-button" id="submitBtn" type="submit">GỬI XÁC NHẬN</button>
-    <p class="rsvp-note">Bản mẫu này hiện mở ứng dụng email để gửi phản hồi. Muốn lưu trực tiếp vào Firebase, cần kết nối biểu mẫu với Firestore và cấu hình quyền truy cập an toàn.</p>
-</form>
-</section>
-<section class="section" id="share">
-    <div class="section-head">
-    <div class="eyebrow">Lan tỏa niềm vui</div>
-    <h2>Chia Sẻ Thiệp Cưới</h2>
-    <div class="ornament">✦ ❦ ✦</div>
-</div>
-<p class="intro">Cảm ơn quý khách đã dành tình cảm và lời chúc tốt đẹp cho gia đình chúng tôi.</p>
-<div style="text-align:center">
-    <button class="gold-button" id="shareButton" type="button">CHIA SẺ THIỆP ↗</button>
-    <p class="rsvp-note">Mã QR có thể được tạo theo đường link thiệp riêng sau khi đăng lên GitHub Pages.</p>
-</div>
-</section>
-    
-    
-</div><a href="admin-chung-mau-01-02.html" class="home-btn">Tạo Mẫu Này</a>
-
 </main>
 
-<footer>
-    <div id="footerCouple" style="font-size:1.8rem">Minh Tú ♡ Yến Nhi</div>
-    <div>Trân trọng cảm ơn sự hiện diện và lời chúc phúc của quý khách.</div>
-    <div>Thiệp Cưới Ngọc Thương</div>
-</footer>
-
-
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyBoBxJvJ1eo6KniFtzC7tTgEOrgxmckndk",
-  authDomain: "thiep-cuoi-online-fa5d4.firebaseapp.com",
-  projectId: "thiep-cuoi-online-fa5d4",
-  storageBucket: "thiep-cuoi-online-fa5d4.firebasestorage.app",
-  messagingSenderId: "677765348842",
-  appId: "1:677765348842:web:001834792642097f5e4693"
-};
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    const music = document.getElementById("bgMusic");
-    const musicToggle = document.getElementById("musicToggle");
+let autoScrollTimer = null;
+let autoScrollAnimation = null;
 
-    // Đồng bộ thông tin thiệp theo thời gian thực từ cùng tài liệu Firebase với trang quản trị.
-    db.collection("wedding_info").doc("main_details").onSnapshot((docSnap) => {
-        if (!docSnap.exists) return;
-        const data = docSnap.data() || {};
-        const groom = data.groom_name || "Minh Tú";
-        const bride = data.bride_name || "Yến Nhi";
-
-        const setText = (id, value, fallback = "") => {
-            const el = document.getElementById(id);
-            if (el) el.textContent = value || fallback;
-        };
-        const setHref = (id, value) => {
-            const el = document.getElementById(id);
-            if (el) el.href = value;
-        };
-
-        setText("groomHero", groom);
-        setText("brideHero", bride);
-        setText("coupleMid", `${groom} & ${bride}`);
-        setText("footerCouple", `${groom} ♡ ${bride}`);
-        setText("groomFather", data.groom_father);
-        setText("groomMother", data.groom_mother);
-        setText("groomAddress", data.groom_address);
-        setText("brideFather", data.bride_father);
-        setText("brideMother", data.bride_mother);
-        setText("brideAddress", data.bride_address);
-        setText("timeChurchTxt", data.time_church, "Vui lòng liên hệ gia đình");
-        setText("ceremonyAddress", data.location_church, "Địa điểm sẽ được cập nhật");
-        setText("timePartyTxt", data.time_party, "Vui lòng liên hệ gia đình");
-        setText("partyAddress", data.location_party, "Địa điểm sẽ được cập nhật");
-        setText("storyTextDisplay", data.story_text, "Trong niềm vui và hồng ân của tình yêu, hai gia đình trân trọng báo tin lễ thành hôn của con chúng tôi và kính mời quý khách đến chung vui.");
-
-            // Đồng bộ ảnh Our happy day
-        const specialDayImg = document.getElementById("imgSpecialDay");
-        if (specialDayImg && data.img_SpecialDay) {
-            specialDayImg.src = data.img_SpecialDay;
-        } 
-        
-        // Bản đồ: chấp nhận cả địa chỉ dạng chữ lẫn link Google Maps đã chia sẻ.
-        function makeMapsUrl(value) {
-            const raw = (value || "").trim();
-            if (!raw) return "https://www.google.com/maps";
-
-            // Nếu quản trị dán link Google Maps (kể cả maps.app.goo.gl), mở trực tiếp link đó.
-            try {
-                const parsed = new URL(raw);
-                const host = parsed.hostname.toLowerCase();
-                if (parsed.protocol === "https:" &&
-                    (host === "maps.google.com" || host === "google.com" || host.endsWith(".google.com") ||
-                     host === "maps.app.goo.gl" || host === "goo.gl")) {
-                    return raw;
-                }
-            } catch (e) {
-                // Không phải URL hợp lệ thì xem như địa chỉ dạng chữ bên dưới.
-            }
-
-            // Nếu nhập địa chỉ/tên địa điểm, tạo link tìm kiếm trên Google Maps.
-            return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(raw);
-        }
-
-        const ceremonyQuery = data.ceremony_map_query || data.location_church || "";
-        const partyQuery = data.party_map_query || data.location_party || "";
-        setHref("ceremonyMap", makeMapsUrl(ceremonyQuery));
-        setHref("partyMap", makeMapsUrl(partyQuery));
-
-        // Ảnh bìa: dùng URL do quản trị nhập; nếu để trống thì giữ ảnh nền mẫu.
-        const hero = document.querySelector(".hero");
-        if (hero && data.cover_photo) {
-            hero.style.backgroundImage =
-                'linear-gradient(115deg,rgba(54,3,11,.83),rgba(91,16,27,.65) 47%,rgba(32,5,10,.55)),url("' +
-                data.cover_photo.replace(/"/g, '%22') + '")';
-            hero.style.backgroundPosition = "center";
-            hero.style.backgroundSize = "cover";
-        }
-
-        // Album: mỗi dòng trong trang quản trị là một URL ảnh.
-        if (typeof data.gallery_urls === "string") {
-            const gallery = document.querySelector(".gallery");
-            if (gallery && data.gallery_urls.trim()) {
-                const urls = data.gallery_urls.split(/\r?\n/)
-                    .map(url => url.trim()).filter(url => /^https?:\/\//i.test(url));
-                if (urls.length) {
-                    gallery.replaceChildren();
-                    urls.forEach((url, index) => {
-                        const img = document.createElement("img");
-                        img.src = url;
-                        img.alt = `Ảnh cưới ${index + 1}`;
-                        img.loading = "lazy";
-                        gallery.appendChild(img);
-                    });
-                }
-            }
-        }
-
-        // Cập nhật nhạc nền khi URL thay đổi.
-        if (data.music_url) {
-            const source = music.querySelector("source");
-            if (source && source.getAttribute("src") !== data.music_url) {
-                source.setAttribute("src", data.music_url);
-                music.load();
-                musicToggle.textContent = "♫ Nhạc nền: Tắt";
-            }
-        }
-    }, (err) => {
-        console.error("Không thể đồng bộ thông tin thiệp từ Firebase:", err);
-    });
-
-    // Hàm cố gắng phát nhạc có âm thanh
-    async function playAudioWithSound() {
-        try {
-            await music.play();
-            musicToggle.textContent = "♫ Nhạc nền: Bật";
-            // Nếu phát thành công, gỡ bỏ các sự kiện lắng nghe để tránh lặp lại
-            document.removeEventListener('click', playAudioWithSound);
-            document.removeEventListener('scroll', playAudioWithSound);
-            document.removeEventListener('touchstart', playAudioWithSound);
-        } catch (e) {
-            console.log("Trình duyệt vẫn đang chặn autoplay, đợi khách click nút.");
-        }
+function stopAutoScroll() {
+    if (autoScrollTimer) {
+        clearTimeout(autoScrollTimer);
+        autoScrollTimer = null;
     }
+    if (autoScrollAnimation) {
+        cancelAnimationFrame(autoScrollAnimation);
+        autoScrollAnimation = null;
+    }
+    window.removeEventListener('wheel', stopAutoScroll);
+    window.removeEventListener('touchstart', stopAutoScroll);
+    window.removeEventListener('pointerdown', stopAutoScroll);
+}
 
-    // Tự động phát ngay khi khách chạm/cuộn/click bất kỳ đâu trên màn hình thiệp
-    document.addEventListener('click', playAudioWithSound);
-    document.addEventListener('scroll', playAudioWithSound);
-    document.addEventListener('touchstart', playAudioWithSound); // Dành cho điện thoại
+const btnOpenCard = document.getElementById("btnOpenCard");
+if (btnOpenCard) {
+    btnOpenCard.addEventListener("click", function (e) {
+        e.preventDefault();
+        stopAutoScroll();
 
-    // Nút bật/tắt thủ công của khách
-    musicToggle.addEventListener("click", (e) => {
-        e.stopPropagation(); // Ngăn chặn kích hoạt sự kiện click toàn trang
-        if (music.paused) {
-            music.play().then(() => { musicToggle.textContent = "♫ Nhạc nền: Bật"; });
-        } else {
-            music.pause();
-            musicToggle.textContent = "♫ Nhạc nền: Tắt";
+        const familySec = document.getElementById("family");
+        if (familySec) {
+            familySec.scrollIntoView({ behavior: 'smooth' });
+
+            autoScrollTimer = setTimeout(() => {
+                window.addEventListener('wheel', stopAutoScroll, { passive: true });
+                window.addEventListener('touchstart', stopAutoScroll, { passive: true });
+                window.addEventListener('pointerdown', stopAutoScroll, { passive: true });
+
+                const scrollSpeed = 1.5;
+                
+                function step() {
+                    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+                    if (window.scrollY < maxScroll) {
+                        window.scrollBy(0, scrollSpeed);
+                        autoScrollAnimation = requestAnimationFrame(step);
+                    } else {
+                        stopAutoScroll();
+                    }
+                }
+                autoScrollAnimation = requestAnimationFrame(step);
+            }, 1000);
         }
     });
-
-    document.getElementById("rsvpForm").addEventListener("submit", (e) => {
-        e.preventDefault();
-        const btn = document.getElementById("submitBtn");
-        if (btn) { btn.disabled = true; btn.textContent = "ĐANG GỬI..."; }
-        const formData = new FormData(e.currentTarget);
-        db.collection("rsvp_responses").add({
-            guest_name: formData.get("guestName"),
-            is_attending: formData.get("attendance") === "yes",
-            guests_count: parseInt(formData.get("guestCount"), 10) || 1,
-            wishes: formData.get("guestMessage") || "",
-            timestamp: new Date()
-        }).then(() => {
-            alert("Xác nhận tham dự thành công!"); document.getElementById("rsvpForm").reset();
-        }).catch((err) => { alert("Lỗi: " + err.message); })
-        .finally(() => { if (btn) { btn.disabled = false; btn.textContent = "GỬI XÁC NHẬN"; } });
-    });
-
-    document.getElementById("shareButton").addEventListener("click", async () => {
-        try {
-            if (navigator.share) await navigator.share({ title: "Thiệp Cưới", url: location.href });
-            else { await navigator.clipboard.writeText(location.href); alert("Đã sao chép link!"); }
-        } catch (e) {}
-    });
-    
+}
 </script>
 </body>
 </html>

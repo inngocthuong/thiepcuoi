@@ -2,7 +2,9 @@
 <html lang="vi">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#5b101b"><title>Thiệp Cưới Ngọc Thương</title>
+<meta name="theme-color" content="#5b101b">
+<title>Wedding Invitation</title>
+<link rel="icon" type="image/png" href="../anh/logo.png">
 <style>
 :root{
     --wine:#5b101b;
@@ -113,7 +115,8 @@ body {
             margin:20px auto 0;       
         }
 
-.special-day-img {
+        /* MỤC NGÀY VUI CỦA CHÚNG TÔI */
+        .special-day-img {
             width: 100%;
             max-height: 480px;
             object-fit: cover;
@@ -129,6 +132,7 @@ body {
             color: #d4a373; 
             margin-bottom: 15px; 
             padding-bottom: 10px; 
+           
             letter-spacing: 1px;
         }
   .section-header1 span { 
@@ -139,6 +143,7 @@ body {
   color: var(--accent); 
   font-weight: 600; }
 
+/* Canvas hiệu ứng sao rơi lấp lánh */
 #starCanvas {
     position: fixed;
     top: 0;
@@ -146,8 +151,9 @@ body {
     width: 100vw;
     height: 100vh;
     pointer-events: none;
-    z-index: 999;
+    z-index: 99999;
 }
+
 </style>
 </head>
 
@@ -157,12 +163,11 @@ body {
 
 <body>
 
-<canvas id="starCanvas"></canvas>
+<canvas id="starCanvas"></canvas>  
 
 <audio id="bgMusic" loop autoplay>
     <source src="https://www.image2url.com/r2/default/audio/1792836324218-f37fe37a-5e05-4dc2-a857-833acad9e785.mp3" type="audio/mpeg">
 </audio>
-
 <section class="hero" id="top">
 <button class="music" id="musicToggle" type="button" aria-pressed="false">♫ Nhạc nền: Tắt</button>
 <div class="hero-inner"><div class="eyebrows">Save The Day</div><div class="tiny-heart">♡ ───────── ♥ ───────── ♡</div>
@@ -178,17 +183,16 @@ body {
     <span>VÀO LÚC<br><b>10:30</b></span>
 </div>
 
-<button class="gold-button" onclick="openInvitation()" type="button" style="border:1px solid var(--gold); border-radius:999px; padding:13px 28px; background:#741822bf; color:#fff7e8; cursor:pointer;">
-    MỞ THIỆP &nbsp; ♥
-</button>
+<a class="gold-button" id="btnOpenCard" href="#family">MỞ THIỆP &nbsp; ♥</a>
 <span class="scroll-hint">&nbsp; CUỘN XUỐNG ĐỂ XEM THÊM</span>
 </div>
 </section>
 
 <nav class="quick-links" aria-label="Liên kết nhanh">
+    <a href="#family" title="Gia đình">♥</a>
     <a href="#gallery" title="Album ảnh">▧</a>
     <a href="#location" title="Bản đồ">⌖</a>
-    <a href="#rsvp" title="Xác nhận tham dự">♥</a>
+    <a href="#rsvp" title="Xác nhận tham dự">✦</a>
     <a href="#share" title="Chia sẻ">↗</a>
 </nav>
 
@@ -227,17 +231,22 @@ body {
     <p>Chúng tôi rất mong được đón tiếp quý khách trong ngày hạnh phúc này.</p>
 </section>
 
-<div class="section-head">
+  </div>
+     <div class="section-head">
     <div class="eyebrow">Our happy day</div>
-    <img id="imgSpecialDay" class="special-day-img" src="https://omni.vn/wp-content/uploads/2024/11/mau-album-anh-cuoi-8.jpg" alt="Ngày Vui Của Chúng Tôi">
-</div>
+      <img id="imgSpecialDay" class="special-day-img" src="https://omni.vn/wp-content/uploads/2024/11/mau-album-anh-cuoi-8.jpg" alt="Ngày Vui Của Chúng Tôi">
+  </div>
+    </div>
   
-<div class="section-head">
-    <div class="eyebrow">Invitation</div>
-    <h2 class="serif">Lời Ngỏ Trân Trọng</h2>
-    <p class="intro">Trân trọng kính mời bạn đến chung vui trong ngày hạnh phúc của chúng mình. Sự hiện diện của bạn là niềm vinh hạnh lớn nhất đối với gia đình hai bên.</p>
-    <div class="ornament">✦ ❦ ✦</div>
+  <div class="section-head">
+      <div class="eyebrow">Invitation</div>
+      <h2 class="serif">Lời Ngỏ Trân Trọng</h2>
+    <p class="intro" id="storyTextDisplay">Trân trọng kính mời bạn đến chung vui trong ngày hạnh phúc của chúng mình. 
+        Sự hiện diện của bạn là niềm vinh hạnh lớn nhất đối với gia đình hai bên.</p>
+   <div class="ornament">✦ ❦ ✦</div>
 </div>
+</div> 
+</section>
 
 <section class="section" id="location">
     <div class="section-head">
@@ -252,7 +261,7 @@ body {
     <h3>Thánh Đường / Nơi Cử Hành</h3>
     <p><strong id="timeChurchTxt">10:30 · Thứ Bảy, 25/10/2026</strong></p>
     <p id="ceremonyAddress">Thánh Đường Giáo Xứ …</p>
-    <a class="gold-button" id="ceremonyMap" href="https://maps.google.com/" target="_blank" rel="noopener">Xem đường đi ↗</a>
+    <a class="map-link" id="ceremonyMap" href="https://maps.google.com/" target="_blank" rel="noopener">Xem đường đi ↗</a>
 </article>
 
 <article class="event-card">
@@ -260,11 +269,11 @@ body {
     <h3>Trân Trọng Kính Mời</h3>
     <p><strong id="timePartyTxt">11:30 · Thứ Bảy, 25/10/2026</strong></p>
     <p id="partyAddress">Nhà hàng …, địa chỉ …</p>
-    <a class="gold-button" id="partyMap" href="https://maps.google.com/" target="_blank" rel="noopener">Xem đường đi ↗</a>
+    <a class="map-link" id="partyMap" href="https://maps.google.com/" target="_blank" rel="noopener">Xem đường đi ↗</a>
 </article>
 </div>
-</section>
 
+</section>
 <section class="section" id="gallery">
     <div class="section-head">
         <div class="eyebrow">Khoảnh khắc yêu thương</div>
@@ -307,12 +316,12 @@ body {
         <option>5</option>
     </select>
     <label for="guestMessage">Lời chúc (không bắt buộc)</label>
-    <textarea id="guestMessage" name="guestMessage" placeholder="Gửi lời chúc đến cô dâu chú rể..."></textarea>
+    <textarea id="guestMessage" name="guestMessage" placeholder="Gửi lời chúc đến cô dâu chú rể...">
+    </textarea>
     <button class="gold-button" id="submitBtn" type="submit">GỬI XÁC NHẬN</button>
     <p class="rsvp-note">Bản mẫu này hiện mở ứng dụng email để gửi phản hồi. Muốn lưu trực tiếp vào Firebase, cần kết nối biểu mẫu với Firestore và cấu hình quyền truy cập an toàn.</p>
 </form>
 </section>
-
 <section class="section" id="share">
     <div class="section-head">
     <div class="eyebrow">Lan tỏa niềm vui</div>
@@ -325,6 +334,9 @@ body {
     <p class="rsvp-note">Mã QR có thể được tạo theo đường link thiệp riêng sau khi đăng lên GitHub Pages.</p>
 </div>
 </section>
+    
+    
+</div><a href="admin-chung-mau-01-02.html" class="home-btn">Tạo Mẫu Này</a>
 
 </main>
 
@@ -333,6 +345,7 @@ body {
     <div>Trân trọng cảm ơn sự hiện diện và lời chúc phúc của quý khách.</div>
     <div>Thiệp Cưới Ngọc Thương</div>
 </footer>
+
 
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -350,6 +363,7 @@ const firebaseConfig = {
     const music = document.getElementById("bgMusic");
     const musicToggle = document.getElementById("musicToggle");
 
+    // Đồng bộ thông tin thiệp theo thời gian thực từ cùng tài liệu Firebase với trang quản trị.
     db.collection("wedding_info").doc("main_details").onSnapshot((docSnap) => {
         if (!docSnap.exists) return;
         const data = docSnap.data() || {};
@@ -380,17 +394,57 @@ const firebaseConfig = {
         setText("timePartyTxt", data.time_party, "Vui lòng liên hệ gia đình");
         setText("partyAddress", data.location_party, "Địa điểm sẽ được cập nhật");
         setText("storyTextDisplay", data.story_text, "Trong niềm vui và hồng ân của tình yêu, hai gia đình trân trọng báo tin lễ thành hôn của con chúng tôi và kính mời quý khách đến chung vui.");
-        
+
+            // Đồng bộ ảnh Our happy day
         const specialDayImg = document.getElementById("imgSpecialDay");
         if (specialDayImg && data.img_SpecialDay) {
             specialDayImg.src = data.img_SpecialDay;
         } 
+        
+        // Bản đồ: chấp nhận cả địa chỉ dạng chữ lẫn link Google Maps đã chia sẻ.
+        function makeMapsUrl(value) {
+            const raw = (value || "").trim();
+            if (!raw) return "https://www.google.com/maps";
 
+            // Nếu quản trị dán link Google Maps (kể cả maps.app.goo.gl), mở trực tiếp link đó.
+            try {
+                const parsed = new URL(raw);
+                const host = parsed.hostname.toLowerCase();
+                if (parsed.protocol === "https:" &&
+                    (host === "maps.google.com" || host === "google.com" || host.endsWith(".google.com") ||
+                     host === "maps.app.goo.gl" || host === "goo.gl")) {
+                    return raw;
+                }
+            } catch (e) {
+                // Không phải URL hợp lệ thì xem như địa chỉ dạng chữ bên dưới.
+            }
+
+            // Nếu nhập địa chỉ/tên địa điểm, tạo link tìm kiếm trên Google Maps.
+            return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(raw);
+        }
+
+        const ceremonyQuery = data.ceremony_map_query || data.location_church || "";
+        const partyQuery = data.party_map_query || data.location_party || "";
+        
+        setHref("ceremonyMap", makeMapsUrl(ceremonyQuery));
+        setHref("partyMap", makeMapsUrl(partyQuery));
+
+        // Ảnh bìa: dùng URL do quản trị nhập; nếu để trống thì giữ ảnh nền mẫu.
+        const hero = document.querySelector(".hero");
+        if (hero && data.cover_photo) {
+            hero.style.backgroundImage =
+                'linear-gradient(115deg,rgba(54,3,11,.83),rgba(91,16,27,.65) 47%,rgba(32,5,10,.55)),url("' +
+                data.cover_photo.replace(/"/g, '%22') + '")';
+            hero.style.backgroundPosition = "center";
+            hero.style.backgroundSize = "cover";
+        }
+
+        // Album: mỗi dòng trong trang quản trị là một URL ảnh.
         if (typeof data.gallery_urls === "string") {
             const gallery = document.querySelector(".gallery");
             if (gallery && data.gallery_urls.trim()) {
                 const urls = data.gallery_urls.split(/\r?\n/)
-                    .map(url => url.trim()).filter(url => url.length > 0);
+                    .map(url => url.trim()).filter(url => /^https?:\/\//i.test(url));
                 if (urls.length) {
                     gallery.replaceChildren();
                     urls.forEach((url, index) => {
@@ -403,36 +457,8 @@ const firebaseConfig = {
                 }
             }
         }
-        
-        function makeMapsUrl(value) {
-            const raw = (value || "").trim();
-            if (!raw) return "https://www.google.com/maps";
-            try {
-                const parsed = new URL(raw);
-                const host = parsed.hostname.toLowerCase();
-                if (parsed.protocol === "https:" &&
-                    (host === "maps.google.com" || host === "google.com" || host.endsWith(".google.com") ||
-                     host === "maps.app.goo.gl" || host === "goo.gl")) {
-                    return raw;
-                }
-            } catch (e) {}
-            return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(raw);
-        }
 
-        const ceremonyQuery = data.ceremony_map_query || data.location_church || "";
-        const partyQuery = data.party_map_query || data.location_party || "";
-        setHref("ceremonyMap", makeMapsUrl(ceremonyQuery));
-        setHref("partyMap", makeMapsUrl(partyQuery));
-
-        const hero = document.querySelector(".hero");
-        if (hero && data.cover_photo) {
-            hero.style.backgroundImage =
-                'linear-gradient(115deg,rgba(54,3,11,.83),rgba(91,16,27,.65) 47%,rgba(32,5,10,.55)),url("' +
-                data.cover_photo.replace(/"/g, '%22') + '")';
-            hero.style.backgroundPosition = "center";
-            hero.style.backgroundSize = "cover";
-        }
-
+        // Cập nhật nhạc nền khi URL thay đổi.
         if (data.music_url) {
             const source = music.querySelector("source");
             if (source && source.getAttribute("src") !== data.music_url) {
@@ -445,6 +471,7 @@ const firebaseConfig = {
         console.error("Không thể đồng bộ thông tin thiệp từ Firebase:", err);
     });
 
+    // Hàm cố gắng phát nhạc có âm thanh
     async function playAudioWithSound() {
         try {
             await music.play();
@@ -496,7 +523,63 @@ const firebaseConfig = {
     });
 
 // ==========================================
-// 1. HIỆU ỨNG SAO RƠI / LẤP LÁNH (CANVAS)
+// HIỆU ỨNG MỞ THIỆP & TỰ ĐỘNG CUỘN (AUTO-SCROLL)
+// ==========================================
+let autoScrollTimer = null;
+let autoScrollAnimation = null;
+
+function stopAutoScroll() {
+    if (autoScrollTimer) {
+        clearTimeout(autoScrollTimer);
+        autoScrollTimer = null;
+    }
+    if (autoScrollAnimation) {
+        cancelAnimationFrame(autoScrollAnimation);
+        autoScrollAnimation = null;
+    }
+    // Gỡ bỏ sự kiện sau khi ngắt cuộn
+    window.removeEventListener('wheel', stopAutoScroll);
+    window.removeEventListener('touchstart', stopAutoScroll);
+    window.removeEventListener('pointerdown', stopAutoScroll);
+}
+
+const btnOpenCard = document.getElementById("btnOpenCard");
+if (btnOpenCard) {
+    btnOpenCard.addEventListener("click", function (e) {
+        e.preventDefault(); // Ngăn cuộn tức thì
+        stopAutoScroll();   // Dọn dẹp trạng thái cũ nếu có
+
+        const familySec = document.getElementById("family");
+        if (familySec) {
+            // 1. Nhảy/cuộn mượt về mục Family
+            familySec.scrollIntoView({ behavior: 'smooth' });
+
+            // 2. Chờ 1 giây (1000ms) rồi bắt đầu tự động cuộn đến hết trang
+            autoScrollTimer = setTimeout(() => {
+                // Đăng ký ngắt cuộn khi người dùng chạm/tương tác màn hình
+                window.addEventListener('wheel', stopAutoScroll, { passive: true });
+                window.addEventListener('touchstart', stopAutoScroll, { passive: true });
+                window.addEventListener('pointerdown', stopAutoScroll, { passive: true });
+
+                const scrollSpeed = 1.5; // Tốc độ cuộn (tăng/giảm số này để chỉnh tốc độ)
+                
+                function step() {
+                    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+                    if (window.scrollY < maxScroll) {
+                        window.scrollBy(0, scrollSpeed);
+                        autoScrollAnimation = requestAnimationFrame(step);
+                    } else {
+                        stopAutoScroll();
+                    }
+                }
+                autoScrollAnimation = requestAnimationFrame(step);
+            }, 1000);
+        }
+    });
+}
+
+// ==========================================
+// HIỆU ỨNG SAO RƠI / LẤP LÁNH TÔNG VÀNG (CANVAS)
 // ==========================================
 (function initStars() {
     const canvas = document.getElementById('starCanvas');
@@ -510,7 +593,7 @@ const firebaseConfig = {
         height = canvas.height = window.innerHeight;
     });
 
-    const starCount = 45;
+    const starCount = 200;
     const stars = [];
 
     for (let i = 0; i < starCount; i++) {
@@ -518,7 +601,7 @@ const firebaseConfig = {
             x: Math.random() * width,
             y: Math.random() * height,
             radius: Math.random() * 1.8 + 0.5,
-            speedY: Math.random() * 0.8 + 0.3,
+            speedY: Math.random() * 0.7 + 0.3,
             speedX: (Math.random() - 0.5) * 0.3,
             opacity: Math.random() * 0.8 + 0.2,
             pulse: Math.random() * 0.02 + 0.005
@@ -541,77 +624,15 @@ const firebaseConfig = {
 
             ctx.beginPath();
             ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(244, 223, 180, ${Math.abs(star.opacity)})`;
+            ctx.fillStyle = `rgba(243, 229, 171, ${Math.abs(star.opacity)})`;
             ctx.shadowBlur = 6;
-            ctx.shadowColor = '#d8b477';
+            ctx.shadowColor = '#d4af37';
             ctx.fill();
         });
         requestAnimationFrame(render);
     }
     render();
 })();
-// ==========================================
-// HIỆU ỨNG NHẢY VÀO TRONG & TỰ ĐỘNG CUỘN (TỐI ƯU CỰC TỐT CHO MOBILE)
-// ==========================================
-let isAutoScrolling = false;
-
-function stopAutoScroll() {
-    if (isAutoScrolling) {
-        isAutoScrolling = false;
-        window.removeEventListener('wheel', stopAutoScroll);
-        window.removeEventListener('touchstart', stopAutoScroll);
-        window.removeEventListener('mousedown', stopAutoScroll);
-        window.removeEventListener('keydown', stopAutoScroll);
-    }
-}
-
-function openInvitation() {
-    // 1. Phát nhạc nền
-    if (typeof playAudioWithSound === 'function') {
-        playAudioWithSound();
-    }
-
-    // 2. Dừng cuộn cũ nếu đang chạy
-    stopAutoScroll();
-
-    // 3. Nhảy nhanh đến phần thông tin gia đình ngay lập tức
-    const familySection = document.getElementById('family');
-    if (!familySection) return;
-    
-    const targetY = familySection.offsetTop;
-    window.scrollTo({ top: targetY, behavior: 'auto' });
-
-    // 4. Lắng nghe hành động chạm/cuộn của người dùng để dừng ngay lập tức nếu họ tác động
-    isAutoScrolling = true;
-    ['wheel', 'touchstart', 'mousedown', 'keydown'].forEach(evt => {
-        window.addEventListener(evt, stopAutoScroll, { passive: true });
-    });
-
-    // 5. Sử dụng requestAnimationFrame để tự động cuộn từ từ (Rất mượt trên Mobile và không bị trình duyệt chặn)
-    let currentY = targetY;
-    const maxScrollY = document.body.scrollHeight - window.innerHeight;
-    const speed = 0.8; // Tốc độ cuộn (có thể chỉnh từ 0.6 đến 1.2 cho phù hợp)
-
-    function step() {
-        if (!isAutoScrolling) return;
-        
-        currentY += speed;
-        window.scrollTo(0, currentY);
-
-        if (currentY < maxScrollY && currentY < document.body.scrollHeight) {
-            requestAnimationFrame(step);
-        } else {
-            stopAutoScroll();
-        }
-    }
-
-    // Chờ 150ms để điện thoại ổn định khung hình rồi bắt đầu chạy tiếp
-    setTimeout(() => {
-        if (isAutoScrolling) {
-            requestAnimationFrame(step);
-        }
-    }, 150);
-}
 </script>
 </body>
 </html>

@@ -1,0 +1,97 @@
+\<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#30070e">
+<title>Wedding Invitation - Pattern 02</title>
+<style>
+:root{--wine:#5b101b;--dark:#30070e;--gold:#d8b477;--pale:#f4dfb4;--cream:#fff8ef;--ink:#4b2023}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:Georgia,"Times New Roman",serif}
+.hero{min-height:100vh;position:relative;display:grid;place-items:center;overflow:hidden;color:var(--cream);text-align:center;padding:90px 20px 54px;background:linear-gradient(115deg,rgba(54,3,11,.83),rgba(91,16,27,.65) 47%,rgba(32,5,10,.55)),url("https://i.ibb.co/2Yc32xF9/bia-thiep.jpg") center/cover}
+.hero-inner{position:relative;z-index:1;max-width:760px}
+.gold-button{display:inline-block;border:1px solid var(--gold);border-radius:999px;padding:13px 28px;background:#741822bf;color:#fff7e8;text-decoration:none;letter-spacing:.1em;cursor:pointer;transition:.2s}
+.gold-button:hover{background:var(--gold);color:var(--dark)}
+main{max-width:1120px;margin:auto;padding:64px 22px}
+.section{margin:0 auto 68px;scroll-margin-top:24px}
+.family-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.family-card{background:#fffdf9;border:1px solid #dfc28f;padding:30px 26px;text-align:center}
+</style>
+</head>
+<body>
+<section class="hero" id="top">
+  <div class="hero-inner">
+    <h1>Minh Tú &amp; Yến Nhi</h1>
+    <a class="gold-button" id="btnOpenCard" href="#family">MỞ THIỆP &nbsp; ♥</a>
+  </div>
+</section>
+
+<main>
+<section class="section" id="family">
+  <h2>Thông Tin Hai Họ</h2>
+  <div class="family-grid">
+    <div class="family-card"><h3>Nhà Trai</h3><p>Nguyễn Văn An &amp; Trần Thị Hoa</p></div>
+    <div class="family-card"><h3>Nhà Gái</h3><p>Lê Văn Bình &amp; Phạm Thị Mai</p></div>
+  </div>
+</section>
+
+<section class="section" id="details" style="min-height:800px;">
+  <h2>Thời Gian &amp; Địa Điểm</h2>
+  <p>10:30 - Thứ Bảy, 25/10/2026</p>
+  <p>Nhà hàng tiệc cưới sang trọng...</p>
+</section>
+</main>
+
+<script>
+let autoScrollTimer = null;
+let autoScrollAnimation = null;
+
+function stopAutoScroll() {
+    if (autoScrollTimer) {
+        clearTimeout(autoScrollTimer);
+        autoScrollTimer = null;
+    }
+    if (autoScrollAnimation) {
+        cancelAnimationFrame(autoScrollAnimation);
+        autoScrollAnimation = null;
+    }
+    window.removeEventListener('wheel', stopAutoScroll);
+    window.removeEventListener('touchstart', stopAutoScroll);
+    window.removeEventListener('pointerdown', stopAutoScroll);
+}
+
+const btnOpenCard = document.getElementById("btnOpenCard");
+if (btnOpenCard) {
+    btnOpenCard.addEventListener("click", function (e) {
+        e.preventDefault();
+        stopAutoScroll();
+
+        const familySec = document.getElementById("family");
+        if (familySec) {
+            familySec.scrollIntoView({ behavior: 'smooth' });
+
+            autoScrollTimer = setTimeout(() => {
+                window.addEventListener('wheel', stopAutoScroll, { passive: true });
+                window.addEventListener('touchstart', stopAutoScroll, { passive: true });
+                window.addEventListener('pointerdown', stopAutoScroll, { passive: true });
+
+                const scrollSpeed = 1.5;
+                
+                function step() {
+                    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+                    if (window.scrollY < maxScroll) {
+                        window.scrollBy(0, scrollSpeed);
+                        autoScrollAnimation = requestAnimationFrame(step);
+                    } else {
+                        stopAutoScroll();
+                    }
+                }
+                autoScrollAnimation = requestAnimationFrame(step);
+            }, 1000);
+        }
+    });
+}
+</script>
+</body>
+</html>

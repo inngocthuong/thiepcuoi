@@ -1,4 +1,7 @@
-<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f7f1e8"><title>Thiệp cưới · Modern Luxury Editorial</title><style>
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f7f1e8">
+<title>Wedding Invitation</title>
+<link rel="icon" type="image/png" href="../anh/logo.png">
+<style>
 :root{
   --bg:#f7f1e8;
   --ink:#2f2925;
@@ -276,12 +279,7 @@ section{
   color:#9a7449;
   letter-spacing:.28em;
   font-size:14px}
-/*
-h2{
-  font-size:clamp(34px,5vw,58px);
-  letter-spacing:-.035em;
-  margin:16px 0 38px}
-*/
+
 .intro{
   font-size:17px;
   max-width:660px;
@@ -320,7 +318,6 @@ h2{
 .event .kicker{
   text-align:left}
   
-/* Floral ornament on the right side of ceremony/reception cards */
 .event{
   overflow:hidden;
   padding-right:clamp(92px,13vw,150px)}
@@ -401,7 +398,6 @@ footer a{color:#e9dece}
    height:560px}section{padding:52px 0}main{padding-left:18px;
   padding-right:18px}}
 
-
 .hero-invite{
  letter-spacing:.25em;
     text-transform:uppercase;
@@ -417,9 +413,6 @@ footer a{color:#e9dece}
  }
 .hero 
 .hero-date{display:none}}
-
-
-
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -438,7 +431,7 @@ footer a{color:#e9dece}
   <br><span id="heroBride">Cô Dâu</span></h1>
   <div class="hero-invite">TRÂN TRỌNG KÍNH MỜI BẠN ĐẾN CHUNG VUI</div>
   <div class="hero-date" id="heroDate">
-  </div><a class="mapbtn" href="#invitation" style="background:#ffffff;color:#8a6b43">MỞ THIỆP ↓</a></div>
+  </div><a class="mapbtn" id="btnOpenCard" href="#invitation" style="background:#ffffff;color:#8a6b43">MỞ THIỆP ↓</a></div>
   </header>
 
 <div class="quick">
@@ -553,7 +546,7 @@ const TEMPLATE='3',DOC='mau03_details',RSVP='mau03_rsvp';let db=null;try{if(!fir
 const $=id=>document.getElementById(id);function text(id,v,fallback=''){$(id).textContent=v||fallback}function mapUrl(v){if(!v)return '';if(/^https?:\/\//i.test(v))return v;return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(v)}
 function setMap(id,v){const a=$(id),u=mapUrl(v);a.href=u||'#';a.style.display=u?'inline-block':'none'}
 function setMusic(url){const audio=$('bgMusic');if(url&&audio.src!==url){audio.src=url;audio.load()}}
-let musicStarted=false;async function tryMusic(){const a=$('bgMusic');if(!a.src||musicStarted)return;try{await a.play();musicStarted=true;$('musicToggle').textContent='♫ Tắt nhạc'}catch(e){/* Browser may require a user gesture; button remains available. */}}
+let musicStarted=false;async function tryMusic(){const a=$('bgMusic');if(!a.src||musicStarted)return;try{await a.play();musicStarted=true;$('musicToggle').textContent='♫ Tắt nhạc'}catch(e){}}
 ['pointerdown','touchstart','keydown','wheel','click'].forEach(ev=>document.addEventListener(ev,()=>tryMusic(),{once:true,passive:true}));$('musicToggle').addEventListener('click',async()=>{const a=$('bgMusic');if(!a.src){alert('Gia đình chưa thêm link nhạc MP3 trong trang quản trị.');return}if(a.paused){try{await a.play();musicStarted=true;$('musicToggle').textContent='♫ Tắt nhạc'}catch(e){alert('Không phát được nhạc. Anh/chị hãy kiểm tra lại link MP3.')}}else{a.pause();musicStarted=false;$('musicToggle').textContent='♫ Bật nhạc'}});
 function render(d){text('heroGroom',d.groomName,'Chú Rể');
 text('mainGroom',d.groomName,'Chú Rể');
@@ -578,5 +571,58 @@ if(d.galleryUrls){const urls=d.galleryUrls.split(/\r?\n/).map(s=>s.trim()).filte
 if(urls.length){$('galleryGrid').innerHTML='';urls.forEach((u,i)=>{const img=document.createElement('img');img.src=u;img.alt='Ảnh kỷ niệm '+(i+1);img.loading='lazy';$('galleryGrid').appendChild(img)})}}$('qr').src='https://api.qrserver.com/v1/create-qr-code/?size=180x180&data='+encodeURIComponent(location.href);$('qr').style.display='inline-block'}
 if(db)db.collection('online_invitations').doc(DOC).onSnapshot(s=>{if(s.exists)render(s.data())},e=>console.error('Firestore read:',e));
 $('rsvpForm').addEventListener('submit',async e=>{e.preventDefault();if(!db){text('rsvpStatus','Chưa kết nối được cơ sở dữ liệu.');return}const b=$('sendBtn');b.disabled=true;text('rsvpStatus','Đang gửi xác nhận...');try{await db.collection(RSVP).add({guestName:$('guestName').value.trim(),attendance:$('attendance').value,guestCount:Number($('guestCount').value),guestMessage:$('guestMessage').value.trim(),createdAt:firebase.firestore.FieldValue.serverTimestamp()});text('rsvpStatus','Cảm ơn anh/chị! Xác nhận đã được gửi thành công.');$('rsvpForm').reset()}catch(err){text('rsvpStatus','Chưa gửi được. Vui lòng thử lại sau.');console.error(err)}finally{b.disabled=false}});
-$('shareBtn').onclick=async()=>{const data={title:'Thiệp cưới '+($('footerNames').textContent||''),text:'Trân trọng kính mời bạn xem thiệp cưới',url:location.href};try{if(navigator.share)await navigator.share(data);else{await navigator.clipboard.writeText(location.href);alert('Đã sao chép liên kết thiệp!')}}catch(e){}};
+$('shareBtn').onclick=async()=>{const data={title:'Thiệp cưới '+($('footerNames').textContent||''),text:'Trân trọng kính mời bạn xem thiệp cưới',url:location.href};
+try{if(navigator.share)await navigator.share(data);else{await navigator.clipboard.writeText(location.href);alert('Đã sao chép liên kết thiệp!')}}catch(e){}};
+
+// ==========================================
+// HIỆU ỨNG MỞ THIỆP & TỰ ĐỘNG CUỘN (AUTO-SCROLL)
+// ==========================================
+let autoScrollTimer = null;
+let autoScrollAnimation = null;
+
+function stopAutoScroll() {
+    if (autoScrollTimer) {
+        clearTimeout(autoScrollTimer);
+        autoScrollTimer = null;
+    }
+    if (autoScrollAnimation) {
+        cancelAnimationFrame(autoScrollAnimation);
+        autoScrollAnimation = null;
+    }
+    window.removeEventListener('wheel', stopAutoScroll);
+    window.removeEventListener('touchstart', stopAutoScroll);
+    window.removeEventListener('pointerdown', stopAutoScroll);
+}
+
+const btnOpenCard = document.getElementById("btnOpenCard");
+if (btnOpenCard) {
+    btnOpenCard.addEventListener("click", function (e) {
+        e.preventDefault();
+        stopAutoScroll();
+
+        const familySec = document.getElementById("invitation");
+        if (familySec) {
+            familySec.scrollIntoView({ behavior: 'smooth' });
+
+            autoScrollTimer = setTimeout(() => {
+                window.addEventListener('wheel', stopAutoScroll, { passive: true });
+                window.addEventListener('touchstart', stopAutoScroll, { passive: true });
+                window.addEventListener('pointerdown', stopAutoScroll, { passive: true });
+
+                const scrollSpeed = 1.5;
+                
+                function step() {
+                    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+                    if (window.scrollY < maxScroll) {
+                        window.scrollBy(0, scrollSpeed);
+                        autoScrollAnimation = requestAnimationFrame(step);
+                    } else {
+                        stopAutoScroll();
+                    }
+                }
+                autoScrollAnimation = requestAnimationFrame(step);
+            }, 1000);
+        }
+    });
+}
 </script></body></html>

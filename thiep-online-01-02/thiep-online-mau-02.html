@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f8e9e8">
-  <title>Thiệp cưới online | Ngọc Thương</title>
+ <title>Wedding Invitation</title>
+ <link rel="icon" type="image/png" href="../anh/logo.png">
   <meta name="description" content="Thiệp cưới online lãng mạn dành cho gia đình và bạn bè.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -257,7 +258,7 @@
       width:100%;
       padding:12px 13px;
       border:1px solid #e7cccc;
-      border-radius:9px;
+      border-radius:99px;
       background:#fffdfb;
       color:var(--ink)}
       
@@ -370,7 +371,7 @@
         <p class="intro" id="welcomeText">Sự hiện diện của bạn là niềm vui và vinh dự cho gia đình chúng tôi.</p>
        
         <div class="actions">
-          <a class="btn" href="#events">Xem thông tin lễ cưới</a>
+          <a class="btn" id="btnOpenCard" href="#familySection">MỞ THIỆP &nbsp; ♥</a>
           <button class="btn secondary" id="shareBtn" type="button">Chia sẻ thiệp</button>
         </div>
         <p class="status" id="loadStatus" aria-live="polite"></p>
@@ -465,16 +466,11 @@
       groom_father:"", groom_mother:"", groom_address:"", bride_father:"", bride_mother:"", bride_address:"", cover_photo:"", gallery_urls:"", music_url:"", ceremony_map_query:"", party_map_query:""
     };
 
-
-
-
     function setText(id, value) { const el=$(id); if(el) el.textContent = value == null ? "" : String(value); }
 
-// Hàm hỗ trợ nhận cả link URL online lẫn đường dẫn thư mục local (vd: ../anh/anh-01.jpg)
     function safeHttpUrl(value) {
       const v = (value || "").trim();
       if (!v) return "";
-      // Nếu là link web (http/https) hoặc đường dẫn thư mục (../, ./, /, hoặc có chữ anh/) thì cho phép luôn
       if (/^https?:\/\//i.test(v) || v.startsWith("../") || v.startsWith("./") || v.startsWith("/") || v.includes("anh/")) {
         return v;
       }
@@ -482,7 +478,7 @@
         const u = new URL(v, location.href); 
         return ["https:","http:"].includes(u.protocol) ? u.href : ""; 
       } catch { 
-        return v; // Trả về nguyên bản chuỗi đường dẫn local nếu nhập dạng tên file
+        return v;
       }
     }
     function mapHref(value) {
@@ -514,12 +510,10 @@
       if(audioUrl && $("weddingMusic").src!==audioUrl) { $("weddingMusic").src=audioUrl; $("weddingMusic").load(); }
       if(!audioUrl) { $("musicBtn").title="Chưa cài link nhạc MP3"; } else { $("musicBtn").title="Bấm để bật/tắt nhạc"; }
 
-
 setInterval(createPetal, 450);
 
       const galleryUrls=String(data.gallery_urls || "").split(/\r?\n/).map(s=>s.trim()).filter(Boolean).slice(0,9);
       if(galleryUrls.length) { const gallery=$("gallery"); gallery.innerHTML=""; galleryUrls.forEach((url,i)=>{const src=safeHttpUrl(url);if(!src)return;const img=document.createElement("img");img.src=src;img.alt="Ảnh cưới "+(i+1);img.loading="lazy";gallery.appendChild(img);}); }
-      document.title=`Thiệp cưới ${data.bride_name||""} & ${data.groom_name||""} | Ngọc Thương`;
     }
     function createQR() { const node=$("qrCode"); node.innerHTML=""; if(window.QRCode) new QRCode(node,{text:location.href,width:140,height:140,colorDark:"#79545a",colorLight:"#ffffff",correctLevel:QRCode.CorrectLevel.M}); else node.textContent="Không tải được thư viện QR."; }
     async function init() {
@@ -540,8 +534,7 @@ setInterval(createPetal, 450);
       try { await db.collection("rsvp_responses_mau02").add({guest_name:$("guestName").value.trim(),guest_phone:$("guestPhone").value.trim(),attendance:$("attendance").value,guest_count:Number($("guestCount").value)||1,wishes:$("wish").value.trim(),created_at:firebase.firestore.FieldValue.serverTimestamp()}); status.textContent="Cảm ơn bạn! Xác nhận đã được gửi thành công.";$("rsvpForm").reset(); }
       catch(e){console.error(e);status.textContent="Chưa gửi được xác nhận. Vui lòng thử lại sau.";} finally{btn.disabled=false;}
     });
-    // Tự phát nhạc ngay khi khách có tương tác đầu tiên với thiệp.
-    // Trình duyệt có thể chặn tự phát khi chưa có tương tác; khi đó sự kiện này sẽ thử lại.
+
     const weddingAudio = $("weddingMusic");
     let musicStartedByGesture = false;
     async function startMusicAfterInteraction(event) {
@@ -554,13 +547,11 @@ setInterval(createPetal, 450);
         $("musicBtn").title = "Nhạc đang phát — bấm để tắt";
         ["pointerdown", "touchstart", "click", "scroll", "keydown"].forEach(type => document.removeEventListener(type, startMusicAfterInteraction));
       } catch (e) {
-        // Giữ sự kiện để thử lại khi khách tương tác tiếp theo.
         console.info("Trình duyệt chưa cho phép tự phát nhạc; sẽ thử lại khi khách tương tác.");
       }
     }
     ["pointerdown", "touchstart", "click", "scroll", "keydown"].forEach(type => document.addEventListener(type, startMusicAfterInteraction, { passive: true }));
 
-    // Nút nhạc vẫn cho phép khách chủ động bật/tắt.
     $("musicBtn").addEventListener("click", async (event) => {
       event.stopPropagation();
       const audio = $("weddingMusic");
@@ -590,7 +581,6 @@ setInterval(createPetal, 450);
     $("zaloBtn").addEventListener("click",()=>window.open("https://zalo.me/share?url="+encodeURIComponent(location.href),"_blank","noopener"));
     init();
 
-      // Tạo hiệu ứng hoa rơi
     function createPetal() {
         const petal = document.createElement('div');
         petal.className = 'petal'; 
@@ -602,8 +592,57 @@ setInterval(createPetal, 450);
         setTimeout(() => { petal.remove(); }, 6000);
     }
 
+// ==========================================
+// HIỆU ỨNG MỞ THIỆP & TỰ ĐỘNG CUỘN (AUTO-SCROLL)
+// ==========================================
+let autoScrollTimer = null;
+let autoScrollAnimation = null;
 
-   
+function stopAutoScroll() {
+    if (autoScrollTimer) {
+        clearTimeout(autoScrollTimer);
+        autoScrollTimer = null;
+    }
+    if (autoScrollAnimation) {
+        cancelAnimationFrame(autoScrollAnimation);
+        autoScrollAnimation = null;
+    }
+    window.removeEventListener('wheel', stopAutoScroll);
+    window.removeEventListener('touchstart', stopAutoScroll);
+    window.removeEventListener('pointerdown', stopAutoScroll);
+}
+
+const btnOpenCard = document.getElementById("btnOpenCard");
+if (btnOpenCard) {
+    btnOpenCard.addEventListener("click", function (e) {
+        e.preventDefault();
+        stopAutoScroll();
+
+        const familySec = document.getElementById("familySection");
+        if (familySec) {
+            familySec.scrollIntoView({ behavior: 'smooth' });
+
+            autoScrollTimer = setTimeout(() => {
+                window.addEventListener('wheel', stopAutoScroll, { passive: true });
+                window.addEventListener('touchstart', stopAutoScroll, { passive: true });
+                window.addEventListener('pointerdown', stopAutoScroll, { passive: true });
+
+                const scrollSpeed = 1.5;
+                
+                function step() {
+                    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+                    if (window.scrollY < maxScroll) {
+                        window.scrollBy(0, scrollSpeed);
+                        autoScrollAnimation = requestAnimationFrame(step);
+                    } else {
+                        stopAutoScroll();
+                    }
+                }
+                autoScrollAnimation = requestAnimationFrame(step);
+            }, 1000);
+        }
+    });
+}
   </script>
 </body>
 </html>

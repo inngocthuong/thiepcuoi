@@ -722,14 +722,14 @@
       else startAutoScroll();
     }
 
-    function initUserInterruption() {
-      const stopEvents = ['wheel', 'touchstart', 'mousedown', 'keydown', 'pointerdown'];
-      stopEvents.forEach(eventType => {
-        window.addEventListener(eventType, () => {
-          if (isAutoScrolling) stopAutoScroll();
-        }, { passive: true });
-      });
-    }
+function initUserInterruption() {
+  const stopEvents = ['wheel', 'touchstart', 'touchmove', 'mousedown', 'keydown', 'pointerdown'];
+  stopEvents.forEach(eventType => {
+    window.addEventListener(eventType, () => {
+      if (isAutoScrolling) stopAutoScroll();
+    }, { passive: true });
+  });
+}
 
     function openInvitation() {
       const envelopeOverlay = document.getElementById('envelopeOverlay');

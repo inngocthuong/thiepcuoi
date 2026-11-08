@@ -54,13 +54,11 @@
   </script>
 
   <style>
-    html, body {
+    body {
       background-color: #380a0e;
       color: #380a0e;
       font-family: 'Be Vietnam Pro', sans-serif;
       overflow-x: hidden;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
     }
 
     #particleCanvas {
@@ -174,7 +172,7 @@
   </div>
 
   <!-- ================= MAIN INVITATION CONTENT ================= -->
-  <main id="mainContent" class="hidden min-h-screen bg-cream opacity-0 transition-opacity duration-1000 overflow-y-auto">
+  <main id="mainContent" class="hidden min-h-screen bg-cream opacity-0 transition-opacity duration-1000">
     
     <nav class="sticky top-0 z-40 bg-burgundy-dark/95 backdrop-blur-md text-cream-dark px-4 py-3 shadow-lg border-b border-gold/30 flex items-center justify-between">
       <button onclick="backToCover()" class="flex items-center gap-2 bg-gold/20 hover:bg-gold/40 text-gold-light border border-gold/40 text-xs sm:text-sm font-semibold px-3 py-1.5 rounded-full transition-all">
@@ -617,7 +615,7 @@
     </div>
   </div>
 
-  <!-- JavaScript Code with Firebase & Optimized Auto-scroll Integration -->
+  <!-- JavaScript Code with Firebase & Auto-scroll Integration -->
   <script>
     // 1. FIREBASE CONFIGURATION (Project: thiep-online-03)
     const firebaseConfig = {
@@ -646,7 +644,7 @@
 
     let rsvpData = [];
     let isAutoScrolling = false;
-    let autoScrollReq = null;
+    let autoScrollInterval = null;
     let isMusicPlaying = false;
 
     // Canvas Particles
@@ -697,62 +695,41 @@
 
     const weddingMusic = document.getElementById('weddingMusic');
 
-    // 2. TỰ ĐỘNG CUỘN TRANG MƯỢT MÀ (DÙNG REQUESTANIMATIONFRAME GIỐNG MẪU 12)
-    function stopAutoScroll() {
-      if (autoScrollReq) {
-        cancelAnimationFrame(autoScrollReq);
-        autoScrollReq = null;
-        isAutoScrolling = false;
-        
-        const scrollIcon = document.getElementById('scrollIcon');
-        if (scrollIcon) scrollIcon.className = 'fas fa-angles-down text-lg text-gold';
-
-        ['wheel', 'touchstart', 'mousedown', 'keydown'].forEach(evt => {
-          window.removeEventListener(evt, stopAutoScroll);
-        });
-      }
-    }
-
+    // 2. TỰ ĐỘNG CUỘN TRANG & BẮT TƯƠNG TÁC NGƯỜI DÙNG NGẮT CUỘN
     function startAutoScroll() {
       if (isAutoScrolling) return;
       isAutoScrolling = true;
-      
       const scrollIcon = document.getElementById('scrollIcon');
       if (scrollIcon) scrollIcon.className = 'fas fa-pause text-lg text-gold';
 
-      ['wheel', 'touchstart', 'mousedown', 'keydown'].forEach(evt => {
-        window.addEventListener(evt, stopAutoScroll, { passive: true });
-      });
-
-      setTimeout(() => {
-        let currentY = window.pageYOffset || document.documentElement.scrollTop;
-        const maxScrollY = document.body.scrollHeight - window.innerHeight;
-        const speed = 1.0; // Tốc độ trượt mượt mà
-
-        function stepAutoScroll() {
-          if (!isAutoScrolling) return;
-          
-          currentY += speed;
-          window.scrollTo(0, currentY);
-
-          if (currentY < maxScrollY && currentY < document.body.scrollHeight) {
-            autoScrollReq = requestAnimationFrame(stepAutoScroll);
-          } else {
-            stopAutoScroll();
-          }
+      autoScrollInterval = setInterval(() => {
+        window.scrollBy({ top: 1, behavior: 'smooth' });
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
+          stopAutoScroll();
         }
+      }, 35);
+    }
 
-        autoScrollReq = requestAnimationFrame(stepAutoScroll);
-      }, 400);
+    function stopAutoScroll() {
+      isAutoScrolling = false;
+      clearInterval(autoScrollInterval);
+      const scrollIcon = document.getElementById('scrollIcon');
+      if (scrollIcon) scrollIcon.className = 'fas fa-angles-down text-lg text-gold';
     }
 
     function toggleAutoScroll() {
-      if (isAutoScrolling) {
-        stopAutoScroll();
-      } else {
-        startAutoScroll();
-      }
+      if (isAutoScrolling) stopAutoScroll();
+      else startAutoScroll();
     }
+
+function initUserInterruption() {
+  const stopEvents = ['wheel', 'touchstart', 'touchmove', 'mousedown', 'keydown', 'pointerdown'];
+  stopEvents.forEach(eventType => {
+    window.addEventListener(eventType, () => {
+      if (isAutoScrolling) stopAutoScroll();
+    }, { passive: true });
+  });
+}
 
     function openInvitation() {
       const envelopeOverlay = document.getElementById('envelopeOverlay');
@@ -774,12 +751,15 @@
         document.getElementById('autoScrollToggle').classList.remove('hidden');
       });
 
-      // Kích hoạt tự động cuộn mượt mà ngay khi mở thiệp
-      startAutoScroll();
+      // Kích hoạt tự động cuộn sau 1 giây mở thiệp
+      setTimeout(() => {
+        startAutoScroll();
+        initUserInterruption();
+      }, 1000);
     }
 
     function backToCover() {
-      stopAutoScroll();
+      if (isAutoScrolling) stopAutoScroll();
       const envelopeOverlay = document.getElementById('envelopeOverlay');
       const mainContent = document.getElementById('mainContent');
       

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thiệp Cưới Đỏ</title>
+  <title>Thiệp Cưới Minh Quân & Ngọc Hân | Romantic Đỏ</title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -54,14 +54,14 @@
   </script>
 
   <style>
-    html, body {
-      background-color: #380a0e;
-      color: #380a0e;
-      font-family: 'Be Vietnam Pro', sans-serif;
-      overflow-x: hidden;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
+ html, body {
+  background-color: #380a0e;
+  color: #380a0e;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  overflow-x: hidden;
+  overflow-y: auto; /* Ép di động nhận diện thanh cuộn dọc */
+  -webkit-overflow-scrolling: touch; /* Giúp vuốt mượt trên iOS */
+}
 
     #particleCanvas {
       position: fixed;
@@ -174,7 +174,8 @@
   </div>
 
   <!-- ================= MAIN INVITATION CONTENT ================= -->
-  <main id="mainContent" class="hidden min-h-screen bg-cream opacity-0 transition-opacity duration-1000 overflow-y-auto">
+
+    <main id="mainContent" class="hidden min-h-screen bg-cream opacity-0 transition-opacity duration-1000 overflow-y-auto">
     
     <nav class="sticky top-0 z-40 bg-burgundy-dark/95 backdrop-blur-md text-cream-dark px-4 py-3 shadow-lg border-b border-gold/30 flex items-center justify-between">
       <button onclick="backToCover()" class="flex items-center gap-2 bg-gold/20 hover:bg-gold/40 text-gold-light border border-gold/40 text-xs sm:text-sm font-semibold px-3 py-1.5 rounded-full transition-all">
@@ -617,7 +618,7 @@
     </div>
   </div>
 
-  <!-- JavaScript Code with Firebase & Optimized Auto-scroll Integration -->
+  <!-- JavaScript Code with Firebase & Auto-scroll Integration -->
   <script>
     // 1. FIREBASE CONFIGURATION (Project: thiep-online-03)
     const firebaseConfig = {
@@ -644,10 +645,12 @@
       'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=800&q=80'
     ];
 
+  
     let rsvpData = [];
     let isAutoScrolling = false;
-    let autoScrollReq = null;
-    let isMusicPlaying = false;
+    let autoScrollInterval = null;
+    let isProgrammaticScroll = false;
+    let allowUserInterruption = false; // Cờ khóa tạm thời để tránh xung đột sự kiện khi vừa mở thiệp trên mobile
 
     // Canvas Particles
     function initParticles() {
@@ -697,61 +700,56 @@
 
     const weddingMusic = document.getElementById('weddingMusic');
 
-    // 2. TỰ ĐỘNG CUỘN TRANG MƯỢT MÀ (DÙNG REQUESTANIMATIONFRAME GIỐNG MẪU 12)
-    function stopAutoScroll() {
-      if (autoScrollReq) {
-        cancelAnimationFrame(autoScrollReq);
-        autoScrollReq = null;
-        isAutoScrolling = false;
-        
-        const scrollIcon = document.getElementById('scrollIcon');
-        if (scrollIcon) scrollIcon.className = 'fas fa-angles-down text-lg text-gold';
-
-        ['wheel', 'touchstart', 'mousedown', 'keydown'].forEach(evt => {
-          window.removeEventListener(evt, stopAutoScroll);
-        });
-      }
-    }
-
+    // 2. TỰ ĐỘNG CUỘN TRANG & BẮT TƯƠNG TÁC NGƯỜI DÙNG NGẮT CUỘN
     function startAutoScroll() {
       if (isAutoScrolling) return;
       isAutoScrolling = true;
-      
       const scrollIcon = document.getElementById('scrollIcon');
       if (scrollIcon) scrollIcon.className = 'fas fa-pause text-lg text-gold';
 
-      ['wheel', 'touchstart', 'mousedown', 'keydown'].forEach(evt => {
-        window.addEventListener(evt, stopAutoScroll, { passive: true });
-      });
+      autoScrollInterval = setInterval(() => {
+        isProgrammaticScroll = true;
+        window.scrollBy({ top: 1, behavior: 'smooth' });
+        
+        setTimeout(() => {
+          isProgrammaticScroll = false;
+        }, 50);
 
-      setTimeout(() => {
-        let currentY = window.pageYOffset || document.documentElement.scrollTop;
-        const maxScrollY = document.body.scrollHeight - window.innerHeight;
-        const speed = 1.0; // Tốc độ trượt mượt mà
-
-        function stepAutoScroll() {
-          if (!isAutoScrolling) return;
-          
-          currentY += speed;
-          window.scrollTo(0, currentY);
-
-          if (currentY < maxScrollY && currentY < document.body.scrollHeight) {
-            autoScrollReq = requestAnimationFrame(stepAutoScroll);
-          } else {
-            stopAutoScroll();
-          }
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
+          stopAutoScroll();
         }
+      }, 35);
+    }
 
-        autoScrollReq = requestAnimationFrame(stepAutoScroll);
-      }, 400);
+    function stopAutoScroll() {
+      isAutoScrolling = false;
+      isProgrammaticScroll = false;
+      clearInterval(autoScrollInterval);
+      const scrollIcon = document.getElementById('scrollIcon');
+      if (scrollIcon) scrollIcon.className = 'fas fa-angles-down text-lg text-gold';
     }
 
     function toggleAutoScroll() {
-      if (isAutoScrolling) {
-        stopAutoScroll();
-      } else {
-        startAutoScroll();
-      }
+      if (isAutoScrolling) stopAutoScroll();
+      else startAutoScroll();
+    }
+
+    function initUserInterruption() {
+      allowUserInterruption = false;
+      
+      // Chờ 1.5 giây sau khi mở thiệp mới cho phép ngắt cuộn bằng thao tác vuốt thật
+      setTimeout(() => {
+        allowUserInterruption = true;
+      }, 1500);
+
+      const stopEvents = ['wheel', 'touchstart', 'touchmove', 'mousedown', 'keydown'];
+      stopEvents.forEach(eventType => {
+        window.addEventListener(eventType, () => {
+          if (isAutoScrolling && allowUserInterruption && !isProgrammaticScroll) {
+            stopAutoScroll();
+          }
+        }, { passive: true });
+      });
     }
 
     function openInvitation() {
@@ -774,12 +772,15 @@
         document.getElementById('autoScrollToggle').classList.remove('hidden');
       });
 
-      // Kích hoạt tự động cuộn mượt mà ngay khi mở thiệp
-      startAutoScroll();
+      // Kích hoạt tự động cuộn sau khi mở thiệp
+      setTimeout(() => {
+        startAutoScroll();
+        initUserInterruption();
+      }, 1000);
     }
 
     function backToCover() {
-      stopAutoScroll();
+      if (isAutoScrolling) stopAutoScroll();
       const envelopeOverlay = document.getElementById('envelopeOverlay');
       const mainContent = document.getElementById('mainContent');
       

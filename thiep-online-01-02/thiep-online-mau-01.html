@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thiệp Cưới Minh Quân & Ngọc Hân | Romantic Đỏ</title>
+  <title>Thiệp1</title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -54,14 +54,12 @@
   </script>
 
   <style>
- html, body {
-  background-color: #380a0e;
-  color: #380a0e;
-  font-family: 'Be Vietnam Pro', sans-serif;
-  overflow-x: hidden;
-  overflow-y: auto; /* Ép di động nhận diện thanh cuộn dọc */
-  -webkit-overflow-scrolling: touch; /* Giúp vuốt mượt trên iOS */
-}
+    body {
+      background-color: #380a0e;
+      color: #380a0e;
+      font-family: 'Be Vietnam Pro', sans-serif;
+      overflow-x: hidden;
+    }
 
     #particleCanvas {
       position: fixed;
@@ -174,8 +172,7 @@
   </div>
 
   <!-- ================= MAIN INVITATION CONTENT ================= -->
-
-    <main id="mainContent" class="hidden min-h-screen bg-cream opacity-0 transition-opacity duration-1000 overflow-y-auto">
+  <main id="mainContent" class="hidden min-h-screen bg-cream opacity-0 transition-opacity duration-1000">
     
     <nav class="sticky top-0 z-40 bg-burgundy-dark/95 backdrop-blur-md text-cream-dark px-4 py-3 shadow-lg border-b border-gold/30 flex items-center justify-between">
       <button onclick="backToCover()" class="flex items-center gap-2 bg-gold/20 hover:bg-gold/40 text-gold-light border border-gold/40 text-xs sm:text-sm font-semibold px-3 py-1.5 rounded-full transition-all">
@@ -645,12 +642,10 @@
       'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=800&q=80'
     ];
 
-  
     let rsvpData = [];
     let isAutoScrolling = false;
     let autoScrollInterval = null;
-    let isProgrammaticScroll = false;
-    let allowUserInterruption = false; // Cờ khóa tạm thời để tránh xung đột sự kiện khi vừa mở thiệp trên mobile
+    let isMusicPlaying = false;
 
     // Canvas Particles
     function initParticles() {
@@ -708,13 +703,7 @@
       if (scrollIcon) scrollIcon.className = 'fas fa-pause text-lg text-gold';
 
       autoScrollInterval = setInterval(() => {
-        isProgrammaticScroll = true;
         window.scrollBy({ top: 1, behavior: 'smooth' });
-        
-        setTimeout(() => {
-          isProgrammaticScroll = false;
-        }, 50);
-
         if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
           stopAutoScroll();
         }
@@ -723,7 +712,6 @@
 
     function stopAutoScroll() {
       isAutoScrolling = false;
-      isProgrammaticScroll = false;
       clearInterval(autoScrollInterval);
       const scrollIcon = document.getElementById('scrollIcon');
       if (scrollIcon) scrollIcon.className = 'fas fa-angles-down text-lg text-gold';
@@ -735,19 +723,10 @@
     }
 
     function initUserInterruption() {
-      allowUserInterruption = false;
-      
-      // Chờ 1.5 giây sau khi mở thiệp mới cho phép ngắt cuộn bằng thao tác vuốt thật
-      setTimeout(() => {
-        allowUserInterruption = true;
-      }, 1500);
-
-      const stopEvents = ['wheel', 'touchstart', 'touchmove', 'mousedown', 'keydown'];
+      const stopEvents = ['wheel', 'touchstart', 'mousedown', 'keydown', 'pointerdown'];
       stopEvents.forEach(eventType => {
         window.addEventListener(eventType, () => {
-          if (isAutoScrolling && allowUserInterruption && !isProgrammaticScroll) {
-            stopAutoScroll();
-          }
+          if (isAutoScrolling) stopAutoScroll();
         }, { passive: true });
       });
     }
@@ -772,7 +751,7 @@
         document.getElementById('autoScrollToggle').classList.remove('hidden');
       });
 
-      // Kích hoạt tự động cuộn sau khi mở thiệp
+      // Kích hoạt tự động cuộn sau 1 giây mở thiệp
       setTimeout(() => {
         startAutoScroll();
         initUserInterruption();

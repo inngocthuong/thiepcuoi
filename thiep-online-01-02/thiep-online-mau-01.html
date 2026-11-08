@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thiệp Cưới Romantic Đỏ</title>
+  <title>Romantic Đỏ</title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -54,12 +54,14 @@
   </script>
 
   <style>
-    body {
-      background-color: #380a0e;
-      color: #380a0e;
-      font-family: 'Be Vietnam Pro', sans-serif;
-      overflow-x: hidden;
-    }
+ html, body {
+  background-color: #380a0e;
+  color: #380a0e;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  overflow-x: hidden;
+  overflow-y: auto; /* Ép di động nhận diện thanh cuộn dọc */
+  -webkit-overflow-scrolling: touch; /* Giúp vuốt mượt trên iOS */
+}
 
     #particleCanvas {
       position: fixed;
@@ -172,7 +174,8 @@
   </div>
 
   <!-- ================= MAIN INVITATION CONTENT ================= -->
-  <main id="mainContent" class="hidden min-h-screen bg-cream opacity-0 transition-opacity duration-1000">
+
+    <main id="mainContent" class="hidden min-h-screen bg-cream opacity-0 transition-opacity duration-1000 overflow-y-auto">
     
     <nav class="sticky top-0 z-40 bg-burgundy-dark/95 backdrop-blur-md text-cream-dark px-4 py-3 shadow-lg border-b border-gold/30 flex items-center justify-between">
       <button onclick="backToCover()" class="flex items-center gap-2 bg-gold/20 hover:bg-gold/40 text-gold-light border border-gold/40 text-xs sm:text-sm font-semibold px-3 py-1.5 rounded-full transition-all">
@@ -723,7 +726,8 @@
     }
 
 function initUserInterruption() {
-  const stopEvents = ['wheel', 'touchstart', 'touchmove', 'mousedown', 'keydown', 'pointerdown'];
+  // Bỏ 'touchstart' để không ngắt vô lý ngay khi vừa chạm màn hình di động
+  const stopEvents = ['wheel', 'touchmove', 'mousedown', 'keydown'];
   stopEvents.forEach(eventType => {
     window.addEventListener(eventType, () => {
       if (isAutoScrolling) stopAutoScroll();

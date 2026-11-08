@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Romantic Đỏ</title>
+  <title>Thiệp Cưới Minh Quân & Ngọc Hân | Romantic Đỏ</title>
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -646,57 +646,9 @@
     ];
 
     let rsvpData = [];
-    let isAutoScrolling = false;
+let isAutoScrolling = false;
     let autoScrollInterval = null;
-    let isMusicPlaying = false;
-
-    // Canvas Particles
-    function initParticles() {
-      const canvas = document.getElementById('particleCanvas');
-      const ctx = canvas.getContext('2d');
-      let width = canvas.width = window.innerWidth;
-      let height = canvas.height = window.innerHeight;
-
-      window.addEventListener('resize', () => {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
-      });
-
-      const particles = [];
-      for (let i = 0; i < 45; i++) {
-        particles.push({
-          x: Math.random() * width,
-          y: Math.random() * height,
-          radius: Math.random() * 2 + 0.5,
-          color: Math.random() > 0.4 ? '#dfb76c' : '#ffffff',
-          speedY: Math.random() * 0.8 + 0.3,
-          speedX: Math.random() * 0.4 - 0.2,
-          opacity: Math.random() * 0.7 + 0.3
-        });
-      }
-
-      function animate() {
-        ctx.clearRect(0, 0, width, height);
-        particles.forEach(p => {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fillStyle = p.color;
-          ctx.globalAlpha = p.opacity;
-          ctx.fill();
-
-          p.y += p.speedY;
-          p.x += p.speedX;
-          if (p.y > height) {
-            p.y = -10;
-            p.x = Math.random() * width;
-          }
-        });
-        requestAnimationFrame(animate);
-      }
-      animate();
-    }
-
-    const weddingMusic = document.getElementById('weddingMusic');
+    let isProgrammaticScroll = false; // Cờ nhận biết đang cuộn tự động bằng code
 
     // 2. TỰ ĐỘNG CUỘN TRANG & BẮT TƯƠNG TÁC NGƯỜI DÙNG NGẮT CUỘN
     function startAutoScroll() {
@@ -706,7 +658,14 @@
       if (scrollIcon) scrollIcon.className = 'fas fa-pause text-lg text-gold';
 
       autoScrollInterval = setInterval(() => {
+        isProgrammaticScroll = true; // Đánh dấu là code đang cuộn
         window.scrollBy({ top: 1, behavior: 'smooth' });
+        
+        // Trả lại cờ sau khi cuộn xong một nhịp ngắn
+        setTimeout(() => {
+          isProgrammaticScroll = false;
+        }, 50);
+
         if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 10) {
           stopAutoScroll();
         }
@@ -715,6 +674,7 @@
 
     function stopAutoScroll() {
       isAutoScrolling = false;
+      isProgrammaticScroll = false;
       clearInterval(autoScrollInterval);
       const scrollIcon = document.getElementById('scrollIcon');
       if (scrollIcon) scrollIcon.className = 'fas fa-angles-down text-lg text-gold';
@@ -725,15 +685,17 @@
       else startAutoScroll();
     }
 
-function initUserInterruption() {
-  // Bỏ 'touchstart' để không ngắt vô lý ngay khi vừa chạm màn hình di động
-  const stopEvents = ['wheel', 'touchmove', 'mousedown', 'keydown'];
-  stopEvents.forEach(eventType => {
-    window.addEventListener(eventType, () => {
-      if (isAutoScrolling) stopAutoScroll();
-    }, { passive: true });
-  });
-}
+    function initUserInterruption() {
+      const stopEvents = ['wheel', 'touchstart', 'touchmove', 'mousedown', 'keydown'];
+      stopEvents.forEach(eventType => {
+        window.addEventListener(eventType, () => {
+          // Chỉ ngắt khi người dùng tương tác THẬT sự, bỏ qua lúc code đang tự cuộn
+          if (isAutoScrolling && !isProgrammaticScroll) {
+            stopAutoScroll();
+          }
+        }, { passive: true });
+      });
+    }
 
     function openInvitation() {
       const envelopeOverlay = document.getElementById('envelopeOverlay');

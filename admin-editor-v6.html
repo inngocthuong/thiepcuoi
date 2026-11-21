@@ -344,6 +344,7 @@
     <div id="app-screen">
         <header>
             <div class="header-left">
+                <a href="https://github.com/inngocthuong/thiepcuoi/tree/main" target="_blank" rel="noopener noreferrer" class="btn btn-sync" style="text-decoration:none;" title="Mở trang quản trị dự án web">🌐 Quản Trị Dự Án Web</a>
                 <button class="btn btn-primary" onclick="selectProjectFolder()">📂 Chọn Thư Mục Mới</button>
                 <button class="btn btn-new" onclick="openNewFileModal('')">➕ Tạo File Mới</button>
                 <button class="btn btn-restore" id="header-restore-btn" onclick="restoreSavedFolder(true)" style="display:none;">🔄 Mở Lại Thư Mục Đã Lưu</button>
@@ -522,7 +523,7 @@
         } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
         // ================= CẤU HÌNH MẬT KHẨU & FIREBASE =================
-        const ADMIN_PASSWORD = "123"; // <-- Đổi mật khẩu của bạn tại đây
+        const ADMIN_PASSWORD = "Thong@121976"; // <-- Đổi mật khẩu của bạn tại đây
         const ALLOWED_EXTENSIONS = ['.html', '.js', '.json', '.css', '.txt', '.md'];
         const PROJECTS_COLLECTION = "admin_projects";
         const ACTIVE_PROJECT_STORAGE_KEY = "admin_editor_active_project_id";

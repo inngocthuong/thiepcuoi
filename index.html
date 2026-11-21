@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trang chủ - Thiệp Cưới Ngọc Thương</title>
+    <title>Thiệp Cưới Ngọc Thương</title>
+    <link rel="icon" type="image/png" href="anh/logo.png">
     <style>
         /* --- 1. CÀI ĐẶT CHUNG --- */
         * {
@@ -98,22 +99,6 @@
             font-size: 16px;
         }
 
-        .cum-tieu-de-danh-muc {
-            max-width: 1600px;
-            margin: 30px auto 25px auto;
-            padding: 0 15px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .cum-tieu-de-danh-muc h2 {
-            font-weight: bold;
-            text-transform: uppercase;
-            margin: 0;
-            padding-bottom: 10px;
-            border-bottom: 2px solid currentColor; 
-        }
-
         @media (max-width: 600px) {
             .banner-search {
                 top: 8px;
@@ -187,113 +172,13 @@
             display: block;
         }
 
-        /* --- 4. KHU VỰC SẢN PHẨM TRUỢT NGANG --- */
         .container {
-            max-width: 1600px;
+            max-width: 1200px;
             margin: 40px auto;
             padding: 0 15px;
         }
 
-        .slider-wrapper {
-            width: 100%;
-            overflow-x: auto;
-            scroll-behavior: smooth;
-            padding-bottom: 10px;
-            scrollbar-width: thin;
-        }
-
-        .slider-wrapper::-webkit-scrollbar {
-            height: 6px;
-        }
-        .slider-wrapper::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
-
-        .product_noibat_box_slider {
-            display: flex;
-            gap: 20px;
-            width: max-content;
-        }
-
-        .product_noibat_item_slider {
-            width: 260px;
-            flex-shrink: 0;
-            background: #fff;
-            padding: 10px;
-            border-radius: 6px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            transition: transform 0.2s ease;
-        }
-
-        .product_noibat_item_slider:hover {
-            transform: translateY(-5px);
-        }
-
-        .product_noibat_item_slider .img_pro {
-            position: relative;
-            display: block;
-            width: 100%;
-            overflow: hidden;
-            background: #f7f7f7;
-            border-radius: 4px;
-            margin-bottom: 10px;
-            cursor: pointer;
-        }
-
-        .product_noibat_item_slider .img_pro img {
-            width: 100%;
-            height: 220px;
-            display: block;
-            object-fit: cover;
-            transition: transform 0.3s ease;
-        }
-
-        .product_noibat_item_slider .img_pro:hover img {
-            transform: scale(1.05);
-        }
-
-        .product_noibat_item_slider h3 {
-            margin: 0 0 5px 0;
-            display: block;
-            font-size: 14px;
-            font-weight: 500;
-            line-height: 1.4;
-            height: 40px;
-            overflow: hidden;
-        }
-
-        .product_noibat_item_slider h3 a {
-            color: #333;
-            text-decoration: none;
-            transition: color 0.2s ease;
-            cursor: pointer;
-        }
-
-        .product_noibat_item_slider h3 a:hover {
-            color: #2980b9;
-        }
-
-        .text-split {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-        }
-
-        .product_noibat_item_slider .box_price_box {
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        .product_noibat_item_slider .box_price_box strong {
-            color: #e74c3c;
-            font-weight: bold;
-            margin: 0;
-        }
-
-        /* --- 5. RESPONSIVE MOBILE --- */
+        /* --- RESPONSIVE MOBILE --- */
         .navbar-mobile, .banner-mobile, .footer-mobile { display: none !important; }
 
         @media (max-width: 768px) {
@@ -379,10 +264,9 @@
             }
             .footer-mobile-copy { border-top: 1px solid rgba(255,255,255,0.1); margin-top: 15px; padding-top: 12px; font-size: 12px; color: #bbb; }
             footer { display: none !important; }
-            .product_noibat_item_slider { width: 200px; }
         }
 
-        /* --- 6. FOOTER DESKTOP --- */
+        /* --- FOOTER DESKTOP --- */
         footer {
             background-color: #e0e1e0;
             color: #000;
@@ -409,6 +293,156 @@
         .footer-links a { color: #000; text-decoration: none; }
         .footer-links a:hover { color: #03692a; }
         .footer-copyright { text-align: center; border-top: 1px solid #bab6b6; margin-top: 20px; padding-top: 20px; font-size: 0.8rem; color: #000; width: 100%; }
+   
+        /* --- PHẦN CSS MỞ RỘNG (ĐÃ CẬP NHẬT TIÊU ĐỀ NẰM DƯỚI HÌNH) --- */
+        :root {
+            --primary-color: #526456;
+            --text-color: #333333;
+            --price-color: #d93838;
+            --gray-light: #f8f9fa;
+        }
+
+        section { padding: 30px 0; }
+        .section-title {
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 25px;
+            color: var(--text-color);
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        /* DANH MỤC 6 KHỐI: TIÊU ĐỀ NẰM DƯỚI HÌNH */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+        .cat-item {
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .cat-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        }
+        .cat-img-box {
+            width: 100%;
+            aspect-ratio: 16/10;
+            overflow: hidden;
+            background: var(--gray-light);
+        }
+        .cat-img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        .cat-item:hover .cat-img-box img {
+            transform: scale(1.06);
+        }
+        .cat-title-box {
+            padding: 14px;
+            text-align: center;
+            background: #fff;
+        }
+        .cat-title-box h3 {
+            color: #222;
+            font-size: 15px;
+            margin: 0;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* DANH MỤC MOBILE SLIDER */
+        .category-slider {
+            overflow-x: auto; scrollbar-width: none; padding-bottom: 10px;
+        }
+        .category-slider::-webkit-scrollbar { display: none; }
+        .slider-track { display: flex; gap: 15px; width: max-content; padding: 5px 0; }
+        .slide-item { text-decoration: none; text-align: center; width: 85px; }
+        .circle-img {
+            width: 70px; height: 70px; border-radius: 50%; overflow: hidden; margin: 0 auto 6px;
+            border: 2px solid var(--primary-color); box-shadow: 0 3px 6px rgba(0,0,0,0.05);
+        }
+        .circle-img img { width: 100%; height: 100%; object-fit: cover; }
+        .slide-item span { font-size: 11.5px; color: var(--text-color); display: block; font-weight: 500; }
+
+        /* TABS SẢN PHẨM */
+        .product-tabs {
+            display: flex; justify-content: center; gap: 15px; margin-bottom: 25px;
+            border-bottom: 2px solid #eeeeee; padding-bottom: 10px;
+        }
+        .tab-btn {
+            background: none; border: none; font-size: 15px; font-weight: bold; color: #888;
+            cursor: pointer; padding: 5px 12px; position: relative; transition: color 0.3s;
+        }
+        .tab-btn.active, .tab-btn:hover { color: var(--primary-color); }
+        .tab-btn.active::after {
+            content: ""; position: absolute; bottom: -12px; left: 0; width: 100%; height: 3px; background-color: var(--primary-color);
+        }
+
+        /* LƯỚI SẢN PHẨM */
+        .product-grid {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+        }
+        .product-card {
+            background: #ffffff; border: 1px solid #eaeaea; border-radius: 8px; overflow: hidden;
+            display: flex; flex-direction: column; transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        .product-card:hover {
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08); transform: translateY(-3px);
+        }
+        .prod-img-box {
+            position: relative; aspect-ratio: 1/1; overflow: hidden; background-color: var(--gray-light);
+        }
+        .prod-img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .prod-info { padding: 12px; display: flex; flex-direction: column; flex-grow: 1; }
+        .prod-code { font-size: 11px; color: #888; margin-bottom: 4px; font-weight: 500; }
+        .prod-title {
+            font-size: 13.5px; margin: 0 0 6px 0; line-height: 1.4; color: #222; height: 38px;
+            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+        }
+        .prod-rating { font-size: 11px; margin-bottom: 6px; }
+        .prod-price-box { margin-bottom: 12px; }
+        .price-current { font-size: 15px; font-weight: 700; color: var(--price-color); margin-right: 6px; }
+        .price-old { font-size: 12px; color: #aaa; text-decoration: line-through; }
+        .btn-detail {
+            display: block; text-align: center; border: 1px solid var(--primary-color); color: var(--primary-color);
+            text-decoration: none; padding: 7px; border-radius: 4px; font-size: 12.5px; font-weight: 600;
+            margin-top: auto; transition: all 0.3s ease;
+        }
+        .btn-detail:hover { background: var(--primary-color); color: #fff; }
+
+        .sale-badge::after {
+            content: attr(data-sale); position: absolute; top: 8px; left: 8px;
+            background: var(--price-color); color: #fff; font-size: 10.5px; padding: 2px 5px; border-radius: 3px; font-weight: bold;
+        }
+        .hot-badge::after {
+            content: "BÁN CHẠY"; position: absolute; top: 8px; left: 8px;
+            background: #ffb703; color: #fff; font-size: 10.5px; padding: 2px 5px; border-radius: 3px; font-weight: bold;
+        }
+
+        @media (min-width: 769px) { .mobile-only { display: none !important; } }
+        @media (max-width: 768px) {
+            .desktop-only { display: none !important; }
+            section { padding: 20px 0; }
+            .section-title { font-size: 18px; margin-bottom: 15px; }
+            .product-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .prod-info { padding: 8px; }
+            .prod-title { font-size: 12.5px; height: 35px; }
+            .price-current { font-size: 13.5px; }
+            .product-tabs { overflow-x: auto; justify-content: flex-start; scrollbar-width: none; }
+            .product-tabs::-webkit-scrollbar { display: none !important; }
+            .tab-btn { font-size: 13px; white-space: nowrap; padding: 5px 8px; }
+        }
     </style>
 </head>
 
@@ -490,47 +524,98 @@
         <a href="lienhe.html">Liên Hệ</a>
     </nav>
 
-    <!-- 3. KHU VỰC HIỂN THỊ SẢN PHẨM CHÍNH -->
-    <div class="vung-chua-2-box" style="max-width: 1600px; margin: 30px auto; padding: 0 15px; display: flex; gap: 10px;">
+     <div class="vung-chua-2-box" style="max-width: 1200px; margin: 30px auto; padding: 0 15px; display: flex; gap: 10px;">
         <div class="banner-giua-trang1">   
-            <img src="anh/banner-duoi.png" alt="Biểu ngữ Giáo xứ">
+            <img src="anh/banner-duoi2.png" alt="Biểu ngữ Giáo xứ">
         </div>
         <iframe src="box/menu-cot-phai.html" style="flex: 35; height: 330px; border: none; overflow: hidden;"></iframe>
     </div>
 
-    <main class="container">
-        <!-- ================= MẪU THIỆP ĐỘC QUYỀN ================= -->
-        <div class="cum-tieu-de-danh-muc">
-            <h2 style="text-align: left; color: #526456; font-size: 24px;">Mẫu Thiệp Độc Quyền</h2>
-        </div>
-        <div class="slider-wrapper">
-            <div class="product_noibat_box_slider" id="slider-docquyen">
-                <!-- JavaScript sẽ đổ sản phẩm độc quyền vào đây -->
+    <!-- PHẦN 1: KHỐI 6 DANH MỤC (HÌNH TRÊN, TIÊU ĐỀ DƯỚI) -->
+    <section class="category-section">
+        <div class="container">
+            <h2 class="section-title">Danh Mục Mẫu Thiệp</h2>
+            
+            <div class="category-grid desktop-only">
+                <a href="thiepcuoi-hiendai.html" class="cat-item">
+                    <div class="cat-img-box"><img src="https://cdn.upanhlaylink.com/i/gwtOP3wo.jpg" alt="Thiệp cưới hiện đại"></div>
+                    <div class="cat-title-box"><h3>Thiệp Cưới Hiện Đại</h3></div>
+                </a>
+                <a href="thiepcuoi-truyenthong.html" class="cat-item">
+                    <div class="cat-img-box"><img src="https://cdn.upanhlaylink.com/i/MoqNfJpx.jpg" alt="Thiệp cưới truyền thống"></div>
+                    <div class="cat-title-box"><h3>Thiệp Cưới Truyền Thống</h3></div>
+                </a>
+                <a href="thiepcuoi-docquyen.html" class="cat-item">
+                    <div class="cat-img-box"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6160-0025.jpg" alt="Thiệp cưới kỹ thuật số"></div>
+                    <div class="cat-title-box"><h3>Thiệp Cưới Độc Quyền KTS</h3></div>
+                </a>
+                <a href="thiep-tangia.html" class="cat-item">
+                    <div class="cat-img-box"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/tg325-6425.jpg" alt="Thiệp tân gia"></div>
+                    <div class="cat-title-box"><h3>Thiệp Tân Gia</h3></div>
+                </a>
+                <a href="thiep-sinhnhat.html" class="cat-item">
+                    <div class="cat-img-box"><img src="https://thiepcuoihoanghaiyen.com/upload/sanpham/sn429-4414.jpg" alt="Thiệp sinh nhật"></div>
+                    <div class="cat-title-box"><h3>Thiệp Sinh Nhật</h3></div>
+                </a>
+                <a href="thiep-taon.html" class="cat-item">
+                    <div class="cat-img-box"><img src="thieptaon/to889.jpg" alt="Thiệp công giáo"></div>
+                    <div class="cat-title-box"><h3>Thiệp Công Giáo</h3></div>
+                </a>
+            </div>
+
+            <div class="category-slider mobile-only">
+                <div class="slider-track">
+                    <a href="thiepcuoi-hiendai.html" class="slide-item">
+                        <div class="circle-img"><img src="anh/logo.png" alt="Hiện đại"></div>
+                        <span>Thiệp Hiện Đại</span>
+                    </a>
+                    <a href="thiepcuoi-truyenthong.html" class="slide-item">
+                        <div class="circle-img"><img src="anh/logo.png" alt="Truyền thống"></div>
+                        <span>Thiệp Truyền Thống</span>
+                    </a>
+                    <a href="thiepcuoi-docquyen.html" class="slide-item">
+                        <div class="circle-img"><img src="anh/logo.png" alt="KTS"></div>
+                        <span>Độc Quyền KTS</span>
+                    </a>
+                    <a href="thiep-tangia.html" class="slide-item">
+                        <div class="circle-img"><img src="anh/logo.png" alt="Tân gia"></div>
+                        <span>Thiệp Tân Gia</span>
+                    </a>
+                    <a href="thiep-sinhnhat.html" class="slide-item">
+                        <div class="circle-img"><img src="anh/logo.png" alt="Sinh nhật"></div>
+                        <span>Thiệp Sinh Nhật</span>
+                    </a>
+                    <a href="thiep-taon.html" class="slide-item">
+                        <div class="circle-img"><img src="anh/logo.png" alt="Công giáo"></div>
+                        <span>Thiệp Công Giáo</span>
+                    </a>
+                </div>
             </div>
         </div>
+    </section>
 
-        <!-- ================= MẪU THIỆP HIỆN ĐẠI ================= -->
-        <div class="cum-tieu-de-danh-muc">
-            <h2 style="text-align: left; color: #526456; font-size: 24px;">Mẫu Thiệp Hiện Đại</h2>
-        </div>
-        <div class="slider-wrapper">
-            <div class="product_noibat_box_slider" id="slider-hiendai">
-                <!-- JavaScript sẽ đổ sản phẩm hiện đại vào đây -->
+
+    <!-- PHẦN 2: KHỐI DANH SÁCH SẢN PHẨM VỚI 3 TAB HOẠT ĐỘNG -->
+    <section class="product-section">
+        <div class="container">
+            <div class="product-tabs" id="productTabs">
+                <button class="tab-btn active" data-tab="best-seller">BÁN CHẠY NHẤT</button>
+                <button class="tab-btn" data-tab="new-arrival">MẪU MỚI VỀ</button>
+                <button class="tab-btn" data-tab="on-sale">ĐANG GIẢM GIÁ</button>
+            </div>
+
+            <!-- Lưới hiển thị sản phẩm tương ứng theo Tab -->
+            <div class="product-grid" id="productGridContainer">
+                <!-- Sản phẩm sẽ được render tự động qua JavaScript -->
             </div>
         </div>
+    </section>
 
-        <!-- ================= MẪU THIỆP TRUYỀN THỐNG ================= -->
-        <div class="cum-tieu-de-danh-muc">
-            <h2 style="text-align: left; color: #526456; font-size: 24px;">Mẫu Thiệp Truyền Thống</h2>
-        </div>
-        <div class="slider-wrapper">
-            <div class="product_noibat_box_slider" id="slider-truyenthong">
-                <!-- JavaScript sẽ đổ sản phẩm truyền thống vào đây -->
-            </div>
-        </div>
-    </main>
+        <div class="vung-chua-box" style="max-width: 1200px; margin: 30px auto; padding: 0 15px; display: flex; gap: 10px;">
+        <iframe src="box/box-thiep-cuoi-online.html" style="flex: 35; height: 660px; border: none; overflow: hidden;"></iframe>
+    </div>
 
-    <!-- 4. CHÂN TRANG (FOOTER) -->
+    <!-------------------------- 4. CHÂN TRANG (FOOTER) ------------------------>
     <footer>
         <div class="footer-container">
             <div class="footer-col">
@@ -546,8 +631,8 @@
             <div class="footer-col">
                 <h3>🔗 CHÍNH SÁCH DỊCH VỤ</h3>
                 <ul class="footer-links">
-                    <li><a href="huong-dan-dat-thiep.html">▶ Hướng dẫn quy trình duyệt thiết kế</a></li>
-                    <li><a href="trang-quan-ly-don-hang-v03.html">▶ Quản lý đơn hàng</a></li>
+                    <li><a href="admin-editor-v6.html"target="_blank" rel="noopener noreferrer">▶ Admin</a></li>
+                    <li><a href="trang-quan-ly-don-hang-v05.html"target="_blank" rel="noopener noreferrer">▶ Quản lý đơn hàng (Admin)</a></li>
                     <li><a href="#">▶ Giao hàng tận nơi toàn quốc</a></li>
                 </ul>
             </div>
@@ -570,63 +655,89 @@
         </div>
     </div>
 
-    <!-- 5. NHÚNG FILE DỮ LIỆU JS VÀ SCRIPT RENDER TỰ ĐỘNG -->
-    <script src="san-pham/danh-muc/data-trangchu.js"></script>
+    <!-- SCRIPT XỬ LÝ 3 TAB VÀ CHUYỂN HƯỚNG SANG TRANG CHI TIẾT TRƯỚC KHI ĐẶT HÀNG -->
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Hàm render sản phẩm tự động từ data.js
-            function renderCategory(items, containerId) {
-                const container = document.getElementById(containerId);
-                if (!container || !items) return;
+        // Dữ liệu giả lập cho 3 Tab sản phẩm
+        const tabProductsData = {
+            "best-seller": [
+                { code: "NT-2026A", title: "Thiệp Cưới Hiện Đại Ép Kim Hoa Văn Sang Trọng", 
+                price: "4.200 đ", 
+                oldPrice: "5.000 đ", 
+                badge: "sale-badge", 
+                badgeText: "-15%", 
+                img: "https://cdn.upanhlaylink.com/i/CY94eUvk.jpg", 
+                desc: "Mẫu thiệp hiện đại ép kim sang trọng, hoa văn tinh tế phù hợp cho các cặp đôi trẻ." },
 
-                container.innerHTML = items.map(item => `
-                    <div class="product_noibat_item_slider" data-description="${item.desc}">
-                        <a class="img_pro" href="${item.detailUrl}">
-                            <img src="${item.image}" alt="${item.name}">
-                        </a>
-                        <h3><a href="${item.detailUrl}" class="text-split">${item.name}</a></h3>
-                        <div class="box_price_box"><strong>${item.price}</strong></div>
+                { code: "NT-2026B", title: "Thiệp Cưới Truyền Thống Nhung Đỏ Cắt Laser Cao Cấp", price: "6.500 đ", oldPrice: "", badge: "hot-badge", badgeText: "BÁN CHẠY", img: "anh/banner.png", desc: "Thiệp cưới chất liệu nh Nhung đỏ kết hợp cắt laser hiện đại, mang phong cách truyền thống ấm áp." },
+                { code: "NT-KTS01", title: "Thiệp Cưới Online Độc Quyền Thiết Kế Kỹ Thuật Số", price: "199.000 đ", oldPrice: "", badge: "", badgeText: "", img: "anh/banner.png", desc: "Mẫu thiệp cưới online kỹ thuật số tích hợp nhạc nền, mã QR bản đồ và xác nhận tham dự." },
+                { code: "TG-301", title: "Thiệp Mời Tân Gia Phủ Nhũ Vàng Ép Kim Tinh Tế", price: "3.600 đ", oldPrice: "4.500 đ", badge: "sale-badge", badgeText: "-20%", img: "anh/banner.png", desc: "Thiệp mời tân gia trang nhã, ép nhũ vàng nổi bật không gian mừng nhà mới." }
+            ],
+            "new-arrival": [
+                { code: "NT-NEW01", title: "Thiệp Cưới Minimalist Tone Màu Pastel Nhẹ Nhàng", price: "3.800 đ", oldPrice: "", badge: "hot-badge", badgeText: "MỚI", img: "anh/banner.png", desc: "Thiệp phong cách tối giản màu pastel thanh lịch, xu hướng mới nhất năm." },
+                { code: "NT-NEW02", title: "Thiệp Cưới Hoa Lá Xanh Họa Tiết Watercolor", price: "4.000 đ", oldPrice: "", badge: "", badgeText: "", img: "anh/banner.png", desc: "Họa tiết màu nước thiên nhiên tươi mát, lãng mạn cho tiệc cưới ngoài trời." },
+                { code: "NT-NEW03", title: "Thiệp Cưới Công Giáo Viền Thánh Giá Dập Nổi", price: "4.500 đ", oldPrice: "", badge: "", badgeText: "", img: "anh/banner.png", desc: "Mẫu thiệp dành riêng cho các đôi uyên ương Công Giáo, trang nghiêm và thành kính." },
+                { code: "SN-05", title: "Thiệp Mời Sinh Nhật Bé Yêu Ngộ Nghĩnh", price: "2.500 đ", oldPrice: "", badge: "", badgeText: "", img: "anh/banner.png", desc: "Thiệp sinh nhật thiết kế đáng yêu, màu sắc tươi sáng dành cho các bé." }
+            ],
+            "on-sale": [
+                { code: "SALE-01", title: "Thiệp Cưới Cổ Điển Giấy Kraft Vintage", price: "2.800 đ", oldPrice: "4.000 đ", badge: "sale-badge", badgeText: "-30%", img: "anh/banner.png", desc: "Chất liệu giấy kraft phong cách vintage cổ điển, tiết kiệm chi phí nhưng cực kỳ độc đáo." },
+                { code: "SALE-02", title: "Thiệp Cưới Ép Kim Gấp 3 Sang Trọng", price: "3.500 đ", oldPrice: "5.000 đ", badge: "sale-badge", badgeText: "-25%", img: "anh/banner.png", desc: "Mẫu thiệp gấp ba tiện lợi, ép kim cao cấp đang có chương trình ưu đãi lớn." },
+                { code: "SALE-01", title: "Thiệp Cưới Cổ Điển Giấy Kraft Vintage", price: "2.800 đ", oldPrice: "4.000 đ", badge: "sale-badge", badgeText: "-30%", img: "anh/banner.png", desc: "Chất liệu giấy kraft phong cách vintage cổ điển, tiết kiệm chi phí nhưng cực kỳ độc đáo." },
+                { code: "SALE-02", title: "Thiệp Cưới Ép Kim Gấp 3 Sang Trọng", price: "3.500 đ", oldPrice: "5.000 đ", badge: "sale-badge", badgeText: "-25%", img: "anh/banner.png", desc: "Mẫu thiệp gấp ba tiện lợi, ép kim cao cấp đang có chương trình ưu đãi lớn." }
+            ]
+
+        };
+
+        function renderProducts(tabKey) {
+            const container = document.getElementById("productGridContainer");
+            const items = tabProductsData[tabKey] || [];
+
+            container.innerHTML = items.map(item => `
+                <div class="product-card" onclick="goToDetailPage('${escapeHtml(item.title)}', '${escapeHtml(item.price)}', '${escapeHtml(item.img)}', '${escapeHtml(item.desc)}')">
+                    <div class="prod-img-box ${item.badge}" ${item.badge === 'sale-badge' ? `data-sale="${item.badgeText}"` : ''}>
+                        <img src="${item.img}" alt="${escapeHtml(item.title)}">
                     </div>
-                `).join('');
-            }
+                    <div class="prod-info">
+                        <span class="prod-code">Mã: ${escapeHtml(item.code)}</span>
+                        <h4 class="prod-title">${escapeHtml(item.title)}</h4>
+                        <div class="prod-rating">⭐⭐⭐⭐⭐</div>
+                        <div class="prod-price-box">
+                            <span class="price-current">${escapeHtml(item.price)}</span>
+                            ${item.oldPrice ? `<span class="price-old">${escapeHtml(item.oldPrice)}</span>` : ''}
+                        </div>
+                        <span class="btn-detail">Xem Chi Tiết</span>
+                    </div>
+                </div>
+            `).join('');
+        }
 
-            // Đổ dữ liệu vào 3 vị trí danh mục
-            renderCategory(homeProducts.docQuyen, 'slider-docquyen');
-            renderCategory(homeProducts.hienDai, 'slider-hiendai');
-            renderCategory(homeProducts.truyenThong, 'slider-truyenthong');
+        function escapeHtml(str) {
+            return String(str).replace(/'/g, "&#39;").replace(/"/g, "&quot;");
+        }
 
-            // Hiệu ứng tự động cuộn ngang slider
-            const sliders = document.querySelectorAll('.slider-wrapper');
-            sliders.forEach(slider => {
-                let isHovered = false;
-                slider.addEventListener('mouseenter', () => isHovered = true);
-                slider.addEventListener('mouseleave', () => isHovered = false);
+        // Khi click vào sản phẩm -> Lưu vào localStorage rồi chuyển sang trang CHI TIẾT
+        function goToDetailPage(name, price, img, desc) {
+            localStorage.setItem('clickProdName', name);
+            localStorage.setItem('clickProdPrice', price);
+            localStorage.setItem('clickProdImg', img);
+            localStorage.setItem('clickProdDesc', desc);
 
-                setInterval(() => {
-                    if (!isHovered) {
-                        if (slider.scrollLeft + slider.clientWidth >= slider.scrollWidth - 5) {
-                            slider.scrollLeft = 0;
-                        } else {
-                            slider.scrollLeft += 1.5;
-                        }
-                    }
-                }, 30);
-            });
+            // Chuyển sang trang chi tiết (bạn có thể thay đổi tên file chi tiết tương ứng nếu cần)
+            window.location.href = "chi-tiet-hien-dai.html";
+        }
 
-            // Lưu dữ liệu sản phẩm khi người dùng click
-            document.body.addEventListener('click', function(e) {
-                const item = e.target.closest('.product_noibat_item_slider');
-                if (item) {
-                    const name = item.querySelector('.text-split').innerText;
-                    const price = item.querySelector('.box_price_box strong').innerText;
-                    const imgUrl = item.querySelector('img').src;
-                    const description = item.getAttribute('data-description') || 'Chưa cập nhật';
+        document.addEventListener("DOMContentLoaded", function() {
+            // Hiển thị mặc định tab đầu tiên (Bán chạy nhất)
+            renderProducts("best-seller");
 
-                    localStorage.setItem('clickProdName', name);
-                    localStorage.setItem('clickProdPrice', price);
-                    localStorage.setItem('clickProdImg', imgUrl);
-                    localStorage.setItem('clickProdDesc', description);
-                }
+            // Xử lý sự kiện bấm chuyển qua lại giữa 3 tab
+            const tabButtons = document.querySelectorAll(".tab-btn");
+            tabButtons.forEach(button => {
+                button.addEventListener("click", function() {
+                    tabButtons.forEach(btn => btn.classList.remove("active"));
+                    this.classList.add("active");
+                    const tabKey = this.getAttribute("data-tab");
+                    renderProducts(tabKey);
+                });
             });
         });
     </script>

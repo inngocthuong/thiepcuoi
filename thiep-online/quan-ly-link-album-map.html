@@ -92,9 +92,6 @@
         </button>
       </div>
     </header>
-    <div class="action-buttons">
-     <a href="https://github.com/inngocthuong/thiepcuoi/tree/main/anh-cuoi" class="home-btn" target="_blank" rel="noopener noreferrer">⬆️ Tải ảnh lên</a>
-  </div>
     <!-- PHẦN 1: QUẢN LÝ LINK ẢNH / ẢNH THƯ MỤC THEO BỘ -->
     <section class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200 space-y-6">
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 border-b pb-4">
@@ -247,6 +244,12 @@
 
           <label class="px-3.5 py-2 rounded-lg bg-white hover:bg-emerald-50 text-emerald-900 border border-emerald-300 text-xs font-semibold cursor-pointer shadow-2xs">
             <i class="fas fa-folder-open mr-1 text-emerald-700"></i> Chọn thư mục ảnh
+            <input type="file" id="pickAnyFolderInput" webkitdirectory directory multiple accept="image/*"
+              onchange="stagePickedImages(event)" class="hidden" />
+          </label>
+
+          <label class="px-3.5 py-2 rounded-lg bg-white hover:bg-emerald-50 text-emerald-900 border border-emerald-300 text-xs font-semibold cursor-pointer shadow-2xs">
+            <a href="https://github.com/inngocthuong/thiepcuoi/tree/main/anh-cuoi" target="_blank" rel="noopener noreferrer">⬆️ Tải thư mục ảnh lên github</a>
             <input type="file" id="pickAnyFolderInput" webkitdirectory directory multiple accept="image/*"
               onchange="stagePickedImages(event)" class="hidden" />
           </label>

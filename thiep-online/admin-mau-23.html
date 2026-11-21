@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quản Lý Mẫu 23 · Dark Green / Olive</title>
+<link rel="icon" type="image/png" href="../anh/logo.png">
+<style>
+:root{
+  --olive:#2a382c;
+  --olive2:#3e5240;
+  --olive-dark:#1a241b;
+  --champagne:#c5a869;
+  --champagne-light:#e8dcc0;
+  --ivory:#f9f8f4;
+  --ink:#1a241b;
+  --line:#d8decb}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#f1f2ec;
+  color:var(--ink);
+  font-family:Arial,sans-serif}
+
+header{
+  background:linear-gradient(120deg,#1a241b,#3e5240);
+  color:var(--champagne-light);
+  padding:24px max(18px,calc((100% - 1120px)/2));
+  border-bottom:3px solid var(--champagne)}
+
+header h1{
+  font-family:Georgia,serif;
+  font-weight:normal;
+  margin:0 0 8px;
+  font-size:30px}
+  
+header p{margin:0; opacity:.9; font-size:14px}
+
+main{
+  max-width:1120px;
+  margin:24px auto;
+  padding:0 16px;
+  display:grid;
+  grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr);
+  gap:20px}
+
+.card{
+  background:white;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:22px;
+  box-shadow:0 8px 24px rgba(26, 36, 27, 0.06)}
+
+h2{
+  font-family:serif;
+  color:var(--olive);
+  font-weight:normal;
+  margin:0 0 18px;
+  font-size:25px}
+
+h3{
+  font-family:serif;
+  color:var(--olive);
+  font-weight:normal;
+  margin:22px 0 12px}
+
+label{
+  display:block;
+  font-size:13px;
+  font-weight:700;
+  margin:12px 0 6px}
+
+input,textarea,select{
+  width:100%; border:1px solid #cbd2be;
+  border-radius:8px;
+  padding:11px;
+  background:var(--ivory);
+  font:14px Arial,sans-serif;
+  color:var(--ink)}
+
+textarea{ resize:vertical; min-height:75px }
+  
+.grid{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+button{
+  border:1px solid var(--champagne);
+  border-radius:999px;
+  padding:11px 17px;
+  background:var(--olive);
+  color:var(--champagne-light);
+  font-weight:700;
+  cursor:pointer;
+  transition:background 0.2s}
+
+button:hover{ background:var(--olive2) }
+button.secondary{ background:#f4f5ef; color:var(--olive); border-color:var(--olive) }
+button.secondary:hover{ background:#e6e9de }
+button.gold{ background:var(--champagne); color:var(--olive-dark) }
+button.gold:hover{ background:#d1b67a }
+
+.actions{ display:flex; gap:8px; flex-wrap:wrap; margin-top:18px }
+  
+.action-link{
+  display:inline-flex; align-items:center; justify-content:center;
+  border:1px solid var(--champagne); border-radius:999px;
+  padding:11px 17px; background:var(--ivory); color:var(--olive);
+  font-weight:700; text-decoration:none; font-size:13px}
+
+.note{
+  font-size:12px; line-height:1.6; color:#5a665b;
+  background:#f4f5ef; border-radius:8px; padding:10px; margin-top:12px}
+
+#status{ font-size:13px; color:#2a5c38; min-height:20px; margin-top:10px; font-weight:600 }
+
+.preview{
+  position:sticky; top:15px; align-self:start; overflow:hidden;
+  border-radius:16px; background:var(--olive); color:var(--champagne-light);
+  text-align:center; min-height:540px; padding:22px; display:flex;
+  align-items:center; justify-content:center}
+
+.preview-inner{
+  border:1px solid var(--champagne); outline:1px solid rgba(197, 168, 105, 0.45);
+  outline-offset:6px; padding:35px 16px; width:100%; position:relative}
+
+.preview .kicker{
+  font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:var(--champagne-light)}
+
+.preview h2{
+  font-family:Georgia,serif; color:#ffffff;
+  font-size:clamp(30px,4vw,48px); line-height:1.1; margin:22px 0; font-style:italic}
+  
+.preview .amp{color:var(--champagne); font-size:.7em}
+.preview .date{letter-spacing:.12em; font-size:13px; color:var(--champagne-light)}
+.preview img{max-width:100%; max-height:180px; object-fit:cover; border-radius:6px; margin:12px auto}
+
+.small{ font-size:12px; color:#5a665b; line-height:1.6 }
+.saved{ margin-top:16px; border-top:1px solid var(--line); padding-top:14px }
+.saved button{ margin:4px 4px 4px 0 }
+
+.home-btn { 
+  display: inline-block; background-color: #ffffff; color: var(--olive-dark); text-decoration: none; padding: 8px 15px; border-radius: 10px; font-weight: 600; border: 1px solid var(--champagne); margin: 15px max(18px, calc((100% - 1120px)/2)); 
+}
+.home-btn:hover { background-color: var(--ivory); }
+
+.tablewrap{overflow:auto; margin-top:10px}
+table{border-collapse:collapse; width:100%; min-width:500px; font-size:13px}
+td,th{padding:10px; border-bottom:1px solid var(--line); text-align:left; vertical-align:top}
+th{background:#f1f2ec; color:var(--olive)}
+
+@media(max-width:800px){
+  main{grid-template-columns:1fr}
+  .preview{position:static; min-height:420px}
+  .grid{grid-template-columns:1fr}
+}
+  /* Khung bao ngoài để đẩy 2 nút sang phải */
+.action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    width: 100%;
+    justify-content: right;
+}
+
+/* Giao diện của từng nút */
+.home-btn { 
+    background-color: #172821; 
+    font-family: 'Montserrat', sans-serif;
+     border: 1px solid #f1c40f;
+    color: rgb(255, 255, 255); 
+    text-decoration: none; 
+    padding: 8px 15px; 
+    border-radius: 10px; 
+    font-weight: 500; 
+    display: inline-block; 
+    margin-bottom: 20px; 
+    transition: background-color 0.3s ease; 
+}
+
+/* Đổi màu khi rê chuột vào */
+.home-btn:hover {
+    background-color: #315c4a;
+    color: white;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>❧ Quản trị thiệp online · Mẫu 23</h1>
+  <p>Bản kết nối Firebase · Dark Green / Olive & Vàng Champagne</p>
+</header>
+<a href="../thiepcuoi-online.html" class="home-btn">⬅ Quay Về Trang Chủ</a>
+
+<section class="card" style="max-width:1120px;margin:20px auto 0;padding:18px 22px">
+  <h2>Đăng nhập quản trị Admin</h2>
+  <p class="small">Đăng nhập bằng tài khoản Admin đã tạo trong Firebase Authentication.</p>
+  <div class="grid">
+    <div>
+      <label for="adminEmail">Email Admin</label>
+      <input id="adminEmail" type="email" placeholder="email@gmail.com" autocomplete="username">
+    </div>
+    <div>
+      <label for="adminPassword">Mật khẩu</label>
+      <input id="adminPassword" type="password" placeholder="Mật khẩu" autocomplete="current-password">
+    </div>
+  </div>
+  <div class="actions">
+    <button type="button" id="loginBtn">Đăng nhập</button>
+    <button type="button" class="secondary" id="logoutBtn" style="display:none">Đăng xuất</button>
+  </div>
+  <div id="authStatus" class="small" aria-live="polite" style="margin-top:8px">Chưa đăng nhập.</div>
+</section>
+
+<main id="adminWorkspace" style="display:none">
+<section class="card">
+  <h2>Thông tin thiệp</h2>
+
+  <!-- KHUNG NHẬP MÃ ID KHÁCH HÀNG -->
+  <div class="full" style="background: rgba(42, 56, 44, 0.06); padding: 15px; border-radius: 10px; border: 1px dashed var(--olive); margin-bottom: 20px;">
+    <label for="admCustomerId" style="color: var(--olive); margin-top:0;">Mã ID Thiệp Của Khách (Ví dụ: tuan-tu, minhquan...)</label>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px;">
+      <input id="admCustomerId" type="text" value="mac-dinh" placeholder="Nhập mã không dấu, viết liền..." style="flex:1; min-width:200px; background:#fff;">
+      <button type="button" id="loadIdBtn" class="gold" style="margin:0; padding: 11px 18px;">Tải Dữ Liệu ID Này</button>
+    </div>
+    <small class="small" style="display: block; margin-top: 6px;">* Nhập mã ID mới để tạo thiệp riêng cho khách mới, hoặc nhập mã ID cũ rồi bấm "Tải Dữ Liệu" để chỉnh sửa.</small>
+  </div>
+
+  <div class="action-buttons">
+    <a href="https://postimages.org/vi/" class="home-btn" target="_blank" rel="noopener noreferrer">⬆️ Tải ảnh lên</a>
+    <a href="quan-ly-link-album-map.html" class="home-btn" target="_blank" rel="noopener noreferrer">🖼️ Ảnh & ♫ Nhạc</a>
+    <a href="https://console.firebase.google.com/project/thiep-cuoi-online-fa5d4/firestore/databases/-default-/data/~2Frsvp_mau_06~2FaFG7kqTAYHDexZnTOji4" class="home-btn" target="_blank" rel="noopener noreferrer">🔥 Firebase</a>
+</div>
+
+  <form id="adminForm">
+    <div class="grid">
+      <div>
+        <label for="bride">Tên Cô Dâu *</label>
+        <input id="bride" required value="Trần Lan">
+      </div>
+      <div>
+        <label for="groom">Tên Chú Rể *</label>
+        <input id="groom" required value="Nguyễn Minh">
+      </div>
+    </div>
+
+    <div class="grid">
+      <div>
+        <label for="date">Ngày tổ chức</label>
+        <input id="date" type="date" value="2027-06-15">
+      </div>
+      <div>
+        <label for="time">Giờ</label>
+        <input id="time" type="time" value="09:00">
+      </div>
+    </div>
+
+    <label for="cover">Link ảnh bìa (nếu có)</label>
+    <input id="cover" type="url" placeholder="https://...">
+
+    <h3>Thông tin hai họ & lời ngỏ</h3>
+    <div class="grid">
+      <div>
+        <label for="familyBride">Thông tin nhà Gái</label>
+        <textarea id="familyBride">Gia đình cô dâu Trần Lan</textarea>
+      </div>
+      <div>
+        <label for="familyGroom">Thông tin nhà Trai</label>
+        <textarea id="familyGroom">Gia đình chú rể Nguyễn Minh</textarea>
+      </div>
+    </div>
+    <label for="message">Lời ngỏ / lời mời</label>
+    <textarea id="message">Trân trọng kính mời bạn đến chung vui trong ngày hạnh phúc của chúng mình.</textarea>
+
+    <!-- TRƯỜNG THÊM: ẢNH NGÀY VUI (ẢNH NGANG) -->
+    <div style="margin-top: 15px; background: #f4f5ef; padding: 12px; border: 1px solid var(--line); border-radius: 8px;">
+      <label for="weddingDayImg" style="color: var(--olive); margin-top:0;">Link ảnh ngày vui (Ảnh ngang hiển thị sau phần hai họ)</label>
+      <input id="weddingDayImg" type="url" placeholder="https://... (dán link ảnh ngang)" style="background:#fff;">
+    </div>
+
+    <h3>Thời gian & địa điểm</h3>
+    <div class="grid">
+      <div>
+        <label for="ceremony">Địa điểm lễ thành hôn</label>
+        <input id="ceremony" placeholder="Tên địa điểm / địa chỉ">
+      </div>
+      <div>
+        <label for="ceremonyTime">Giờ/Ngày lễ thành hôn</label>
+        <input id="ceremonyTime" placeholder="09:00 · 15/06/2027">
+      </div>
+      <div>
+        <label for="ceremonyMap">Link Google Maps lễ</label>
+        <input id="ceremonyMap" type="url" placeholder="https://maps.google.com/...">
+      </div>
+    </div>
+
+    <div class="grid">
+      <div>
+        <label for="reception">Địa điểm đãi tiệc</label>
+        <input id="reception" placeholder="Tên nhà hàng / địa chỉ">
+      </div>
+      <div>
+        <label for="receptionMap">Link Google Maps tiệc</label>
+        <input id="receptionMap" type="url" placeholder="https://maps.google.com/...">
+      </div>
+    </div>
+
+    <h3>Album cưới (tối đa 6 ảnh)</h3>
+    <p class="small">Dán link ảnh trực tiếp (URL bắt đầu bằng https://).</p>
+    <div class="grid">
+      <div><label for="album1">Link ảnh 1</label><input id="album1" type="url" placeholder="https://..."></div>
+      <div><label for="album2">Link ảnh 2</label><input id="album2" type="url" placeholder="https://..."></div>
+      <div><label for="album3">Link ảnh 3</label><input id="album3" type="url" placeholder="https://..."></div>
+      <div><label for="album4">Link ảnh 4</label><input id="album4" type="url" placeholder="https://..."></div>
+      <div><label for="album5">Link ảnh 5</label><input id="album5" type="url" placeholder="https://..."></div>
+      <div><label for="album6">Link ảnh 6</label><input id="album6" type="url" placeholder="https://..."></div>
+    </div>
+
+    <label for="music" style="margin-top:16px">Link MP3 trực tiếp (nếu có)</label>
+    <input id="music" type="url" placeholder="https://.../nhac-cuoi.mp3">
+
+    <div class="actions">
+      <button type="button" id="saveOnlineBtn" class="gold">Lưu Thay Đổi Thiệp</button>
+      <button class="secondary" type="button" id="previewBtn">Cập nhật xem trước</button>
+    </div>
+    <div id="status" aria-live="polite"></div>
+
+    <div id="inviteLinkBox" style="margin-top:20px; display:none; background:#f4f5ef; padding:15px; border-radius:10px; border:1px solid var(--line);">
+      <h3 style="margin-top:0">Đường link thiệp riêng của khách</h3>
+      <p class="small">Sao chép đường link này gửi cho khách hàng.</p>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center; margin-top:8px;">
+        <input id="inviteLink" type="url" readonly style="flex:1;min-width:220px; background:#fff;">
+        <button type="button" id="copyInviteLinkBtn" class="secondary">Sao chép link</button>
+        <button type="button" id="openInviteLinkBtn" class="gold">Mở thiệp</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- PHẦN QUẢN LÝ RSVP THEO ID -->
+  <div class="saved">
+    <h3 id="rsvpListTitle">Khách xác nhận tham dự (Theo ID đang chọn)</h3>
+    <div id="summary" class="small" style="font-weight:bold; margin-bottom:8px;">Đang tải...</div>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Khách</th>
+            <th>Tham dự</th>
+            <th>Số người</th>
+            <th>Lời chúc</th>
+            <th>Thời gian</th>
+          </tr>
+        </thead>
+        <tbody id="rsvpRows">
+          <tr><td colspan="5" class="small">Đang tải phản hồi...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<aside>
+  <div class="preview">
+    <div class="preview-inner">
+      <div class="kicker">Trân trọng kính mời</div>
+      <div id="coverPhoto"></div>
+      <h2><span id="pBride">Trần Lan</span><br><span class="amp">&</span><br><span id="pGroom">Nguyễn Minh</span></h2>
+      <div style="color:var(--champagne)">❧ ✧ ❧</div>
+      <p class="date" id="pDate">15 · 06 · 2027 &nbsp; | &nbsp; 09:00</p>
+      <p id="pMessage" style="font-size:13px; opacity:0.85; line-height:1.6;">Trân trọng kính mời bạn đến chung vui trong ngày hạnh phúc của chúng mình.</p>
+    </div>
+  </div>
+  <p class="small" style="margin-top:15px">Bản xem trước trực quan trong Admin (Mẫu 23 - Dark Green / Olive).</p>
+</aside>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBbzcpByDk2Yzlqo9y7YHwpIq2sXJinNDQ",
+  authDomain: "thiep-cuoi-online-02.firebaseapp.com",
+  projectId: "thiep-cuoi-online-02",
+  storageBucket: "thiep-cuoi-online-02.firebasestorage.app",
+  messagingSenderId: "261787760014",
+  appId: "1:261787760014:web:5e9c246306b95ec7cca0df"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth(), db = firebase.firestore();
+
+const COLLECTION_THIEP = 'wedding_mau_23';
+const COLLECTION_RSVP  = 'rsvp_mau_23';
+const FILE_THIEP       = 'thiep-online-mau-23.html';
+
+const $ = id => document.getElementById(id); 
+let currentUser = null;
+
+const ids = ['bride','groom','date','time','cover','weddingDayImg','familyBride','familyGroom',
+'message','ceremony','ceremonyTime','ceremonyMap','reception','receptionMap',
+'music','album1','album2','album3','album4','album5','album6'];
+
+function getCustomerId() {
+  let id = $('admCustomerId').value.trim().toLowerCase();
+  if(!id) { id = 'mac-dinh'; $('admCustomerId').value = id; }
+  return id;
+}
+
+function getDataObj() {
+  const d = {};
+  ids.forEach(id => { if($(id)) d[id] = $(id).value.trim(); });
+  d.albumImages = ['album1','album2','album3','album4','album5','album6']
+    .map(id => $(id) ? $(id).value.trim() : '').filter(Boolean);
+  d.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+  return d;
+}
+
+function fmtDate(s){
+  if(!s) return 'Ngày giờ sẽ được cập nhật';
+  const a = s.split('-');
+  return a.length === 3 ? `${a[2]} · ${a[1]} · ${a[0]}` : s;
+}
+
+function renderPreview(){
+  const d = getDataObj();
+  $('pBride').textContent = d.bride || 'Tên cô dâu';
+  $('pGroom').textContent = d.groom || 'Tên chú rể';
+  $('pDate').textContent = fmtDate(d.date) + ' | ' + (d.time || 'Giờ sẽ cập nhật');
+  $('pMessage').textContent = d.message || 'Trân trọng kính mời';
+  $('coverPhoto').innerHTML = '';
+  const src = d.cover;
+  if(src){
+    const img = document.createElement('img');
+    img.alt = 'Ảnh bìa thiệp cưới';
+    img.src = src;
+    $('coverPhoto').appendChild(img);
+  }
+}
+
+function setStatus(t){ $('status').textContent = t; }
+
+$('loadIdBtn').onclick = () => loadData();
+
+async function loadData() {
+  const customerId = getCustomerId();
+  setStatus('Đang tải dữ liệu cho ID: ' + customerId);
+  try {
+    const docSnap = await db.collection(COLLECTION_THIEP).doc(customerId).get();
+    if(docSnap.exists) {
+      const d = docSnap.data();
+      ids.forEach(id => { if($(id)) $(id).value = d[id] || ''; });
+      if(d.albumImages && Array.isArray(d.albumImages)) {
+        d.albumImages.forEach((url, i) => {
+          if($('album' + (i + 1))) $('album' + (i + 1)).value = url;
+        });
+      }
+      renderPreview();
+      setStatus('Đã tải dữ liệu thành công cho mã ID: ' + customerId);
+      showInviteLink(customerId);
+    } else {
+      ids.forEach(id => { if($(id) && id !== 'bride' && id !== 'groom') $(id).value = ''; });
+      for(let i=1; i<=6; i++) { if($('album'+i)) $('album'+i).value = ''; }
+      renderPreview();
+      setStatus('Mã ID này chưa có dữ liệu. Bạn có thể điền thông tin và bấm Lưu.');
+      $('inviteLinkBox').style.display = 'none';
+    }
+    listenRSVP(customerId);
+  } catch(e) {
+    setStatus('Không tải được dữ liệu: ' + e.message);
+  }
+}
+
+function showInviteLink(customerId) {
+  const url = new URL(FILE_THIEP, window.location.href);
+  url.searchParams.set('id', customerId);
+  $('inviteLink').value = url.href;
+  $('inviteLinkBox').style.display = 'block';
+}
+
+$('copyInviteLinkBtn').onclick = async () => {
+  const val = $('inviteLink').value;
+  try {
+    await navigator.clipboard.writeText(val);
+    setStatus('Đã sao chép đường link thiệp.');
+  } catch(e) {
+    $('inviteLink').focus(); $('inviteLink').select();
+    try { document.execCommand('copy'); setStatus('Đã sao chép đường link thiệp.'); }
+    catch(err) { setStatus('Không tự sao chép được. Hãy copy thủ công.'); }
+  }
+};
+
+$('openInviteLinkBtn').onclick = () => window.open($('inviteLink').value, '_blank', 'noopener');
+
+let unsubRSVP = null;
+function listenRSVP(customerId) {
+  if(unsubRSVP) unsubRSVP();
+  $('rsvpListTitle').textContent = `Khách xác nhận tham dự (Mã ID: ${customerId})`;
+  
+  // Bỏ .orderBy() để không bị lỗi yêu cầu Composite Index trên Firebase
+  unsubRSVP = db.collection(COLLECTION_RSVP)
+    .where('card_id', '==', customerId)
+    .onSnapshot(s => {
+      let rsvps = [];
+      s.forEach(doc => {
+        rsvps.push({ id: doc.id, ...doc.data() });
+      });
+
+      // Tự sắp xếp mới nhất lên đầu bằng JavaScript
+      rsvps.sort((a, b) => {
+        const timeA = a.createdAt && a.createdAt.toDate ? a.createdAt.toDate().getTime() : 0;
+        const timeB = b.createdAt && b.createdAt.toDate ? b.createdAt.toDate().getTime() : 0;
+        return timeB - timeA;
+      });
+
+      $('summary').textContent = `Tổng phản hồi: ` + rsvps.length;
+      $('rsvpRows').innerHTML = '';
+      if(rsvps.length === 0) {
+        $('rsvpRows').innerHTML = `<tr><td colspan="5" class="small" style="text-align:center">Chưa có phản hồi nào cho mã ID này.</td></tr>`;
+        return;
+      }
+      rsvps.forEach(d => {
+        const tr = document.createElement('tr');
+        [
+          d.guestName || '',
+          d.attendance === 'yes' ? 'Có tham dự' : (d.attendance === 'no' ? 'Không tham dự' : 'Xem sau'),
+          d.guestCount || '1',
+          d.guestMessage || '',
+          d.createdAt && d.createdAt.toDate ? d.createdAt.toDate().toLocaleString('vi-VN') : ''
+        ].forEach(v => {
+          const td = document.createElement('td');
+          td.textContent = v;
+          tr.appendChild(td);
+        });
+        $('rsvpRows').appendChild(tr);
+      });
+    }, e => {
+      console.error(e);
+      $('summary').textContent = `Lỗi tải RSVP: ` + e.message;
+    });
+}
+
+$('previewBtn').addEventListener('click', () => { renderPreview(); setStatus('Đã cập nhật xem trước.'); });
+ids.forEach(id => { if($(id)) $(id).addEventListener('input', renderPreview); });
+renderPreview();
+
+$('loginBtn').addEventListener('click', async () => {
+  $('authStatus').textContent = 'Đang đăng nhập…';
+  try {
+    await auth.signInWithEmailAndPassword($('adminEmail').value.trim(), $('adminPassword').value);
+    $('adminPassword').value = '';
+  } catch(e) {
+    $('authStatus').textContent = 'Đăng nhập thất bại: ' + e.message;
+  }
+});
+
+$('logoutBtn').addEventListener('click', async () => {
+  try { await auth.signOut(); } catch(e) { $('authStatus').textContent = e.message; }
+});
+
+auth.onAuthStateChanged(async user => {
+  currentUser = user;
+  $('adminWorkspace').style.display = user ? 'grid' : 'none';
+  $('authStatus').textContent = user ? 'Đã đăng nhập: ' + user.email : 'Chưa đăng nhập. Hãy nhập email và mật khẩu Admin.';
+  $('logoutBtn').style.display = user ? 'inline-block' : 'none';
+  if(user) {
+    await loadData();
+  }
+});
+
+$('saveOnlineBtn').addEventListener('click', async () => {
+  if(!currentUser) { setStatus('Bạn cần đăng nhập Admin trước.'); return; }
+  const btn = $('saveOnlineBtn');
+  const customerId = getCustomerId();
+  btn.disabled = true;
+  setStatus('Đang lưu thiệp lên Firestore...');
+  try {
+    const d = getDataObj();
+    await db.collection(COLLECTION_THIEP).doc(customerId).set(d, { merge: true });
+    setStatus('Đã lưu thành công cho mã ID: ' + customerId);
+    showInviteLink(customerId);
+    listenRSVP(customerId);
+  } catch(e) {
+    setStatus('Lỗi lưu Firestore: ' + e.message);
+  } finally {
+    btn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>

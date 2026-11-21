@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Khung Thiệp Cưới Online</title>
+<style>
+:root { 
+    --xanh: #17720b; 
+    --blue: #0f6204; 
+    --den: #ffffff; 
+    --xam: #ffffff; 
+    --bg: #046c04; 
+} 
+
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI',Arial,sans-serif; } 
+body { background: #ffffff; padding: 15px; } 
+
+.sh-khoi-bao-ve-he-thong {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.t-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: flex-end; 
+    border-bottom: 2px solid var(--xanh); 
+    margin-bottom: 15px; 
+    padding-bottom: 5px; 
+} 
+.t-title { 
+    font-size: 18px; 
+    font-weight: bold; 
+    text-transform: uppercase; 
+    color: var(--xanh); 
+} 
+.t-tabs { display: flex; } 
+.t-btn { 
+    font-size: 16px; 
+    font-weight: bold; 
+    color: #818181; 
+    cursor: pointer; 
+    padding: 0 12px 5px 12px; 
+    margin-left: 5px; 
+    border-bottom: 1px solid transparent; 
+    transition: all 0.2s; 
+} 
+.t-btn.active, 
+.t-btn:hover { 
+    color: #1d1d1d; 
+    border-bottom-color: #ddd;
+} 
+
+/* Thanh công cụ chọn chế độ xem (Desktop / Mobile) trên web */
+.preview-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.device-switcher {
+    display: flex;
+    gap: 8px;
+}
+
+.device-btn {
+    background: #e9e9e9;
+    border: 1px solid #d0d0d0;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #333;
+}
+
+.device-btn.active {
+    background: var(--xanh);
+    color: #fff;
+    border-color: var(--xanh);
+}
+
+.box-flex { 
+    display: flex; 
+    width: 100%; 
+    border: 1px solid #eeeded; 
+    border-radius: 8px; 
+    overflow: hidden; 
+    background: #f8f8f8; 
+    position: relative; 
+} 
+
+.col-left { 
+    width: 75%; 
+    padding: 20px; 
+    border-right: 1px solid #eee; 
+    display: flex;
+    flex-direction: column;
+} 
+
+/* Khung chứa iframe */
+.iframe-container-wrapper {
+    width: 100%;
+    height: 460px;
+    background: #e5e5e5;
+    border-radius: 6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.iframe-wrap { 
+    width: 100%; 
+    height: 100%; 
+    background: #ffffff; 
+    transition: all 0.3s ease;
+} 
+
+/* Khi chọn chế độ mobile trên giao diện web */
+.iframe-container-wrapper.mode-mobile .iframe-wrap {
+    width: 375px !important;
+    height: 100% !important;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    border: 6px solid #333;
+}
+
+.iframe-big { 
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block; 
+} 
+
+.p-title { 
+    font-size: 18px; 
+    font-weight: bold; 
+    margin: 15px 0 5px 0; 
+    color: #2b2c2c; 
+    line-height: 1.4; 
+    text-align: left !important; 
+    cursor: pointer; 
+    display: block; 
+    width: 100% !important; 
+} 
+.p-title:hover {
+    color: var(--xanh) !important; 
+}
+
+/* Cột phải chứa danh sách */
+.col-right { 
+    width: 25%; 
+    display: flex; 
+    flex-direction: column; 
+    background: #f8f8f8; 
+    position: relative; 
+    z-index: 1;
+    padding-top: 5px; 
+    max-height: 548px; 
+    overflow-y: auto;   
+} 
+
+/* Tùy chỉnh thanh cuộn */
+.col-right::-webkit-scrollbar { width: 6px; }
+.col-right::-webkit-scrollbar-track { background: #f1f1f1; }
+.col-right::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+.col-right::-webkit-scrollbar-thumb:hover { background: #aaa; }
+
+.row-news { 
+   display: flex; 
+   align-items: center; 
+   padding: 10px 15px; 
+   border-bottom: 1px solid #eee; 
+   cursor: pointer; 
+   border-left: 4px solid transparent; 
+   transition: all 0.2s;
+} 
+ 
+.row-news:last-child { border-bottom: none; } 
+
+.row-news:hover {
+    background: #ffffff;
+    border-left-color: #cccccc;
+}
+.row-news:hover .r-title {
+    color: #013f01 !important; 
+}
+
+.row-news.active { 
+    background: #f0efef; 
+    border-left-color: var(--xanh);
+}
+
+.thumb-wrap { 
+    width: 70px; 
+    min-width: 70px; 
+    height: 48px; 
+    margin-right: 12px; 
+    overflow: hidden; 
+    border-radius: 4px; 
+    border: 1px solid #ddd;
+    background: #1a1a1a; 
+}
+ 
+.img-thumb { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+} 
+
+.txt-wrap { overflow: hidden; } 
+
+.r-title { 
+    font-size: 13px; 
+    font-weight: 600; 
+    color: #424141 !important; 
+    line-height: 1.4; 
+    text-align: left; 
+} 
+
+/* ==========================================================
+   RESPONSIVE CHO ĐIỆN THOẠI THẬT (Màn hình nhỏ <= 768px)
+   ========================================================== */
+@media screen and (max-width: 768px) {
+    body { padding: 5px; }
+
+    /* Chuyển hộp lớn thành dạng cột dọc (Xếp trên - dưới) */
+    .box-flex {
+        flex-direction: column;
+    }
+
+    /* Cột trái chiếm toàn bộ chiều ngang */
+    .col-left {
+        width: 100%;
+        padding: 12px;
+        border-right: none;
+        border-bottom: 1px solid #eeeded;
+    }
+
+    /* Thu gọn chiều cao khung xem trước trên điện thoại cho vừa vặn màn hình */
+    .iframe-container-wrapper {
+        height: 380px;
+    }
+
+    /* Ẩn nút chọn máy tính/điện thoại giả lập đi vì xem trực tiếp trên điện thoại rồi */
+    .preview-toolbar {
+        display: none; 
+    }
+
+    /* Cột phải (Danh sách mẫu) chuyển xuống dưới, chiếm 100% chiều ngang */
+    .col-right {
+        width: 100%;
+        max-height: 320px; /* Giới hạn chiều cao danh sách trên mobile để có thanh cuộn gọn gàng */
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="sh-khoi-bao-ve-he-thong">
+
+    <div class="t-header">
+        <h2 class="t-title">Thiệp Cưới Online</h2>
+        <div class="t-tabs">
+            <div class="t-btn active" id="tab1">Mẫu Thiệp</div>
+        </div>
+    </div>  
+
+    <div class="box-flex">
+        <!-- Cột hiển thị thiệp chạy trực tiếp bên trái (hoặc nằm trên khi xem mobile) -->
+        <div class="col-left">
+            <!-- Thanh công cụ chuyển đổi thiết bị (Chỉ hiện khi xem trên máy tính) -->
+            <div class="preview-toolbar">
+                <span style="font-size: 13px; color: #666; font-weight: 600;">Khung xem trước:</span>
+                <div class="device-switcher">
+                    <button class="device-btn active" id="btn-desktop" onclick="setDevice('desktop')">🖥️ Máy tính</button>
+                    <button class="device-btn" id="btn-mobile" onclick="setDevice('mobile')">📱 Điện thoại</button>
+                </div>
+            </div>
+
+            <div class="iframe-container-wrapper" id="iframe-container">
+                <div class="iframe-wrap">
+                    <iframe src="" class="iframe-big" id="p-iframe" title="Xem trước thiệp cưới"></iframe>
+                </div>
+            </div>
+            <h3 class="p-title" id="p-title" onclick="goToLink()" title="Click để mở rộng thiệp">Đang tải...</h3>
+        </div>
+        
+        <!-- Cột danh sách bên phải (Tự động rớt xuống dưới khi xem trên điện thoại thật) -->
+        <div class="col-right" id="list-zone"></div>
+    </div>
+
+</div>
+
+<script>
+var DATA_1 = [
+    { title: "Thiệp online mẫu 01", img: "../hinh-thiep-online/mau-01.jpg", url: "../thiep-online-01-02/thiep-online-mau-01.html", date: "10/09/2026" },
+    { title: "Thiệp online mẫu 02", img: "../hinh-thiep-online/mau-02.jpg", url: "../thiep-online-01-02/thiep-online-mau-02.html", date: "10/09/2026" },
+    { title: "Thiệp online mẫu 03", img: "../hinh-thiep-online/mau-03.jpg", url: "../thiep-online-03-04/thiep-online-mau-03.html", date: "10/09/2026" },
+    { title: "Thiệp online mẫu 04", img: "../hinh-thiep-online/mau-04.jpg", url: "../thiep-online-03-04/thiep-online-mau-04.html", date: "10/09/2026" },
+    { title: "Thiệp online mẫu 05", img: "../hinh-thiep-online/mau-05.jpg", url: "../thiep-online-05-06/thiep-online-mau-05.html", date: "10/09/2026" },
+    { title: "Thiệp online mẫu 06", img: "../hinh-thiep-online/mau-06.jpg", url: "../thiep-online-05-06/thiep-online-mau-06.html", date: "10/09/2026" },
+    { title: "Thiệp online mẫu 07", img: "../hinh-thiep-online/mau-07.jpg", url: "../thiep-online-07-08/thiep-online-mau-07.html", date: "10/09/2026" },
+    { title: "Thiệp online mẫu 08", img: "../hinh-thiep-online/mau-08.jpg", url: "../thiep-online-07-08/thiep-online-mau-08.html", date: "10/09/2026" },
+    { title: "Thiệp online mẫu 09", img: "../hinh-thiep-online/mau-09.jpg", url: "../thiep-online-09-10/thiep-online-mau-09.html", date: "10/09/2026" },
+    { title: "Thiệp online mẫu 10", img: "../hinh-thiep-online/mau-10.jpg", url: "../thiep-online-09-10/thiep-online-mau-10.html", date: "10/09/2026" },
+    { title: "Thiệp online mẫu 11", img: "../hinh-thiep-online/mau-11.jpg", url: "../thiep-online-11-12/thiep-online-mau-11.html", date: "10/09/2026" },
+    { title: "Thiệp online mẫu 12", img: "../hinh-thiep-online/mau-11.jpg", url: "../thiep-online-11-12/thiep-online-mau-12.html", date: "10/09/2026" },
+    { title: "Thiệp online mẫu 11", img: "../hinh-thiep-online/mau-11.jpg", url: "../thiep-online-11-12/thiep-online-mau-11.html", date: "10/09/2026" },
+    { title: "Thiệp online mẫu 11", img: "../hinh-thiep-online/mau-11.jpg", url: "../thiep-online-11-12/thiep-online-mau-11.html", date: "10/09/2026" }
+
+
+
+
+
+]; 
+
+var currentUrl = ""; 
+
+function render(data) {
+    var zone = document.getElementById("list-zone");
+    var html = "";
+    window.activeData = data; 
+    
+    for (var i = 0; i < data.length; i++) {
+        var activeClass = (i === 0) ? "row-news active" : "row-news";
+        
+        var imgHtml = "";
+        if (data[i].img && data[i].img !== "") {
+            imgHtml = '<img src="' + data[i].img + '" class="img-thumb" onerror="this.style.display=\'none\'">';
+        }
+        
+        html += '<div class="' + activeClass + '" onclick="changeNews(' + i + ', this)">' +
+                '<div class="thumb-wrap">' + imgHtml + '</div>' +
+                '<div class="txt-wrap">' +
+                    '<div class="r-title">' + data[i].title + '</div>' +
+                '</div>' +
+                '</div>';
+    }
+    zone.innerHTML = html;
+    
+    if (data.length > 0) {
+        document.getElementById("p-title").innerHTML = data[0].title;
+        document.getElementById("p-iframe").src = data[0].url;
+        currentUrl = data[0].url;
+    }
+}
+
+function changeNews(idx, element) {
+    var rows = document.getElementsByClassName("row-news");
+    for (var j = 0; j < rows.length; j++) {
+        rows[j].classList.remove("active");
+    }
+    element.classList.add("active");
+    
+    var currentData = window.activeData[idx];
+    
+    document.getElementById("p-title").innerHTML = currentData.title;
+    document.getElementById("p-iframe").src = currentData.url;
+    currentUrl = currentData.url;
+}
+
+function setDevice(type) {
+    var container = document.getElementById("iframe-container");
+    var btnDesktop = document.getElementById("btn-desktop");
+    var btnMobile = document.getElementById("btn-mobile");
+
+    if (type === 'mobile') {
+        container.classList.add("mode-mobile");
+        btnMobile.classList.add("active");
+        btnDesktop.classList.remove("active");
+    } else {
+        container.classList.remove("mode-mobile");
+        btnDesktop.classList.add("active");
+        btnMobile.classList.remove("active");
+    }
+}
+
+function goToLink() {
+    if (currentUrl && currentUrl !== "" && currentUrl !== "#") {
+        window.open(currentUrl, "_blank");
+    }
+}
+
+render(DATA_1);
+</script>
+
+</body>
+</html>

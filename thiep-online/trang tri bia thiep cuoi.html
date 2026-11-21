@@ -1,0 +1,375 @@
+
+<!--Bước 1: Thêm CSS trang trí hoa văn 2 cánh cửa Bạn tìm đoạn .gate-door-right trong thẻ <style> và dán thêm đoạn CSS sau ngay bên dưới:
+
+    /* --- HOA VĂN TRANG TRÍ BÌA THIỆP --- */
+    .gate-door::before {
+      content: "";
+      position: absolute;
+      top: 14px;
+      bottom: 14px;
+      width: calc(100% - 14px);
+      border: 1px solid rgba(184, 137, 40, 0.45);
+      pointer-events: none;
+    }
+    .gate-door-left::before {
+      left: 14px;
+      border-right: none;
+    }
+    .gate-door-right::before {
+      right: 14px;
+      border-left: none;
+    }
+
+    .gate-ornament-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+<!-Bước 2: Thay thế phần HTML của <div class="gate-container">
+Bạn tìm đoạn <div class="gate-container"> ... </div> ở đầu thẻ <body> và thay bằng đoạn mã dưới đây (đã tích hợp sẵn hoa văn góc, tia sáng tỏa tâm và vòng nguyệt quế tách đôi trên 2 cánh cửa):
+------------------------------------------------------------------------------------------------
+    <div class="gate-overlay" id="gateOverlay" role="dialog" aria-label="Thiệp mời cưới">
+    <div class="gate-container">
+      <!-- CÁNH CỬA TRÁI + HOA VĂN NỬA TRÁI -->
+      <div class="gate-door gate-door-left">
+        <svg class="gate-ornament-svg" viewBox="0 0 240 800" preserveAspectRatio="none" fill="none">
+          <!-- Khung chỉ phụ bên trong -->
+          <path d="M 22 22 L 240 22 M 22 778 L 240 778 M 22 22 L 22 778" stroke="#b88928" stroke-width="0.7" stroke-opacity="0.55"/>
+          
+          <!-- Hoa văn góc trên trái -->
+          <path d="M 22 85 C 22 45, 45 22, 85 22" stroke="#b88928" stroke-width="1.4"/>
+          <path d="M 22 62 C 38 62, 62 38, 62 22" stroke="#b88928" stroke-width="0.9"/>
+          <circle cx="44" cy="44" r="3" fill="#d4af37"/>
+          <path d="M 32 32 L 54 54 M 54 32 L 32 54" stroke="#b88928" stroke-width="0.7"/>
+
+          <!-- Hoa văn góc dưới trái -->
+          <path d="M 22 715 C 22 755, 45 778, 85 778" stroke="#b88928" stroke-width="1.4"/>
+          <path d="M 22 738 C 38 738, 62 762, 62 778" stroke="#b88928" stroke-width="0.9"/>
+          <circle cx="44" cy="756" r="3" fill="#d4af37"/>
+          <path d="M 32 768 L 54 746 M 54 768 L 32 746" stroke="#b88928" stroke-width="0.7"/>
+
+          <!-- Họa tiết hình học dải dọc sát mép giữa -->
+          <line x1="232" y1="30" x2="232" y2="305" stroke="#b88928" stroke-width="0.8" stroke-dasharray="3 4"/>
+          <line x1="232" y1="495" x2="232" y2="770" stroke="#b88928" stroke-width="0.8" stroke-dasharray="3 4"/>
+
+          <!-- Nửa vòng nguyệt quế & hào quang ôm nút Mở Thiệp (Tâm tại X=240, Y=400) -->
+          <path d="M 240 295 A 105 105 0 0 0 240 505" stroke="#b88928" stroke-width="1.3"/>
+          <path d="M 240 306 A 94 94 0 0 0 240 494" stroke="#b88928" stroke-width="0.7" stroke-dasharray="4 3"/>
+          <path d="M 240 280 A 120 120 0 0 0 135 400 A 120 120 0 0 0 240 520" stroke="#b88928" stroke-width="0.6" stroke-opacity="0.5"/>
+          
+          <!-- Các ngôi sao nhỏ điểm xuyết quanh vòng cung trái -->
+          <circle cx="148" cy="348" r="2.2" fill="#b88928"/>
+          <circle cx="135" cy="400" r="3" fill="#d4af37"/>
+          <circle cx="148" cy="452" r="2.2" fill="#b88928"/>
+          <circle cx="182" cy="312" r="1.8" fill="#b88928"/>
+          <circle cx="182" cy="488" r="1.8" fill="#b88928"/>
+        </svg>
+      </div>
+
+      <!-- CÁNH CỬA PHẢI + HOA VĂN NỬA PHẢI -->
+      <div class="gate-door gate-door-right">
+        <svg class="gate-ornament-svg" viewBox="0 0 240 800" preserveAspectRatio="none" fill="none">
+          <!-- Khung chỉ phụ bên trong -->
+          <path d="M 0 22 L 218 22 M 0 778 L 218 778 M 218 22 L 218 778" stroke="#b88928" stroke-width="0.7" stroke-opacity="0.55"/>
+          
+          <!-- Hoa văn góc trên phải -->
+          <path d="M 218 85 C 218 45, 195 22, 155 22" stroke="#b88928" stroke-width="1.4"/>
+          <path d="M 218 62 C 202 62, 178 38, 178 22" stroke="#b88928" stroke-width="0.9"/>
+          <circle cx="196" cy="44" r="3" fill="#d4af37"/>
+          <path d="M 208 32 L 186 54 M 186 32 L 208 54" stroke="#b88928" stroke-width="0.7"/>
+
+          <!-- Hoa văn góc dưới phải -->
+          <path d="M 218 715 C 218 755, 195 778, 155 778" stroke="#b88928" stroke-width="1.4"/>
+          <path d="M 218 738 C 202 738, 178 762, 178 778" stroke="#b88928" stroke-width="0.9"/>
+          <circle cx="196" cy="756" r="3" fill="#d4af37"/>
+          <path d="M 208 768 L 186 746 M 186 768 L 208 746" stroke="#b88928" stroke-width="0.7"/>
+
+          <!-- Họa tiết hình học dải dọc sát mép giữa -->
+          <line x1="8" y1="30" x2="8" y2="305" stroke="#b88928" stroke-width="0.8" stroke-dasharray="3 4"/>
+          <line x1="8" y1="495" x2="8" y2="770" stroke="#b88928" stroke-width="0.8" stroke-dasharray="3 4"/>
+
+          <!-- Nửa vòng nguyệt quế & hào quang ôm nút Mở Thiệp (Tâm tại X=0, Y=400) -->
+          <path d="M 0 295 A 105 105 0 0 1 0 505" stroke="#b88928" stroke-width="1.3"/>
+          <path d="M 0 306 A 94 94 0 0 1 0 494" stroke="#b88928" stroke-width="0.7" stroke-dasharray="4 3"/>
+          <path d="M 0 280 A 120 120 0 0 1 105 400 A 120 120 0 0 1 0 520" stroke="#b88928" stroke-width="0.6" stroke-opacity="0.5"/>
+
+          <!-- Các ngôi sao nhỏ điểm xuyết quanh vòng cung phải -->
+          <circle cx="92" cy="348" r="2.2" fill="#b88928"/>
+          <circle cx="105" cy="400" r="3" fill="#d4af37"/>
+          <circle cx="92" cy="452" r="2.2" fill="#b88928"/>
+          <circle cx="58" cy="312" r="1.8" fill="#b88928"/>
+          <circle cx="58" cy="488" r="1.8" fill="#b88928"/>
+        </svg>
+      </div>
+
+      <!-- NỘI DUNG TRÊN BÌA THIỆP -->
+      <div class="gate-content">
+        <div class="gate-top">
+          <p class="sub">Thiệp Mời Cưới</p>
+          <h2 id="gateGroomName">Minh Tuấn</h2>
+          <div class="amp">&amp;</div>
+          <h2 id="gateBrideName">Thu Hà</h2>
+          <div class="date-pill" id="gateDateText">20 . 12 . 2026</div>
+        </div>
+
+        <button class="star-seal-btn" id="openGateBtn" aria-label="Chạm để mở thiệp">
+          <span class="icon">✦</span>
+          <span class="tap-txt">Mở Thiệp</span>
+        </button>
+
+        <div class="gate-bottom">
+          <p>Kính mời</p>
+          <h3 id="gateGuestName">Quý Khách</h3>
+          <div class="gate-hint">Chạm vào ngôi sao để mở thiệp</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-------------MẪU LÁ TRÚC-------------->
+
+  <!--1. PHẦN 1 CSS thay thế (Dán vào thẻ <style> thay cho CSS của .gate-door và .gate-content)
+
+
+    /* --- BÌA THIỆP DỰ PHÒNG: PHONG CÁCH CÀNH TRÚC RỦ & TÊN DỊCH XUỐNG --- */
+    .gate-door {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 50%;
+      background: linear-gradient(165deg, #fcf6e8 0%, #f3e4c3 55%, #e8d0a0 100%);
+      transition: transform 1.25s cubic-bezier(0.77, 0, 0.175, 1);
+      z-index: 1;
+      box-shadow: inset 0 0 45px rgba(168, 124, 38, 0.2);
+    }
+    .gate-door-left { left: 0; border-right: 1px solid rgba(184, 137, 40, 0.65); }
+    .gate-door-right { right: 0; border-left: 1px solid rgba(184, 137, 40, 0.65); }
+    .gate-overlay.opening .gate-door-left { transform: translateX(-102%); }
+    .gate-overlay.opening .gate-door-right { transform: translateX(102%); }
+
+    /* Viền khung chỉ mảnh bên trong 2 cánh */
+    .gate-door::before {
+      content: "";
+      position: absolute;
+      top: 14px;
+      bottom: 14px;
+      width: calc(100% - 14px);
+      border: 1px solid rgba(184, 137, 40, 0.42);
+      pointer-events: none;
+    }
+    .gate-door-left::before { left: 14px; border-right: none; }
+    .gate-door-right::before { right: 14px; border-left: none; }
+
+    .gate-bamboo-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    /* Dịch cụm tên dâu rể xuống (padding-top tăng từ 60px lên 135px) */
+    .gate-content {
+      position: relative;
+      z-index: 3;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: 135px 24px 56px;
+      text-align: center;
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+    .gate-overlay.opening .gate-content { opacity: 0; transform: scale(0.95); }
+
+    .gate-top .sub {
+      font-family: var(--font-serif);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      font-size: 11px;
+      color: var(--gold-dark);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .gate-top .sub::before, .gate-top .sub::after { content: "✦"; font-size: 9px; color: var(--gold); }
+    .gate-top h2 {
+      font-family: var(--font-script);
+      font-size: 48px;
+      font-weight: 400;
+      color: var(--ink-main);
+      line-height: 1.05;
+      text-shadow: 0 2px 14px rgba(212, 175, 55, 0.35);
+    }
+    .gate-top .amp {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 22px;
+      color: var(--gold);
+      margin: 2px 0;
+    }
+    .gate-top .date-pill {
+      margin-top: 10px;
+      font-family: var(--font-serif);
+      font-size: 15px;
+      letter-spacing: 4px;
+      color: var(--gold-dark);
+      font-weight: 600;
+    }
+
+    /* Thu gọn nhẹ nút ấn xuống 104px để cân đối khoảng cách mới */
+    .star-seal-btn {
+      width: 104px;
+      height: 104px;
+      margin: 8px 0;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #fff6dc, #e5c068 70%, #b88928 100%);
+      border: 2px solid #fff9ea;
+      box-shadow: 0 8px 28px rgba(184, 137, 40, 0.45), inset 0 0 18px rgba(255, 255, 255, 0.65);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      animation: starPulse 2.4s infinite ease-in-out;
+      transition: transform 0.3s ease;
+    }
+    .star-seal-btn:hover { transform: scale(1.06); }
+    .star-seal-btn span.icon { font-size: 26px; color: #543a0c; line-height: 1; text-shadow: 0 0 10px rgba(255, 255, 255, 0.9); }
+    .star-seal-btn span.tap-txt { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: #473008; font-weight: 600; margin-top: 5px; }
+
+    2. PHẦN 2 HTML thay thế (Thay cho <div class="gate-overlay" id="gateOverlay"> ... </div>)
+---------------------------------------------------------------------------------------------------
+    <div class="gate-overlay" id="gateOverlay" role="dialog" aria-label="Thiệp mời cưới">
+    <div class="gate-container">
+      <!-- CÁNH CỬA TRÁI + RÈM CÀNH TRÚC RỦ TỪ TRÊN XUỐNG -->
+      <div class="gate-door gate-door-left">
+        <svg class="gate-bamboo-svg" viewBox="0 0 240 800" preserveAspectRatio="xMinYMin slice" fill="none">
+          <!-- Thân trúc chính bên trái (có đốt trúc tự nhiên) -->
+          <path d="M 38 -5 L 40 165 M 40 171 L 43 355 M 43 361 L 41 560 M 41 566 L 39 805" stroke="#b88928" stroke-width="2.4" stroke-opacity="0.72"/>
+          <!-- Khớp đốt trúc -->
+          <path d="M 35 168 Q 40 165 45 168" stroke="#8c6214" stroke-width="1.8"/>
+          <path d="M 38 358 Q 43 355 48 358" stroke="#8c6214" stroke-width="1.8"/>
+          <path d="M 36 563 Q 41 560 46 563" stroke="#8c6214" stroke-width="1.8"/>
+
+          <!-- Thân trúc phụ mảnh song song -->
+          <path d="M 62 -5 L 64 130 M 64 135 L 61 310 M 61 315 L 63 510" stroke="#b88928" stroke-width="1.3" stroke-opacity="0.48"/>
+          <path d="M 60 132 Q 64 130 68 132" stroke="#8c6214" stroke-width="1.2" stroke-opacity="0.6"/>
+          <path d="M 57 312 Q 61 310 65 312" stroke="#8c6214" stroke-width="1.2" stroke-opacity="0.6"/>
+
+          <!-- CÀNH & LÁ TRÚC XỔ XUỐNG TỪ ĐỈNH BÊN TRÁI (Tạo vòm rủ phía trên tên Dâu Rể) -->
+          <!-- Nhánh rủ 1 (vươn dài vào giữa) -->
+          <path d="M 40 32 Q 115 48 195 102" stroke="#b88928" stroke-width="1.1" stroke-opacity="0.75"/>
+          <path d="M 195 102 Q 214 118 228 134 Q 208 124 195 102 Z" fill="#b88928" fill-opacity="0.78"/>
+          <path d="M 168 85 Q 186 105 194 126 Q 174 110 168 85 Z" fill="#d4af37" fill-opacity="0.7"/>
+          <path d="M 145 72 Q 160 55 182 52 Q 164 66 145 72 Z" fill="#b88928" fill-opacity="0.65"/>
+          <path d="M 118 58 Q 130 82 132 106 Q 118 85 118 58 Z" fill="#b88928" fill-opacity="0.72"/>
+          <path d="M 92 46 Q 106 32 126 30 Q 110 42 92 46 Z" fill="#d4af37" fill-opacity="0.65"/>
+
+          <!-- Nhánh rủ 2 (tầng trung tạo độ dày tán lá) -->
+          <path d="M 64 68 Q 112 92 148 148" stroke="#b88928" stroke-width="0.95" stroke-opacity="0.65"/>
+          <path d="M 148 148 Q 160 168 164 190 Q 148 172 148 148 Z" fill="#b88928" fill-opacity="0.7"/>
+          <path d="M 126 122 Q 132 145 128 168 Q 120 146 126 122 Z" fill="#d4af37" fill-opacity="0.68"/>
+          <path d="M 102 98 Q 88 120 82 142 Q 98 122 102 98 Z" fill="#b88928" fill-opacity="0.6"/>
+
+          <!-- Nhánh rủ 3 (sát mép trên cùng) -->
+          <path d="M 98 -2 Q 135 28 165 65" stroke="#b88928" stroke-width="0.9" stroke-opacity="0.6"/>
+          <path d="M 165 65 Q 182 78 192 94 Q 174 84 165 65 Z" fill="#b88928" fill-opacity="0.62"/>
+          <path d="M 138 35 Q 144 58 140 78 Q 132 58 138 35 Z" fill="#d4af37" fill-opacity="0.58"/>
+
+          <!-- Nhánh lá điểm xuyết ở đốt trúc giữa & dưới bên trái -->
+          <path d="M 43 355 Q 72 342 96 346" stroke="#b88928" stroke-width="0.9" stroke-opacity="0.55"/>
+          <path d="M 96 346 Q 114 345 128 352 Q 112 354 96 346 Z" fill="#b88928" fill-opacity="0.6"/>
+          <path d="M 74 348 Q 84 364 86 380 Q 74 366 74 348 Z" fill="#d4af37" fill-opacity="0.55"/>
+
+          <path d="M 41 560 Q 68 548 92 554" stroke="#b88928" stroke-width="0.9" stroke-opacity="0.5"/>
+          <path d="M 92 554 Q 110 556 122 565 Q 106 564 92 554 Z" fill="#b88928" fill-opacity="0.55"/>
+
+          <!-- Điểm sao vàng lấp lánh xen kẽ lá trúc -->
+          <circle cx="176" cy="116" r="2" fill="#d4af37"/>
+          <circle cx="110" cy="86" r="1.6" fill="#b88928"/>
+          <circle cx="212" cy="95" r="1.5" fill="#d4af37"/>
+        </svg>
+      </div>
+
+      <!-- CÁNH CỬA PHẢI + RÈM CÀNH TRÚC ĐỐI XỨNG RỦ XUỐNG -->
+      <div class="gate-door gate-door-right">
+        <svg class="gate-bamboo-svg" viewBox="0 0 240 800" preserveAspectRatio="xMaxYMin slice" fill="none">
+          <!-- Thân trúc chính bên phải -->
+          <path d="M 202 -5 L 200 185 M 200 191 L 197 380 M 197 386 L 199 585 M 199 591 L 201 805" stroke="#b88928" stroke-width="2.4" stroke-opacity="0.72"/>
+          <!-- Khớp đốt trúc -->
+          <path d="M 195 188 Q 200 185 205 188" stroke="#8c6214" stroke-width="1.8"/>
+          <path d="M 192 383 Q 197 380 202 383" stroke="#8c6214" stroke-width="1.8"/>
+          <path d="M 194 588 Q 199 585 204 588" stroke="#8c6214" stroke-width="1.8"/>
+
+          <!-- Thân trúc phụ mảnh song song -->
+          <path d="M 178 -5 L 176 145 M 176 150 L 179 330 M 179 335 L 177 525" stroke="#b88928" stroke-width="1.3" stroke-opacity="0.48"/>
+          <path d="M 172 147 Q 176 145 180 147" stroke="#8c6214" stroke-width="1.2" stroke-opacity="0.6"/>
+          <path d="M 175 332 Q 179 330 183 332" stroke="#8c6214" stroke-width="1.2" stroke-opacity="0.6"/>
+
+          <!-- CÀNH & LÁ TRÚC XỔ XUỐNG TỪ ĐỈNH BÊN PHẢI -->
+          <!-- Nhánh rủ 1 (vươn dài vào giữa) -->
+          <path d="M 200 36 Q 125 52 45 106" stroke="#b88928" stroke-width="1.1" stroke-opacity="0.75"/>
+          <path d="M 45 106 Q 26 122 12 138 Q 32 128 45 106 Z" fill="#b88928" fill-opacity="0.78"/>
+          <path d="M 72 89 Q 54 109 46 130 Q 66 114 72 89 Z" fill="#d4af37" fill-opacity="0.7"/>
+          <path d="M 95 76 Q 80 59 58 56 Q 76 70 95 76 Z" fill="#b88928" fill-opacity="0.65"/>
+          <path d="M 122 62 Q 110 86 108 110 Q 122 89 122 62 Z" fill="#b88928" fill-opacity="0.72"/>
+          <path d="M 148 50 Q 134 36 114 34 Q 130 46 148 50 Z" fill="#d4af37" fill-opacity="0.65"/>
+
+          <!-- Nhánh rủ 2 (tầng trung) -->
+          <path d="M 176 72 Q 128 96 92 152" stroke="#b88928" stroke-width="0.95" stroke-opacity="0.65"/>
+          <path d="M 92 152 Q 80 172 76 194 Q 92 176 92 152 Z" fill="#b88928" fill-opacity="0.7"/>
+          <path d="M 114 126 Q 108 149 112 172 Q 120 150 114 126 Z" fill="#d4af37" fill-opacity="0.68"/>
+          <path d="M 138 102 Q 152 124 158 146 Q 142 126 138 102 Z" fill="#b88928" fill-opacity="0.6"/>
+
+          <!-- Nhánh rủ 3 (sát mép trên cùng) -->
+          <path d="M 142 -2 Q 105 28 75 65" stroke="#b88928" stroke-width="0.9" stroke-opacity="0.6"/>
+          <path d="M 75 65 Q 58 78 48 94 Q 66 84 75 65 Z" fill="#b88928" fill-opacity="0.62"/>
+          <path d="M 102 35 Q 96 58 100 78 Q 108 58 102 35 Z" fill="#d4af37" fill-opacity="0.58"/>
+
+          <!-- Nhánh lá điểm xuyết ở đốt trúc giữa & dưới bên phải -->
+          <path d="M 197 380 Q 168 367 144 371" stroke="#b88928" stroke-width="0.9" stroke-opacity="0.55"/>
+          <path d="M 144 371 Q 126 370 112 377 Q 128 379 144 371 Z" fill="#b88928" fill-opacity="0.6"/>
+          <path d="M 166 373 Q 156 389 154 405 Q 166 391 166 373 Z" fill="#d4af37" fill-opacity="0.55"/>
+
+          <path d="M 199 585 Q 172 573 148 579" stroke="#b88928" stroke-width="0.9" stroke-opacity="0.5"/>
+          <path d="M 148 579 Q 130 581 118 590 Q 134 589 148 579 Z" fill="#b88928" fill-opacity="0.55"/>
+
+          <!-- Điểm sao vàng lấp lánh xen kẽ lá trúc -->
+          <circle cx="64" cy="120" r="2" fill="#d4af37"/>
+          <circle cx="130" cy="90" r="1.6" fill="#b88928"/>
+          <circle cx="28" cy="99" r="1.5" fill="#d4af37"/>
+        </svg>
+      </div>
+
+      <!-- NỘI DUNG TRÊN BÌA THIỆP (TÊN DÂU RỂ ĐÃ DỊCH XUỐNG DƯỚI TÁN TRÚC) -->
+      <div class="gate-content">
+        <div class="gate-top">
+          <p class="sub">Thiệp Mời Cưới</p>
+          <h2 id="gateGroomName">Minh Tuấn</h2>
+          <div class="amp">&amp;</div>
+          <h2 id="gateBrideName">Thu Hà</h2>
+          <div class="date-pill" id="gateDateText">20 . 12 . 2026</div>
+        </div>
+
+        <button class="star-seal-btn" id="openGateBtn" aria-label="Chạm để mở thiệp">
+          <span class="icon">✦</span>
+          <span class="tap-txt">Mở Thiệp</span>
+        </button>
+
+        <div class="gate-bottom">
+          <p>Kính mời</p>
+          <h3 id="gateGuestName">Quý Khách</h3>
+          <div class="gate-hint">Chạm vào ngôi sao để mở thiệp</div>
+        </div>
+      </div>
+    </div>
+  </div>

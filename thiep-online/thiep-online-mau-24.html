@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thiệp Cưới Hiện Đại | Trần Lan & Nguyễn Minh</title>
+  <link rel="icon" type="image/png" href="../anh/logo.png">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            olive: { DEFAULT: '#2a382c', dark: '#1a241b', light: '#3e5240' },
+            champagne: { DEFAULT: '#c5a869', light: '#e8dcc0', dark: '#8c733a' },
+            ivory: '#f9f8f4'
+          },
+          fontFamily: {
+            sans: ['Montserrat', 'sans-serif'],
+            serif: ['Cormorant Garamond', 'serif'],
+            script: ['Alex Brush', 'cursive']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      background-color: #f9f8f4;
+      color: #1a241b;
+      font-family: 'Montserrat', sans-serif;
+      overflow-x: hidden;
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #f9f8f4; }
+    ::-webkit-scrollbar-thumb { background: #c5a869; border-radius: 4px; }
+
+    #magicCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 60;
+    }
+
+    #oliveEnvelope {
+      background: radial-gradient(circle at center, #3e5240 0%, #243025 60%, #121a13 100%);
+      transition: opacity 0.9s ease, transform 0.9s ease, visibility 0.9s ease;
+    }
+    #oliveEnvelope.opened {
+      opacity: 0;
+      transform: scale(1.08);
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .envelope-flap {
+      clip-path: polygon(0 0, 100% 0, 50% 55%);
+      background: linear-gradient(180deg, #354737 0%, #1e291f 100%);
+      transform-origin: top;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #oliveEnvelope.opening .envelope-flap {
+      transform: rotateX(180deg);
+    }
+
+    .wax-seal {
+      background: radial-gradient(circle at 30% 30%, #efe3c5, #c5a869 55%, #826a34 100%);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.55), inset 0 2px 5px rgba(255, 255, 255, 0.65);
+      animation: sealPulse 2.4s infinite ease-in-out;
+    }
+    @keyframes sealPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 10px 25px rgba(0,0,0,0.55), 0 0 0 0 rgba(197, 168, 105, 0.45); }
+      50% { transform: scale(1.06); box-shadow: 0 14px 30px rgba(0,0,0,0.65), 0 0 0 14px rgba(197, 168, 105, 0); }
+    }
+
+    .olive-frame {
+      position: relative;
+      border: 1px solid rgba(197, 168, 105, 0.4);
+      background: #ffffff;
+    }
+    .olive-frame::before {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border: 1px solid rgba(42, 56, 44, 0.12);
+      pointer-events: none;
+    }
+
+    /* Khung ảnh kép cho phần Trân Trọng Kính Mời */
+#mainInvitation .invitation-frame {
+  position: relative;
+  background: #ffffff;
+  box-sizing: border-box;
+  border-radius: 15px;
+  margin-top: 60px;
+  margin-bottom: 30px;
+  padding: 80px 35px;
+}
+
+/* Viền trắng thứ nhất */
+#mainInvitation .invitation-frame::before {
+  content: "";
+  position: absolute;
+  inset: 18px;
+  border: 1px solid #e0c57f;
+  border-radius: 16px;
+  pointer-events: none;
+}
+
+/* Viền trắng thứ hai */
+#mainInvitation .invitation-frame::after {
+  content: "";
+  position: absolute;
+  inset: 25px;
+  border: 1px solid rgba(199, 202, 202, 0.75);
+  border-radius: 0;
+  pointer-events: none;
+}
+  </style>
+</head>
+<body class="relative min-h-screen selection:bg-olive selection:text-champagne-light">
+
+  <canvas id="magicCanvas"></canvas>
+  <audio id="bgMusic" loop preload="auto"></audio>
+
+  <div id="floatingControls" class="fixed bottom-5 right-5 z-50 hidden flex-col gap-2.5">
+    <button id="scrollBtn" onclick="toggleAutoScroll()" class="w-11 h-11 rounded-full bg-olive text-champagne-light border border-champagne/50 shadow-xl flex items-center justify-center hover:scale-110 transition" title="Tạm dừng / Tiếp tục cuộn">
+      <i id="scrollIcon" class="fas fa-pause text-sm"></i>
+    </button>
+    <button id="musicBtn" onclick="toggleMusic()" class="w-11 h-11 rounded-full bg-olive text-champagne-light border border-champagne/50 shadow-xl flex items-center justify-center hover:scale-110 transition" title="Bật / Tắt nhạc">
+      <i id="musicIcon" class="fas fa-music text-sm"></i>
+    </button>
+  </div>
+
+  <!-- PHONG BÌ 3D DARK GREEN / OLIVE -->
+  <div id="oliveEnvelope" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-cover bg-center">
+    <div class="envelope-flap absolute top-0 left-0 right-0 h-[48vh] border-b border-champagne/25 shadow-2xl pointer-events-none"></div>
+
+    <div class="relative z-10 w-full max-w-lg bg-olive-dark/85 backdrop-blur-md rounded-2xl p-8 sm:p-10 text-center border border-champagne/50 shadow-[0_25px_60px_rgba(0,0,0,0.8)]">
+      <div class="border border-champagne/25 rounded-xl p-6 sm:p-8">
+        <p class="text-[11px] uppercase tracking-[0.35em] text-champagne-light/90 font-medium mb-4">Trân Trọng Kính Mời</p>
+
+        <h1 id="coverBride" class="font-script text-5xl sm:text-6xl text-ivory leading-tight">Trần Lan</h1>
+        <div class="font-script text-3xl text-champagne my-1">&amp;</div>
+        <h1 id="coverGroom" class="font-script text-5xl sm:text-6xl text-ivory leading-tight">Nguyễn Minh</h1>
+
+        <div class="flex items-center justify-center gap-3 my-5 text-champagne/70 text-xs">
+          <span class="h-[1px] w-12 bg-champagne/40"></span>
+          <span>✦</span>
+          <span class="h-[1px] w-12 bg-champagne/40"></span>
+        </div>
+
+        <p id="coverDate" class="font-serif text-lg tracking-[0.2em] text-champagne-light mb-2">15 · 06 · 2027</p>
+        <p id="coverSubtitle" class="text-xs text-ivory/75 italic leading-relaxed mb-7">Một ngày đặc biệt, một lời hẹn trăm năm.</p>
+
+        <div class="flex flex-col items-center">
+          <button onclick="openOliveInvitation()" class="wax-seal w-20 h-20 rounded-full flex flex-col items-center justify-center text-olive-dark border-2 border-champagne-light/80 cursor-pointer group focus:outline-none">
+            <i class="fas fa-leaf text-lg mb-0.5 group-hover:scale-125 transition-transform"></i>
+            <span class="text-[9px] font-bold uppercase tracking-widest">Mở Thiệp</span>
+          </button>
+          <span class="text-[10px] uppercase tracking-[0.25em] text-champagne/80 mt-3 animate-pulse">Chạm vào con dấu</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NỘI DUNG THIỆP CHÍNH -->
+  <main id="mainInvitation" class="w-full">
+    
+    <nav class="sticky top-0 z-40 bg-ivory/95 backdrop-blur-md border-b border-olive/15 px-4 py-2.5 flex items-center justify-between shadow-sm">
+      <button onclick="backToEnvelope()" class="text-xs font-medium text-olive hover:text-champagne-dark flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-olive/25 transition">
+        <i class="fas fa-envelope"></i><span>Trang bìa</span>
+      </button>
+      <div class="hidden sm:flex items-center gap-5 text-[11px] uppercase tracking-[0.18em] font-semibold text-olive"> 
+        <a href="#giadinh" class="hover:text-champagne-dark transition">Hai họ</a>
+        <a href="#loingo" class="hover:text-champagne-dark transition">Lời ngỏ</a>
+        <a href="#sukien" class="hover:text-champagne-dark transition">Sự kiện</a>
+        <a href="#album" class="hover:text-champagne-dark transition">Album</a>
+        <a href="#rsvp" class="hover:text-champagne-dark transition">Xác nhận</a>
+      </div>
+      <a href="#rsvp" class="bg-olive text-champagne-light text-[11px] uppercase tracking-wider font-semibold px-3.5 py-1.5 rounded-full hover:bg-olive-light transition">
+        Gửi lời chúc
+      </a>
+    </nav>
+
+    <!-- HAI HỌ -->
+    <section id="giadinh" class="py-16 px-5 bg-[#f1f2ec] border-y border-olive/15">
+      <div class="max-w-4xl mx-auto text-center">
+        <p class="text-xs uppercase tracking-[0.3em] text-champagne-dark font-semibold mb-2">Gia Đình Hai Bên</p>
+        <h2 class="font-serif text-3xl sm:text-4xl text-olive font-semibold mb-10">Thông Tin Hai Họ</h2>
+        <div class="text-champagne text-xl my-4">❧ ✧ ❧</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+          <div class="olive-frame p-8 rounded-xl shadow-sm text-center">
+            <p class="text-[11px] uppercase tracking-[0.25em] text-champagne-dark font-bold mb-2">Nhà Gái</p>
+            <div class="w-10 h-[1px] bg-champagne mx-auto mb-4"></div>
+            <p id="wFamilyBride" class="font-serif text-lg sm:text-xl text-stone-800 leading-relaxed">
+              Gia đình cô dâu Trần Lan<br>Địa chỉ: vui lòng cập nhật
+            </p>
+          </div>
+
+          <div class="olive-frame p-8 rounded-xl shadow-sm text-center">
+            <p class="text-[11px] uppercase tracking-[0.25em] text-champagne-dark font-bold mb-2">Nhà Trai</p>
+            <div class="w-10 h-[1px] bg-champagne mx-auto mb-4"></div>
+            <p id="wFamilyGroom" class="font-serif text-lg sm:text-xl text-stone-800 leading-relaxed">
+              Gia đình chú rể Nguyễn Minh<br>Địa chỉ: vui lòng cập nhật
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PHẦN ẢNH NGÀY VUI (ẢNH NGANG) -->
+    <section id="weddingDaySection" class="hidden py-12 px-5 max-w-4xl mx-auto text-center">
+      <p class="text-xs uppercase tracking-[0.3em] text-champagne-dark font-semibold mb-2">Our Wedding</p>
+      <h2 class="font-serif text-3xl sm:text-4xl text-olive font-semibold mb-10">Lễ Thành Hôn</h2>
+      <div class="text-champagne text-xl my-4">❧ ✧ ❧</div>
+      <p id="wNgayvuiNames" class="font-script text-4xl sm:text-5xl text-olive mb-10">Trần Lan &amp; Nguyễn Minh</p>
+      <div class="olive-frame p-3 sm:p-4 rounded-2xl shadow-md bg-white">
+        <div class="overflow-hidden rounded-xl h-[450px]">
+          <img id="wDayImgTag" src="" alt="Ảnh ngày vui" class="w-full h-full object-cover shadow-inner">
+        </div>
+        <p class="font-serif italic text-sm text-champagne-dark mt-3">"Ngày hạnh phúc nhất của chúng mình"</p>
+      </div>   
+    </section>
+
+    <!-- LỜI NGỎ -->
+    <section id="loingo" class="py-20 sm:py-24 px-5 max-w-3xl mx-auto text-center invitation-frame ">
+      <p class="text-xs uppercase tracking-[0.3em] text-champagne-dark font-semibold mb-2">Save The Date</p>
+      <h2 class="font-serif text-4xl sm:text-5xl text-olive font-semibold">Trân Trọng Kính Mời</h2>
+      <div class="text-champagne text-xl my-4">❧ ✧ ❧</div>
+      <p id="wMessage" class="font-serif text-xl sm:text-2xl italic leading-relaxed text-stone-700 max-w-2xl mx-auto">
+        Tình yêu là hành trình đẹp nhất khi có gia đình và bạn bè cùng chứng kiến. Chúng mình hân hạnh mời bạn đến chung vui trong ngày thành hôn.
+      </p>
+    </section>
+
+    <!-- THỜI GIAN & ĐỊA ĐIỂM -->
+    <section id="sukien" class="py-20 px-5 max-w-4xl mx-auto text-center">
+      <p class="text-xs uppercase tracking-[0.3em] text-champagne-dark font-semibold mb-2">The Wedding Day</p>
+      <h2 class="font-serif text-3xl sm:text-4xl text-olive font-semibold mb-10">Thời Gian &amp; Địa Điểm</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+        <div class="olive-frame p-8 rounded-xl shadow-sm space-y-4">
+          <div class="w-12 h-12 rounded-full bg-olive text-champagne-light flex items-center justify-center mx-auto text-lg shadow">
+            <i class="fas fa-ring"></i>
+          </div>
+          <h3 class="font-serif text-2xl text-olive font-semibold">Lễ Thành Hôn</h3>
+          <p id="wCeremonyTime" class="text-sm font-bold tracking-wider text-champagne-dark uppercase">09:00 · 15/06/2027</p>
+          <p id="wCeremony" class="text-sm text-stone-600 leading-relaxed">Địa điểm tổ chức lễ — cập nhật địa chỉ</p>
+          <div class="pt-2">
+            <a id="wCeremonyMap" href="https://maps.google.com/" target="_blank" rel="noopener" class="inline-flex items-center gap-2 border border-olive text-olive hover:bg-olive hover:text-champagne-light text-xs font-semibold uppercase tracking-wider px-5 py-2.5 rounded-full transition">
+              <i class="fas fa-map-marker-alt"></i> Mở Google Maps
+            </a>
+          </div>
+        </div>
+
+        <div class="olive-frame p-8 rounded-xl shadow-sm space-y-4">
+          <div class="w-12 h-12 rounded-full bg-olive text-champagne-light flex items-center justify-center mx-auto text-lg shadow">
+            <i class="fas fa-champagne-glasses"></i>
+          </div>
+          <h3 class="font-serif text-2xl text-olive font-semibold">Tiệc Cưới Chung Vui</h3>
+          <p id="wReceptionTime" class="text-sm font-bold tracking-wider text-champagne-dark uppercase">11:00 · 15/06/2027</p>
+          <p id="wReception" class="text-sm text-stone-600 leading-relaxed">Nhà hàng — cập nhật địa chỉ</p>
+          <div class="pt-2">
+            <a id="wReceptionMap" href="https://maps.google.com/" target="_blank" rel="noopener" class="inline-flex items-center gap-2 border border-olive text-olive hover:bg-olive hover:text-champagne-light text-xs font-semibold uppercase tracking-wider px-5 py-2.5 rounded-full transition">
+              <i class="fas fa-map-marker-alt"></i> Mở Google Maps
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ALBUM ẢNH -->
+    <section id="album" class="py-16 px-5 bg-[#f1f2ec] border-y border-olive/15">
+      <div class="max-w-5xl mx-auto text-center">
+        <p class="text-xs uppercase tracking-[0.3em] text-champagne-dark font-semibold mb-2">Our Memories</p>
+        <h2 class="font-serif text-3xl sm:text-4xl text-olive font-semibold mb-3">Album Cưới</h2>
+        <p class="text-xs text-stone-500 mb-10">Chạm vào từng bức ảnh để xem kích thước lớn</p>
+
+        <div id="albumGrid" class="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5"></div>
+      </div>
+    </section>
+
+    <!-- XÁC NHẬN THAM DỰ (RSVP) -->
+    <section id="rsvp" class="py-20 px-5 max-w-xl mx-auto text-center">
+      <p class="text-xs uppercase tracking-[0.3em] text-champagne-dark font-semibold mb-2">Kindly Reply</p>
+      <h2 class="font-serif text-3xl sm:text-4xl text-olive font-semibold mb-3">Xác Nhận Tham Dự</h2>
+      <p class="text-xs text-stone-600 mb-8">Sự hiện diện của bạn là niềm vinh hạnh lớn nhất của gia đình chúng tôi.</p>
+
+      <form id="rsvpForm" class="olive-frame p-7 sm:p-9 rounded-2xl shadow-md text-left space-y-4 text-xs">
+        <div>
+          <label for="guest" class="block font-semibold text-olive mb-1.5">Tên khách mời *</label>
+          <input id="guest" required placeholder="Nhập họ và tên của bạn" class="w-full p-3 bg-ivory border border-olive/25 rounded-lg outline-none focus:border-olive">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label for="attendance" class="block font-semibold text-olive mb-1.5">Bạn sẽ tham dự chứ?</label>
+            <select id="attendance" class="w-full p-3 bg-ivory border border-olive/25 rounded-lg outline-none focus:border-olive">
+              <option value="yes">Mình sẽ tham dự</option>
+              <option value="no">Rất tiếc, mình không thể tham dự</option>
+              <option value="maybe">Mình sẽ xác nhận sau</option>
+            </select>
+          </div>
+          <div>
+            <label for="count" class="block font-semibold text-olive mb-1.5">Số người tham dự</label>
+            <select id="count" class="w-full p-3 bg-ivory border border-olive/25 rounded-lg outline-none focus:border-olive">
+              <option value="1">1 người</option>
+              <option value="2">2 người</option>
+              <option value="3">3 người</option>
+              <option value="4">4 người</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label for="message" class="block font-semibold text-olive mb-1.5">Lời chúc mừng</label>
+          <textarea id="message" rows="3" placeholder="Gửi lời chúc phúc đến cô dâu chú rể..." class="w-full p-3 bg-ivory border border-olive/25 rounded-lg outline-none focus:border-olive"></textarea>
+        </div>
+
+        <button type="submit" id="submitRsvp" class="w-full py-3.5 rounded-full bg-olive hover:bg-olive-light text-champagne-light font-bold uppercase tracking-widest text-xs shadow-lg transition">
+          Gửi Xác Nhận
+        </button>
+        <p id="formMessage" class="text-center text-xs font-medium text-olive pt-1"></p>
+      </form>
+    </section>
+
+    <!-- CHIA SẺ & CHÂN TRANG -->
+    <section class="py-12 px-5 text-center border-t border-olive/15">
+      <div class="flex justify-center gap-3 flex-wrap">
+        <button onclick="copyInviteLink()" class="border border-olive/40 bg-white hover:bg-olive/5 text-olive text-xs font-semibold px-5 py-2.5 rounded-full transition">
+          <i class="fas fa-link mr-1.5"></i> Sao chép link thiệp
+        </button>
+        <button onclick="shareInvite()" class="border border-olive/40 bg-white hover:bg-olive/5 text-olive text-xs font-semibold px-5 py-2.5 rounded-full transition">
+          <i class="fas fa-share-nodes mr-1.5"></i> Chia sẻ thiệp
+        </button>
+      </div>
+      <p id="shareToast" class="text-xs text-champagne-dark mt-3 min-h-[18px]"></p>
+    </section>
+
+    <footer class="bg-olive-dark text-ivory py-12 px-5 text-center border-t border-champagne/30">
+      <div class="text-champagne text-xl mb-2">❧</div>
+      <p id="wFooterNames" class="font-script text-4xl text-champagne-light mb-2">Trần Lan &amp; Nguyễn Minh</p>
+      <p class="text-xs tracking-widest uppercase text-ivory/70">Trân trọng cảm ơn và hẹn gặp bạn!</p>
+    </footer>
+  </main>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="fixed inset-0 z-50 hidden bg-black/90 flex items-center justify-center p-4" onclick="this.classList.add('hidden')">
+    <img id="lightboxImg" src="" class="max-w-full max-h-[90vh] rounded-lg border border-champagne/50 shadow-2xl">
+  </div>
+
+  <script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBbzcpByDk2Yzlqo9y7YHwpIq2sXJinNDQ",
+  authDomain: "thiep-cuoi-online-02.firebaseapp.com",
+  projectId: "thiep-cuoi-online-02",
+  storageBucket: "thiep-cuoi-online-02.firebasestorage.app",
+  messagingSenderId: "261787760014",
+  appId: "1:261787760014:web:5e9c246306b95ec7cca0df"
+};
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const customerId = (urlParams.get('id') || 'mac-dinh').trim().toLowerCase();
+
+    // Collection riêng cho Mẫu 24
+    const COLLECTION_THIEP = 'wedding_mau_24';
+    const COLLECTION_RSVP  = 'rsvp_mau_24';
+
+    const bgMusic = document.getElementById('bgMusic');
+    let isMusicPlaying = false;
+    let isAutoScrolling = false;
+    let autoScrollReq = null;
+
+    function initMagicCanvas() {
+      const canvas = document.getElementById('magicCanvas');
+      const ctx = canvas.getContext('2d');
+      let w = canvas.width = window.innerWidth;
+      let h = canvas.height = window.innerHeight;
+
+      window.addEventListener('resize', () => {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+      });
+
+      const particles = Array.from({ length: 42 }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        size: Math.random() * 5 + 3,
+        speedY: Math.random() * 0.9 + 0.4,
+        speedX: (Math.random() - 0.5) * 0.7,
+        rot: Math.random() * 360,
+        rotSpeed: (Math.random() - 0.5) * 2,
+        isGoldDust: Math.random() > 0.45,
+        opacity: Math.random() * 0.6 + 0.3
+      }));
+
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+        particles.forEach(p => {
+          ctx.save();
+          ctx.translate(p.x, p.y);
+          ctx.rotate((p.rot * Math.PI) / 180);
+          ctx.globalAlpha = p.opacity;
+
+          if (p.isGoldDust) {
+            ctx.beginPath();
+            ctx.arc(0, 0, p.size * 0.45, 0, Math.PI * 2);
+            ctx.fillStyle = '#e8dcc0';
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = '#c5a869';
+            ctx.fill();
+          } else {
+            // Lá ô-liu xanh nhạt rơi nhẹ nhàng
+            ctx.beginPath();
+            ctx.ellipse(0, 0, p.size, p.size * 0.48, 0, 0, Math.PI * 2);
+            ctx.fillStyle = '#7b947c';
+            ctx.fill();
+          }
+
+          ctx.restore();
+          p.y += p.speedY;
+          p.x += p.speedX + Math.sin(p.y * 0.015) * 0.3;
+          p.rot += p.rotSpeed;
+
+          if (p.y > h + 15) {
+            p.y = -15;
+            p.x = Math.random() * w;
+          }
+        });
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }
+
+    function stopAutoScroll() {
+      if (autoScrollReq) {
+        cancelAnimationFrame(autoScrollReq);
+        autoScrollReq = null;
+      }
+      isAutoScrolling = false;
+      const icon = document.getElementById('scrollIcon');
+      if (icon) icon.className = 'fas fa-angles-down text-sm';
+      ['wheel', 'touchstart', 'mousedown', 'keydown'].forEach(evt => {
+        window.removeEventListener(evt, stopAutoScroll);
+      });
+    }
+
+    function startAutoScroll() {
+      stopAutoScroll();
+      isAutoScrolling = true;
+      const icon = document.getElementById('scrollIcon');
+      if (icon) icon.className = 'fas fa-pause text-sm';
+
+      let currentY = window.pageYOffset;
+      const speed = 0.85;
+
+      function step() {
+        if (!isAutoScrolling) return;
+        const maxScrollY = document.documentElement.scrollHeight - window.innerHeight;
+        currentY += speed;
+        window.scrollTo(0, currentY);
+
+        if (currentY < maxScrollY) {
+          autoScrollReq = requestAnimationFrame(step);
+        } else {
+          stopAutoScroll();
+        }
+      }
+      autoScrollReq = requestAnimationFrame(step);
+
+      setTimeout(() => {
+        ['wheel', 'touchstart', 'mousedown', 'keydown'].forEach(evt => {
+          window.addEventListener(evt, stopAutoScroll, { passive: true });
+        });
+      }, 300);
+    }
+
+    async function openOliveInvitation() {
+      const env = document.getElementById('oliveEnvelope');
+      env.classList.add('opening');
+
+      if (bgMusic.src && !isMusicPlaying) {
+        try {
+          await bgMusic.play();
+          isMusicPlaying = true;
+          document.getElementById('musicIcon').className = 'fas fa-volume-high text-sm';
+        } catch (e) {}
+      }
+
+      const controls = document.getElementById('floatingControls');
+      controls.classList.remove('hidden');
+      controls.classList.add('flex');
+
+      setTimeout(() => {
+        env.classList.add('opened');
+        const loingo = document.getElementById('giadinh');
+        if (loingo) {
+          loingo.scrollIntoView({ behavior: 'auto', block: 'start' });
+        }
+        setTimeout(startAutoScroll, 600);
+      }, 350);
+    }
+
+    function backToEnvelope() {
+      stopAutoScroll();
+      const env = document.getElementById('oliveEnvelope');
+      env.classList.remove('opened', 'opening');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+
+    function toggleMusic() {
+      if (!bgMusic.src) {
+        alert('Chủ thiệp chưa cập nhật link nhạc MP3.');
+        return;
+      }
+      if (isMusicPlaying) {
+        bgMusic.pause();
+        isMusicPlaying = false;
+        document.getElementById('musicIcon').className = 'fas fa-music text-sm';
+      } else {
+        bgMusic.play();
+        isMusicPlaying = true;
+        document.getElementById('musicIcon').className = 'fas fa-volume-high text-sm';
+      }
+    }
+
+    function toggleAutoScroll() {
+      if (isAutoScrolling) stopAutoScroll();
+      else startAutoScroll();
+    }
+
+    function renderAlbum(images) {
+      const grid = document.getElementById('albumGrid');
+      grid.innerHTML = '';
+      const list = (Array.isArray(images) && images.length > 0) ? images : [
+        'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=800&q=80',
+        'https://images.unsplash.com/photo-1529636798458-92182e662485?auto=format&fit=crop&w=800&q=80'
+      ];
+
+      list.forEach((url, idx) => {
+        if (!url) return;
+        const card = document.createElement('div');
+        card.className = 'aspect-[4/5] rounded-xl overflow-hidden border border-olive/20 shadow-sm cursor-pointer group bg-olive/5';
+        card.onclick = () => {
+          document.getElementById('lightboxImg').src = url;
+          document.getElementById('lightbox').classList.remove('hidden');
+        };
+        card.innerHTML = `<img src="${url}" alt="Ảnh cưới ${idx + 1}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">`;
+        grid.appendChild(card);
+      });
+    }
+
+    function applyWeddingData(d) {
+      const date = d.date || '';
+      const parts = date.split('-');
+      const prettyDate = parts.length === 3 ? `${parts[2]} · ${parts[1]} · ${parts[0]}` : '15 · 06 · 2027';
+      const vnDate = parts.length === 3 ? `${parts[2]}/${parts[1]}/${parts[0]}` : '15/06/2027';
+
+      if (d.bride) document.getElementById('coverBride').textContent = d.bride;
+      if (d.groom) document.getElementById('coverGroom').textContent = d.groom;
+      document.getElementById('coverDate').textContent = `${prettyDate}  |  ${d.time || '09:00'}`;
+
+      if (d.message) {
+        document.getElementById('coverSubtitle').textContent = d.message;
+        document.getElementById('wMessage').textContent = d.message;
+      }
+
+      if (d.familyBride) document.getElementById('wFamilyBride').innerHTML = d.familyBride.replace(/\n/g, '<br>');
+      if (d.familyGroom) document.getElementById('wFamilyGroom').innerHTML = d.familyGroom.replace(/\n/g, '<br>');
+
+      const weddingDaySec = document.getElementById('weddingDaySection');
+      const weddingDayImgTag = document.getElementById('wDayImgTag');
+      if (d.weddingDayImg) {
+        weddingDayImgTag.src = d.weddingDayImg;
+        weddingDaySec.classList.remove('hidden');
+      } else {
+        weddingDaySec.classList.add('hidden');
+      }
+
+      document.getElementById('wCeremonyTime').textContent = `${d.time || '09:00'} · ${vnDate}`;
+      document.getElementById('wReceptionTime').textContent = `${d.time || '11:00'} · ${vnDate}`;
+      if (d.ceremony) document.getElementById('wCeremony').textContent = d.ceremony;
+      if (d.ceremonyTime) document.getElementById('wCeremonyTime').textContent = d.ceremonyTime;
+      if (d.reception) document.getElementById('wReception').textContent = d.reception;
+
+      if (d.ceremonyMap) document.getElementById('wCeremonyMap').href = d.ceremonyMap;
+      if (d.receptionMap) document.getElementById('wReceptionMap').href = d.receptionMap;
+
+      document.getElementById('wFooterNames').textContent = `${d.bride || 'Trần Lan'} & ${d.groom || 'Nguyễn Minh'}`;
+      document.getElementById('wNgayvuiNames').textContent = `${d.bride || 'Trần Lan'} & ${d.groom || 'Nguyễn Minh'}`;
+
+      // Lớp phủ Dark Green / Olive trên ảnh bìa phong bì
+      if (d.cover) {
+        document.getElementById('oliveEnvelope').style.backgroundImage = `linear-gradient(rgba(42, 56, 44, 0.82), rgba(18, 26, 19, 0.9)), url("${d.cover.replace(/"/g, '%22')}")`;
+      }
+
+      if (d.music) {
+        bgMusic.src = d.music;
+      }
+
+      renderAlbum(d.albumImages);
+    }
+
+    document.getElementById('rsvpForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('submitRsvp');
+      const msgEl = document.getElementById('formMessage');
+      btn.disabled = true;
+      msgEl.textContent = 'Đang gửi xác nhận...';
+
+      try {
+        await db.collection(COLLECTION_RSVP).add({
+          card_id: customerId,
+          guestName: document.getElementById('guest').value.trim(),
+          attendance: document.getElementById('attendance').value,
+          guestCount: Number(document.getElementById('count').value),
+          guestMessage: document.getElementById('message').value.trim(),
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        msgEl.textContent = 'Cảm ơn bạn! Xác nhận tham dự đã được gửi thành công. ♡';
+        document.getElementById('rsvpForm').reset();
+      } catch (err) {
+        msgEl.textContent = 'Chưa gửi được phản hồi, vui lòng thử lại sau.';
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    async function copyInviteLink() {
+      const toast = document.getElementById('shareToast');
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        toast.textContent = 'Đã sao chép đường link thiệp cưới!';
+      } catch (e) {
+        toast.textContent = 'Hãy sao chép đường link trên thanh địa chỉ trình duyệt.';
+      }
+    }
+
+    async function shareInvite() {
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: document.title, text: 'Trân trọng kính mời bạn xem thiệp cưới', url: window.location.href });
+        } catch (e) {}
+      } else {
+        copyInviteLink();
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', async () => {
+      initMagicCanvas();
+      renderAlbum([]);
+      try {
+        const snap = await db.collection(COLLECTION_THIEP).doc(customerId).get();
+        if (snap.exists) applyWeddingData(snap.data());
+      } catch (e) {
+        console.error('Lỗi tải dữ liệu Firebase:', e);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản Trị Thiệp Cưới | Admin 16</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Firebase SDK (v9 Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            moss: { DEFAULT: '#26332a', dark: '#1b241e' },
+            gold: { DEFAULT: '#b58b2f', dark: '#8c681b' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+
+  /* Khung bao ngoài để đẩy 2 nút sang phải */
+.action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    width: 100%;
+    justify-content: right;
+}
+
+/* Giao diện của từng nút */
+.home-btn { 
+    background-color: #172821; 
+    font-family: 'Montserrat', sans-serif;
+     border: 1px solid #f1c40f;
+    color: rgb(255, 255, 255); 
+    text-decoration: none; 
+    padding: 8px 15px; 
+    border-radius: 10px; 
+    font-weight: 500; 
+    display: inline-block; 
+    margin-bottom: 20px; 
+    transition: background-color 0.3s ease; 
+}
+
+/* Đổi màu khi rê chuột vào */
+.home-btn:hover {
+    background-color: #315c4a;
+    color: white;
+}
+</style>
+</head>
+<body class="bg-stone-100 text-stone-800 font-sans min-h-screen py-10 px-4">
+
+  <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-stone-200">
+    <div class="bg-[#26332a] text-white p-6 flex justify-between items-center border-b border-gold/40">
+      <div>
+        <h1 class="text-xl font-bold tracking-wide">QUẢN TRỊ THIỆP CƯỚI THEO ID</h1>
+        <p class="text-xs text-stone-300 mt-0.5">Mỗi khách hàng một ID riêng biệt, không lo bị ghi đè</p>
+      </div>
+  
+    </div>
+
+    <div class="p-6 sm:p-8 space-y-8 text-sm">
+      
+      <!-- KHU VỰC NHẬP ID THIỆP -->
+      <div class="bg-amber-50 border border-amber-200 p-4 rounded-xl space-y-3">
+        <h2 class="font-bold text-amber-900 uppercase text-xs tracking-wider flex items-center gap-2">
+          <i class="fas fa-id-card text-gold"></i> Nhập ID Thiệp Khách Hàng
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="sm:col-span-2">
+            <input type="text" id="inviteIdInput" placeholder="Ví dụ: thiep-khach-a, khach-b..." class="w-full p-2.5 border rounded-lg text-xs font-mono bg-white">
+          </div>
+          <div>
+            <button onclick="loadInviteData()" class="w-full bg-gold hover:bg-gold-dark text-white font-bold py-2.5 rounded-lg text-xs uppercase tracking-wider transition shadow">
+              Tải Dữ Liệu
+            </button>
+          </div>
+        </div>
+        <p class="text-[11px] text-amber-800 italic">* Nhập ID của khách rồi bấm "Tải Dữ Liệu" để chỉnh sửa, hoặc nhập ID mới hoàn toàn để tạo thiệp mới cho khách tiếp theo.</p>
+      </div>
+        <div class="action-buttons">
+    <a href="https://postimages.org/vi/" class="home-btn" target="_blank" rel="noopener noreferrer">⬆️ Tải ảnh lên</a>
+    <a href="quan-ly-link-album-map.html" class="home-btn" target="_blank" rel="noopener noreferrer">🖼️ Ảnh & ♫ Nhạc</a>
+    <a href="https://console.firebase.google.com/project/thiep-cuoi-online-fa5d4/firestore/databases/-default-/data/~2Frsvp_mau_06~2FaFG7kqTAYHDexZnTOji4" class="home-btn" target="_blank" rel="noopener noreferrer">🔥 Firebase</a>
+</div>
+
+      <!-- 1. THÔNG TIN THÂN TỘC 2 BÊN -->
+      <div class="space-y-4">
+        <h2 class="font-bold text-[#26332a] uppercase text-xs tracking-wider border-b pb-2 flex items-center gap-2">
+          <i class="fas fa-users text-gold"></i> 1. Thông Tin Hai Bên Gia Đình
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-stone-50 p-4 rounded-xl border space-y-3">
+            <p class="font-bold text-xs text-gold uppercase">Nhà Trai</p>
+            <div>
+              <label class="block text-xs font-medium text-stone-600 mb-1">Tên Chú Rể</label>
+              <input type="text" id="cfg-groom" value="Minh Quân" class="w-full p-2.5 border rounded-lg text-xs">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-stone-600 mb-1">Link Ảnh Chú Rể (1:1)</label>
+              <input type="text" id="cfg-groom-img" class="w-full p-2.5 border rounded-lg text-xs">
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-xs font-medium text-stone-600 mb-1">Thân Phụ</label>
+                <input type="text" id="cfg-father-groom" class="w-full p-2.5 border rounded-lg text-xs">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-stone-600 mb-1">Thân Mẫu</label>
+                <input type="text" id="cfg-mother-groom" class="w-full p-2.5 border rounded-lg text-xs">
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-stone-600 mb-1">Địa Chỉ Nhà Trai</label>
+              <input type="text" id="cfg-address-groom" class="w-full p-2.5 border rounded-lg text-xs">
+            </div>
+          </div>
+
+          <div class="bg-stone-50 p-4 rounded-xl border space-y-3">
+            <p class="font-bold text-xs text-gold uppercase">Nhà Gái</p>
+            <div>
+              <label class="block text-xs font-medium text-stone-600 mb-1">Tên Cô Dâu</label>
+              <input type="text" id="cfg-bride" value="Ngọc Hân" class="w-full p-2.5 border rounded-lg text-xs">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-stone-600 mb-1">Link Ảnh Cô Dâu (1:1)</label>
+              <input type="text" id="cfg-bride-img" class="w-full p-2.5 border rounded-lg text-xs">
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-xs font-medium text-stone-600 mb-1">Thân Phụ</label>
+                <input type="text" id="cfg-father-bride" class="w-full p-2.5 border rounded-lg text-xs">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-stone-600 mb-1">Thân Mẫu</label>
+                <input type="text" id="cfg-mother-bride" class="w-full p-2.5 border rounded-lg text-xs">
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-stone-600 mb-1">Địa Chỉ Nhà Gái</label>
+              <input type="text" id="cfg-address-bride" class="w-full p-2.5 border rounded-lg text-xs">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. THỜI GIAN, ĐỊA ĐIỂM & MAPS -->
+      <div class="space-y-4">
+        <h2 class="font-bold text-[#26332a] uppercase text-xs tracking-wider border-b pb-2 flex items-center gap-2">
+          <i class="fas fa-clock text-gold"></i> 2. Thời Gian, Địa Điểm & Google Maps
+        </h2>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-stone-700 mb-1">Ngày Đếm Ngược (YYYY-MM-DD)</label>
+            <input type="date" id="cfg-date" value="2026-04-07" class="w-full p-2.5 border rounded-lg text-xs">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-stone-700 mb-1">Link Google Maps</label>
+            <input type="url" id="cfg-map-url" class="w-full p-2.5 border rounded-lg text-xs">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="bg-stone-50 p-3.5 rounded-xl border space-y-2">
+            <p class="font-bold text-xs text-gold uppercase">Lễ Thành Hôn</p>
+            <div>
+              <label class="block text-[11px] font-medium mb-1">Thời Gian</label>
+              <input type="text" id="cfg-event-time" value="09:00 - 07/04/2026" class="w-full p-2 border rounded text-xs">
+            </div>
+            <div>
+              <label class="block text-[11px] font-medium mb-1">Tên Địa Điểm</label>
+              <input type="text" id="cfg-event-loc" value="Tư Gia Nhà Nam" class="w-full p-2 border rounded text-xs">
+            </div>
+            <div>
+              <label class="block text-[11px] font-medium mb-1">Địa Chỉ Chi Tiết</label>
+              <input type="text" id="cfg-event-addr" class="w-full p-2 border rounded text-xs">
+            </div>
+          </div>
+
+          <div class="bg-stone-50 p-3.5 rounded-xl border space-y-2">
+            <p class="font-bold text-xs text-gold uppercase">Tiệc Mừng Cưới</p>
+            <div>
+              <label class="block text-[11px] font-medium mb-1">Thời Gian</label>
+              <input type="text" id="cfg-party-time" value="18:00 - 07/04/2026" class="w-full p-2 border rounded text-xs">
+            </div>
+            <div>
+              <label class="block text-[11px] font-medium mb-1">Tên Nhà Hàng</label>
+              <input type="text" id="cfg-party-loc" value="Trung Tâm Luxury Palace" class="w-full p-2 border rounded text-xs">
+            </div>
+            <div>
+              <label class="block text-[11px] font-medium mb-1">Địa Chỉ Chi Tiết</label>
+              <input type="text" id="cfg-party-addr" class="w-full p-2 border rounded text-xs">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. NHẠC NỀN & ALBUM -->
+      <div class="space-y-4">
+        <h2 class="font-bold text-[#26332a] uppercase text-xs tracking-wider border-b pb-2 flex items-center gap-2">
+          <i class="fas fa-music text-gold"></i> 3. Nhạc Nền & Album Ảnh
+        </h2>
+        <div>
+          <label class="block text-xs font-medium text-stone-700 mb-1">Link Nhạc Nền (.mp3)</label>
+          <input type="text" id="cfg-music-url" class="w-full p-2.5 border rounded-lg text-xs font-mono">
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-stone-700 mb-1">Quản Lý Album Ảnh (Mỗi URL 1 dòng)</label>
+          <textarea id="cfg-gallery" rows="4" class="w-full p-2.5 border rounded-lg text-xs font-mono"></textarea>
+        </div>
+      </div>
+
+      <!-- 4. NGÂN HÀNG MỪNG CƯỚI -->
+      <div class="space-y-4">
+        <h2 class="font-bold text-[#26332a] uppercase text-xs tracking-wider border-b pb-2 flex items-center gap-2">
+          <i class="fas fa-qrcode text-gold"></i> 4. Tài Khoản Ngân Hàng Mừng Cưới
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-stone-700 mb-1">STK Chú Rể (MB Bank)</label>
+            <input type="text" id="cfg-groom-acc" value="0987654321" class="w-full p-2.5 border rounded-lg text-xs">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-stone-700 mb-1">STK Cô Dâu (Vietcombank)</label>
+            <input type="text" id="cfg-bride-acc" value="1234567890" class="w-full p-2.5 border rounded-lg text-xs">
+          </div>
+        </div>
+      </div>
+
+      <!-- DANH SÁCH KHÁCH MỜI RSVP -->
+      <div class="space-y-3">
+        <h2 class="font-bold text-[#26332a] uppercase text-xs tracking-wider border-b pb-2 flex items-center gap-2">
+          <i class="fas fa-comments text-gold"></i> 5. Phản Hồi Khách Mời (<span id="rsvpTotal">0</span>)
+        </h2>
+        <div id="adminRsvpList" class="max-h-48 overflow-y-auto space-y-2 text-xs bg-stone-50 p-3 rounded-xl border"></div>
+      </div>
+
+      <!-- NÚT LƯU -->
+      <button onclick="saveAdminConfig()" class="w-full bg-[#26332a] hover:bg-moss-dark text-white font-bold py-3.5 rounded-xl shadow-lg transition text-base">
+        Lưu Cấu Hình Lên Firebase
+      </button>
+
+      <!-- HỘP THÔNG BÁO & SAO CHÉP LINK -->
+      <div id="saveResultBox" class="hidden bg-emerald-50 border border-emerald-300 p-4 rounded-xl space-y-3 text-emerald-900">
+        <p class="font-bold text-xs">🎉 Đã lưu cấu hình thành công! Đường dẫn riêng cho thiệp này:</p>
+        <div class="flex gap-2">
+          <input type="text" id="generatedLink" readonly class="w-full p-2 border rounded text-xs font-mono bg-white">
+          <button onclick="copyInvitationLink()" class="bg-gold hover:bg-gold-dark text-white font-bold px-4 py-2 rounded text-xs whitespace-nowrap">
+            Sao chép
+          </button>
+        </div>
+        <div>
+          <a id="previewBtn" href="#" target="_blank" class="inline-flex items-center gap-1.5 bg-[#26332a] text-white font-bold px-4 py-2 rounded text-xs hover:bg-moss-dark">
+            <i class="fas fa-external-link-alt"></i> Xem thiệp ngay
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBoBxJvJ1eo6KniFtzC7tTgEOrgxmckndk",
+      authDomain: "thiep-cuoi-online-fa5d4.firebaseapp.com",
+      projectId: "thiep-cuoi-online-fa5d4",
+      storageBucket: "thiep-cuoi-online-fa5d4.firebasestorage.app",
+      messagingSenderId: "677765348842",
+      appId: "1:677765348842:web:001834792642097f5e4693"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
+
+    function checkAdminAuth() {
+      let isAuthed = sessionStorage.getItem("admin_authenticated_16");
+      if (isAuthed !== "true") {
+        let pwd = prompt("Vui lòng nhập mật khẩu Quản Trị Admin:");
+        if (pwd === "Thong@121976" || pwd === "Thong@121976") {
+          sessionStorage.setItem("admin_authenticated_16", "true");
+          alert("Đăng nhập thành công!");
+        } else {
+          alert("Sai mật khẩu!");
+          window.location.href = "thiep-online-mau-16.html";
+        }
+      }
+    }
+
+    // Tải dữ liệu của một ID thiệp cụ thể
+    function loadInviteData() {
+      const inviteId = document.getElementById('inviteIdInput').value.trim();
+      if(!inviteId) {
+        alert("Vui lòng nhập ID thiệp (ví dụ: thiep-khach-a)!");
+        return;
+      }
+
+      db.collection('wedding_mau_16').doc(inviteId).get().then(doc => {
+        if (doc.exists) {
+          const data = doc.data();
+          document.getElementById('cfg-groom').value = data.groom || '';
+          document.getElementById('cfg-bride').value = data.bride || '';
+          document.getElementById('cfg-father-groom').value = data.fatherGroom || '';
+          document.getElementById('cfg-mother-groom').value = data.motherGroom || '';
+          document.getElementById('cfg-address-groom').value = data.addressGroom || '';
+          document.getElementById('cfg-father-bride').value = data.fatherBride || '';
+          document.getElementById('cfg-mother-bride').value = data.motherBride || '';
+          document.getElementById('cfg-address-bride').value = data.addressBride || '';
+          document.getElementById('cfg-groom-img').value = data.groomImg || '';
+          document.getElementById('cfg-bride-img').value = data.brideImg || '';
+          document.getElementById('cfg-date').value = data.date || '';
+          document.getElementById('cfg-event-time').value = data.eventTime || '';
+          document.getElementById('cfg-event-loc').value = data.eventLoc || '';
+          document.getElementById('cfg-event-addr').value = data.eventAddr || '';
+          document.getElementById('cfg-party-time').value = data.partyTime || '';
+          document.getElementById('cfg-party-loc').value = data.partyLoc || '';
+          document.getElementById('cfg-party-addr').value = data.partyAddr || '';
+          document.getElementById('cfg-map-url').value = data.mapUrl || '';
+          document.getElementById('cfg-music-url').value = data.musicUrl || '';
+          if (data.gallery) {
+            document.getElementById('cfg-gallery').value = data.gallery.join('\n');
+          }
+          document.getElementById('cfg-groom-acc').value = data.groomAcc || '';
+          document.getElementById('cfg-bride-acc').value = data.brideAcc || '';
+          alert("Đã tải dữ liệu thành công cho ID: " + inviteId);
+        } else {
+          alert("ID này chưa có dữ liệu trên hệ thống. Bạn có thể điền thông tin và bấm Lưu để tạo mới!");
+        }
+      });
+
+      // Tải danh sách RSVP của ID này
+      db.collection('wedding_mau_16').doc(inviteId).collection('rsvps').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
+        const adminList = document.getElementById('adminRsvpList');
+        adminList.innerHTML = '';
+        let count = 0;
+        snapshot.forEach(doc => {
+          count++;
+          const item = doc.data();
+          const div = document.createElement('div');
+          div.className = 'p-2.5 bg-white rounded border flex justify-between items-center text-xs';
+          div.innerHTML = `<div><strong>${escapeHtml(item.name)}</strong> (${item.status} - ${item.count} khách)<p class="text-stone-500 italic">${escapeHtml(item.wish || 'Không có lời chúc')}</p></div>`;
+          adminList.appendChild(div);
+        });
+        document.getElementById('rsvpTotal').innerText = count;
+      });
+    }
+
+    async function saveAdminConfig() {
+      const inviteId = document.getElementById('inviteIdInput').value.trim();
+      if(!inviteId) {
+        alert("Vui lòng nhập ID thiệp trước khi lưu!");
+        document.getElementById('inviteIdInput').focus();
+        return;
+      }
+
+      const configData = {
+        groom: document.getElementById('cfg-groom').value,
+        bride: document.getElementById('cfg-bride').value,
+        fatherGroom: document.getElementById('cfg-father-groom').value,
+        motherGroom: document.getElementById('cfg-mother-groom').value,
+        addressGroom: document.getElementById('cfg-address-groom').value,
+        fatherBride: document.getElementById('cfg-father-bride').value,
+        motherBride: document.getElementById('cfg-mother-bride').value,
+        addressBride: document.getElementById('cfg-address-bride').value,
+        groomImg: document.getElementById('cfg-groom-img').value,
+        brideImg: document.getElementById('cfg-bride-img').value,
+        date: document.getElementById('cfg-date').value,
+        eventTime: document.getElementById('cfg-event-time').value,
+        eventLoc: document.getElementById('cfg-event-loc').value,
+        eventAddr: document.getElementById('cfg-event-addr').value,
+        partyTime: document.getElementById('cfg-party-time').value,
+        partyLoc: document.getElementById('cfg-party-loc').value,
+        partyAddr: document.getElementById('cfg-party-addr').value,
+        mapUrl: document.getElementById('cfg-map-url').value,
+        musicUrl: document.getElementById('cfg-music-url').value,
+        gallery: document.getElementById('cfg-gallery').value.split('\n').map(s => s.trim()).filter(s => s.length > 0),
+        groomAcc: document.getElementById('cfg-groom-acc').value,
+        brideAcc: document.getElementById('cfg-bride-acc').value,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      try {
+        await db.collection('wedding_mau_16').doc(inviteId).set(configData);
+        
+        // Tạo link riêng cho khách kèm ID
+        const baseUrl = window.location.href.replace('admin-mau-16.html', 'thiep-online-mau-16.html');
+        const inviteUrl = `${baseUrl}?id=${encodeURIComponent(inviteId)}`;
+        
+        document.getElementById('generatedLink').value = inviteUrl;
+        document.getElementById('previewBtn').href = inviteUrl;
+        document.getElementById('saveResultBox').classList.remove('hidden');
+        
+        alert('Đã lưu dữ liệu thành công cho ID: ' + inviteId);
+      } catch (err) {
+        alert('Lỗi lưu Firebase: ' + err.message);
+        console.error(err);
+      }
+    }
+
+    function copyInvitationLink() {
+      const input = document.getElementById('generatedLink');
+      input.select();
+      navigator.clipboard.writeText(input.value);
+      alert('Đã sao chép đường dẫn thiệp!');
+    }
+
+    function escapeHtml(text) {
+      if(!text) return '';
+      return text.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[m]);
+    }
+
+    window.onload = function() {
+      checkAdminAuth();
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quản Trị Thiệp Cưới — Starlight Gold (Mẫu 30)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #171106;
+      --card: #241b0b;
+      --border: #4d3a18;
+      --gold: #f5d076;
+      --gold-bright: #ffe8a3;
+      --text: #fff9eb;
+      --muted: #cbb789;
+      --danger: #e05260;
+      --success: #34c77b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 24px 16px 60px;
+      line-height: 1.5;
+    }
+    .container { max-width: 960px; margin: 0 auto; }
+    
+    #authOverlay {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .auth-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 30px;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.65);
+    }
+    .auth-box h2 { color: var(--gold-bright); margin-bottom: 8px; font-size: 20px; }
+    .auth-box p { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+    .auth-box input { margin-bottom: 14px; }
+
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+    header h1 { font-size: 22px; color: var(--gold-bright); }
+    .id-bar {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      background: var(--card);
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+    input, textarea, select {
+      background: #1c1408;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 9px 12px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13.5px;
+      width: 100%;
+    }
+    input:focus, textarea:focus { outline: none; border-color: var(--gold); }
+    .btn {
+      padding: 9px 16px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 600;
+      font-size: 13.5px;
+      cursor: pointer;
+      transition: 0.2s;
+      white-space: nowrap;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn-gold { background: linear-gradient(135deg, #ffe8a3, #f5d076, #c99738); color: #171106; }
+    .btn-gold:hover { opacity: 0.92; }
+    .btn-outline { background: transparent; border: 1px solid var(--gold); color: var(--gold-bright); }
+    .btn-outline:hover { background: rgba(245, 208, 118, 0.12); }
+    .btn-success { background: var(--success); color: #171106; }
+    .btn-success:hover { opacity: 0.9; }
+    .btn-danger { background: var(--danger); color: #fff; padding: 5px 10px; font-size: 12px; }
+
+    .tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+    .tab-btn {
+      padding: 10px 18px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .tab-btn.active { background: linear-gradient(135deg, #ffe8a3, #f5d076); color: #171106; border-color: var(--gold); }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .section-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+    .section-card h2 { font-size: 16px; color: var(--gold-bright); margin-bottom: 14px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+    @media (max-width: 640px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+    .field { margin-bottom: 12px; }
+    .field label { display: block; font-size: 12.5px; color: var(--muted); margin-bottom: 5px; }
+
+    .link-box {
+      background: #1c1408;
+      border: 1px dashed var(--gold);
+      padding: 14px;
+      border-radius: 10px;
+      margin-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .link-box code { color: var(--gold-bright); font-size: 13px; word-break: break-all; }
+
+    .save-result-box {
+      display: none;
+      margin-top: 18px;
+      padding: 18px 20px;
+      background: rgba(52, 199, 123, 0.08);
+      border: 1px solid var(--success);
+      border-radius: 12px;
+    }
+    .save-result-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--success);
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
+    .save-result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13.5px; }
+    th, td { border-bottom: 1px solid var(--border); padding: 10px 8px; text-align: left; vertical-align: top; }
+    th { color: var(--gold-bright); font-weight: 600; }
+    .badge { padding: 3px 8px; border-radius: 12px; font-size: 11.5px; font-weight: 600; }
+    .badge-yes { background: rgba(52, 199, 123, 0.2); color: var(--success); }
+    .badge-no { background: rgba(224, 82, 96, 0.2); color: var(--danger); }
+
+          /* Khung bao ngoài để đẩy 2 nút sang phải */
+.action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    width: 100%;
+    justify-content: right;
+}
+
+/* Giao diện của từng nút */
+.home-btn { 
+    background-color: #241b0b; 
+    font-family: 'Montserrat', sans-serif;
+     border: 1px solid #dbcc86;
+    color: rgb(255, 255, 255); 
+    text-decoration: none; 
+    padding: 8px 15px; 
+    border-radius: 10px; 
+    font-weight: 500; 
+    display: inline-block; 
+    margin-bottom: 20px; 
+    transition: background-color 0.3s ease; 
+}
+
+/* Đổi màu khi rê chuột vào */
+.home-btn:hover {
+    background-color: #e8c782;
+    color: rgb(37, 19, 19);
+}
+
+    
+  </style>
+</head>
+<body>
+
+  <div id="authOverlay">
+    <div class="auth-box">
+      <h2>✦ Đăng Nhập Quản Trị (Mẫu 30)</h2>
+      <p>Vui lòng nhập mật khẩu admin để tiếp tục</p>
+      <input type="password" id="adminPasswordInput" placeholder="Nhập mật khẩu">
+      <button class="btn btn-gold" id="loginBtn" style="width: 100%;">Đăng Nhập</button>
+      <p id="loginErrorMsg" style="color: var(--danger); font-size: 12px; margin-top: 10px; display: none;"></p>
+    </div>
+  </div>
+
+  <div class="container">
+    <header>
+      <div>
+        <h1>✦ Quản Trị Thiệp Cưới — Mẫu 30</h1>
+        <p style="font-size: 13px; color: var(--muted);">Quản lý nội dung thiệp, tạo link mời khách &amp; theo dõi danh sách RSVP</p>
+      </div>
+      <div class="id-bar">
+        <span style="font-size: 12.5px; color: var(--muted);">Mã Thiệp (ID):</span>
+        <input type="text" id="cardIdInput" value="default_mau_30" style="width: 170px;" />
+        <button class="btn btn-outline" id="loadCardBtn">Tải Dữ Liệu</button>
+      </div>
+    </header>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('configTab', this)">1.Nội Dung Thiệp</button>
+      <button class="tab-btn" onclick="switchTab('rsvpTab', this)">2. Lời Chúc (<span id="rsvpCountBadge">0</span>)</button>
+      <button class="tab-btn" onclick="switchTab('shareTab', this)">3. Tạo Link Gửi Khách</button>
+             <a href="https://postimages.org/vi/" class="home-btn"  target="_blank" rel="noopener noreferrer">⬆️ Tải ảnh lên</a>
+    <a href="quan-ly-link-album-map.html" class="home-btn" target="_blank" rel="noopener noreferrer">🖼️ Ảnh & ♫ Nhạc</a>
+    <a href="https://console.firebase.google.com/project/thiep-cuoi-online-fa5d4/firestore/databases/-default-/data/~2Frsvp_mau_06~2FaFG7kqTAYHDexZnTOji4" class="home-btn" target="_blank" rel="noopener noreferrer">🔥 Firebase</a>
+    </div>
+
+    <!-- TAB 1: CẤU HÌNH -->
+    <div id="configTab" class="panel active">
+      <form id="adminConfigForm">
+        <div class="section-card">
+          <h2>Thông Tin Cô Dâu &amp; Chú Rể</h2>
+          <div class="grid-2">
+            <div class="field"><label>Tên ngắn Chú Rể</label><input type="text" id="groomShort" value="Minh Tuấn"></div>
+            <div class="field"><label>Tên ngắn Cô Dâu</label><input type="text" id="brideShort" value="Thu Hà"></div>
+            <div class="field"><label>Họ tên đầy đủ Chú Rể</label><input type="text" id="groomFull" value="Nguyễn Minh Tuấn"></div>
+            <div class="field"><label>Họ tên đầy đủ Cô Dâu</label><input type="text" id="brideFull" value="Trần Thu Hà"></div>
+          </div>
+          <div class="field"><label>Câu trích dẫn dưới ảnh bìa</label><textarea id="heroQuote" rows="2">Giữa muôn vàn vì sao, chúng ta đã tìm thấy nhau</textarea></div>
+        </div>
+
+        <div class="section-card">
+          <h2>Thông Tin Hai Bên Gia Đình</h2>
+          <div class="grid-2">
+            <div>
+              <div class="field"><label>Phụ huynh Nhà Trai</label><textarea id="groomParents" rows="2">Ông Nguyễn Văn Hùng\nBà Lê Thị Thu</textarea></div>
+              <div class="field"><label>Địa chỉ Nhà Trai</label><input type="text" id="groomAddress" value="Đống Đa, Hà Nội"></div>
+            </div>
+            <div>
+              <div class="field"><label>Phụ huynh Nhà Gái</label><textarea id="brideParents" rows="2">Ông Trần Quốc Bảo\nBà Phạm Thị Mai</textarea></div>
+              <div class="field"><label>Địa chỉ Nhà Gái</label><input type="text" id="brideAddress" value="Ba Đình, Hà Nội"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <h2>Thời Gian &amp; Địa Điểm Tiệc Cưới</h2>
+          <div class="grid-3">
+            <div class="field"><label>Ngày cưới (YYYY-MM-DD)</label><input type="date" id="weddingDateStr" value="2026-12-20"></div>
+            <div class="field"><label>Giờ khai tiệc (24h)</label><input type="text" id="partyTime24" value="18:00"></div>
+            <div class="field"><label>Giờ hiển thị trên thiệp</label><input type="text" id="partyTimeText" value="18 giờ 00"></div>
+          </div>
+          <div class="grid-2">
+            <div class="field"><label>Thứ trong tuần</label><input type="text" id="partyDayOfWeek" value="Chủ Nhật"></div>
+            <div class="field"><label>Ngày Âm Lịch</label><input type="text" id="lunarDate" value="Nhằm ngày 12 tháng 11 năm Bính Ngọ"></div>
+          </div>
+          <div class="grid-3">
+            <div class="field"><label>Loại hình địa điểm</label><input type="text" id="venueType" value="Trung tâm Tiệc cưới"></div>
+            <div class="field"><label>Tên địa điểm / Nhà hàng</label><input type="text" id="venueName" value="Ngân Hà"></div>
+            <div class="field"><label>Địa chỉ chi tiết</label><input type="text" id="venueAddress" value="Số 88 Trần Duy Hưng, Cầu Giấy, Hà Nội"></div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <h2>Nghi Lễ &amp; Lịch Trình Buổi Tiệc</h2>
+          <div class="grid-2">
+            <div class="field"><label>Thời gian Lễ Vu Quy</label><input type="text" id="vuQuyTime" value="08:00 · Chủ Nhật 20.12.2026"></div>
+            <div class="field"><label>Địa điểm Lễ Vu Quy</label><textarea id="vuQuyPlace" rows="2">Tại tư gia nhà gái\nBa Đình, Hà Nội</textarea></div>
+            <div class="field"><label>Thời gian Lễ Thành Hôn</label><input type="text" id="thanhHonTime" value="10:00 · Chủ Nhật 20.12.2026"></div>
+            <div class="field"><label>Địa điểm Lễ Thành Hôn</label><textarea id="thanhHonPlace" rows="2">Tại tư gia nhà trai\nĐống Đa, Hà Nội</textarea></div>
+          </div>
+          <div class="field">
+            <label>Lịch trình (Định dạng: Giờ | Sự kiện)</label>
+            <textarea id="scheduleText" rows="4">17:30 | Đón khách
+18:00 | Cử hành hôn lễ
+18:30 | Khai tiệc
+20:00 | Giao lưu & chụp ảnh</textarea>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <h2>Hình Ảnh, Nhạc Nền &amp; Mừng Cưới (VietQR)</h2>
+          <div class="grid-3">
+            <div class="field"><label>Link Ảnh Bìa Chính</label><input type="url" id="coverImg" value="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80"></div>
+            <div class="field"><label>Link Ảnh Chú Rể</label><input type="url" id="groomImg" value="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=500&q=80"></div>
+            <div class="field"><label>Link Ảnh Cô Dâu</label><input type="url" id="brideImg" value="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=500&q=80"></div>
+          </div>
+          <div class="field">
+            <label>Danh sách Link Album (Mỗi link 1 dòng)</label>
+            <textarea id="albumUrlsText" rows="4">https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=600&q=80
+https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=600&q=80
+https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=900&q=80
+https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=600&q=80
+https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=600&q=80</textarea>
+          </div>
+          <div class="field"><label>Link Nhạc Nền MP3</label><input type="text" id="musicUrl" value="https://cdn.pixabay.com/download/audio/2022/02/15/audio_8860669422.mp3?filename=romantic-piano-11157.mp3"></div>
+
+          <div class="grid-2" style="margin-top: 14px;">
+            <div>
+              <div class="field"><label>Mã Ngân Hàng Chú Rể (VD: VCB)</label><input type="text" id="groomBankId" value="VCB"></div>
+              <div class="field"><label>Số Tài Khoản Chú Rể</label><input type="text" id="groomAccNo" value="0123456789"></div>
+              <div class="field"><label>Tên Chủ TK Chú Rể (Không dấu)</label><input type="text" id="groomAccName" value="NGUYEN MINH TUAN"></div>
+            </div>
+            <div>
+              <div class="field"><label>Mã Ngân Hàng Cô Dâu (VD: TCB)</label><input type="text" id="brideBankId" value="TCB"></div>
+              <div class="field"><label>Số Tài Khoản Cô Dâu</label><input type="text" id="brideAccNo" value="190355558888"></div>
+              <div class="field"><label>Tên Chủ TK Cô Dâu (Không dấu)</label><input type="text" id="brideAccName" value="TRAN THU HA"></div>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-gold" id="saveConfigBtn" style="width: 100%; padding: 14px; font-size: 15px;">💾 Lưu Cấu Hình Thiệp Lên Firebase</button>
+
+        <div id="saveResultBox" class="save-result-box">
+          <div class="save-result-header">
+            <span>✓ Đã lưu thiệp thành công! Đường dẫn thiệp của bạn:</span>
+          </div>
+          <div class="link-box" style="margin-top: 0;">
+            <code id="savedCardUrlText">thiep-online-mau-30.html?id=default_mau_30</code>
+          </div>
+          <div class="save-result-actions">
+            <button type="button" class="btn btn-gold" id="copySavedLinkBtn" onclick="copySavedCardLink()">📋 Sao Chép Link</button>
+            <a href="thiep-online-mau-30.html?id=default_mau_30" target="_blank" class="btn btn-outline" id="previewSavedCardBtn">👁️ Xem Thiệp</a>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- TAB 2: RSVP -->
+    <div id="rsvpTab" class="panel">
+      <div class="section-card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h2>Danh Sách Khách Xác Nhận &amp; Chữ Ký</h2>
+          <button class="btn btn-outline" onclick="exportRsvpCSV()">📥 Xuất Excel (CSV)</button>
+        </div>
+        <div style="overflow-x: auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>Khách mời</th>
+                <th>Trạng thái</th>
+                <th>Số lượng</th>
+                <th>Lời chúc</th>
+                <th>Chữ ký</th>
+                <th>Xóa</th>
+              </tr>
+            </thead>
+            <tbody id="rsvpTableBody">
+              <tr><td colspan="6" style="text-align:center; color: var(--muted);">Đang tải dữ liệu...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: TẠO LINK -->
+    <div id="shareTab" class="panel">
+      <div class="section-card">
+        <h2>Tạo Link Thiệp Cá Nhân Hóa Cho Từng Khách Mời</h2>
+        <div class="grid-2">
+          <div class="field">
+            <label>Đường dẫn file thiệp chính</label>
+            <input type="text" id="baseCardUrl" value="thiep-online-mau-30.html" oninput="generateGuestLink()">
+          </div>
+          <div class="field">
+            <label>Tên khách mời hiển thị trên thiệp</label>
+            <input type="text" id="customGuestName" placeholder="VD: Anh Minh & Gia Đình" oninput="generateGuestLink()">
+          </div>
+        </div>
+        <div class="link-box">
+          <code id="generatedGuestUrl">thiep-online-mau-30.html?id=default_mau_30</code>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn btn-gold" onclick="copyGeneratedLink()">📋 Sao chép Link</button>
+            <a href="thiep-online-mau-30.html?id=default_mau_30" target="_blank" class="btn btn-outline" id="previewTab3Link">👁️ Xem Thiệp</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getFirestore, doc, getDoc, setDoc, collection, query, where, orderBy, onSnapshot, deleteDoc, serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const ADMIN_PASS = "Thong@121976";
+    document.getElementById("loginBtn").addEventListener("click", () => {
+      const val = document.getElementById("adminPasswordInput").value;
+      if (val === ADMIN_PASS) {
+        document.getElementById("authOverlay").style.display = "none";
+      } else {
+        const err = document.getElementById("loginErrorMsg");
+        err.textContent = "Mật khẩu không chính xác!";
+        err.style.display = "block";
+      }
+    });
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBbzcpByDk2Yzlqo9y7YHwpIq2sXJinNDQ",
+      authDomain: "thiep-cuoi-online-02.firebaseapp.com",
+      projectId: "thiep-cuoi-online-02",
+      storageBucket: "thiep-cuoi-online-02.firebasestorage.app",
+      messagingSenderId: "261787760014",
+      appId: "1:261787760014:web:5e9c246306b95ec7cca0df"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let currentRsvpData = [];
+    let unsubscribeRsvp = null;
+
+    function getCardId() {
+      return document.getElementById("cardIdInput").value.trim() || "default_mau_30";
+    }
+
+    function buildFullCardUrl(cardId) {
+      const baseFile = (document.getElementById("baseCardUrl")?.value.trim()) || "thiep-online-mau-30.html";
+      if (/^https?:\/\//i.test(baseFile)) {
+        return `${baseFile}?id=${encodeURIComponent(cardId)}`;
+      }
+      const currentHref = window.location.href.split('?')[0];
+      const baseDir = currentHref.substring(0, currentHref.lastIndexOf('/') + 1);
+      return `${baseDir}${baseFile}?id=${encodeURIComponent(cardId)}`;
+    }
+
+    async function loadCardConfig() {
+      const cardId = getCardId();
+      try {
+        const snap = await getDoc(doc(db, "wedding_mau_30", cardId));
+        if (snap.exists()) {
+          const d = snap.data();
+          const fields = [
+            "groomShort","brideShort","groomFull","brideFull","heroQuote",
+            "groomParents","groomAddress","brideParents","brideAddress",
+            "weddingDateStr","partyTime24","partyTimeText","partyDayOfWeek","lunarDate",
+            "venueType","venueName","venueAddress","vuQuyTime","vuQuyPlace",
+            "thanhHonTime","thanhHonPlace","coverImg","groomImg","brideImg",
+            "musicUrl","groomBankId","groomAccNo","groomAccName",
+            "brideBankId","brideAccNo","brideAccName"
+          ];
+          fields.forEach(f => {
+            if (d[f] !== undefined && document.getElementById(f)) {
+              document.getElementById(f).value = d[f];
+            }
+          });
+          if (Array.isArray(d.albumUrls)) {
+            document.getElementById("albumUrlsText").value = d.albumUrls.join("\n");
+          }
+          if (Array.isArray(d.schedule)) {
+            document.getElementById("scheduleText").value = d.schedule.map(s => `${s.time} | ${s.event}`).join("\n");
+          }
+        }
+        listenRsvp(cardId);
+        generateGuestLink();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    document.getElementById("adminConfigForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById("saveConfigBtn");
+      btn.disabled = true;
+      btn.textContent = "Đang lưu dữ liệu...";
+
+      const cardId = getCardId();
+      const schedule = document.getElementById("scheduleText").value.split("\n").map(line => {
+        const [time, ...rest] = line.split("|");
+        return { time: (time || "").trim(), event: rest.join("|").trim() };
+      }).filter(item => item.time || item.event);
+
+      const albumUrls = document.getElementById("albumUrlsText").value.split("\n").map(u => u.trim()).filter(Boolean);
+
+      const payload = {
+        groomShort: document.getElementById("groomShort").value.trim(),
+        brideShort: document.getElementById("brideShort").value.trim(),
+        groomFull: document.getElementById("groomFull").value.trim(),
+        brideFull: document.getElementById("brideFull").value.trim(),
+        heroQuote: document.getElementById("heroQuote").value,
+        groomParents: document.getElementById("groomParents").value,
+        groomAddress: document.getElementById("groomAddress").value.trim(),
+        brideParents: document.getElementById("brideParents").value,
+        brideAddress: document.getElementById("brideAddress").value.trim(),
+        weddingDateStr: document.getElementById("weddingDateStr").value,
+        partyTime24: document.getElementById("partyTime24").value.trim(),
+        partyTimeText: document.getElementById("partyTimeText").value.trim(),
+        partyDayOfWeek: document.getElementById("partyDayOfWeek").value.trim(),
+        lunarDate: document.getElementById("lunarDate").value.trim(),
+        venueType: document.getElementById("venueType").value.trim(),
+        venueName: document.getElementById("venueName").value.trim(),
+        venueAddress: document.getElementById("venueAddress").value.trim(),
+        vuQuyTime: document.getElementById("vuQuyTime").value.trim(),
+        vuQuyPlace: document.getElementById("vuQuyPlace").value,
+        thanhHonTime: document.getElementById("thanhHonTime").value.trim(),
+        thanhHonPlace: document.getElementById("thanhHonPlace").value,
+        schedule,
+        coverImg: document.getElementById("coverImg").value.trim(),
+        groomImg: document.getElementById("groomImg").value.trim(),
+        brideImg: document.getElementById("brideImg").value.trim(),
+        albumUrls,
+        musicUrl: document.getElementById("musicUrl").value.trim(),
+        groomBankId: document.getElementById("groomBankId").value.trim(),
+        groomAccNo: document.getElementById("groomAccNo").value.trim(),
+        groomAccName: document.getElementById("groomAccName").value.trim(),
+        brideBankId: document.getElementById("brideBankId").value.trim(),
+        brideAccNo: document.getElementById("brideAccNo").value.trim(),
+        brideAccName: document.getElementById("brideAccName").value.trim(),
+        updatedAt: serverTimestamp()
+      };
+
+      try {
+        await setDoc(doc(db, "wedding_mau_30", cardId), payload, { merge: true });
+        const fullUrl = buildFullCardUrl(cardId);
+        document.getElementById("savedCardUrlText").textContent = fullUrl;
+        document.getElementById("previewSavedCardBtn").href = fullUrl;
+
+        const saveResultBox = document.getElementById("saveResultBox");
+        saveResultBox.style.display = "block";
+        saveResultBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        generateGuestLink();
+      } catch (err) {
+        alert("Lỗi khi lưu: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "💾 Lưu Cấu Hình Thiệp Lên Firebase";
+      }
+    });
+
+    window.copySavedCardLink = function() {
+      const text = document.getElementById("savedCardUrlText").textContent;
+      const copyBtn = document.getElementById("copySavedLinkBtn");
+      navigator.clipboard.writeText(text).then(() => {
+        copyBtn.textContent = "✅ Đã sao chép link!";
+        setTimeout(() => { copyBtn.textContent = "📋 Sao Chép Link"; }, 2000);
+      });
+    };
+
+    function listenRsvp(cardId) {
+      if (unsubscribeRsvp) unsubscribeRsvp();
+      const q = query(collection(db, "rsvp_mau_30"), where("card_id", "==", cardId), orderBy("createdAt", "desc"));
+      unsubscribeRsvp = onSnapshot(q, (snap) => {
+        const tbody = document.getElementById("rsvpTableBody");
+        document.getElementById("rsvpCountBadge").textContent = snap.size;
+        currentRsvpData = [];
+        if (snap.empty) {
+          tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--muted);">Chưa có khách nào xác nhận.</td></tr>`;
+          return;
+        }
+        tbody.innerHTML = "";
+        snap.forEach(docSnap => {
+          const d = docSnap.data();
+          currentRsvpData.push(d);
+          const isYes = (d.attendance || "").includes("Sẽ") || (d.attendance || "").includes("Có");
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td><strong>${escapeHtml(d.name || "")}</strong></td>
+            <td><span class="badge ${isYes ? 'badge-yes' : 'badge-no'}">${escapeHtml(d.attendance || "")}</span></td>
+            <td>${escapeHtml(d.count || "")}</td>
+            <td>${escapeHtml(d.wish || "")}</td>
+            <td>${d.signature ? `<img src="${d.signature}" style="max-height:45px; background:#171106; border:1px solid #4d3a18; border-radius:4px;">` : "—"}</td>
+            <td><button class="btn btn-danger" onclick="deleteRsvp('${docSnap.id}')">Xóa</button></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      });
+    }
+
+    window.deleteRsvp = async function(docId) {
+      if (!confirm("Bạn có chắc muốn xóa lời chúc này?")) return;
+      await deleteDoc(doc(db, "rsvp_mau_30", docId));
+    };
+
+    window.exportRsvpCSV = function() {
+      if (!currentRsvpData.length) return alert("Chưa có dữ liệu để xuất!");
+      let csv = "\uFEFFTên khách mời,Trạng thái,Số lượng,Lời chúc\n";
+      currentRsvpData.forEach(r => {
+        csv += `"${(r.name||"").replace(/"/g,'""')}","${(r.attendance||"").replace(/"/g,'""')}","${(r.count||"").replace(/"/g,'""')}","${(r.wish||"").replace(/"/g,'""')}"\n`;
+      });
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `rsvp-${getCardId()}.csv`;
+      a.click();
+    };
+
+    window.generateGuestLink = function() {
+      const cardId = getCardId();
+      const guest = document.getElementById("customGuestName").value.trim();
+      let url = buildFullCardUrl(cardId);
+      if (guest) url += `&guest=${encodeURIComponent(guest)}`;
+      document.getElementById("generatedGuestUrl").textContent = url;
+      const previewTab3 = document.getElementById("previewTab3Link");
+      if (previewTab3) previewTab3.href = url;
+    };
+
+    window.copyGeneratedLink = function() {
+      const text = document.getElementById("generatedGuestUrl").textContent;
+      navigator.clipboard.writeText(text).then(() => alert("Đã sao chép link: " + text));
+    };
+
+    window.switchTab = function(tabId, btn) {
+      document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.getElementById(tabId).classList.add("active");
+      btn.classList.add("active");
+    };
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
+    }
+
+    document.getElementById("loadCardBtn").addEventListener("click", loadCardConfig);
+    loadCardConfig();
+  </script>
+</body>
+</html>

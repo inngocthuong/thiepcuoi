@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quản Lý Mẫu 07</title>
+<link rel="icon" type="image/png" href="../anh/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-dark: #1e1b18;
+  --panel-bg: #ffffff;
+  --accent: #d4a373;
+  --text-main: #2b211e;
+  --border: #e2dad1;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #f5f2ed; color: var(--text-main); font-family: "Montserrat", sans-serif; padding-bottom: 60px; }
+
+header {
+  background: var(--bg-dark); color: #fff; padding: 20px 40px;
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
+}
+header h1 { font-size: 20px; font-weight: 500; letter-spacing: 0.05em; }
+.home-btn { 
+  background-color: #fefffe; color: rgb(18, 34, 43); text-decoration: none; padding: 8px 15px; border-radius: 6px; font-weight: 500; font-size: 13px; display: inline-block;
+}
+
+main { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+.card {
+  background: var(--panel-bg); border-radius: 12px; padding: 32px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.04); border: 1px solid var(--border); margin-bottom: 24px;
+}
+h2 { font-size: 18px; font-weight: 600; margin-bottom: 20px; border-bottom: 2px solid var(--accent); display: inline-block; padding-bottom: 4px; }
+
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.full { grid-column: 1 / -1; }
+
+label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 6px; }
+input, textarea {
+  width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 6px;
+  font-size: 13px; font-family: inherit; outline: none; transition: border-color 0.3s; background: #fff;
+}
+input:focus, textarea:focus { border-color: var(--accent); }
+
+.btn {
+  background: var(--bg-dark); color: #fff; padding: 14px 28px; border: none;
+  border-radius: 6px; font-size: 12px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; cursor: pointer; transition: background 0.3s;
+  display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
+}
+.btn:hover { background: var(--accent); }
+.btn-secondary { background: #eee; color: #333; margin-left: 10px; }
+.btn-secondary:hover { background: #ddd; color: #000; }
+
+#authStatus { font-size: 12px; margin-top: 10px; color: #666; }
+
+/* Thông báo lưu thành công & Link Thiệp */
+.success-box {
+  background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px;
+  padding: 16px; margin-top: 20px; display: none;
+}
+.success-box h4 { color: #166534; margin-bottom: 8px; font-size: 14px; }
+.link-preview-group { display: flex; gap: 10px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
+.link-preview-group input { background: #fff; flex: 1; min-width: 220px; }
+
+/* Table Lời Chúc */
+.table-wrapper { width: 100%; overflow-x: auto; margin-top: 10px; }
+table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+th, td { padding: 12px 14px; border-bottom: 1px solid var(--border); }
+th { background: #f8f6f0; font-weight: 600; color: #555; }
+tr:hover { background: #faf8f5; }
+.no-data { text-align: center; color: #888; padding: 20px; }
+
+@media(max-width: 640px) {
+  .grid { grid-template-columns: 1fr; }
+  header { padding: 15px 20px; }
+}
+
+/* Khung bao ngoài để đẩy 2 nút sang phải */
+.action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    width: 100%;
+    justify-content: right;
+}
+
+/* Giao diện của từng nút */
+.home-btn { 
+    background-color: #1b2723; 
+    color: white; 
+    text-decoration: none; 
+    padding: 8px 15px; 
+    border-radius: 10px; 
+    font-weight: 500; 
+    display: inline-block; 
+    margin-bottom: 20px; 
+    transition: background-color 0.3s ease; 
+}
+
+/* Đổi màu khi rê chuột vào */
+.home-btn:hover {
+    background-color: #2d4e4a;
+    color: white;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>✿ Quản Trị Thiệp Cưới Online — Mẫu 07</h1>
+  <a href="../thiepcuoi-online.html" class="home-btn">⬅ Quay Về Trang Chủ</a>
+</header>
+
+<main>
+  <!-- AUTH SECTION -->
+  <section class="card" id="authSection">
+    <h2>Đăng Nhập Quản Trị</h2>
+    <div class="grid">
+      <div>
+        <label>Email Admin</label>
+        <input id="adminEmail" type="email" placeholder="admin@gmail.com" autocomplete="username">
+      </div>
+      <div>
+        <label>Mật Khẩu</label>
+        <input id="adminPassword" type="password" placeholder="******" autocomplete="current-password">
+      </div>
+    </div>
+    <button class="btn" id="loginBtn">Đăng Nhập</button>
+    <button class="btn btn-secondary" id="logoutBtn" style="display:none;">Đăng Xuất</button>
+    <div id="authStatus">Trạng thái: Chưa đăng nhập.</div>
+  </section>
+  
+ 
+   
+    \
+  <!-- FORM SECTION -->
+  <section class="card" id="editorSection" style="display:none;">
+    <h2>Cấu Hình Nội Dung Thiệp (Mẫu 07)</h2>
+    
+    <!-- KHUNG NHẬP MÃ ID KHÁCH HÀNG -->
+    <div class="full" style="background: rgba(212,163,115,0.1); padding: 16px; border-radius: 8px; border: 1px dashed var(--accent); margin-bottom: 24px;">
+      <label style="color: var(--accent);">Mã ID Thiệp Của Khách (Ví dụ: tuan-tu, minhquan...)</label>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px;">
+        <input id="admCustomerId" type="text" value="mac-dinh" placeholder="Nhập mã không dấu, viết liền..." style="flex:1; min-width:200px; background:#fff;">
+        <button type="button" class="btn" id="loadIdBtn" style="margin:0; padding: 12px 20px;">Tải Dữ Liệu ID Này</button>
+      </div>
+      <small style="display: block; margin-top: 6px; font-size: 12px; color: #666;">* Nhập mã ID mới để tạo thiệp riêng cho khách mới, hoặc nhập mã ID cũ rồi bấm "Tải Dữ Liệu" để chỉnh sửa.</small>
+    </div>
+
+  <div class="action-buttons">
+    <a href="https://postimages.org/vi/" class="home-btn" target="_blank" rel="noopener noreferrer">⬆️ Tải ảnh lên</a>
+    <a href="quan-ly-link-album-map.html" class="home-btn" target="_blank" rel="noopener noreferrer">🖼️ Ảnh & ♫ Nhạc</a>
+    <a href="https://console.firebase.google.com/project/thiep-cuoi-online-fa5d4/firestore/databases/-default-/data/~2Frsvp_mau_06~2FaFG7kqTAYHDexZnTOji4" class="home-btn" target="_blank" rel="noopener noreferrer">🔥 Firebase</a>
+</div>
+    <form id="adminForm">
+      <div class="grid">
+        <div>
+          <label>Tên Chú Rể</label>
+          <input id="groom_name" value="Minh Thông">
+        </div>
+        <div>
+          <label>Tên Cô Dâu</label>
+          <input id="bride_name" value="Ngọc Thương">
+        </div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label>Ngày Hiển Thị (vd: 15 · 06 · 2027)</label>
+          <input id="display_date" value="15 · 06 · 2027">
+        </div>
+        <div>
+          <label>Thời Gian Chuẩn (Tính đếm ngược)</label>
+          <input id="event_datetime" type="datetime-local" value="2027-06-15T09:00">
+        </div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label>Thông Tin Nhà Trai</label>
+          <textarea id="groom_parents" rows="2">Gia đình chú rể Minh Thông</textarea>
+        </div>
+        <div>
+          <label>Thông Tin Nhà Gái</label>
+          <textarea id="bride_parents" rows="2">Gia đình cô dâu Ngọc Thương</textarea>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="full">
+          <label>Lời Ngỏ / Lời Mời</label>
+          <textarea id="invitation_text" rows="3">Trân trọng kính mời bạn đến chung vui trong ngày hạnh phúc của chúng mình.</textarea>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label>Thời Gian Tổ Chức</label>
+          <input id="event_time" value="09:00 · Ngày 15 tháng 06 năm 2027">
+        </div>
+        <div>
+          <label>Tên Địa Điểm / Nhà Hàng</label>
+          <input id="event_address" value="Trung tâm Hội nghị & Tiệc cưới">
+        </div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label>Địa Chỉ Chi Tiết</label>
+          <input id="event_detail" value="Số 123 Đường ABC, Quận XYZ">
+        </div>
+        <div>
+          <label>Link Google Maps</label>
+          <input id="google_maps_link" placeholder="https://maps.google.com/...">
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="full">
+          <label>Link Ảnh Bìa Hero (URL hoặc tên file trong thư mục anh/)</label>
+          <input id="hero_image" placeholder="https://images.unsplash.com/...">
+        </div>
+      </div>
+      <div class="grid">
+        <div class="full">
+          <label>Link Ảnh Our happy day (URL hoặc tên file trong thư mục anh/)</label>
+          <input id="img_happyDay" placeholder="https://images.unsplash.com/...">
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="full">
+          <label>Link Ảnh Nền / Họa Tiết Bìa (Tùy chọn thay thế)</label>
+          <input id="cover_bg_color" placeholder="https://... hoặc tên file (Để trống sẽ giữ nguyên nền kem sáng mặc định)">
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="full">
+          <label>Link Nhạc Nền (File MP3 trực tiếp)</label>
+          <input id="music_url" placeholder="https://.../music.mp3">
+        </div>
+      </div>
+
+      <h3 style="font-size: 14px; margin: 20px 0 10px;">Link Album Ảnh (Max 6 ảnh)</h3>
+      <div class="grid">
+        <input id="img1" placeholder="Link ảnh 1">
+        <input id="img2" placeholder="Link ảnh 2">
+        <input id="img3" placeholder="Link ảnh 3">
+        <input id="img4" placeholder="Link ảnh 4">
+        <input id="img5" placeholder="Link ảnh 5">
+        <input id="img6" placeholder="Link ảnh 6">
+      </div>
+
+      <div style="margin-top: 24px;">
+        <button type="button" class="btn" id="saveBtn">Lưu Thiệp Mẫu 07</button>
+        <span id="saveStatus" style="margin-left: 15px; font-size: 13px; font-weight: 600;"></span>
+      </div>
+
+      <!-- Khung hiển thị Link & Nút xem thiệp sau khi lưu -->
+      <div class="success-box" id="successBox">
+        <h4>✓ Lưu Thiệp Thành Công!</h4>
+        <p style="font-size: 12px; color: #444;">Đường link thiệp riêng của khách hàng đã sẵn sàng:</p>
+        <div class="link-preview-group">
+          <input id="cardUrlInput" readonly>
+          <a id="viewCardBtn" href="#" target="_blank" class="btn">Xem Thiệp ↗</a>
+          <button type="button" class="btn btn-secondary" onclick="copyCardUrl()">Sao Chép Link</button>
+        </div>
+      </div>
+    </form>
+  </section>
+
+  <!-- WISHES LIST SECTION -->
+  <section class="card" id="wishesSection" style="display:none;">
+    <h2 id="rsvpListTitle">Danh Sách Lời Chúc Từ Khách Mời (Theo ID đang chọn)</h2>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 50px;">STT</th>
+            <th style="width: 180px;">Tên Người Gửi</th>
+            <th>Lời Chúc / Trạng Thái</th>
+            <th style="width: 160px;">Thời Gian</th>
+          </tr>
+        </thead>
+        <tbody id="wishesTableBody">
+          <tr><td colspan="4" class="no-data">Đang tải danh sách lời chúc...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBoBxJvJ1eo6KniFtzC7tTgEOrgxmckndk",
+  authDomain: "thiep-cuoi-online-fa5d4.firebaseapp.com",
+  projectId: "thiep-cuoi-online-fa5d4",
+  storageBucket: "thiep-cuoi-online-fa5d4.firebasestorage.app",
+  messagingSenderId: "677765348842",
+  appId: "1:677765348842:web:001834792642097f5e4693"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+const $ = id => document.getElementById(id);
+
+const COLLECTION_THIEP = "wedding_mau_07";
+const COLLECTION_RSVP  = "rsvp_mau_07";
+const FILE_THIEP       = "thiep-online-mau-07.html";
+
+const fields = [
+  'groom_name', 'bride_name', 'display_date', 'event_datetime',
+  'groom_parents', 'bride_parents', 'invitation_text', 'event_time',
+  'event_address', 'event_detail', 'google_maps_link', 'hero_image', 'img_happyDay', 'cover_bg_color', 'music_url'
+];
+
+function getCustomerId() {
+  let id = $('admCustomerId').value.trim().toLowerCase();
+  if(!id) { id = 'mac-dinh'; $('admCustomerId').value = id; }
+  return id;
+}
+
+auth.onAuthStateChanged(user => {
+  if (user) {
+    $('authStatus').textContent = "Đã đăng nhập: " + user.email;
+    $('editorSection').style.display = 'block';
+    $('wishesSection').style.display = 'block';
+    $('logoutBtn').style.display = 'inline-block';
+    loadData();
+  } else {
+    $('authStatus').textContent = "Chưa đăng nhập.";
+    $('editorSection').style.display = 'none';
+    $('wishesSection').style.display = 'none';
+    $('logoutBtn').style.display = 'none';
+  }
+});
+
+$('loginBtn').onclick = async () => {
+  try {
+    await auth.signInWithEmailAndPassword($('adminEmail').value.trim(), $('adminPassword').value);
+  } catch (e) {
+    alert("Lỗi đăng nhập: " + e.message);
+  }
+};
+
+$('logoutBtn').onclick = () => auth.signOut();
+
+$('loadIdBtn').onclick = () => loadData();
+
+async function loadData() {
+  const customerId = getCustomerId();
+  try {
+    const docSnap = await db.collection(COLLECTION_THIEP).doc(customerId).get();
+    if (docSnap.exists) {
+      const data = docSnap.data();
+      fields.forEach(f => { if ($(f)) $(f).value = data[f] || ''; });
+      if (data.gallery_images && Array.isArray(data.gallery_images)) {
+        for(let i=1; i<=6; i++) {
+          if($('img' + i)) $('img' + i).value = data.gallery_images[i-1] || '';
+        }
+      } else {
+        for(let i=1; i<=6; i++) { if($('img' + i)) $('img' + i).value = ''; }
+      }
+      $('saveStatus').textContent = "Đã tải dữ liệu ID: " + customerId;
+      $('saveStatus').style.color = "green";
+      showCardUrl(customerId);
+    } else {
+      fields.forEach(f => { if ($(f) && f !== 'groom_name' && f !== 'bride_name') $(f).value = ''; });
+      for(let i=1; i<=6; i++) { if($('img' + i)) $('img' + i).value = ''; }
+      $('saveStatus').textContent = "Mã ID này chưa có dữ liệu. Hãy điền thông tin và bấm Lưu.";
+      $('saveStatus').style.color = "#888";
+      $('successBox').style.display = "none";
+    }
+    listenToWishes(customerId);
+  } catch (e) {
+    console.error(e);
+    $('saveStatus').textContent = "Lỗi tải dữ liệu: " + e.message;
+    $('saveStatus').style.color = "red";
+  }
+}
+
+function showCardUrl(customerId) {
+  const url = new URL(FILE_THIEP, window.location.href);
+  url.searchParams.set('id', customerId);
+  $('cardUrlInput').value = url.href;
+  $('viewCardBtn').href = url.href;
+  $('successBox').style.display = "block";
+}
+
+// Lắng nghe danh sách lời chúc theo ID
+let unsubWishes = null;
+function listenToWishes(customerId) {
+  if (unsubWishes) unsubWishes();
+  $('rsvpListTitle').textContent = `Danh Sách Lời Chúc (Mã ID: ${customerId})`;
+  
+  unsubWishes = db.collection(COLLECTION_RSVP)
+    .where("card_id", "==", customerId)
+    //.orderBy("createdAt", "desc")
+    .onSnapshot(snapshot => {
+      const tbody = $('wishesTableBody');
+      if (snapshot.empty) {
+        tbody.innerHTML = `<tr><td colspan="4" class="no-data">Chưa có phản hồi nào cho mã ID này.</td></tr>`;
+        return;
+      }
+
+      let html = '';
+      let index = 1;
+      snapshot.forEach(docSnap => {
+        const item = docSnap.data();
+        let timeStr = "Chưa rõ";
+        if (item.createdAt && item.createdAt.toDate) {
+          const date = item.createdAt.toDate();
+          timeStr = date.toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'}) + ' ' + date.toLocaleDateString('vi-VN');
+        }
+
+        const attendText = item.is_attending === false ? '<span style="color:#d9534f; font-weight:600;">[Không tham dự]</span>' : `<span style="color:#5cb85c; font-weight:600;">[Tham dự: ${item.guest_count || 1} người]</span>`;
+
+        html += `
+          <tr>
+            <td>${index++}</td>
+            <td><strong>${escapeHtml(item.guest_name || item.name || 'Khách ẩn danh')}</strong></td>
+            <td>${attendText}<br>${escapeHtml(item.wishes || item.message || '')}</td>
+            <td style="color: #666; font-size: 12px;">${timeStr}</td>
+          </tr>
+        `;
+      });
+      tbody.innerHTML = html;
+    }, err => {
+      console.error("Lỗi tải lời chúc:", err);
+      $('wishesTableBody').innerHTML = `<tr><td colspan="4" class="no-data" style="color:red;">Lỗi tải dữ liệu. Hãy chắc chắn bạn đã tạo Composite Index trên Firebase cho collection ${COLLECTION_RSVP} (card_id + createdAt).</td></tr>`;
+    });
+}
+
+function escapeHtml(text) {
+  return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}
+
+$('saveBtn').onclick = async () => {
+  const customerId = getCustomerId();
+  $('saveStatus').textContent = "Đang lưu...";
+  $('saveStatus').style.color = "#333";
+  
+  const data = {};
+  fields.forEach(f => data[f] = $(f).value.trim());
+  data.gallery_images = [
+    $('img1').value.trim(), $('img2').value.trim(), $('img3').value.trim(),
+    $('img4').value.trim(), $('img5').value.trim(), $('img6').value.trim()
+  ].filter(Boolean);
+  data.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+
+  try {
+    await db.collection(COLLECTION_THIEP).doc(customerId).set(data, { merge: true });
+    $('saveStatus').textContent = "Đã lưu thành công cho mã ID: " + customerId;
+    $('saveStatus').style.color = "green";
+
+    showCardUrl(customerId);
+    listenToWishes(customerId);
+  } catch (e) {
+    $('saveStatus').textContent = "Lỗi khi lưu: " + e.message;
+    $('saveStatus').style.color = "red";
+    $('successBox').style.display = "none";
+  }
+};
+
+function copyCardUrl() {
+  const urlInput = $('cardUrlInput');
+  urlInput.select();
+  navigator.clipboard.writeText(urlInput.value);
+  alert("Đã sao chép link thiệp thành công!");
+}
+</script>
+</body>
+</html>

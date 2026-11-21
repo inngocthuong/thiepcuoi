@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý & Chỉnh Sửa Mã Nguồn Dự Án</title>
+    <style>
+        :root {
+            --bg-dark: #000000;
+            --bg-sidebar: #0e0e11;
+            --bg-header: #11111b;
+            --accent: #89b4fa;
+            --accent-hover: #74c7ec;
+            --text-main: #cdd6f4;
+            --text-muted: #a6adc8;
+            --border: #313244;
+            --success: #a6e3a1;
+            --danger: #f38ba8;
+            --warning: #f9e2af;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-main); height: 100vh; overflow: hidden; }
+
+        /* MÀN HÌNH ĐĂNG NHẬP */
+        #login-screen {
+            position: fixed; inset: 0; background: var(--bg-header);
+            display: flex; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .login-box {
+            background: var(--bg-sidebar); padding: 30px 40px; border-radius: 12px;
+            border: 1px solid var(--border); text-align: center; width: 350px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .login-box h2 { margin-bottom: 20px; color: var(--accent); font-size: 22px; }
+        .login-box input {
+            width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 6px;
+            border: 1px solid var(--border); background: var(--bg-dark); color: #fff;
+            font-size: 15px; outline: none;
+        }
+        .login-box input:focus { border-color: var(--accent); }
+        .login-box button {
+            width: 100%; padding: 12px; border: none; border-radius: 6px;
+            background: var(--accent); color: #11111b; font-weight: bold;
+            font-size: 15px; cursor: pointer; transition: 0.2s;
+        }
+        .login-box button:hover { background: var(--accent-hover); }
+        #login-error { color: var(--danger); font-size: 13px; margin-top: 10px; display: none; }
+
+        /* GIAO DIỆN CHÍNH */
+        #app-screen { display: none; height: 100vh; flex-direction: column; }
+
+        /* THANH HEADER */
+        header {
+            min-height: 55px; background: var(--bg-header); border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between; padding: 8px 20px; gap: 10px; flex-wrap: wrap;
+        }
+        .header-left, .header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .btn {
+            padding: 7px 12px; border-radius: 6px; border: none; font-weight: 600;
+            cursor: pointer; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; transition: 0.2s;
+        }
+        .btn-primary { background: var(--accent); color: #11111b; }
+        .btn-primary:hover { background: var(--accent-hover); }
+        .btn-new { background: rgba(166, 227, 161, 0.16); color: var(--success); border: 1px solid rgba(166, 227, 161, 0.35); }
+        .btn-new:hover { background: rgba(166, 227, 161, 0.28); }
+        .btn-save { background: var(--success); color: #11111b; }
+        .btn-save:disabled { opacity: 0.4; cursor: not-allowed; }
+        .btn-sync { background: rgba(137, 180, 250, 0.16); color: var(--accent); border: 1px solid rgba(137, 180, 250, 0.35); }
+        .btn-sync:hover { background: rgba(137, 180, 250, 0.28); }
+        .btn-restore { background: rgba(249, 226, 175, 0.16); color: var(--warning); border: 1px solid rgba(249, 226, 175, 0.4); }
+        .btn-restore:hover { background: rgba(249, 226, 175, 0.28); }
+        .btn-logout { background: transparent; border: 1px solid var(--border); color: var(--text-muted); }
+        .btn-logout:hover { border-color: var(--danger); color: var(--danger); }
+
+        #current-file-info { font-size: 13px; color: var(--text-muted); margin-left: 6px; }
+        #current-file-info span { color: var(--accent); font-weight: bold; }
+        .dirty-dot { color: var(--warning); font-weight: bold; margin-left: 4px; }
+
+        .project-bar {
+            background: #141420; border-bottom: 1px solid var(--border);
+            padding: 8px 20px; display: flex; align-items: center; justify-content: space-between;
+            gap: 12px; flex-wrap: wrap; font-size: 12px;
+        }
+        .project-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; color: var(--text-muted); }
+        .project-select {
+            background: var(--bg-dark); color: var(--text-main); border: 1px solid var(--border);
+            border-radius: 6px; padding: 5px 10px; font-size: 12px; outline: none;
+        }
+        .sync-badge {
+            padding: 3px 8px; border-radius: 999px; font-weight: 600;
+            background: rgba(166, 227, 161, 0.15); color: var(--success);
+        }
+        .sync-badge.warn {
+            background: rgba(249, 226, 175, 0.15); color: var(--warning);
+        }
+
+        /* KHU VỰC LÀM VIỆC */
+        .workspace { display: flex; flex: 1; overflow: hidden; }
+
+        /* MENU DANH MỤC BÊN TRÁI */
+        aside {
+            width: 300px; background: var(--bg-sidebar); border-right: 1px solid var(--border);
+            display: flex; flex-direction: column; overflow: hidden;
+        }
+        .sidebar-header {
+            padding: 12px 15px; border-bottom: 1px solid var(--border);
+            display: flex; flex-direction: column; gap: 8px;
+        }
+        .sidebar-title-row {
+            display: flex; align-items: center; justify-content: space-between; gap: 6px;
+        }
+        .sidebar-title {
+            font-size: 12px; text-transform: uppercase; letter-spacing: 1px;
+            color: var(--text-muted); font-weight: bold;
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        .sidebar-actions { display: flex; gap: 4px; flex-shrink: 0; }
+        .icon-btn {
+            background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+            color: var(--text-main); border-radius: 4px; padding: 3px 7px;
+            font-size: 11px; cursor: pointer; transition: 0.15s;
+        }
+        .icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .search-input {
+            width: 100%; background: var(--bg-dark); color: var(--text-main);
+            border: 1px solid var(--border); border-radius: 6px;
+            padding: 6px 10px; font-size: 12px; outline: none;
+        }
+        .search-input:focus { border-color: var(--accent); }
+
+        .clipboard-banner {
+            display: none; align-items: center; justify-content: space-between; gap: 6px;
+            background: rgba(137, 180, 250, 0.12); border: 1px solid rgba(137, 180, 250, 0.3);
+            border-radius: 6px; padding: 5px 8px; font-size: 11px; color: var(--accent);
+        }
+        .clipboard-banner span {
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+
+        #menu-container { flex: 1; overflow-y: auto; }
+        #menu-container::-webkit-scrollbar { width: 6px; }
+        #menu-container::-webkit-scrollbar-thumb { background: #313244; border-radius: 3px; }
+
+        .folder-group { border-bottom: 1px solid rgba(49, 50, 68, 0.5); }
+        .folder-header {
+            padding: 9px 14px; background: rgba(255,255,255,0.03); font-size: 13px;
+            font-weight: bold; color: var(--warning); cursor: pointer;
+            display: flex; align-items: center; justify-content: space-between; user-select: none; gap: 6px;
+        }
+        .folder-header:hover { background: rgba(255,255,255,0.06); }
+        .folder-header-right { display: flex; align-items: center; gap: 5px; }
+        .folder-add-btn {
+            background: rgba(166, 227, 161, 0.15); color: var(--success);
+            border: 1px solid rgba(166, 227, 161, 0.35); border-radius: 4px;
+            padding: 0 5px; font-size: 11px; font-weight: bold; cursor: pointer;
+        }
+        .folder-add-btn:hover { background: rgba(166, 227, 161, 0.3); }
+        .folder-count {
+            font-size: 11px; color: var(--text-muted); font-weight: normal;
+            background: rgba(0,0,0,0.3); padding: 1px 6px; border-radius: 10px;
+        }
+        .file-list { list-style: none; padding: 4px 0; }
+        .folder-group.collapsed .file-list { display: none; }
+        .file-item {
+            padding: 7px 14px 7px 26px; font-size: 13px; cursor: pointer;
+            display: flex; align-items: center; justify-content: space-between; gap: 6px;
+            color: var(--text-main); transition: 0.15s; user-select: none;
+        }
+        .file-item span.file-name {
+            overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        .file-item:hover { background: rgba(137, 180, 250, 0.1); }
+        .file-item.active {
+            background: rgba(137, 180, 250, 0.2); color: var(--accent);
+            font-weight: bold; border-left: 3px solid var(--accent);
+        }
+        .file-item.copied-target {
+            outline: 1px dashed var(--accent);
+            background: rgba(137, 180, 250, 0.08);
+        }
+
+        /* MENU CHUỘT PHẢI (CONTEXT MENU) */
+        #file-context-menu {
+            position: fixed;
+            display: none;
+            min-width: 215px;
+            background: #1e1e2e;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 5px;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65);
+            z-index: 2000;
+        }
+        .ctx-header {
+            padding: 6px 10px;
+            font-size: 11px;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .ctx-item {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            padding: 8px 10px;
+            border-radius: 5px;
+            font-size: 13px;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            transition: 0.12s;
+        }
+        .ctx-item:hover:not(:disabled) {
+            background: rgba(137, 180, 250, 0.18);
+            color: var(--accent);
+        }
+        .ctx-item:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .ctx-item.danger {
+            color: var(--danger);
+        }
+        .ctx-item.danger:hover:not(:disabled) {
+            background: rgba(243, 139, 168, 0.18);
+            color: var(--danger);
+        }
+        .ctx-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 4px 0;
+        }
+
+        /* Nhãn đuôi file */
+        .badge { font-size: 10px; padding: 2px 5px; border-radius: 4px; font-weight: bold; text-transform: uppercase; flex-shrink: 0; }
+        .badge-html { background: rgba(243, 139, 168, 0.2); color: #f38ba8; }
+        .badge-js { background: rgba(249, 226, 175, 0.2); color: #f9e2af; }
+        .badge-json { background: rgba(166, 227, 161, 0.2); color: #a6e3a1; }
+        .badge-css { background: rgba(137, 180, 250, 0.2); color: #89b4fa; }
+        .badge-txt, .badge-md { background: rgba(166, 173, 200, 0.2); color: #cdd6f4; }
+
+        /* KHUNG SOẠN THẢO CODE + SỐ DÒNG */
+        main { flex: 1; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+        .editor-toolbar {
+            display: none; align-items: center; justify-content: space-between;
+            background: #141420; border-bottom: 1px solid var(--border);
+            padding: 6px 14px; gap: 10px; flex-wrap: wrap;
+        }
+        .find-replace-bar { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .find-replace-bar input {
+            background: var(--bg-dark); color: var(--text-main); border: 1px solid var(--border);
+            border-radius: 4px; padding: 4px 8px; font-size: 12px; width: 155px; outline: none;
+        }
+        .find-replace-bar input:focus { border-color: var(--accent); }
+        .editor-stats { font-size: 11px; color: var(--text-muted); }
+
+        .editor-wrapper {
+            flex: 1;
+            display: none;
+            overflow: hidden;
+            background: var(--bg-dark);
+        }
+        #line-numbers {
+            width: 56px;
+            min-width: 56px;
+            background: #0d0d14;
+            color: #6c7086;
+            border-right: 1px solid var(--border);
+            padding: 20px 10px 20px 0;
+            text-align: right;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            overflow: hidden;
+            user-select: none;
+        }
+        #code-editor {
+            flex: 1; width: 100%; height: 100%; background: var(--bg-dark); color: #e2e8f0;
+            border: none; padding: 20px; font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 14px; line-height: 1.6; resize: none; outline: none; tab-size: 4;
+            white-space: pre; overflow: auto;
+        }
+        #empty-state {
+            position: absolute; inset: 0; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; color: var(--text-muted);
+            text-align: center; padding: 20px; gap: 12px;
+        }
+        .restore-card {
+            background: var(--bg-sidebar); border: 1px solid var(--border);
+            border-radius: 10px; padding: 18px 22px; max-width: 440px;
+            display: none; flex-direction: column; gap: 10px; align-items: center;
+        }
+
+        /* MODAL CHUNG */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.75);
+            display: none; justify-content: center; align-items: center; z-index: 1200; padding: 16px;
+        }
+        .modal-box {
+            background: var(--bg-sidebar); border: 1px solid var(--border); border-radius: 12px;
+            width: 100%; max-width: 520px; padding: 24px; box-shadow: 0 12px 32px rgba(0,0,0,0.6);
+        }
+        .modal-box h3 { color: var(--accent); margin-bottom: 14px; font-size: 18px; }
+        .field-group { margin-bottom: 12px; }
+        .field-group label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 5px; }
+        .field-group input, .field-group textarea, .field-group select {
+            width: 100%; background: var(--bg-dark); color: var(--text-main);
+            border: 1px solid var(--border); border-radius: 6px; padding: 9px 11px; font-size: 13px; outline: none;
+        }
+        .field-group textarea { min-height: 120px; font-family: Consolas, monospace; resize: vertical; }
+        .field-hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+
+        #toast {
+            position: fixed; bottom: 20px; right: 20px; background: var(--success);
+            color: #11111b; padding: 10px 20px; border-radius: 6px; font-weight: bold;
+            font-size: 14px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transform: translateY(100px); opacity: 0; transition: 0.3s; z-index: 1500;
+        }
+        #toast.show { transform: translateY(0); opacity: 1; }
+    </style>
+</head>
+<body>
+
+    <!-- 1. MÀN HÌNH MẬT KHẨU -->
+    <div id="login-screen">
+        <div class="login-box">
+            <h2>🔒 Quản Trị Dự Án</h2>
+            <input type="password" id="password-input" placeholder="Nhập mật khẩu quản trị..." onkeypress="if(event.key==='Enter') checkLogin()">
+            <button onclick="checkLogin()">Mở Khóa</button>
+            <p id="login-error">Mật khẩu không chính xác!</p>
+        </div>
+    </div>
+
+    <!-- 2. GIAO DIỆN QUẢN LÝ & SỬA FILE -->
+    <div id="app-screen">
+        <header>
+            <div class="header-left">
+                <button class="btn btn-primary" onclick="selectProjectFolder()">📂 Chọn Thư Mục Mới</button>
+                <button class="btn btn-new" onclick="openNewFileModal('')">➕ Tạo File Mới</button>
+                <button class="btn btn-restore" id="header-restore-btn" onclick="restoreSavedFolder(true)" style="display:none;">🔄 Mở Lại Thư Mục Đã Lưu</button>
+                <button class="btn btn-sync" onclick="openProjectModal()">🔥 Cấu Hình Dự Án</button>
+                <div id="current-file-info">Chưa mở file nào</div>
+            </div>
+            <div class="header-right">
+                <button class="btn btn-logout" id="save-as-btn" onclick="saveAsNewFile()" style="display:none;" title="Lưu nội dung đang sửa thành một file mới">📑 Lưu Thành File Mới</button>
+                <button class="btn btn-logout" id="reload-file-btn" onclick="reloadCurrentFile()" style="display:none;" title="Tải lại nội dung gốc từ máy">↻ Tải lại file</button>
+                <button class="btn btn-save" id="save-btn" onclick="saveCurrentFile()" disabled>💾 Lưu Thay Đổi (Ctrl+S)</button>
+                <button class="btn btn-logout" onclick="logout()">Thoát</button>
+            </div>
+        </header>
+
+        <!-- THANH ĐỒNG BỘ DỰ ÁN VỚI FIREBASE -->
+        <div class="project-bar">
+            <div class="project-meta">
+                <span>Dự án đang chọn:</span>
+                <select id="project-select" class="project-select" onchange="onSelectProjectChange(this.value)">
+                    <option value="">-- Chưa có dự án --</option>
+                </select>
+                <span id="firebase-sync-status" class="sync-badge warn">Đang kết nối Firebase...</span>
+                <span id="last-saved-info"></span>
+            </div>
+            <div id="folder-hint" style="color: var(--text-muted);">
+                Mẹo: Chuột phải vào file hoặc thư mục bên trái để Copy, Dán hoặc Xóa nhanh.
+            </div>
+        </div>
+
+        <div class="workspace">
+            <!-- Thanh menu danh mục thư mục & file -->
+            <aside>
+                <div class="sidebar-header">
+                    <div class="sidebar-title-row">
+                        <span class="sidebar-title" id="sidebar-title">Danh Mục File</span>
+                        <div class="sidebar-actions">
+                            <button class="icon-btn" onclick="openNewFileModal('')" title="Tạo file mới trong dự án">+ File</button>
+                            <button class="icon-btn" onclick="refreshCurrentFolder()" title="Quét lại thư mục hiện tại">↻</button>
+                            <button class="icon-btn" onclick="toggleAllFolders(false)" title="Mở tất cả thư mục">+</button>
+                            <button class="icon-btn" onclick="toggleAllFolders(true)" title="Thu gọn tất cả thư mục">−</button>
+                        </div>
+                    </div>
+                    <input type="text" id="file-search-input" class="search-input" placeholder="🔍 Tìm tên file hoặc thư mục..." oninput="filterMenuFiles(this.value)">
+                    <div class="clipboard-banner" id="clipboard-banner">
+                        <span id="clipboard-label">📋 Đang copy: ...</span>
+                        <button class="icon-btn" onclick="clearClipboardFile()" title="Bỏ chọn copy">✕</button>
+                    </div>
+                </div>
+                <div id="menu-container">
+                    <p style="padding: 15px; font-size: 13px; color: var(--text-muted);">
+                        Nhấn <b>"Chọn Thư Mục Mới"</b> để tải danh sách file. Hệ thống sẽ ghi nhớ thư mục cho từng dự án.
+                    </p>
+                </div>
+            </aside>
+
+            <!-- Khung chỉnh sửa nội dung -->
+            <main>
+                <div id="empty-state">
+                    <h3>Trình Chỉnh Sửa Nhanh</h3>
+                    <p style="font-size: 14px; max-width: 480px;">Chọn thư mục dự án của bạn, tạo file mới hoặc chuột phải vào file bên trái để Copy, Dán, Xóa.</p>
+                    <div class="restore-card" id="restore-card">
+                        <div style="font-size: 13px; color: var(--warning); font-weight: bold;" id="restore-card-title">Tìm thấy thư mục đã lưu trước đó</div>
+                        <div style="font-size: 12px; color: var(--text-muted);">Trình duyệt cần bạn xác nhận quyền truy cập lại thư mục này.</div>
+                        <button class="btn btn-restore" onclick="restoreSavedFolder(true)">🔓 Khôi Phục Danh Sách Thư Mục</button>
+                    </div>
+                </div>
+
+                <!-- Thanh tìm & thay thế nhanh trong code -->
+                <div class="editor-toolbar" id="editor-toolbar">
+                    <div class="find-replace-bar">
+                        <input type="text" id="find-input" placeholder="Tìm trong file..." onkeypress="if(event.key==='Enter') findNextInEditor()">
+                        <button class="icon-btn" onclick="findNextInEditor()">Tìm tiếp</button>
+                        <input type="text" id="replace-input" placeholder="Thay thế bằng...">
+                        <button class="icon-btn" onclick="replaceOneInEditor()">Thay 1</button>
+                        <button class="icon-btn" onclick="replaceAllInEditor()">Thay tất cả</button>
+                        <button class="icon-btn" onclick="formatJsonIfValid()" id="format-json-btn" style="display:none;">Format JSON</button>
+                    </div>
+                    <div class="editor-stats" id="editor-stats">Dòng: 1 | Ký tự: 0</div>
+                </div>
+
+                <div class="editor-wrapper" id="editor-wrapper">
+                    <div id="line-numbers" aria-hidden="true">1</div>
+                    <textarea id="code-editor" spellcheck="false"></textarea>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- MENU CHUỘT PHẢI CHO FILE / THƯ MỤC -->
+    <div id="file-context-menu">
+        <div class="ctx-header" id="ctx-target-label">Tên file</div>
+        <button type="button" class="ctx-item" id="ctx-copy-btn" onclick="handleContextCopy()">
+            <span>📋 Copy file</span>
+            <span style="font-size:11px; color:var(--text-muted);">Sao chép</span>
+        </button>
+        <button type="button" class="ctx-item" id="ctx-paste-btn" onclick="handleContextPaste()" disabled>
+            <span>📥 Dán vào thư mục này</span>
+            <span style="font-size:11px; color:var(--text-muted);" id="ctx-paste-hint">Trống</span>
+        </button>
+        <div class="ctx-divider" id="ctx-delete-divider"></div>
+        <button type="button" class="ctx-item danger" id="ctx-delete-btn" onclick="handleContextDelete()">
+            <span>🗑️ Xóa file</span>
+            <span style="font-size:11px;">Xóa vĩnh viễn</span>
+        </button>
+    </div>
+
+    <!-- MODAL TẠO / LƯU FILE MỚI -->
+    <div id="new-file-modal" class="modal-overlay">
+        <div class="modal-box">
+            <h3 id="new-file-modal-title">➕ Tạo & Lưu File Mới</h3>
+            <div class="field-group">
+                <label for="new-file-folder">Thư mục lưu file (để trống nếu lưu ở thư mục gốc)</label>
+                <input type="text" id="new-file-folder" list="existing-folders-list" placeholder="Ví dụ: js hoặc data/mau-26">
+                <datalist id="existing-folders-list"></datalist>
+                <div class="field-hint">Nếu nhập tên thư mục con chưa có (ví dụ: <b>templates/mau-26</b>), hệ thống sẽ tự động tạo thư mục đó.</div>
+            </div>
+            <div class="field-group">
+                <label for="new-file-name">Tên file mới (kèm đuôi .html, .js, .json, .css, .txt, .md)</label>
+                <input type="text" id="new-file-name" placeholder="Ví dụ: thiep-cuoi-online-mau-26.html" onkeypress="if(event.key==='Enter') confirmCreateNewFile()">
+            </div>
+            <div class="field-group" id="new-file-template-group">
+                <label for="new-file-template">Mẫu khởi tạo nhanh</label>
+                <select id="new-file-template">
+                    <option value="empty">File trống</option>
+                    <option value="html">Khung HTML5 cơ bản</option>
+                    <option value="json">Object JSON mẫu ({})</option>
+                    <option value="js">File JavaScript cơ bản</option>
+                    <option value="current">Sao chép từ nội dung đang mở trong khung soạn thảo</option>
+                </select>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-logout" onclick="closeNewFileModal()">Hủy</button>
+                <button type="button" class="btn btn-save" onclick="confirmCreateNewFile()">💾 Tạo & Lưu File</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL LƯU / ĐỒNG BỘ DỰ ÁN LÊN FIREBASE -->
+    <div id="project-modal" class="modal-overlay">
+        <div class="modal-box">
+            <h3>Đồng Bộ Dự Án Với Firebase</h3>
+            <div class="field-group">
+                <label for="proj-key">Mã định danh dự án (viết liền, không dấu)</label>
+                <input type="text" id="proj-key" placeholder="Ví dụ: thiep-cuoi-web">
+            </div>
+            <div class="field-group">
+                <label for="proj-name">Tên dự án / Thư mục dự án</label>
+                <input type="text" id="proj-name" placeholder="Ví dụ: Website Thiệp Cưới">
+            </div>
+            <div class="field-group">
+                <label for="proj-config-json">firebaseConfig của dự án (dạng JSON)</label>
+                <textarea id="proj-config-json" placeholder='{"apiKey":"...","authDomain":"...","projectId":"..."}'></textarea>
+            </div>
+            <div class="field-group">
+                <label for="proj-note">Ghi chú cập nhật / Nhắc push GitHub</label>
+                <input type="text" id="proj-note" placeholder="Ví dụ: Đã sửa data.js, nhớ push lên GitHub">
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-logout" onclick="closeProjectModal()">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="saveProjectToFirebase()">Lưu lên Firebase</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast">Đã lưu file thành công!</div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+        import {
+            getFirestore,
+            collection,
+            doc,
+            setDoc,
+            getDocs,
+            serverTimestamp
+        } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
+        // ================= CẤU HÌNH MẬT KHẨU & FIREBASE =================
+        const ADMIN_PASSWORD = "123"; // <-- Đổi mật khẩu của bạn tại đây
+        const ALLOWED_EXTENSIONS = ['.html', '.js', '.json', '.css', '.txt', '.md'];
+        const PROJECTS_COLLECTION = "admin_projects";
+        const ACTIVE_PROJECT_STORAGE_KEY = "admin_editor_active_project_id";
+        const LAST_OPEN_FILE_PREFIX = "admin_editor_last_file_";
+
+        const IDB_NAME = "admin_editor_fs_db";
+        const IDB_STORE = "dir_handles";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBdFVN7qwuxgkiHo9Fejr4K7pLceEu6gh4",
+            authDomain: "quan-ly-san-pham-55ec5.firebaseapp.com",
+            projectId: "quan-ly-san-pham-55ec5",
+            storageBucket: "quan-ly-san-pham-55ec5.firebasestorage.app",
+            messagingSenderId: "845660088489",
+            appId: "1:845660088489:web:49635a861acff93c6a21b8"
+        };
+        // =================================================================
+
+        let db = null;
+        let firebaseReady = false;
+        let projectsMap = new Map();
+        let activeProjectId = localStorage.getItem(ACTIVE_PROJECT_STORAGE_KEY) || "default-project";
+        let currentDirHandle = null;
+        let currentFileHandle = null;
+        let currentFilePath = "";
+        let isDirty = false;
+        let allGroupedFiles = {};
+        let fileLookupByPath = new Map();
+        let lastLineCount = 0;
+
+        // Trạng thái Copy / Dán / Xóa chuột phải
+        let copiedFileObj = null;
+        let contextTarget = null;
+
+        const editor = document.getElementById('code-editor');
+        const editorWrapper = document.getElementById('editor-wrapper');
+        const lineNumbersEl = document.getElementById('line-numbers');
+        const saveBtn = document.getElementById('save-btn');
+        const saveAsBtn = document.getElementById('save-as-btn');
+        const reloadFileBtn = document.getElementById('reload-file-btn');
+        const emptyState = document.getElementById('empty-state');
+        const editorToolbar = document.getElementById('editor-toolbar');
+        const editorStats = document.getElementById('editor-stats');
+        const formatJsonBtn = document.getElementById('format-json-btn');
+        const fileInfo = document.getElementById('current-file-info');
+        const projectSelect = document.getElementById('project-select');
+        const syncStatusEl = document.getElementById('firebase-sync-status');
+        const lastSavedInfoEl = document.getElementById('last-saved-info');
+        const headerRestoreBtn = document.getElementById('header-restore-btn');
+        const restoreCard = document.getElementById('restore-card');
+        const restoreCardTitle = document.getElementById('restore-card-title');
+        const sidebarTitle = document.getElementById('sidebar-title');
+        const contextMenu = document.getElementById('file-context-menu');
+
+        // ================= SỐ DÒNG & ĐỒNG BỘ CUỘN =================
+        function renderLineNumbers(force = false) {
+            const totalLines = editor.value ? editor.value.split('\n').length : 1;
+            if (!force && totalLines === lastLineCount) return;
+            lastLineCount = totalLines;
+
+            let html = '';
+            for (let i = 1; i <= totalLines; i++) {
+                html += `<div>${i}</div>`;
+            }
+            lineNumbersEl.innerHTML = html;
+            lineNumbersEl.style.minWidth = `${Math.max(48, String(totalLines).length * 10 + 24)}px`;
+            lineNumbersEl.scrollTop = editor.scrollTop;
+        }
+
+        editor.addEventListener('scroll', () => {
+            lineNumbersEl.scrollTop = editor.scrollTop;
+        });
+
+        // ================= INDEXEDDB LƯU DIRECTORY HANDLE =================
+        function openHandleDB() {
+            return new Promise((resolve, reject) => {
+                const req = indexedDB.open(IDB_NAME, 1);
+                req.onupgradeneeded = () => {
+                    if (!req.result.objectStoreNames.contains(IDB_STORE)) {
+                        req.result.createObjectStore(IDB_STORE);
+                    }
+                };
+                req.onsuccess = () => resolve(req.result);
+                req.onerror = () => reject(req.error);
+            });
+        }
+
+        async function saveDirHandleToIDB(projectKey, handle) {
+            try {
+                const dbConn = await openHandleDB();
+                await new Promise((resolve, reject) => {
+                    const tx = dbConn.transaction(IDB_STORE, "readwrite");
+                    tx.objectStore(IDB_STORE).put(handle, projectKey);
+                    tx.oncomplete = () => resolve();
+                    tx.onerror = () => reject(tx.error);
+                });
+            } catch (err) {
+                console.warn("Không lưu được handle vào IndexedDB:", err);
+            }
+        }
+
+        async function getDirHandleFromIDB(projectKey) {
+            try {
+                const dbConn = await openHandleDB();
+                return await new Promise((resolve, reject) => {
+                    const tx = dbConn.transaction(IDB_STORE, "readonly");
+                    const req = tx.objectStore(IDB_STORE).get(projectKey);
+                    req.onsuccess = () => resolve(req.result || null);
+                    req.onerror = () => reject(req.error);
+                });
+            } catch (err) {
+                console.warn("Không đọc được handle từ IndexedDB:", err);
+                return null;
+            }
+        }
+
+        // ================= FIREBASE =================
+        function initFirebase() {
+            try {
+                if (!firebaseConfig.apiKey || firebaseConfig.apiKey === "API_KEY_CUA_BAN") {
+                    syncStatusEl.textContent = "Chưa điền firebaseConfig";
+                    syncStatusEl.className = "sync-badge warn";
+                    return;
+                }
+                const app = initializeApp(firebaseConfig, "admin-editor-app");
+                db = getFirestore(app);
+                firebaseReady = true;
+                syncStatusEl.textContent = "Đã kết nối Firestore";
+                syncStatusEl.className = "sync-badge";
+                loadProjectsFromFirebase();
+            } catch (err) {
+                console.error(err);
+                syncStatusEl.textContent = "Lỗi kết nối Firebase";
+                syncStatusEl.className = "sync-badge warn";
+            }
+        }
+
+        async function loadProjectsFromFirebase() {
+            if (!firebaseReady || !db) return;
+            try {
+                const snap = await getDocs(collection(db, PROJECTS_COLLECTION));
+                projectsMap.clear();
+                snap.forEach((docSnap) => {
+                    projectsMap.set(docSnap.id, { id: docSnap.id, ...docSnap.data() });
+                });
+
+                if (!projectsMap.has(activeProjectId) && projectsMap.size > 0) {
+                    activeProjectId = projectsMap.keys().next().value;
+                    localStorage.setItem(ACTIVE_PROJECT_STORAGE_KEY, activeProjectId);
+                }
+
+                renderProjectSelect();
+                applyActiveProjectUI();
+                await restoreSavedFolder(false);
+            } catch (err) {
+                console.error(err);
+                syncStatusEl.textContent = "Không đọc được Firestore";
+                syncStatusEl.className = "sync-badge warn";
+            }
+        }
+
+        function renderProjectSelect() {
+            const ids = Array.from(projectsMap.keys());
+            if (ids.length === 0) {
+                projectSelect.innerHTML = `<option value="${activeProjectId}">${activeProjectId} (mới)</option>`;
+                return;
+            }
+            projectSelect.innerHTML = ids
+                .map((id) => {
+                    const p = projectsMap.get(id);
+                    const label = p.projectName ? `${p.projectName} (${id})` : id;
+                    return `<option value="${id}" ${id === activeProjectId ? "selected" : ""}>${label}</option>`;
+                })
+                .join("");
+        }
+
+        function applyActiveProjectUI() {
+            const proj = projectsMap.get(activeProjectId);
+            if (!proj) {
+                lastSavedInfoEl.textContent = "";
+                return;
+            }
+            const noteText = proj.note ? `• Ghi chú: ${proj.note}` : "";
+            const fileText = proj.lastEditedFile ? `• File gần nhất: ${proj.lastEditedFile}` : "";
+            lastSavedInfoEl.textContent = `${fileText} ${noteText}`.trim();
+        }
+
+        window.onSelectProjectChange = async function(newId) {
+            if (!newId) return;
+            if (isDirty && !confirm("File hiện tại có thay đổi chưa lưu. Bạn vẫn muốn chuyển dự án?")) {
+                projectSelect.value = activeProjectId;
+                return;
+            }
+            activeProjectId = newId;
+            localStorage.setItem(ACTIVE_PROJECT_STORAGE_KEY, activeProjectId);
+            applyActiveProjectUI();
+            resetEditorArea();
+            clearClipboardFile();
+            await restoreSavedFolder(true);
+        };
+
+        window.openProjectModal = function() {
+            const proj = projectsMap.get(activeProjectId) || {};
+            document.getElementById('proj-key').value = activeProjectId || "default-project";
+            document.getElementById('proj-name').value = proj.projectName || "";
+            document.getElementById('proj-config-json').value = proj.projectFirebaseConfig
+                ? JSON.stringify(proj.projectFirebaseConfig, null, 2)
+                : "";
+            document.getElementById('proj-note').value = proj.note || "";
+            document.getElementById('project-modal').style.display = 'flex';
+        };
+
+        window.closeProjectModal = function() {
+            document.getElementById('project-modal').style.display = 'none';
+        };
+
+        window.saveProjectToFirebase = async function() {
+            const rawKey = document.getElementById('proj-key').value.trim().replace(/\//g, "_") || "default-project";
+            const projectName = document.getElementById('proj-name').value.trim() || rawKey;
+            const rawConfig = document.getElementById('proj-config-json').value.trim();
+            const note = document.getElementById('proj-note').value.trim();
+
+            let parsedConfig = null;
+            if (rawConfig) {
+                try {
+                    parsedConfig = JSON.parse(rawConfig);
+                } catch {
+                    alert("Phần firebaseConfig chưa đúng định dạng JSON hợp lệ (cần dấu ngoặc kép cho key và value).");
+                    return;
+                }
+            }
+
+            if (!firebaseReady || !db) {
+                alert("Vui lòng kiểm tra firebaseConfig trong code trước khi lưu lên Firebase.");
+                return;
+            }
+
+            try {
+                const payload = {
+                    projectName,
+                    projectFirebaseConfig: parsedConfig,
+                    note,
+                    updatedAt: serverTimestamp()
+                };
+                await setDoc(doc(db, PROJECTS_COLLECTION, rawKey), payload, { merge: true });
+
+                if (currentDirHandle && rawKey !== activeProjectId) {
+                    await saveDirHandleToIDB(rawKey, currentDirHandle);
+                }
+
+                activeProjectId = rawKey;
+                localStorage.setItem(ACTIVE_PROJECT_STORAGE_KEY, activeProjectId);
+                projectsMap.set(rawKey, { id: rawKey, ...payload });
+                renderProjectSelect();
+                applyActiveProjectUI();
+                closeProjectModal();
+                showToast("✅ Đã đồng bộ cấu hình dự án lên Firebase!");
+            } catch (err) {
+                console.error(err);
+                alert("Lỗi lưu dự án lên Firebase: " + err.message);
+            }
+        };
+
+        async function syncEditActivityToFirebase(filePath) {
+            if (!firebaseReady || !db) return;
+            try {
+                const existing = projectsMap.get(activeProjectId) || {};
+                const payload = {
+                    projectName: existing.projectName || activeProjectId,
+                    lastEditedFile: filePath,
+                    lastEditedAt: new Date().toISOString(),
+                    updatedAt: serverTimestamp()
+                };
+                await setDoc(doc(db, PROJECTS_COLLECTION, activeProjectId), payload, { merge: true });
+                projectsMap.set(activeProjectId, { ...existing, id: activeProjectId, ...payload });
+                applyActiveProjectUI();
+            } catch (err) {
+                console.warn("Không thể cập nhật log lên Firebase:", err.message);
+            }
+        }
+
+        // ================= ĐĂNG NHẬP =================
+        if (sessionStorage.getItem('isAdminLoggedIn') === 'true') {
+            showApp();
+        }
+
+        window.checkLogin = function() {
+            const input = document.getElementById('password-input').value;
+            if (input === ADMIN_PASSWORD) {
+                sessionStorage.setItem('isAdminLoggedIn', 'true');
+                showApp();
+            } else {
+                document.getElementById('login-error').style.display = 'block';
+            }
+        };
+
+        async function showApp() {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('app-screen').style.display = 'flex';
+            initFirebase();
+            await restoreSavedFolder(false);
+        }
+
+        window.logout = function() {
+            if (isDirty && !confirm("Bạn có thay đổi chưa lưu. Vẫn thoát?")) return;
+            sessionStorage.removeItem('isAdminLoggedIn');
+            location.reload();
+        };
+
+        // ================= QUẢN LÝ THƯ MỤC & FILE =================
+        window.selectProjectFolder = async function() {
+            try {
+                const dirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+
+                if (!projectsMap.has(activeProjectId)) {
+                    activeProjectId = dirHandle.name.replace(/\s+/g, "-").toLowerCase() || "default-project";
+                    localStorage.setItem(ACTIVE_PROJECT_STORAGE_KEY, activeProjectId);
+                    if (!projectsMap.has(activeProjectId)) {
+                        projectsMap.set(activeProjectId, { id: activeProjectId, projectName: dirHandle.name });
+                    }
+                    renderProjectSelect();
+                }
+
+                await saveDirHandleToIDB(activeProjectId, dirHandle);
+                await saveDirHandleToIDB("__last_used_folder__", dirHandle);
+                await loadFromDirectoryHandle(dirHandle, true);
+                showToast(`📂 Đã lưu & tải thư mục: ${dirHandle.name}`);
+            } catch (err) {
+                if (err.name !== 'AbortError') {
+                    alert("Trình duyệt không hỗ trợ hoặc bạn chưa cấp quyền truy cập thư mục! (Hãy dùng Chrome hoặc Edge trên máy tính)");
+                }
+            }
+        };
+
+        window.restoreSavedFolder = async function(askPermission = true) {
+            let savedHandle = await getDirHandleFromIDB(activeProjectId);
+            if (!savedHandle) {
+                savedHandle = await getDirHandleFromIDB("__last_used_folder__");
+            }
+            if (!savedHandle) {
+                headerRestoreBtn.style.display = 'none';
+                restoreCard.style.display = 'none';
+                return false;
+            }
+
+            const loaded = await loadFromDirectoryHandle(savedHandle, askPermission);
+            if (!loaded) {
+                headerRestoreBtn.style.display = 'inline-flex';
+                headerRestoreBtn.textContent = `🔄 Mở Lại: ${savedHandle.name}`;
+                restoreCard.style.display = 'flex';
+                restoreCardTitle.textContent = `Đã ghi nhớ thư mục: "${savedHandle.name}"`;
+                document.getElementById('menu-container').innerHTML = `
+                    <div style="padding: 15px; font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+                        Đã lưu thư mục <b>${savedHandle.name}</b>.<br>
+                        Bấm nút <b>"Mở Lại: ${savedHandle.name}"</b> ở thanh trên để cấp quyền hiển thị lại danh sách file.
+                    </div>
+                `;
+            } else {
+                headerRestoreBtn.style.display = 'none';
+                restoreCard.style.display = 'none';
+                if (askPermission) {
+                    showToast(`✅ Đã khôi phục thư mục: ${savedHandle.name}`);
+                }
+            }
+            return loaded;
+        };
+
+        window.refreshCurrentFolder = async function() {
+            if (!currentDirHandle) {
+                await restoreSavedFolder(true);
+                return;
+            }
+            await loadFromDirectoryHandle(currentDirHandle, true);
+            showToast("↻ Đã làm mới danh sách file!");
+        };
+
+        async function loadFromDirectoryHandle(dirHandle, askPermission = false, targetFileToOpen = null) {
+            try {
+                const opts = { mode: 'readwrite' };
+                let perm = await dirHandle.queryPermission(opts);
+                if (perm !== 'granted' && askPermission) {
+                    perm = await dirHandle.requestPermission(opts);
+                }
+                if (perm !== 'granted') return false;
+
+                currentDirHandle = dirHandle;
+                sidebarTitle.textContent = `📁 ${dirHandle.name}`;
+
+                const groupedFiles = {};
+                fileLookupByPath.clear();
+
+                async function scanDirectory(directoryHandle, path = '') {
+                    for await (const entry of directoryHandle.values()) {
+                        const currentPath = path ? `${path}/${entry.name}` : entry.name;
+
+                        if (entry.kind === 'file') {
+                            const dotIdx = entry.name.lastIndexOf('.');
+                            const ext = dotIdx !== -1 ? entry.name.slice(dotIdx).toLowerCase() : '';
+                            if (ALLOWED_EXTENSIONS.includes(ext)) {
+                                const folderName = path || 'Thư mục gốc (/)';
+                                if (!groupedFiles[folderName]) groupedFiles[folderName] = [];
+                                const fileObj = {
+                                    name: entry.name,
+                                    path: currentPath,
+                                    folderPath: path,
+                                    ext: ext.replace('.', ''),
+                                    handle: entry,
+                                    parentHandle: directoryHandle
+                                };
+                                groupedFiles[folderName].push(fileObj);
+                                fileLookupByPath.set(currentPath, fileObj);
+                            }
+                        } else if (entry.kind === 'directory') {
+                            if (entry.name !== '.git' && entry.name !== 'node_modules') {
+                                await scanDirectory(entry, currentPath);
+                            }
+                        }
+                    }
+                }
+
+                await scanDirectory(dirHandle);
+                allGroupedFiles = groupedFiles;
+                updateExistingFoldersDatalist(groupedFiles);
+
+                const searchVal = document.getElementById('file-search-input').value || '';
+                renderMenu(groupedFiles, searchVal);
+
+                const openPath = targetFileToOpen || localStorage.getItem(LAST_OPEN_FILE_PREFIX + activeProjectId);
+                if (openPath && fileLookupByPath.has(openPath)) {
+                    const targetEl = document.querySelector(`.file-item[data-path="${CSS.escape(openPath)}"]`);
+                    await openFile(fileLookupByPath.get(openPath), targetEl, true);
+                }
+
+                return true;
+            } catch (err) {
+                console.error("Lỗi quét thư mục:", err);
+                return false;
+            }
+        }
+
+        function updateExistingFoldersDatalist(groupedFiles) {
+            const datalist = document.getElementById('existing-folders-list');
+            const folders = Object.keys(groupedFiles).filter(f => f !== 'Thư mục gốc (/)').sort();
+            datalist.innerHTML = folders.map(f => `<option value="${f}">`).join('');
+        }
+
+        function renderMenu(groupedFiles, filterText = '') {
+            const container = document.getElementById('menu-container');
+            container.innerHTML = '';
+
+            const keyword = filterText.trim().toLowerCase();
+            const folders = Object.keys(groupedFiles).sort((a, b) => {
+                if (a === 'Thư mục gốc (/)') return -1;
+                if (b === 'Thư mục gốc (/)') return 1;
+                return a.localeCompare(b);
+            });
+
+            if (folders.length === 0) {
+                container.innerHTML = '<p style="padding:15px; font-size:13px; color:var(--text-muted);">Không tìm thấy file phù hợp.</p>';
+                return;
+            }
+
+            let totalRendered = 0;
+
+            folders.forEach(folder => {
+                const matchedFiles = groupedFiles[folder]
+                    .filter(f => !keyword || f.name.toLowerCase().includes(keyword) || folder.toLowerCase().includes(keyword))
+                    .sort((a, b) => a.name.localeCompare(b.name));
+
+                if (matchedFiles.length === 0) return;
+                totalRendered += matchedFiles.length;
+
+                const realFolderPath = folder === 'Thư mục gốc (/)' ? '' : folder;
+
+                const groupDiv = document.createElement('div');
+                groupDiv.className = 'folder-group';
+
+                const folderHeader = document.createElement('div');
+                folderHeader.className = 'folder-header';
+
+                const folderTitleSpan = document.createElement('span');
+                folderTitleSpan.textContent = `📁 ${folder}`;
+                folderTitleSpan.style.overflow = 'hidden';
+                folderTitleSpan.style.textOverflow = 'ellipsis';
+                folderTitleSpan.style.whiteSpace = 'nowrap';
+
+                const rightBox = document.createElement('div');
+                rightBox.className = 'folder-header-right';
+
+                const addInFolderBtn = document.createElement('button');
+                addInFolderBtn.className = 'folder-add-btn';
+                addInFolderBtn.textContent = '+';
+                addInFolderBtn.title = `Tạo file mới trong "${folder}"`;
+                addInFolderBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    openNewFileModal(realFolderPath);
+                };
+
+                const countSpan = document.createElement('span');
+                countSpan.className = 'folder-count';
+                countSpan.textContent = matchedFiles.length;
+
+                rightBox.appendChild(addInFolderBtn);
+                rightBox.appendChild(countSpan);
+
+                folderHeader.appendChild(folderTitleSpan);
+                folderHeader.appendChild(rightBox);
+                folderHeader.onclick = () => groupDiv.classList.toggle('collapsed');
+
+                folderHeader.oncontextmenu = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    showFileContextMenu(e.clientX, e.clientY, {
+                        type: 'folder',
+                        folderPath: realFolderPath,
+                        displayLabel: `📁 ${folder}`
+                    });
+                };
+
+                const ul = document.createElement('ul');
+                ul.className = 'file-list';
+
+                matchedFiles.forEach(file => {
+                    const li = document.createElement('li');
+                    const isCopied = copiedFileObj && copiedFileObj.path === file.path;
+                    li.className = 'file-item'
+                        + (file.path === currentFilePath ? ' active' : '')
+                        + (isCopied ? ' copied-target' : '');
+                    li.setAttribute('data-path', file.path);
+                    li.title = `${file.path} (Chuột phải để Copy / Dán / Xóa)`;
+                    li.innerHTML = `
+                        <span class="file-name">${file.name}</span>
+                        <span class="badge badge-${file.ext}">${file.ext}</span>
+                    `;
+                    li.onclick = () => openFile(file, li);
+
+                    li.oncontextmenu = (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        showFileContextMenu(e.clientX, e.clientY, {
+                            type: 'file',
+                            file,
+                            folderPath: file.folderPath,
+                            displayLabel: `📄 ${file.name}`
+                        });
+                    };
+
+                    ul.appendChild(li);
+                });
+
+                groupDiv.appendChild(folderHeader);
+                groupDiv.appendChild(ul);
+                container.appendChild(groupDiv);
+            });
+
+            if (totalRendered === 0) {
+                container.innerHTML = '<p style="padding:15px; font-size:13px; color:var(--text-muted);">Không có file nào khớp từ khóa tìm kiếm.</p>';
+            }
+        }
+
+        // ================= MENU CHUỘT PHẢI: COPY, DÁN, XÓA =================
+        function showFileContextMenu(x, y, target) {
+            contextTarget = target;
+
+            const labelEl = document.getElementById('ctx-target-label');
+            const copyBtn = document.getElementById('ctx-copy-btn');
+            const pasteBtn = document.getElementById('ctx-paste-btn');
+            const pasteHint = document.getElementById('ctx-paste-hint');
+            const deleteBtn = document.getElementById('ctx-delete-btn');
+            const deleteDivider = document.getElementById('ctx-delete-divider');
+
+            labelEl.textContent = target.displayLabel;
+
+            if (target.type === 'file') {
+                copyBtn.style.display = 'flex';
+                deleteBtn.style.display = 'flex';
+                deleteDivider.style.display = 'block';
+            } else {
+                copyBtn.style.display = 'none';
+                deleteBtn.style.display = 'none';
+                deleteDivider.style.display = 'none';
+            }
+
+            if (copiedFileObj) {
+                pasteBtn.disabled = false;
+                pasteHint.textContent = copiedFileObj.name;
+            } else {
+                pasteBtn.disabled = true;
+                pasteHint.textContent = 'Chưa copy';
+            }
+
+            contextMenu.style.display = 'block';
+
+            const rect = contextMenu.getBoundingClientRect();
+            const posX = (x + rect.width > window.innerWidth) ? window.innerWidth - rect.width - 8 : x;
+            const posY = (y + rect.height > window.innerHeight) ? window.innerHeight - rect.height - 8 : y;
+            contextMenu.style.left = `${Math.max(8, posX)}px`;
+            contextMenu.style.top = `${Math.max(8, posY)}px`;
+        }
+
+        function hideFileContextMenu() {
+            contextMenu.style.display = 'none';
+        }
+
+        document.addEventListener('click', (e) => {
+            if (!contextMenu.contains(e.target)) {
+                hideFileContextMenu();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                hideFileContextMenu();
+            }
+        });
+
+        function updateClipboardBanner() {
+            const banner = document.getElementById('clipboard-banner');
+            const label = document.getElementById('clipboard-label');
+            if (copiedFileObj) {
+                banner.style.display = 'flex';
+                label.textContent = `📋 Đã copy: ${copiedFileObj.name}`;
+                label.title = `Nguồn: ${copiedFileObj.path} — Chuột phải vào thư mục hoặc file bất kỳ để Dán`;
+            } else {
+                banner.style.display = 'none';
+            }
+            const searchVal = document.getElementById('file-search-input').value || '';
+            if (Object.keys(allGroupedFiles).length > 0) {
+                renderMenu(allGroupedFiles, searchVal);
+            }
+        }
+
+        window.clearClipboardFile = function() {
+            copiedFileObj = null;
+            updateClipboardBanner();
+        };
+
+        window.handleContextCopy = function() {
+            hideFileContextMenu();
+            if (!contextTarget || contextTarget.type !== 'file') return;
+            copiedFileObj = contextTarget.file;
+            updateClipboardBanner();
+            showToast(`📋 Đã copy "${copiedFileObj.name}". Chuột phải để Dán!`);
+        };
+
+        async function getDirectoryHandleByRelativePath(rootHandle, folderPath, create = false) {
+            let dir = rootHandle;
+            if (!folderPath) return dir;
+            const parts = folderPath.split('/').filter(Boolean);
+            for (const part of parts) {
+                dir = await dir.getDirectoryHandle(part, { create });
+            }
+            return dir;
+        }
+
+        function generateUniqueCopyName(baseName, folderPath) {
+            const dotIdx = baseName.lastIndexOf('.');
+            const nameOnly = dotIdx !== -1 ? baseName.slice(0, dotIdx) : baseName;
+            const ext = dotIdx !== -1 ? baseName.slice(dotIdx) : '';
+
+            let candidate = `${nameOnly}-copy${ext}`;
+            let counter = 2;
+            const makePath = (n) => folderPath ? `${folderPath}/${n}` : n;
+
+            while (fileLookupByPath.has(makePath(candidate))) {
+                candidate = `${nameOnly}-copy-${counter}${ext}`;
+                counter++;
+            }
+            return candidate;
+        }
+
+        window.handleContextPaste = async function() {
+            hideFileContextMenu();
+            if (!copiedFileObj || !currentDirHandle || !contextTarget) return;
+
+            try {
+                const targetFolderPath = contextTarget.folderPath || '';
+                const targetDirHandle = await getDirectoryHandleByRelativePath(currentDirHandle, targetFolderPath, true);
+
+                const srcFile = await copiedFileObj.handle.getFile();
+                const content = await srcFile.text();
+
+                let targetFileName = copiedFileObj.name;
+                const checkPath = targetFolderPath ? `${targetFolderPath}/${targetFileName}` : targetFileName;
+
+                if (fileLookupByPath.has(checkPath)) {
+                    const suggestedName = generateUniqueCopyName(copiedFileObj.name, targetFolderPath);
+                    const userChoice = prompt(
+                        `File "${targetFileName}" đã tồn tại trong thư mục đích.\nNhập tên mới để dán (hoặc bấm OK để dùng tên gợi ý bên dưới):`,
+                        suggestedName
+                    );
+                    if (userChoice === null) return;
+                    const trimmed = userChoice.trim();
+                    if (!trimmed) return;
+                    targetFileName = trimmed;
+                }
+
+                const destFileHandle = await targetDirHandle.getFileHandle(targetFileName, { create: true });
+                const writable = await destFileHandle.createWritable();
+                await writable.write(content);
+                await writable.close();
+
+                const newFullPath = targetFolderPath ? `${targetFolderPath}/${targetFileName}` : targetFileName;
+                await syncEditActivityToFirebase(newFullPath);
+                await loadFromDirectoryHandle(currentDirHandle, true, newFullPath);
+                showToast(`📥 Đã dán thành công: ${newFullPath}`);
+            } catch (err) {
+                console.error(err);
+                alert("Không thể dán file: " + err.message);
+            }
+        };
+
+        window.handleContextDelete = async function() {
+            hideFileContextMenu();
+            if (!contextTarget || contextTarget.type !== 'file' || !currentDirHandle) return;
+
+            const fileToDelete = contextTarget.file;
+            const ok = confirm(`Bạn có chắc muốn XÓA VĨNH VIỄN file:\n"${fileToDelete.path}" khỏi máy tính không?\n\n(Hành động này không thể hoàn tác)`);
+            if (!ok) return;
+
+            try {
+                const parentDir = fileToDelete.parentHandle
+                    || await getDirectoryHandleByRelativePath(currentDirHandle, fileToDelete.folderPath, false);
+
+                await parentDir.removeEntry(fileToDelete.name);
+
+                if (copiedFileObj && copiedFileObj.path === fileToDelete.path) {
+                    copiedFileObj = null;
+                    updateClipboardBanner();
+                }
+
+                if (currentFilePath === fileToDelete.path) {
+                    localStorage.removeItem(LAST_OPEN_FILE_PREFIX + activeProjectId);
+                    resetEditorArea();
+                }
+
+                await loadFromDirectoryHandle(currentDirHandle, true);
+                showToast(`🗑️ Đã xóa file: ${fileToDelete.name}`);
+            } catch (err) {
+                console.error(err);
+                alert("Không thể xóa file: " + err.message);
+            }
+        };
+
+        window.filterMenuFiles = function(keyword) {
+            renderMenu(allGroupedFiles, keyword);
+        };
+
+        window.toggleAllFolders = function(collapse) {
+            document.querySelectorAll('.folder-group').forEach(el => {
+                if (collapse) el.classList.add('collapsed');
+                else el.classList.remove('collapsed');
+            });
+        };
+
+        // ================= TẠO & LƯU FILE MỚI =================
+        function getDefaultStarterContent(templateType, fileName) {
+            if (templateType === 'current') {
+                return editor.value || '';
+            }
+            if (templateType === 'html') {
+                const title = fileName.replace(/\.html$/i, '');
+                return `<!DOCTYPE html>\n<html lang="vi">\n<head>\n    <meta charset="UTF-8">\n    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n    <title>${title}</title>\n</head>\n<body>\n    \n</body>\n</html>\n`;
+            }
+            if (templateType === 'json') {
+                return `{\n    \n}\n`;
+            }
+            if (templateType === 'js') {
+                return `// ${fileName}\n`;
+            }
+            return '';
+        }
+
+        window.openNewFileModal = async function(defaultFolder = '', defaultTemplate = 'empty') {
+            if (!currentDirHandle) {
+                const restored = await restoreSavedFolder(true);
+                if (!restored && !currentDirHandle) {
+                    alert("Vui lòng bấm 'Chọn Thư Mục Mới' trước khi tạo file mới trong dự án!");
+                    return;
+                }
+            }
+            document.getElementById('new-file-modal-title').textContent =
+                defaultTemplate === 'current' ? '📑 Lưu Thành File Mới (Save As)' : '➕ Tạo & Lưu File Mới';
+            document.getElementById('new-file-folder').value = defaultFolder;
+            document.getElementById('new-file-name').value = '';
+            document.getElementById('new-file-template').value = defaultTemplate;
+            document.getElementById('new-file-modal').style.display = 'flex';
+            setTimeout(() => document.getElementById('new-file-name').focus(), 50);
+        };
+
+        window.saveAsNewFile = function() {
+            const currentFolder = currentFilePath.includes('/')
+                ? currentFilePath.substring(0, currentFilePath.lastIndexOf('/'))
+                : '';
+            openNewFileModal(currentFolder, 'current');
+        };
+
+        window.closeNewFileModal = function() {
+            document.getElementById('new-file-modal').style.display = 'none';
+        };
+
+        window.confirmCreateNewFile = async function() {
+            if (!currentDirHandle) return;
+
+            const rawFolder = document.getElementById('new-file-folder').value
+                .trim()
+                .replace(/\\/g, '/')
+                .replace(/^\/+|\/+$/g, '');
+            const rawFileName = document.getElementById('new-file-name').value.trim();
+            const templateType = document.getElementById('new-file-template').value;
+
+            if (!rawFileName) {
+                alert("Vui lòng nhập tên file mới!");
+                return;
+            }
+            if (rawFileName.includes('/') || rawFileName.includes('\\')) {
+                alert("Tên file không được chứa dấu gạch chéo. Hãy nhập tên thư mục con ở ô phía trên.");
+                return;
+            }
+
+            const dotIdx = rawFileName.lastIndexOf('.');
+            const ext = dotIdx !== -1 ? rawFileName.slice(dotIdx).toLowerCase() : '';
+            if (!ALLOWED_EXTENSIONS.includes(ext)) {
+                alert(`Vui lòng đặt đuôi file thuộc danh sách hỗ trợ: ${ALLOWED_EXTENSIONS.join(', ')}`);
+                return;
+            }
+
+            const fullPath = rawFolder ? `${rawFolder}/${rawFileName}` : rawFileName;
+
+            if (fileLookupByPath.has(fullPath)) {
+                if (!confirm(`File "${fullPath}" đã tồn tại. Bạn có muốn ghi đè nội dung mới lên file này không?`)) {
+                    return;
+                }
+            }
+
+            try {
+                const targetDir = await getDirectoryHandleByRelativePath(currentDirHandle, rawFolder, true);
+                const newFileHandle = await targetDir.getFileHandle(rawFileName, { create: true });
+                const initialContent = getDefaultStarterContent(templateType, rawFileName);
+
+                const writable = await newFileHandle.createWritable();
+                await writable.write(initialContent);
+                await writable.close();
+
+                closeNewFileModal();
+                await syncEditActivityToFirebase(fullPath);
+                await loadFromDirectoryHandle(currentDirHandle, true, fullPath);
+                showToast(`✅ Đã tạo & lưu file mới: ${fullPath}`);
+            } catch (err) {
+                console.error(err);
+                alert("Không thể tạo file mới: " + err.message);
+            }
+        };
+
+        function resetEditorArea() {
+            currentFileHandle = null;
+            currentFilePath = "";
+            isDirty = false;
+            editor.value = "";
+            editorWrapper.style.display = 'none';
+            editorToolbar.style.display = 'none';
+            emptyState.style.display = 'flex';
+            saveBtn.disabled = true;
+            saveAsBtn.style.display = 'none';
+            reloadFileBtn.style.display = 'none';
+            fileInfo.innerHTML = 'Chưa mở file nào';
+            renderLineNumbers(true);
+        }
+
+        async function openFile(fileObj, element, skipConfirm = false) {
+            if (!skipConfirm && isDirty && fileObj.path !== currentFilePath) {
+                if (!confirm("File hiện tại có thay đổi chưa lưu. Bạn muốn bỏ thay đổi và mở file khác?")) return;
+            }
+            try {
+                document.querySelectorAll('.file-item').forEach(el => el.classList.remove('active'));
+                if (element) element.classList.add('active');
+
+                const file = await fileObj.handle.getFile();
+                const content = await file.text();
+
+                currentFileHandle = fileObj.handle;
+                currentFilePath = fileObj.path;
+                localStorage.setItem(LAST_OPEN_FILE_PREFIX + activeProjectId, currentFilePath);
+
+                editor.value = content;
+                editor.scrollTop = 0;
+                editor.scrollLeft = 0;
+                editorWrapper.style.display = 'flex';
+                editorToolbar.style.display = 'flex';
+                emptyState.style.display = 'none';
+                saveAsBtn.style.display = 'inline-flex';
+                reloadFileBtn.style.display = 'inline-flex';
+                formatJsonBtn.style.display = fileObj.ext === 'json' ? 'inline-block' : 'none';
+
+                setDirtyState(false);
+                updateEditorStats();
+                renderLineNumbers(true);
+            } catch (err) {
+                alert("Không thể đọc file này: " + err.message);
+            }
+        }
+
+        window.reloadCurrentFile = async function() {
+            if (!currentFileHandle) return;
+            if (isDirty && !confirm("Tải lại từ ổ cứng sẽ mất các sửa đổi chưa lưu. Tiếp tục?")) return;
+            const file = await currentFileHandle.getFile();
+            editor.value = await file.text();
+            setDirtyState(false);
+            updateEditorStats();
+            renderLineNumbers(true);
+            showToast("↻ Đã tải lại nội dung gốc của file!");
+        };
+
+        function setDirtyState(dirty) {
+            isDirty = dirty;
+            saveBtn.disabled = !dirty;
+            if (!currentFilePath) return;
+            fileInfo.innerHTML = dirty
+                ? `Đang sửa: <span>${currentFilePath}</span><span class="dirty-dot">● (chưa lưu)</span>`
+                : `Đang sửa: <span>${currentFilePath}</span>`;
+        }
+
+        window.saveCurrentFile = async function() {
+            if (!currentFileHandle) return;
+            try {
+                const writable = await currentFileHandle.createWritable();
+                await writable.write(editor.value);
+                await writable.close();
+                setDirtyState(false);
+                await syncEditActivityToFirebase(currentFilePath);
+                showToast("✅ Đã lưu file! Nhớ push thủ công lên GitHub nhé.");
+            } catch (err) {
+                alert("Lỗi khi lưu file: " + err.message);
+            }
+        };
+
+        // ================= TIỆN ÍCH TRONG KHUNG SOẠN THẢO =================
+        function updateEditorStats() {
+            const text = editor.value;
+            const lines = text ? text.split('\n').length : 1;
+            editorStats.textContent = `Dòng: ${lines} | Ký tự: ${text.length}`;
+        }
+
+        window.findNextInEditor = function() {
+            const query = document.getElementById('find-input').value;
+            if (!query) return;
+            const text = editor.value;
+            const startPos = editor.selectionEnd || 0;
+            let idx = text.toLowerCase().indexOf(query.toLowerCase(), startPos);
+            if (idx === -1) {
+                idx = text.toLowerCase().indexOf(query.toLowerCase(), 0);
+            }
+            if (idx === -1) {
+                showToast("Không tìm thấy từ khóa này!");
+                return;
+            }
+            editor.focus();
+            editor.setSelectionRange(idx, idx + query.length);
+        };
+
+        window.replaceOneInEditor = function() {
+            const query = document.getElementById('find-input').value;
+            const replacement = document.getElementById('replace-input').value;
+            if (!query) return;
+            const selected = editor.value.substring(editor.selectionStart, editor.selectionEnd);
+            if (selected.toLowerCase() === query.toLowerCase()) {
+                const start = editor.selectionStart;
+                editor.value = editor.value.substring(0, start) + replacement + editor.value.substring(editor.selectionEnd);
+                editor.setSelectionRange(start, start + replacement.length);
+                setDirtyState(true);
+                updateEditorStats();
+                renderLineNumbers();
+            }
+            findNextInEditor();
+        };
+
+        window.replaceAllInEditor = function() {
+            const query = document.getElementById('find-input').value;
+            const replacement = document.getElementById('replace-input').value;
+            if (!query) return;
+            const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const regex = new RegExp(escaped, 'gi');
+            const matches = editor.value.match(regex);
+            if (!matches) {
+                showToast("Không có kết quả nào để thay thế.");
+                return;
+            }
+            editor.value = editor.value.replace(regex, replacement);
+            setDirtyState(true);
+            updateEditorStats();
+            renderLineNumbers();
+            showToast(`Đã thay thế ${matches.length} vị trí!`);
+        };
+
+        window.formatJsonIfValid = function() {
+            try {
+                const parsed = JSON.parse(editor.value);
+                editor.value = JSON.stringify(parsed, null, 4);
+                setDirtyState(true);
+                updateEditorStats();
+                renderLineNumbers();
+                showToast("✨ Đã định dạng đẹp file JSON!");
+            } catch (e) {
+                alert("File JSON đang có lỗi cú pháp nên chưa thể format:\n" + e.message);
+            }
+        };
+
+        editor.addEventListener('input', () => {
+            setDirtyState(true);
+            updateEditorStats();
+            renderLineNumbers();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+                e.preventDefault();
+                if (!saveBtn.disabled) window.saveCurrentFile();
+            }
+        });
+
+        editor.addEventListener('keydown', function(e) {
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                const start = this.selectionStart;
+                const end = this.selectionEnd;
+                this.value = this.value.substring(0, start) + "    " + this.value.substring(end);
+                this.selectionStart = this.selectionEnd = start + 4;
+                setDirtyState(true);
+                renderLineNumbers();
+            }
+        });
+
+        window.addEventListener('beforeunload', (e) => {
+            if (isDirty) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2600);
+        }
+    </script>
+</body>
+</html>

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thiệp Cưới ONLINE</title>
+    <link rel="icon" type="image/png" href="anh/logo.png">
     <style>
         /* --- 1. CÀI ĐẶT CHUNG --- */
         * {
@@ -18,113 +19,70 @@
             color: #333;
         }
 
-
-/* --- 2. PHẦN BANNER MỚI --- */
-
+        /* --- 2. PHẦN BANNER --- */
         .banner {
-    position: relative;
-    width: 100%;
-}
+            position: relative;
+            width: 100%;
+        }
 
-.banner img {
-    display: block;
-    width: 100%;
-    height: auto;
-}
+        .banner img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
 
-.banner-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90%;
-    color: white;
-    text-align: center;
-}
+        .banner-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            color: white;
+            text-align: center;
+        }
 
-/* Khung bọc giới hạn độ rộng bằng thanh ngang tiêu đề */
-.banner-giua-trang {
-    max-width: 1200px;       /* Ép độ rộng tối đa bằng đúng khung nội dung */
-    margin: 10px auto;       /* Tự động căn giữa và tạo khoảng cách 30px với khối trên/dưới */
-    padding: 0 15px;         /* Khoảng đệm an toàn khi xem trên điện thoại */
-    width: 100%;
-    box-sizing: border-box;
-}
+        /* Thanh tìm kiếm ở góc phải banner */
+        .banner-search {
+            position: absolute;
+            top: 50%;
+            right: 50px;
+            transform: translateY(-50%);
+            z-index: 10;
+        }
 
-/* Định dạng cho tấm ảnh bên trong tự động co giãn mềm mại */
-.banner-giua-trang img {
-    width: 100%;             /* Ép ảnh luôn rộng hết 100% lề của cái hộp 1200px */
-    height: auto;            /* Tự động tính chiều cao theo tỷ lệ gốc để ảnh không bị méo */
-    display: block;          /* Xóa khoảng trống thừa dưới đáy ảnh của trình duyệt */
-    border-radius: 6px;      /* Bo tròn nhẹ 4 góc ảnh cho mềm mại giống các hộp box */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* Tạo bóng đổ nhẹ xung quanh tấm ảnh cho sang trọng */
-    transition: transform 0.2s ease; /* Hiệu ứng mượt mà khi rê chuột */
-}
+        .banner-search form {
+            display: flex;
+            align-items: center;
+            width: 260px;
+            height: 40px;
+            background: #fff;
+            border: 1px solid #ead4cc;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
 
-/* Thanh tìm kiếm ở góc phải banner */
-.banner {
-    position: relative;
-}
+        .banner-search input {
+            flex: 1;
+            min-width: 0;
+            height: 100%;
+            padding: 0 14px;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: #333;
+            font-size: 14px;
+        }
 
-.banner-search {
-position: absolute;
-top: 50%;
-right: 50px;
-transform: translateY(-50%);
-z-index: 10;
-}
-
-.banner-search form {
-    display: flex;
-    align-items: center;
-    width: 260px;
-    height: 40px;
-    background: #fff;
-    border: 1px solid #ead4cc;
-    border-radius: 25px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-.banner-search input {
-    flex: 1;
-    min-width: 0;
-    height: 100%;
-    padding: 0 14px;
-    border: none;
-    outline: none;
-    background: transparent;
-    color: #333;
-    font-size: 14px;
-}
-
-.banner-search button {
-    height: 100%;
-    padding: 0 13px;
-    border: none;
-    background: #fff;
-    color: white;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.banner-search button:hover {
-    background: #fff;
-}
-
-/* Hiển thị phù hợp trên điện thoại */
-@media (max-width: 600px) {
-    .banner-search {
-        top: 8px;
-        right: 8px;
-    }
-
-    .banner-search form {
-        width: 190px;
-        height: 34px;
-    }
-}
-
+        .banner-search button {
+            height: 100%;
+            padding: 0 13px;
+            border: none;
+            background: #fff;
+            color: #333;
+            cursor: pointer;
+            font-size: 16px;
+        }
 
         /* --- 3. THANH MENU NGANG SHOPPING --- */
         .navbar {
@@ -188,143 +146,28 @@ z-index: 10;
             display: block;
         }
 
-                /*-------- TIÊU ĐỀ DANH MỤC CÓ GẠCH DÁI DƯỚI ------------*/
-.cum-tieu-de-danh-muc {
-    max-width: 1200px; /* Bạn có thể chỉnh lại số này trùng với max-width khối nội dung của bạn */
-    margin: 30px auto 25px auto; /* Khoảng cách trên và dưới dòng tiêu đề */
-    padding: 0 15px;
-    width: 100%;
-    box-sizing: border-box;}
-    /* Định dạng cho chữ h2 bên trong khối */
-.cum-tieu-de-danh-muc h2 {
-    font-weight: bold;
-    text-transform: uppercase; /* Ép chữ luôn viết hoa */
-    margin: 0;
-    padding-bottom: 10px; /* Khoảng cách giữa chữ và đường gạch dưới */
-    
-    /* ĐƯỜNG GẠCH NGANG DÀI HẾT KHUNG NỘI DUNG */
-    /* Lệnh currentColor giúp đường gạch tự động đổi màu theo màu của chữ h2 bên trên */
-    border-bottom: 2px solid currentColor; }
+        /* --- TIÊU ĐỀ DANH MỤC CÓ GẠCH DƯỚI --- */
+        .cum-tieu-de-danh-muc {
+            max-width: 1200px;
+            margin: 30px auto 25px auto;
+            padding: 0 15px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .cum-tieu-de-danh-muc h2 {
+            font-weight: bold;
+            text-transform: uppercase;
+            margin: 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid currentColor;
+        }
 
-    /* =========================================================
-   TỰ ĐỘNG CHUYỂN ĐỔI GIAO DIỆN ĐIỆN THOẠI (DƯỚI 768_PIXEL)
-========================================================= */
-@media (max-width: 768px) {
-    
-    /* 1. Biến các hàng ngang bọc 3 box thành hàng dọc để lướt vuốt */
-    .vung-chua-3-box,
-    .trang-chu-container,
-    .box-flex {
-        display: flex !important;
-        flex-direction: column !important; /* Ép xếp dọc từ trên xuống */
-        height: auto !important;           /* Hủy chiều cao cố định để không bị vỡ khung */
-        gap: 15px !important;
-    }
-
-    /* 2. Ép các ô iframe mở rộng hết 100% chiều ngang màn hình điện thoại */
-    iframe {
-        width: 100% !important;
-        height: 750px !important; /* Đặt chiều cao vừa vặn cho 1 màn hình dọc di động */
-        flex: none !important;
-    }
-
-    /* 3. Tối ưu lại kích thước chữ Menu trên điện thoại cho khỏi dính nhau */
-    .navbar a {
-        padding: 10px 8px !important;
-        font-size: 14px !important;
-    }
-}
-
-/* =========================================================
-   1. ĐỊNH DẠNG MẶC ĐỊNH (KHI XEM TRÊN MÁY TÍNH PC)
-========================================================= */
-/* Mặc định trên máy tính: HIỆN giao diện PC và ẨN giao diện Điện thoại đi */
-.navbar-mobile,
-.banner-mobile,
-.footer-mobile {
-    display: none !important;
-}
-
-/* =========================================================
-   2. ĐỊNH DẠNG KHI CHUYỂN SANG MÀN HÌNH ĐIỆN THOẠI (DƯỚI 768PX)
-========================================================= */
-@media (max-width: 768px) {
-    /* ➔ BẤT CÔNG TẮC: ẨN sạch sẽ giao diện máy tính dài dòng đi */
-    .navbar,
-    .banner,
-    .footer,
-    .menu-item,
-    .banner-search 
-    {
-        display: none !important;
-    }
-
-    /* ➔ BẬT CÔNG TẮC: HIỆN giao diện điện thoại thu gọn lên */
-    .navbar-mobile {
-        display: flex !important;
-        justify-content: space-around;
-        background: #526456; /* Màu xanh lá Giáo xứ */
-        padding: 12px 5px;
-        position: sticky;
-        top: 0;
-        z-index: 999;
-    }
-    .navbar-mobile a {
-        color: #ffffff;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 14.5px;
-    }
-
-    /* Thiết kế riêng cho ảnh Banner điện thoại */
-    .banner-mobile {
-        display: block !important;
-        width: 100%;
-        margin-bottom: 10px;
-    }
-    .banner-mobile img {
-        width: 100%;
-        height: auto; /* Tự co giãn vừa vặn màn hình dọc */
-        display: block;
-    }
-
-    /* Thiết kế riêng cho Chân web di động siêu ngắn gọn */
-    .footer-mobile {
-        display: block !important;
-        background: #115e07;
-        color: #ffffff;
-        text-align: center;
-        padding: 15px 10px;
-        font-size: 13px;
-        line-height: 1.6;
-        margin-top: 30px;
-    }
-}
-
-        /* --- 5. KHU VỰC SẢN PHẨM --- */
+        /* --- 5. KHU VỰC SẢN PHẨM & KHUNG PREVIEW IFRAME TỰ ĐỘNG --- */
         .container {
             max-width: 1200px;
             margin: 40px auto;
             padding: 0 20px;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 30px;
-            position: relative;
-            padding-bottom: 10px;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 70px;
-            height: 3px;
-            background-color: #381a1f;
         }
 
         .product-grid {
@@ -349,10 +192,49 @@ z-index: 10;
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
 
-        .product-img {
+        /* Khung bọc iframe thu nhỏ làm ảnh đại diện tự động */
+        .preview-thumb-box {
+            position: relative;
             width: 100%;
-            height: 240px;
-            object-fit: cover;
+            height: 320px;
+            overflow: hidden;
+            background: linear-gradient(135deg, #fdfaf3, #f3e8d8);
+            border-bottom: 1px solid #eef0f5;
+        }
+
+        .preview-thumb-box iframe {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 1000px;  /* Giả lập màn hình rộng */
+            height: 1200px;
+            border: none;
+            transform: translateX(-50%) scale(0.28); /* Thu nhỏ vừa khít ô sản phẩm */
+            transform-origin: top center;
+            pointer-events: none; /* Khóa tương tác bên trong iframe */
+        }
+
+        .preview-click-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 5;
+            background: transparent;
+            transition: background 0.3s;
+        }
+
+        .product-card:hover .preview-click-overlay {
+            background: rgba(106, 7, 22, 0.06);
+        }
+
+        .preview-loading-text {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            color: #8c7a6b;
+            z-index: 1;
         }
 
         .product-info {
@@ -365,21 +247,10 @@ z-index: 10;
         .product-name {
             font-size: 1.05rem;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             color: #222;
             text-decoration: none;
-            height: 44px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .product-price {
-            font-size: 1.2rem;
-            color: #d93838;
-            font-weight: bold;
-            margin-bottom: 15px;
+            text-align: center;
         }
 
         .btn-buy {
@@ -397,7 +268,7 @@ z-index: 10;
             background-color: #9a3636;
         }
 
-           /* --- 6. PHẦN CHÂN TRANG (FOOTER) --- */
+        /* --- 6. PHẦN CHÂN TRANG (FOOTER) --- */
         footer {
             background-color: #e0e1e0;
             color: #000;
@@ -431,8 +302,6 @@ z-index: 10;
         }
 
         .footer-col p { margin-bottom: 10px; }
-        .footer-col strong { color: #000; }
-
         .footer-links { list-style: none; padding: 0; margin: 0; }
         .footer-links li { margin-bottom: 8px; }
         .footer-links a { color: #000; text-decoration: none; }
@@ -448,20 +317,69 @@ z-index: 10;
             width: 100%;
         }
 
-        @media (max-width: 768px) {
-            .main-menu { flex-direction: column; padding: 0; }
-            .dropdown-menu { position: static; width: 100%; }
-            .footer-container { flex-direction: column; }
-            .footer-col { padding-right: 0; }
-            footer { display: none !important; }
-        }
-
-        /* --- PHẦN CSS RIÊNG CHO FOOTER MOBILE --- */
-        .footer-mobile {
+        /* --- GIAO DIỆN MOBILE --- */
+        .navbar-mobile, .banner-mobile, .footer-mobile {
             display: none !important;
         }
 
         @media (max-width: 768px) {
+            .navbar, .banner, .footer, .menu-item, .banner-search {
+                display: none !important;
+            }
+
+            .navbar-mobile {
+                display: flex !important;
+                justify-content: space-around;
+                align-items: center;
+                background: #526456;
+                padding: 8px 5px;
+                position: sticky;
+                top: 0;
+                z-index: 999;
+            }
+
+            .navbar-mobile > a, .mobile-dropdown-btn {
+                color: #ffffff;
+                text-decoration: none;
+                font-weight: bold;
+                font-size: 14.5px;
+                cursor: pointer;
+                list-style: none;
+            }
+
+            .mobile-dropdown-content {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                background-color: #435247;
+                min-width: 200px;
+                box-shadow: 0px 8px 16px rgba(0,0,0,0.25);
+                border-radius: 6px;
+                margin-top: 8px;
+                overflow: hidden;
+                z-index: 1000;
+            }
+
+            .mobile-dropdown-content a {
+                color: #ffffff;
+                padding: 10px 16px;
+                text-decoration: none;
+                display: block;
+                font-size: 13.5px;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            }
+
+            .banner-mobile {
+                display: block !important;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            .banner-mobile img {
+                width: 100%;
+                height: auto;
+                display: block;
+            }
+
             .footer-mobile {
                 display: block !important;
                 background: #526456;
@@ -478,9 +396,7 @@ z-index: 10;
                 margin-bottom: 10px;
                 text-transform: uppercase;
             }
-            .footer-mobile p {
-                margin-bottom: 8px;
-            }
+            .footer-mobile p { margin-bottom: 8px; }
             .footer-mobile-actions {
                 display: flex;
                 justify-content: center;
@@ -505,105 +421,29 @@ z-index: 10;
                 color: #bbb;
             }
         }
-             @media (max-width: 768px) {
-    /* Giữ nguyên cấu trúc ẩn desktop */
-    .main-menu, .banner, .footer, .menu-item, .banner-search, .vung-chua-2-box { 
-        display: none !important; 
-    }
-
-    /* Thanh Menu Mobile Chính */
-    .navbar-mobile {
-        display: flex !important;
-        justify-content: space-around;
-        align-items: center;
-        background: #526456;
-        padding: 8px 5px;
-        position: sticky;
-        top: 0;
-        z-index: 999;
-    }
-
-    .navbar-mobile > a, 
-    .mobile-dropdown-btn {
-        color: #ffffff;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 14.5px;
-        cursor: pointer;
-        list-style: none; /* Xóa dấu mũi tên mặc định của summary */
-        user-select: none;
-    }
-
-    .mobile-dropdown-btn::-webkit-details-marker {
-        display: none; /* Xóa mũi tên mặc định trên Safari/Chrome */
-    }
-
-    /* Khung chứa Menu Con Xổ Xuống */
-    .mobile-dropdown {
-        position: relative;
-    }
-
-    .mobile-dropdown-content {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        background-color: #435247; /* Tông màu tối hơn menu chính để phân biệt */
-        min-width: 200px;
-        box-shadow: 0px 8px 16px rgba(0,0,0,0.25);
-        border-radius: 6px;
-        margin-top: 8px;
-        overflow: hidden;
-        z-index: 1000;
-    }
-
-    .mobile-dropdown-content a {
-        color: #ffffff;
-        padding: 10px 16px;
-        text-decoration: none;
-        display: block;
-        font-size: 13.5px;
-        font-weight: normal;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .mobile-dropdown-content a:last-child {
-        border-bottom: none;
-    }
-
-    .mobile-dropdown-content a:active {
-        background-color: #687b6c;
-    }
-}
-
-.product-card a img {
-    transition: transform 0.3s ease;
-}
-.product-card:hover img {
-    transform: scale(1.03); /* Phóng nhẹ ảnh lên khi rê chuột cho sinh động */
-}
-
     </style>
 </head>
 <body>
-    <!-- 1. BANNER CỬA HÀNG -->
-<div class="banner-mobile">
-    <a href="index.html"><img src="anh/banner-mobile.png" alt="Banner Điện Thoại"></a>
-</div>
 
+    <!-- BANNER MOBILE -->
+    <div class="banner-mobile">
+        <a href="index.html"><img src="anh/banner-mobile.png" alt="Banner Điện Thoại"></a>
+    </div>
+
+    <!-- BANNER PC -->
     <div class="banner">
         <img src="anh/banner.png" alt="Banner">
         <div class="banner-content">
-        <div class="banner-search">
-        <form action="index.html" method="get">
-        <input type="text" id="search-input" placeholder="Tìm thiệp cưới...">
-        <button type="button">🔍</button>
-        </form>
+            <div class="banner-search">
+                <form action="index.html" method="get">
+                    <input type="text" id="search-input" placeholder="Tìm thiệp cưới...">
+                    <button type="button">🔍</button>
+                </form>
+            </div>
         </div>
-        </div>
-        </div>
+    </div>
 
-    <!-- 2. THANH MENU HÀNG HÓA -->
-
+    <!-- THANH MENU PC -->
     <nav class="navbar">
         <ul class="main-menu">
             <li class="menu-item"><a href="index.html">Trang Chủ</a></li>
@@ -662,137 +502,17 @@ z-index: 10;
         <a href="lienhe.html">Liên Hệ</a>
     </nav>
 
-    <!-- 3. KHU VỰC HIỂN THỊ SẢN PHẨM THIỆP CƯỚI TRUYỀN THỐNG -->
+    <!-- KHU VỰC HIỂN THỊ SẢN PHẨM TỰ ĐỘNG -->
     <main class="container">
-
-            <!-- KHỐI TIÊU ĐỀ THIỆP CƯỚI TRUYỀN THỐNG -->
-<div class="cum-tieu-de-danh-muc">   
-    <!-- Bạn có thể chỉnh căn lề (left, center, right) và màu sắc ngay tại dòng h2 này -->
-    <h2 style="text-align: left; color: #6a0716; font-size: 24px;">THIỆP CƯỚI ONLINE</h2>
-
-</div>
-        
-        <div class="product-grid">
-            
-           <!-- Sản phẩm số 1 -->
-        <div class="product-card" data-description="Màu kem1 - Ruột in 2 mặt - Bao thư in 1 mặt">
-        <a href="thiep-online-01-02/thiep-online-mau-01.html" target="_blank" rel="noopener noreferrer">
-        <img src="hinh-thiep-online/mau-01.jpg" alt="Sản phẩm 1" class="product-img"></a>  
-        <div class="product-info">             
-        <a href="thiep-online-01-02/thiep-online-mau-01.html" class="product-name" target="_blank" rel="noopener noreferrer">Xem Demo  Mẫu-01</a>
-        <a href="thiep-online-01-02/admin-mau-01.html" class="btn-buy" target="_blank" rel="noopener noreferrer">Tạo Thiệp</a>
-    </div>
-</div>
-
-            <!-- Sản phẩm số 2 -->
-            <div class="product-card" data-description="Màu kem1 - Ruột in 2 mặt - Bao thư in 1 mặt">
-                <a href="thiep-online-01-02/thiep-online-mau-02.html" target="_blank" rel="noopener noreferrer">
-                <img src="hinh-thiep-online/mau-02.jpg" alt="Sản phẩm 1" class="product-img"></a>
-                <div class="product-info">
-                    <a href="thiep-online-01-02/thiep-online-mau-02.html" class="product-name" target="_blank" rel="noopener noreferrer">Xem Demo Mẫu-02</a>
-                    <a href="thiep-online-01-02/admin-mau-02.html" class="btn-buy"target="_blank" rel="noopener noreferrer">Tạo Thiệp</a>
-                </div>
-            </div>
-
-            <!-- Sản phẩm số 3 -->
-           <div class="product-card" data-description="Màu kem1 - Ruột in 2 mặt - Bao thư in 1 mặt">
-            <a href="thiep-online-03-04/thiep-online-mau-03.html" target="_blank" rel="noopener noreferrer">
-                <img src="hinh-thiep-online/mau-03.jpg" alt="Sản phẩm 1" class="product-img"></a>
-                <div class="product-info">
-                    <a href="thiep-online-03-04/thiep-online-mau-03.html" class="product-name" target="_blank" rel="noopener noreferrer">Xem Demo Mẫu-03</a>
-                    <a href="thiep-online-03-04/admin-mau-03.html" class="btn-buy"target="_blank" rel="noopener noreferrer">Tạo Thiệp</a>
-                </div>
-            </div>
-            <!-- Sản phẩm số 4 -->
-        <div class="product-card" data-description="Màu kem1 - Ruột in 2 mặt - Bao thư in 1 mặt">
-            <a href="thiep-online-03-04/thiep-online-mau-04.html" target="_blank" rel="noopener noreferrer">
-                <img src="hinh-thiep-online/mau-04.jpg" alt="Sản phẩm 1" class="product-img"></a>
-                <div class="product-info">
-                    <a href="thiep-online-03-04/thiep-online-mau-04.html" class="product-name" target="_blank" rel="noopener noreferrer">Xem Demo Mẫu-04</a>
-                    <a href="thiep-online-03-04/admin-mau-04.html" class="btn-buy"target="_blank" rel="noopener noreferrer">Tạo Thiệp</a>
-                </div>
-            </div>
-           <!-- Sản phẩm số 5 -->
-            <div class="product-card" data-description="Màu kem1 - Ruột in 2 mặt - Bao thư in 1 mặt">
-                <a href="thiep-online-05-06/thiep-online-mau-05.html" target="_blank" rel="noopener noreferrer">
-                <img src="hinh-thiep-online/mau-05.jpg" alt="Sản phẩm 1" class="product-img"></a>
-                <div class="product-info">
-                    <a href="thiep-online-05-06/thiep-online-mau-05.html?id=mGQ1LjEY5wj6F00Tc3pD" class="product-name" target="_blank" rel="noopener noreferrer">Xem Demo Mẫu-05</a>
-                    <a href="thiep-online-05-06/admin-mau-05.html" class="btn-buy"target="_blank" rel="noopener noreferrer">Tạo Thiệp</a>
-                </div>
-            </div>
-
-            <!-- Sản phẩm số 6 -->
-            <div class="product-card" data-description="Màu kem1 - Ruột in 2 mặt - Bao thư in 1 mặt">
-                <a href="thiep-online-05-06/thiep-online-mau-06.html" target="_blank" rel="noopener noreferrer">
-                <img src="hinh-thiep-online/mau-06.jpg" alt="Sản phẩm 1" class="product-img"></a>
-                <div class="product-info">
-                    <a href="thiep-online-05-06/thiep-online-mau-06.html" class="product-name" target="_blank" rel="noopener noreferrer">Xem Demo Mẫu-06</a>
-                    <a href="thiep-online-05-06/admin-mau-06.html" class="btn-buy"target="_blank" rel="noopener noreferrer">Tạo Thiệp</a>
-                </div>
-            </div>
-
-            <!-- Sản phẩm số 7 -->
-           <div class="product-card" data-description="Màu kem1 - Ruột in 2 mặt - Bao thư in 1 mặt">
-                <a href="thiep-online-07-08/thiep-online-mau-07.html" target="_blank" rel="noopener noreferrer">
-                <img src="hinh-thiep-online/mau-07.jpg" alt="Sản phẩm 1" class="product-img"></a>
-                <div class="product-info">
-                    <a href="thiep-online-07-08/thiep-online-mau-07.html" class="product-name" target="_blank" rel="noopener noreferrer">Xem Demo Mẫu-07</a>
-                    <a href="thiep-online-07-08/admin-mau-07.html" class="btn-buy"target="_blank" rel="noopener noreferrer">Tạo Thiệp</a>
-                </div>
-            </div>
-            <!-- Sản phẩm số 8 -->
-        <div class="product-card" data-description="Màu kem1 - Ruột in 2 mặt - Bao thư in 1 mặt">
-            <a href="thiep-online-07-08/thiep-online-mau-08.html" target="_blank" rel="noopener noreferrer">
-                <img src="hinh-thiep-online/mau-08.jpg" alt="Sản phẩm 1" class="product-img"></a>
-                <div class="product-info">
-                    <a href="thiep-online-07-08/thiep-online-mau-08.html" class="product-name" target="_blank" rel="noopener noreferrer">Demo Mẫu-08</a>
-                    <a href="thiep-online-07-08/admin-mau-08.html" class="btn-buy"target="_blank" rel="noopener noreferrer">Tạo Thiệp</a>
-                </div>
-            </div>
-              <!-- Sản phẩm số 9 -->
-           <div class="product-card" data-description="Màu kem1 - Ruột in 2 mặt - Bao thư in 1 mặt">
-            <a href="thiep-online-09-10/thiep-online-mau-09.html" target="_blank" rel="noopener noreferrer">
-                <img src="hinh-thiep-online/mau-09.jpg" alt="Sản phẩm 1" class="product-img"></a>
-                <div class="product-info">
-                    <a href="thiep-online-09-10/thiep-online-mau-09.html" class="product-name" target="_blank" rel="noopener noreferrer">Xem Demo Mẫu-09</a>
-                    <a href="thiep-online-09-10/admin-mau-09.html" class="btn-buy"target="_blank" rel="noopener noreferrer">Tạo Thiệp</a>
-                </div>
-            </div>
-            <!-- Sản phẩm số 10 -->
-        <div class="product-card" data-description="Màu kem1 - Ruột in 2 mặt - Bao thư in 1 mặt">
-            <a href="thiep-online-09-10/thiep-online-mau-10.html" target="_blank" rel="noopener noreferrer">
-                <img src="hinh-thiep-online/mau-10.jpg" alt="Sản phẩm 1" class="product-img"></a>
-                <div class="product-info">
-                    <a href="thiep-online-09-10/thiep-online-mau-10.html" class="product-name" target="_blank" rel="noopener noreferrer">Xem Demo Mẫu-10</a>
-                    <a href="thiep-online-09-10/admin-mau-10.html" class="btn-buy"target="_blank" rel="noopener noreferrer">Tạo Thiệp</a>
-                </div>
-            </div>
-                  <!-- Sản phẩm số 11 -->
-           <div class="product-card" data-description="Màu kem1 - Ruột in 2 mặt - Bao thư in 1 mặt">
-            <a href="thiep-online-11-12/thiep-online-mau-11.html" target="_blank" rel="noopener noreferrer">
-                <img src="hinh-thiep-online/mau-11.jpg" alt="Sản phẩm 1" class="product-img"></a>
-                <div class="product-info">
-                    <a href="thiep-online-11-12/thiep-online-mau-11.html" class="product-name" target="_blank" rel="noopener noreferrer">Xem Demo Mẫu-11</a>
-                    <a href="thiep-online-11-12/admin-mau-11.html" class="btn-buy"target="_blank" rel="noopener noreferrer">Tạo Thiệp</a>
-                </div>
-            </div>
-            <!-- Sản phẩm số 12 -->
-        <div class="product-card" data-description="Màu kem1 - Ruột in 2 mặt - Bao thư in 1 mặt">
-            <a href="thiep-online-11-12/thiep-online-mau-12.html" target="_blank" rel="noopener noreferrer">
-                <img src="hinh-thiep-online/mau-11.jpg" alt="Sản phẩm 1" class="product-img"></a>
-                <div class="product-info">
-                    <a href="thiep-online-11-12/thiep-online-mau-12.html" class="product-name" target="_blank" rel="noopener noreferrer">Xem Demo Mẫu-12</a>
-                    <a href="thiep-online-11-12/admin-mau-12.html" class="btn-buy"target="_blank" rel="noopener noreferrer">Tạo Thiệp</a>
-                </div>
-            </div>
- 
-    
+        <div class="cum-tieu-de-danh-muc">   
+            <h2 style="text-align: left; color: #6a0716; font-size: 24px;">THIỆP CƯỚI ONLINE</h2>
         </div>
+        
+        <!-- Lưới sản phẩm được tạo tự động từ mẫu 01 đến 24 -->
+        <div class="product-grid" id="autoProductGrid"></div>
     </main>
 
-    <!-- 4. KHU VỰC CHÂN TRANG (FOOTER) DƯỚI CÙNG -->
-
+    <!-- FOOTER PC -->
     <footer>
         <div class="footer-container">
             <div class="footer-col">
@@ -818,7 +538,8 @@ z-index: 10;
             <p>© 2026 Thiệp Cưới Ngọc Thương - Tinh Tế Trong Từng Đường Nét</p>
         </div>
     </footer>
-      <!-- KHU VỰC FOOTER THU GỌN RIÊNG CHO ĐIỆN THOẠI (FOOTER MOBILE) -->
+
+    <!-- FOOTER MOBILE -->
     <div class="footer-mobile">
         <h4>THIỆP CƯỚI NGỌC THƯƠNG</h4>
         <p>📍 123 Nguyễn Trãi, Quận 1, TP.HCM</p>
@@ -830,12 +551,59 @@ z-index: 10;
             © 2026 Thiệp Cưới Ngọc Thương
         </div>
     </div>
-    
- 
 
+  <!-- SCRIPT TỰ ĐỘNG TẠO 24 MẪU VÀ TỰ ĐỘNG ẨN CHỮ KHI TẢI XONG -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const grid = document.getElementById("autoProductGrid");
+            const totalTemplates = 32;
 
- 
+            for (let i = 1; i <= totalTemplates; i++) {
+                const num = String(i).padStart(2, '0');
+                const demoUrl = `thiep-online/thiep-online-mau-${num}.html?id=mau-${num}`;
+                const adminUrl = `thiep-online/admin-mau-${num}.html`;
 
+                const card = document.createElement("div");
+                card.className = "product-card";
+                card.innerHTML = `
+                    <div class="preview-thumb-box">
+                        <span class="preview-loading-text" id="loading-${num}">Đang tải Mẫu ${num}...</span>
+                        <!-- THÊM SỰ KIỆN onload ĐỂ TỰ ĐỘNG ẨN CHỮ KHI IFRAME TẢI XONG -->
+                        <iframe 
+                            data-src="${demoUrl}" 
+                            title="Preview Mẫu ${num}" 
+                            scrolling="no" 
+                            allow="autoplay 'none'"
+                            sandbox="allow-scripts allow-same-origin"
+                            onload="document.getElementById('loading-${num}').style.display='none';">
+                        </iframe>
+                        <a href="${demoUrl}" target="_blank" rel="noopener noreferrer" class="preview-click-overlay" aria-label="Xem Demo Mẫu-${num}"></a>
+                    </div>
+                    <div class="product-info">
+                        <a href="${demoUrl}" class="product-name" target="_blank" rel="noopener noreferrer">Xem Demo Mẫu-${num}</a>
+                        <a href="${adminUrl}" class="btn-buy" target="_blank" rel="noopener noreferrer">Tạo Thiệp</a>
+                    </div>
+                `;
+                grid.appendChild(card);
+            }
 
+            // Chỉ load iframe khi cuộn tới gần
+            const iframes = document.querySelectorAll(".preview-thumb-box iframe");
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const iframe = entry.target;
+                        if (iframe.dataset.src) {
+                            iframe.src = iframe.dataset.src;
+                            iframe.removeAttribute("data-src");
+                        }
+                        obs.unobserve(iframe);
+                    }
+                });
+            }, { rootMargin: "200px" });
+
+            iframes.forEach(iframe => observer.observe(iframe));
+        });
+    </script>
 </body>
 </html>

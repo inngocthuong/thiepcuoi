@@ -330,13 +330,14 @@
 </head>
 <body>
 
-    <!-- 1. MÀN HÌNH MẬT KHẨU -->
+    <!-- 1. MÀN HÌNH ĐĂNG NHẬP FIREBASE AUTH -->
     <div id="login-screen">
         <div class="login-box">
             <h2>🔒 Quản Trị Dự Án</h2>
-            <input type="password" id="password-input" placeholder="Nhập mật khẩu quản trị..." onkeypress="if(event.key==='Enter') checkLogin()">
-            <button onclick="checkLogin()">Mở Khóa</button>
-            <p id="login-error">Mật khẩu không chính xác!</p>
+            <input type="email" id="email-input" placeholder="Email quản trị (ví dụ: admin@domain.com)..." autocomplete="username" onkeypress="if(event.key==='Enter') checkLogin()">
+            <input type="password" id="password-input" placeholder="Nhập mật khẩu..." autocomplete="current-password" onkeypress="if(event.key==='Enter') checkLogin()">
+            <button id="login-btn" onclick="checkLogin()">Đăng Nhập</button>
+            <p id="login-error">Email hoặc mật khẩu không chính xác!</p>
         </div>
     </div>
 
@@ -521,9 +522,14 @@
             getDocs,
             serverTimestamp
         } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+        import {
+            getAuth,
+            signInWithEmailAndPassword,
+            signOut,
+            onAuthStateChanged
+        } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
-        // ================= CẤU HÌNH MẬT KHẨU & FIREBASE =================
-        const ADMIN_PASSWORD = "Thong@121976"; // <-- Đổi mật khẩu của bạn tại đây
+        // ================= CẤU HÌNH FIREBASE =================
         const ALLOWED_EXTENSIONS = ['.html', '.js', '.json', '.css', '.txt', '.md'];
         const PROJECTS_COLLECTION = "admin_projects";
         const ACTIVE_PROJECT_STORAGE_KEY = "admin_editor_active_project_id";
@@ -543,7 +549,9 @@
         // =================================================================
 
         let db = null;
+        let auth = null;
         let firebaseReady = false;
+        let hasInitializedWorkspace = false;
         let projectsMap = new Map();
         let activeProjectId = localStorage.getItem(ACTIVE_PROJECT_STORAGE_KEY) || "default-project";
         let currentDirHandle = null;
@@ -640,25 +648,33 @@
             }
         }
 
-        // ================= FIREBASE =================
-        function initFirebase() {
+        // ================= FIREBASE AUTH + FIRESTORE =================
+        function ensureFirebaseInitialized() {
+            if (auth && db) return true;
             try {
                 if (!firebaseConfig.apiKey || firebaseConfig.apiKey === "API_KEY_CUA_BAN") {
                     syncStatusEl.textContent = "Chưa điền firebaseConfig";
                     syncStatusEl.className = "sync-badge warn";
-                    return;
+                    return false;
                 }
                 const app = initializeApp(firebaseConfig, "admin-editor-app");
+                auth = getAuth(app);
                 db = getFirestore(app);
                 firebaseReady = true;
-                syncStatusEl.textContent = "Đã kết nối Firestore";
-                syncStatusEl.className = "sync-badge";
-                loadProjectsFromFirebase();
+                return true;
             } catch (err) {
                 console.error(err);
                 syncStatusEl.textContent = "Lỗi kết nối Firebase";
                 syncStatusEl.className = "sync-badge warn";
+                return false;
             }
+        }
+
+        function initFirebase() {
+            if (!ensureFirebaseInitialized()) return;
+            syncStatusEl.textContent = "Đã kết nối Firestore";
+            syncStatusEl.className = "sync-badge";
+            loadProjectsFromFirebase();
         }
 
         async function loadProjectsFromFirebase() {
@@ -805,18 +821,52 @@
             }
         }
 
-        // ================= ĐĂNG NHẬP =================
-        if (sessionStorage.getItem('isAdminLoggedIn') === 'true') {
-            showApp();
+        // ================= ĐĂNG NHẬP BẰNG FIREBASE AUTH =================
+        function mapAuthErrorMessage(err) {
+            const code = err?.code || "";
+            if (code === "auth/invalid-email") return "Định dạng email không hợp lệ!";
+            if (code === "auth/invalid-credential" || code === "auth/user-not-found" || code === "auth/wrong-password") {
+                return "Email hoặc mật khẩu không chính xác!";
+            }
+            if (code === "auth/too-many-requests") return "Đăng nhập sai quá nhiều lần. Vui lòng thử lại sau!";
+            if (code === "auth/network-request-failed") return "Lỗi mạng, không thể kết nối tới Firebase Auth!";
+            return "Đăng nhập thất bại: " + (err?.message || code);
         }
 
-        window.checkLogin = function() {
-            const input = document.getElementById('password-input').value;
-            if (input === ADMIN_PASSWORD) {
-                sessionStorage.setItem('isAdminLoggedIn', 'true');
-                showApp();
-            } else {
-                document.getElementById('login-error').style.display = 'block';
+        window.checkLogin = async function() {
+            const emailInput = document.getElementById('email-input');
+            const passwordInput = document.getElementById('password-input');
+            const loginBtn = document.getElementById('login-btn');
+            const errorEl = document.getElementById('login-error');
+
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+
+            errorEl.style.display = 'none';
+            if (!email || !password) {
+                errorEl.textContent = "Vui lòng nhập đầy đủ email và mật khẩu!";
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            if (!ensureFirebaseInitialized()) {
+                errorEl.textContent = "Chưa cấu hình Firebase hợp lệ!";
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            loginBtn.disabled = true;
+            loginBtn.textContent = "Đang đăng nhập...";
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                passwordInput.value = "";
+            } catch (err) {
+                console.error(err);
+                errorEl.textContent = mapAuthErrorMessage(err);
+                errorEl.style.display = 'block';
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.textContent = "Đăng Nhập";
             }
         };
 
@@ -824,14 +874,40 @@
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('app-screen').style.display = 'flex';
             initFirebase();
-            await restoreSavedFolder(false);
+            if (!hasInitializedWorkspace) {
+                hasInitializedWorkspace = true;
+                await restoreSavedFolder(false);
+            }
         }
 
-        window.logout = function() {
+        function showLoginScreen() {
+            hasInitializedWorkspace = false;
+            document.getElementById('app-screen').style.display = 'none';
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('login-error').style.display = 'none';
+        }
+
+        window.logout = async function() {
             if (isDirty && !confirm("Bạn có thay đổi chưa lưu. Vẫn thoát?")) return;
-            sessionStorage.removeItem('isAdminLoggedIn');
-            location.reload();
+            try {
+                if (auth) {
+                    await signOut(auth);
+                }
+            } catch (err) {
+                console.warn("Lỗi đăng xuất:", err);
+            }
+            showLoginScreen();
         };
+
+        if (ensureFirebaseInitialized()) {
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    await showApp();
+                } else {
+                    showLoginScreen();
+                }
+            });
+        }
 
         // ================= QUẢN LÝ THƯ MỤC & FILE =================
         window.selectProjectFolder = async function() {

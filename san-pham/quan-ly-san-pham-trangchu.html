@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quản lý Sản Phẩm Trang Chủ (data-trangchu.js)</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f5f5f5; margin: 0; padding: 20px; color: #222; }
+    .container { max-width: 1180px; margin: 0 auto; background: #fff; padding: 24px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border-bottom: 2px solid #f0f0f0; padding-bottom: 16px; margin-bottom: 20px; }
+    h1 { margin: 0; color: #8b1e24; font-size: 22px; }
+    .cat-selector { display: flex; align-items: center; gap: 10px; background: #fff5f5; padding: 10px 14px; border: 1px solid #f5c2c7; border-radius: 8px; }
+    .cat-selector label { margin: 0; color: #8b1e24; white-space: nowrap; }
+    select { padding: 8px 12px; border: 1px solid #8b1e24; border-radius: 6px; font-size: 14px; font-weight: bold; color: #222; background: #fff; cursor: pointer; }
+    .grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 24px; }
+    @media (max-width: 880px) { .grid { grid-template-columns: 1fr; } }
+    .box { background: #fafafa; border: 1px solid #e5e5e5; padding: 16px; border-radius: 8px; }
+    label { display: block; font-weight: bold; margin-top: 10px; margin-bottom: 4px; font-size: 14px; }
+    input, textarea { width: 100%; box-sizing: border-box; padding: 8px 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 520px) { .two-col { grid-template-columns: 1fr; } }
+    .row { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+    button { padding: 9px 14px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; }
+    .btn-primary { background: #8b1e24; color: #fff; }
+    .btn-secondary { background: #e0e0e0; color: #222; }
+    .btn-success { background: #1f7a4c; color: #fff; }
+    .btn-danger { background: #c62828; color: #fff; padding: 5px 10px; font-size: 12px; }
+    .btn-edit { background: #1565c0; color: #fff; padding: 5px 10px; font-size: 12px; }
+    .preview-img { width: 110px; height: 110px; object-fit: cover; border-radius: 6px; border: 1px solid #ddd; margin-top: 8px; display: none; }
+    .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { border-bottom: 1px solid #e5e5e5; padding: 8px; text-align: left; vertical-align: middle; }
+    td img { width: 48px; height: 48px; object-fit: cover; border-radius: 4px; }
+    .status { margin-top: 8px; font-size: 13px; color: #1f7a4c; min-height: 18px; }
+    .badge { background: #eee; padding: 3px 8px; border-radius: 12px; font-size: 12px; font-weight: normal; color: #444; }
+    .tag-pill { display: inline-block; background: #ffe8ea; color: #8b1e24; font-size: 11px; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+    textarea.code-out { font-family: Consolas, monospace; font-size: 12px; height: 220px; margin-top: 12px; background: #1e1e1e; color: #d4d4d4; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="top-bar">
+    <div>
+      <h1>Quản lý Sản Phẩm Trang Chủ <span id="countBadge" class="badge">0 mẫu</span></h1>
+      <div id="loadStatus" style="font-size: 12px; color: #666; margin-top: 4px;"></div>
+    </div>
+
+    <div class="cat-selector">
+      <label for="tabSelect">Đang quản lý tab:</label>
+      <select id="tabSelect"></select>
+    </div>
+  </div>
+
+  <div class="grid">
+    <!-- FORM THÊM / SỬA -->
+    <div class="box">
+      <h2 id="formTitle" style="margin-top:0; font-size: 18px;">Thêm sản phẩm mới</h2>
+
+      <div class="two-col">
+        <div>
+          <label>Cloud Name (Cloudinary)</label>
+          <input type="text" id="cloudName" placeholder="Ví dụ: dxyz123abc" />
+        </div>
+        <div>
+          <label>Upload Preset (Unsigned)</label>
+          <input type="text" id="uploadPreset" placeholder="Ví dụ: thiep_cuoi_preset" />
+        </div>
+      </div>
+
+      <label>Chọn ảnh từ máy tính</label>
+      <input type="file" id="fileInput" accept="image/*" />
+      <img id="previewImg" class="preview-img" alt="Xem trước ảnh" />
+      <div id="uploadStatus" class="status"></div>
+
+      <label>Link ảnh (img)</label>
+      <input type="text" id="imageUrl" placeholder="https://res.cloudinary.com/... hoặc anh/banner.png" />
+
+      <label>Mã sản phẩm (code)</label>
+      <input type="text" id="code" placeholder="Ví dụ: NT-2026C" />
+
+      <label>Tên sản phẩm (title)</label>
+      <input type="text" id="title" placeholder="Ví dụ: Thiệp Cưới Hiện Đại..." />
+
+      <div class="two-col">
+        <div>
+          <label>Giá bán (price)</label>
+          <input type="text" id="price" value="4.200 đ" />
+        </div>
+        <div>
+          <label>Giá cũ (oldPrice)</label>
+          <input type="text" id="oldPrice" placeholder="Ví dụ: 5.000 đ (có thể bỏ trống)" />
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div>
+          <label>Class nhãn (badge)</label>
+          <input type="text" id="badge" placeholder="sale-badge hoặc hot-badge" />
+        </div>
+        <div>
+          <label>Chữ trên nhãn (badgeText)</label>
+          <input type="text" id="badgeText" placeholder="Ví dụ: -15%, BÁN CHẠY, MỚI" />
+        </div>
+      </div>
+
+      <label>Mô tả (desc)</label>
+      <input type="text" id="desc" placeholder="Mô tả ngắn sản phẩm..." />
+
+      <div class="row">
+        <button class="btn-primary" id="saveBtn">Lưu sản phẩm</button>
+        <button class="btn-secondary" id="resetBtn" type="button">Làm mới / Hủy sửa</button>
+      </div>
+    </div>
+
+    <!-- DANH SÁCH & XUẤT FILE data-trangchu.js -->
+    <div class="box">
+      <div class="toolbar">
+        <input type="text" id="searchInput" placeholder="Tìm theo mã hoặc tên..." style="max-width: 200px;" />
+        <div class="row" style="margin-top:0;">
+          <button class="btn-success" id="downloadJsBtn">Tải data-trangchu.js</button>
+          <button class="btn-secondary" id="toggleCodeBtn" type="button">Hiện code</button>
+          <button class="btn-secondary" id="copyJsBtn" type="button">Copy code .js</button>
+        </div>
+      </div>
+
+      <div style="max-height: 420px; overflow-y: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Ảnh</th>
+              <th>Mã</th>
+              <th>Tên sản phẩm</th>
+              <th>Giá</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="productTableBody"></tbody>
+        </table>
+      </div>
+
+      <textarea id="jsOutput" class="code-out hidden" readonly></textarea>
+    </div>
+  </div>
+</div>
+
+<script>
+  const ADMIN_EDITOR_URL = "../admin-editor-auth.html";
+  const CLOUD_NAME = "a6goixuq";
+  const UPLOAD_PRESET = "thiep_cuoi_online";
+  const DATA_FILE_NAME = "data-trangchu.js";
+
+  const TABS = [
+    { key: "best-seller", label: "Tab 1: Bán chạy (best-seller)", prefix: "NT-2026" },
+    { key: "new-arrival", label: "Tab 2: Hàng mới (new-arrival)", prefix: "NT-NEW" },
+    { key: "on-sale", label: "Tab 3: Khuyến mãi (on-sale)", prefix: "SALE-" }
+  ];
+
+  // Dữ liệu 3 tab (sẽ tự ghi đè nếu nạp được file data-trangchu.js bên ngoài)
+  let tabData = {
+    "best-seller": [],
+    "new-arrival": [],
+    "on-sale": []
+  };
+
+  let currentTabKey = TABS[0].key;
+  let editingIndex = -1;
+  let isCodeVisible = false;
+
+  const els = {
+    tabSelect: document.getElementById("tabSelect"),
+    loadStatus: document.getElementById("loadStatus"),
+    countBadge: document.getElementById("countBadge"),
+    cloudName: document.getElementById("cloudName"),
+    uploadPreset: document.getElementById("uploadPreset"),
+    fileInput: document.getElementById("fileInput"),
+    previewImg: document.getElementById("previewImg"),
+    uploadStatus: document.getElementById("uploadStatus"),
+    imageUrl: document.getElementById("imageUrl"),
+    code: document.getElementById("code"),
+    title: document.getElementById("title"),
+    price: document.getElementById("price"),
+    oldPrice: document.getElementById("oldPrice"),
+    badge: document.getElementById("badge"),
+    badgeText: document.getElementById("badgeText"),
+    desc: document.getElementById("desc"),
+    formTitle: document.getElementById("formTitle"),
+    saveBtn: document.getElementById("saveBtn"),
+    resetBtn: document.getElementById("resetBtn"),
+    searchInput: document.getElementById("searchInput"),
+    productTableBody: document.getElementById("productTableBody"),
+    jsOutput: document.getElementById("jsOutput"),
+    downloadJsBtn: document.getElementById("downloadJsBtn"),
+    copyJsBtn: document.getElementById("copyJsBtn"),
+    toggleCodeBtn: document.getElementById("toggleCodeBtn")
+  };
+
+  TABS.forEach(t => {
+    const opt = document.createElement("option");
+    opt.value = t.key;
+    opt.textContent = t.label;
+    els.tabSelect.appendChild(opt);
+  });
+
+  els.cloudName.value = localStorage.getItem("cld_name") || CLOUD_NAME;
+  els.uploadPreset.value = localStorage.getItem("cld_preset") || UPLOAD_PRESET;
+  els.cloudName.addEventListener("input", () => localStorage.setItem("cld_name", els.cloudName.value.trim()));
+  els.uploadPreset.addEventListener("input", () => localStorage.setItem("cld_preset", els.uploadPreset.value.trim()));
+
+  function getCurrentList() {
+    if (!Array.isArray(tabData[currentTabKey])) tabData[currentTabKey] = [];
+    return tabData[currentTabKey];
+  }
+
+  function loadDataTrangChu() {
+    els.loadStatus.textContent = `Đang tải ${DATA_FILE_NAME}...`;
+    const script = document.createElement("script");
+    script.src = `${DATA_FILE_NAME}?v=${Date.now()}`;
+
+    script.onload = () => {
+      let loaded = undefined;
+      try {
+        loaded = eval("tabProductsData");
+      } catch (e) {
+        loaded = window.tabProductsData;
+      }
+
+      if (loaded && typeof loaded === "object") {
+        tabData = {
+          "best-seller": Array.isArray(loaded["best-seller"]) ? [...loaded["best-seller"]] : [],
+          "new-arrival": Array.isArray(loaded["new-arrival"]) ? [...loaded["new-arrival"]] : [],
+          "on-sale": Array.isArray(loaded["on-sale"]) ? [...loaded["on-sale"]] : []
+        };
+        const total = tabData["best-seller"].length + tabData["new-arrival"].length + tabData["on-sale"].length;
+        els.loadStatus.style.color = "#1f7a4c";
+        els.loadStatus.textContent = `Đã nạp ${total} sản phẩm từ ${DATA_FILE_NAME} (biến: tabProductsData).`;
+      } else {
+        els.loadStatus.style.color = "#c62828";
+        els.loadStatus.textContent = `Đã mở ${DATA_FILE_NAME} nhưng chưa thấy "tabProductsData". Bắt đầu danh sách mới.`;
+      }
+      resetForm();
+      renderAll();
+    };
+
+    script.onerror = () => {
+      els.loadStatus.style.color = "#b26a00";
+      els.loadStatus.textContent = `Chưa thấy ${DATA_FILE_NAME} cùng thư mục — bạn có thể thêm mới và bấm "Tải data-trangchu.js".`;
+      resetForm();
+      renderAll();
+    };
+
+    document.body.appendChild(script);
+  }
+
+  els.tabSelect.addEventListener("change", () => {
+    currentTabKey = els.tabSelect.value;
+    resetForm();
+    renderAll();
+  });
+
+  function showPreview(url) {
+    if (url) {
+      els.previewImg.src = url;
+      els.previewImg.style.display = "block";
+    } else {
+      els.previewImg.style.display = "none";
+    }
+  }
+
+  els.imageUrl.addEventListener("input", () => showPreview(els.imageUrl.value.trim()));
+
+  els.fileInput.addEventListener("change", async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const cloudName = els.cloudName.value.trim();
+    const uploadPreset = els.uploadPreset.value.trim();
+    if (!cloudName || !uploadPreset) {
+      els.uploadStatus.style.color = "#c62828";
+      els.uploadStatus.textContent = "Vui lòng nhập Cloud Name và Upload Preset trước!";
+      return;
+    }
+
+    els.uploadStatus.style.color = "#1565c0";
+    els.uploadStatus.textContent = "Đang tải ảnh lên Cloudinary...";
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", uploadPreset);
+
+    try {
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+        method: "POST",
+        body: formData
+      });
+      const data = await res.json();
+      if (!res.ok || !data.secure_url) {
+        throw new Error(data.error?.message || "Upload thất bại");
+      }
+      els.imageUrl.value = data.secure_url;
+      showPreview(data.secure_url);
+      els.uploadStatus.style.color = "#1f7a4c";
+      els.uploadStatus.textContent = "Upload thành công! Đã lấy link ảnh.";
+    } catch (err) {
+      els.uploadStatus.style.color = "#c62828";
+      els.uploadStatus.textContent = "Lỗi: " + err.message;
+    }
+  });
+
+  function esc(str) {
+    return String(str ?? "").replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+  }
+
+  function buildJsFileContent() {
+    const formatTab = (key) => {
+      const arr = Array.isArray(tabData[key]) ? tabData[key] : [];
+      const items = arr.map(p => (
+`                { code: "${esc(p.code)}",
+                title: "${esc(p.title)}",
+                price: "${esc(p.price)}",
+                oldPrice: "${esc(p.oldPrice)}",
+                badge: "${esc(p.badge)}",
+                badgeText: "${esc(p.badgeText)}",
+                img: "${esc(p.img)}",
+                desc: "${esc(p.desc)}" }`
+      )).join(",\n\n");
+      return `            "${key}": [\n${items}\n            ]`;
+    };
+
+    return `// Dữ liệu danh sách sản phẩm trên trang chủ\n// Dữ liệu cho 3 Tab sản phẩm\nconst tabProductsData = {\n${formatTab("best-seller")},\n${formatTab("new-arrival")},\n${formatTab("on-sale")}\n};\n`;
+  }
+
+  function renderAll() {
+    const list = getCurrentList();
+    const keyword = els.searchInput.value.trim().toLowerCase();
+    els.productTableBody.innerHTML = "";
+    els.countBadge.textContent = `${list.length} mẫu`;
+
+    list.forEach((item, idx) => {
+      const matchText = `${item.code} ${item.title} ${item.desc}`.toLowerCase();
+      if (keyword && !matchText.includes(keyword)) return;
+
+      const badgeHtml = item.badgeText ? ` <span class="tag-pill">${item.badgeText}</span>` : "";
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><img src="${item.img}" alt="${item.code}" onerror="this.style.display='none'"></td>
+        <td><strong>${item.code}</strong></td>
+        <td>${item.title}${badgeHtml}</td>
+        <td>${item.price}</td>
+        <td>
+          <button class="btn-edit" onclick="editProduct(${idx})">Sửa</button>
+          <button class="btn-danger" onclick="deleteProduct(${idx})">Xóa</button>
+        </td>
+      `;
+      els.productTableBody.appendChild(tr);
+    });
+
+    els.jsOutput.value = buildJsFileContent();
+  }
+
+  function resetForm() {
+    const tabInfo = TABS.find(t => t.key === currentTabKey) || TABS[0];
+    editingIndex = -1;
+    els.formTitle.textContent = `Thêm vào: ${tabInfo.label}`;
+    els.saveBtn.textContent = "Lưu sản phẩm";
+    els.fileInput.value = "";
+    els.imageUrl.value = "";
+    els.code.value = "";
+    els.title.value = "";
+    els.price.value = "4.200 đ";
+    els.oldPrice.value = "";
+    els.badge.value = "";
+    els.badgeText.value = "";
+    els.desc.value = "";
+    els.uploadStatus.textContent = "";
+    showPreview("");
+  }
+
+  window.editProduct = function(idx) {
+    const item = getCurrentList()[idx];
+    if (!item) return;
+    editingIndex = idx;
+    els.formTitle.textContent = `Đang sửa: ${item.code}`;
+    els.saveBtn.textContent = "Cập nhật sản phẩm";
+    els.code.value = item.code || "";
+    els.title.value = item.title || "";
+    els.price.value = item.price || "";
+    els.oldPrice.value = item.oldPrice || "";
+    els.badge.value = item.badge || "";
+    els.badgeText.value = item.badgeText || "";
+    els.imageUrl.value = item.img || "";
+    els.desc.value = item.desc || "";
+    showPreview(item.img);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  window.deleteProduct = function(idx) {
+    const list = getCurrentList();
+    if (!confirm(`Xóa sản phẩm "${list[idx].code}"?`)) return;
+    list.splice(idx, 1);
+    renderAll();
+  };
+
+  els.saveBtn.addEventListener("click", () => {
+    const code = els.code.value.trim();
+    const title = els.title.value.trim();
+    const img = els.imageUrl.value.trim();
+    const price = els.price.value.trim() || "Liên hệ";
+    const oldPrice = els.oldPrice.value.trim();
+    const badge = els.badge.value.trim();
+    const badgeText = els.badgeText.value.trim();
+    const desc = els.desc.value.trim() || title;
+
+    if (!code || !title || !img) {
+      alert("Vui lòng nhập đủ Mã sản phẩm (code), Tên sản phẩm (title) và Link ảnh (img)!");
+      return;
+    }
+
+    const obj = { code, title, price, oldPrice, badge, badgeText, img, desc };
+    const list = getCurrentList();
+    if (editingIndex >= 0) {
+      list[editingIndex] = obj;
+    } else {
+      list.unshift(obj);
+    }
+
+    renderAll();
+    resetForm();
+  });
+
+  els.resetBtn.addEventListener("click", resetForm);
+  els.searchInput.addEventListener("input", renderAll);
+
+  els.downloadJsBtn.addEventListener("click", () => {
+    const blob = new Blob([buildJsFileContent()], { type: "application/javascript;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = DATA_FILE_NAME;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  async function copyAndGoEditor(text) {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        els.jsOutput.classList.remove("hidden");
+        els.jsOutput.select();
+        document.execCommand("copy");
+        if (!isCodeVisible) els.jsOutput.classList.add("hidden");
+      }
+    } catch (err) {
+      els.jsOutput.classList.remove("hidden");
+      els.jsOutput.select();
+      document.execCommand("copy");
+      if (!isCodeVisible) els.jsOutput.classList.add("hidden");
+    }
+    setTimeout(() => {
+      window.location.href = ADMIN_EDITOR_URL;
+    }, 200);
+  }
+
+  els.copyJsBtn.addEventListener("click", () => {
+    copyAndGoEditor(els.jsOutput.value);
+  });
+
+  els.toggleCodeBtn.addEventListener("click", () => {
+    isCodeVisible = !isCodeVisible;
+    els.jsOutput.classList.toggle("hidden", !isCodeVisible);
+    els.toggleCodeBtn.textContent = isCodeVisible ? "Ẩn code" : "Hiện code";
+  });
+
+  loadDataTrangChu();
+</script>
+</body>
+</html>

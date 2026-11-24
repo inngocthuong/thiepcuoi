@@ -1,0 +1,477 @@
+\<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quản lý Dữ Liệu Trang Chi Tiết (8 Danh Mục)</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f5f5f5; margin: 0; padding: 20px; color: #222; }
+    .container { max-width: 1150px; margin: 0 auto; background: #fff; padding: 24px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border-bottom: 2px solid #f0f0f0; padding-bottom: 16px; margin-bottom: 20px; }
+    h1 { margin: 0; color: #8b1e24; font-size: 22px; }
+    .cat-selector { display: flex; align-items: center; gap: 10px; background: #fff5f5; padding: 10px 14px; border: 1px solid #f5c2c7; border-radius: 8px; }
+    .cat-selector label { margin: 0; color: #8b1e24; white-space: nowrap; }
+    select { padding: 8px 12px; border: 1px solid #8b1e24; border-radius: 6px; font-size: 14px; font-weight: bold; color: #222; background: #fff; cursor: pointer; }
+    .grid { display: grid; grid-template-columns: 1fr 1.45fr; gap: 24px; }
+    @media (max-width: 850px) { .grid { grid-template-columns: 1fr; } }
+    .box { background: #fafafa; border: 1px solid #e5e5e5; padding: 16px; border-radius: 8px; }
+    label { display: block; font-weight: bold; margin-top: 10px; margin-bottom: 4px; font-size: 14px; }
+    input, textarea { width: 100%; box-sizing: border-box; padding: 8px 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+    .hint { font-size: 12px; color: #666; margin-top: 3px; }
+    .row { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+    button { padding: 9px 14px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; }
+    .btn-primary { background: #8b1e24; color: #fff; }
+    .btn-secondary { background: #e0e0e0; color: #222; }
+    .btn-success { background: #1f7a4c; color: #fff; }
+    .btn-danger { background: #c62828; color: #fff; padding: 5px 10px; font-size: 12px; }
+    .btn-edit { background: #1565c0; color: #fff; padding: 5px 10px; font-size: 12px; }
+    .preview-img { width: 110px; height: 110px; object-fit: cover; border-radius: 6px; border: 1px solid #ddd; margin-top: 8px; display: none; }
+    .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { border-bottom: 1px solid #e5e5e5; padding: 8px; text-align: left; vertical-align: middle; }
+    td img { width: 48px; height: 48px; object-fit: cover; border-radius: 4px; }
+    .status { margin-top: 8px; font-size: 13px; color: #1f7a4c; min-height: 18px; }
+    .badge { background: #eee; padding: 3px 8px; border-radius: 12px; font-size: 12px; font-weight: normal; color: #444; }
+    textarea.code-out { font-family: Consolas, monospace; font-size: 12px; height: 210px; margin-top: 12px; background: #1e1e1e; color: #d4d4d4; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="top-bar">
+    <div>
+      <h1>Sản Phẩm Trang Chi Tiết <span id="countBadge" class="badge">0 mẫu</span></h1>
+      <div id="loadStatus" style="font-size: 12px; color: #666; margin-top: 4px;"></div>
+    </div>
+
+    <div class="cat-selector">
+      <label for="categorySelect">Danh mục chi tiết:</label>
+      <select id="categorySelect"></select>
+    </div>
+  </div>
+
+  <div class="grid">
+    <!-- FORM THÊM / SỬA -->
+    <div class="box">
+      <h2 id="formTitle" style="margin-top:0; font-size: 18px;">Thêm sản phẩm mới</h2>
+
+      <label>Cloud Name (Cloudinary)</label>
+      <input type="text" id="cloudName" placeholder="Ví dụ: dxyz123abc" />
+
+      <label>Upload Preset (Unsigned)</label>
+      <input type="text" id="uploadPreset" placeholder="Ví dụ: thiep_cuoi_preset" />
+
+      <label>Chọn ảnh từ máy tính</label>
+      <input type="file" id="fileInput" accept="image/*" />
+      <img id="previewImg" class="preview-img" alt="Xem trước ảnh" />
+      <div id="uploadStatus" class="status"></div>
+
+      <label>Link ảnh (trường: img)</label>
+      <input type="text" id="imgUrl" placeholder="https://res.cloudinary.com/..." />
+
+      <label>Tên sản phẩm kèm mã (trường: name)</label>
+      <input type="text" id="name" placeholder="Ví dụ: Thiệp cưới độc quyền HHY-6180" />
+      <div class="hint" id="codeHint">Gợi ý mã kế tiếp: HHY-6180</div>
+
+      <label>Giá (trường: price)</label>
+      <input type="text" id="price" value="Liên hệ" />
+
+      <label>Mô tả (trường: desc)</label>
+      <input type="text" id="desc" placeholder="Ví dụ: Thiệp cưới độc quyền" />
+
+      <div class="row">
+        <button class="btn-primary" id="saveBtn">Lưu sản phẩm</button>
+        <button class="btn-secondary" id="resetBtn" type="button">Làm mới / Hủy sửa</button>
+      </div>
+    </div>
+
+    <!-- DANH SÁCH & XUẤT FILE .JS -->
+    <div class="box">
+      <div class="toolbar">
+        <input type="text" id="searchInput" placeholder="Tìm theo tên hoặc mô tả..." style="max-width: 210px;" />
+        <div class="row" style="margin-top:0;">
+          <button class="btn-success" id="downloadJsBtn">Tải file .js</button>
+          <button class="btn-secondary" id="toggleCodeBtn" type="button">Hiện code</button>
+          <button class="btn-secondary" id="copyJsBtn" type="button">Copy code .js</button>
+          
+        </div>
+      </div>
+
+      <div style="max-height: 380px; overflow-y: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Ảnh</th>
+              <th>Tên sản phẩm</th>
+              <th>Giá</th>
+              <th style="width: 105px;">Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="productTableBody"></tbody>
+        </table>
+      </div>
+      <textarea id="jsOutput" class="code-out hidden" readonly></textarea>
+    </div>
+  </div>
+</div>
+
+<script>
+  const ADMIN_EDITOR_URL = "../admin-editor-auth.html";
+
+  // =========================================================================
+  // CẤU HÌNH DANH MỤC TRANG CHI TIẾT (Sửa tên file/tên biến hoặc thêm mục mới tại đây)
+  // =========================================================================
+  const DETAIL_CATEGORIES = [
+    {
+      id: "hiendai",
+      label: "1. Chi tiết Hiện Đại",
+      fileName: "data-chitiet-hiendai.js",
+      varName: "Hdproducts",
+      codePrefix: "HHY-",
+      startNumber: 6180
+    },
+    {
+      id: "truyenthong",
+      label: "2. Chi tiết Truyền Thống",
+      fileName: "data-chitiet-truyenthong.js",
+      varName: "Ttproducts",
+      codePrefix: "HD-",
+      startNumber: 1001
+    },
+    {
+      id: "docquyen",
+      label: "3. Chi tiết Độc Quyền ",
+      fileName: "data-chitiet-docquyen.js",
+      varName: "Dqproducts",
+      codePrefix: "TT-",
+      startNumber: 1001
+    },
+    {
+      id: "dq25",
+      label: "4. Chi tiết DQ-25",
+      fileName: "data-chitiet-dq25.js",
+      varName: "Dq25products",
+      codePrefix: "EK-",
+      startNumber: 1001
+    },
+    {
+      id: "tangia",
+      label: "5. Chi tiết Tân Gia",
+      fileName: "data-chitiet-tangia.js",
+      varName: "Tgproducts",
+      codePrefix: "HL-",
+      startNumber: 1001
+    },
+    {
+      id: "sinhnhat",
+      label: "6. Chi tiết Sinh Nhật",
+      fileName: "data-chitiet-sinhnhat.js",
+      varName: "Snproducts",
+      codePrefix: "GR-",
+      startNumber: 1001
+    },
+    {
+      id: "conggiao",
+      label: "7. Chi tiết Công Giáo",
+      fileName: "data-chitiet-taon.js",
+      varName: "Toproducts",
+      codePrefix: "IH-",
+      startNumber: 1001
+    }
+  ];
+
+  let currentCat = DETAIL_CATEGORIES[0];
+  let products = [];
+  let editingIndex = -1;
+  let isCodeVisible = false;
+
+  const els = {
+    categorySelect: document.getElementById("categorySelect"),
+    loadStatus: document.getElementById("loadStatus"),
+    countBadge: document.getElementById("countBadge"),
+    cloudName: document.getElementById("cloudName"),
+    uploadPreset: document.getElementById("uploadPreset"),
+    fileInput: document.getElementById("fileInput"),
+    previewImg: document.getElementById("previewImg"),
+    uploadStatus: document.getElementById("uploadStatus"),
+    imgUrl: document.getElementById("imgUrl"),
+    name: document.getElementById("name"),
+    codeHint: document.getElementById("codeHint"),
+    price: document.getElementById("price"),
+    desc: document.getElementById("desc"),
+    formTitle: document.getElementById("formTitle"),
+    saveBtn: document.getElementById("saveBtn"),
+    resetBtn: document.getElementById("resetBtn"),
+    searchInput: document.getElementById("searchInput"),
+    productTableBody: document.getElementById("productTableBody"),
+    jsOutput: document.getElementById("jsOutput"),
+    downloadJsBtn: document.getElementById("downloadJsBtn"),
+    copyJsBtn: document.getElementById("copyJsBtn"),
+    toggleCodeBtn: document.getElementById("toggleCodeBtn")
+  };
+
+  DETAIL_CATEGORIES.forEach(cat => {
+    const opt = document.createElement("option");
+    opt.value = cat.id;
+    opt.textContent = `${cat.label} (${cat.fileName})`;
+    els.categorySelect.appendChild(opt);
+  });
+
+  els.cloudName.value = localStorage.getItem("cld_name") || "";
+  els.uploadPreset.value = localStorage.getItem("cld_preset") || "";
+  els.cloudName.addEventListener("input", () => localStorage.setItem("cld_name", els.cloudName.value.trim()));
+  els.uploadPreset.addEventListener("input", () => localStorage.setItem("cld_preset", els.uploadPreset.value.trim()));
+
+  function generateNextCode() {
+    let maxNum = currentCat.startNumber - 1;
+    const regex = new RegExp(`${currentCat.codePrefix}(\\d+)`, "i");
+    products.forEach(p => {
+      const match = String(p.name || "").match(regex);
+      if (match) {
+        const num = parseInt(match[1], 10);
+        if (num > maxNum) maxNum = num;
+      }
+    });
+    return `${currentCat.codePrefix}${maxNum + 1}`;
+  }
+
+  function loadCategoryData(cat) {
+    currentCat = cat;
+    els.downloadJsBtn.textContent = `Tải ${cat.fileName}`;
+    els.loadStatus.textContent = `Đang tải ${cat.fileName}...`;
+
+    const oldScript = document.getElementById("dynamicDataScript");
+    if (oldScript) oldScript.remove();
+
+    const script = document.createElement("script");
+    script.id = "dynamicDataScript";
+    script.src = `${cat.fileName}?v=${Date.now()}`;
+
+    script.onload = () => {
+      let loadedData = undefined;
+      try {
+        loadedData = eval(cat.varName);
+      } catch (e) {
+        loadedData = window[cat.varName];
+      }
+
+      if (Array.isArray(loadedData)) {
+        products = [...loadedData];
+        els.loadStatus.style.color = "#1f7a4c";
+        els.loadStatus.textContent = `Đã nạp ${products.length} mẫu từ ${cat.fileName} (biến: ${cat.varName}).`;
+      } else {
+        products = [];
+        els.loadStatus.style.color = "#c62828";
+        els.loadStatus.textContent = `Đã mở ${cat.fileName} nhưng chưa thấy mảng "${cat.varName}". Bắt đầu danh sách mới.`;
+      }
+      resetForm();
+      renderAll();
+    };
+
+    script.onerror = () => {
+      products = [];
+      els.loadStatus.style.color = "#b26a00";
+      els.loadStatus.textContent = `Chưa có file ${cat.fileName} trong thư mục — bạn có thể thêm mới và tải file về.`;
+      resetForm();
+      renderAll();
+    };
+
+    document.body.appendChild(script);
+  }
+
+  els.categorySelect.addEventListener("change", () => {
+    const selected = DETAIL_CATEGORIES.find(c => c.id === els.categorySelect.value);
+    if (selected) loadCategoryData(selected);
+  });
+
+  function showPreview(url) {
+    if (url) {
+      els.previewImg.src = url;
+      els.previewImg.style.display = "block";
+    } else {
+      els.previewImg.style.display = "none";
+    }
+  }
+
+  els.imgUrl.addEventListener("input", () => showPreview(els.imgUrl.value.trim()));
+
+  els.fileInput.addEventListener("change", async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const cloudName = els.cloudName.value.trim();
+    const uploadPreset = els.uploadPreset.value.trim();
+    if (!cloudName || !uploadPreset) {
+      els.uploadStatus.style.color = "#c62828";
+      els.uploadStatus.textContent = "Vui lòng nhập Cloud Name và Upload Preset trước!";
+      return;
+    }
+
+    els.uploadStatus.style.color = "#1565c0";
+    els.uploadStatus.textContent = "Đang tải ảnh lên Cloudinary...";
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", uploadPreset);
+
+    try {
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+        method: "POST",
+        body: formData
+      });
+      const data = await res.json();
+      if (!res.ok || !data.secure_url) {
+        throw new Error(data.error?.message || "Upload thất bại");
+      }
+      els.imgUrl.value = data.secure_url;
+      showPreview(data.secure_url);
+
+      if (editingIndex === -1 && !els.name.value.trim()) {
+        els.name.value = `Thiệp cưới ${generateNextCode()}`;
+      }
+      els.uploadStatus.style.color = "#1f7a4c";
+      els.uploadStatus.textContent = "Upload thành công! Đã lấy link ảnh.";
+    } catch (err) {
+      els.uploadStatus.style.color = "#c62828";
+      els.uploadStatus.textContent = "Lỗi: " + err.message;
+    }
+  });
+
+  function buildJsFileContent() {
+    const items = products.map(p => {
+      const esc = (str) => String(str ?? "").replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+      return `    {\n        img: "${esc(p.img)}",\n        name: "${esc(p.name)}",\n        price: "${esc(p.price)}",\n        desc: "${esc(p.desc)}"\n    }`;
+    }).join(",\n");
+    return `// Dữ liệu trang chi tiết: ${currentCat.label}\nvar ${currentCat.varName} = [\n${items}\n];\n`;
+  }
+
+  function renderAll() {
+    const keyword = els.searchInput.value.trim().toLowerCase();
+    els.productTableBody.innerHTML = "";
+    els.countBadge.textContent = `${products.length} mẫu`;
+    els.codeHint.textContent = `Gợi ý mã kế tiếp: ${generateNextCode()}`;
+
+    products.forEach((item, idx) => {
+      const matchText = `${item.name} ${item.desc} ${item.price}`.toLowerCase();
+      if (keyword && !matchText.includes(keyword)) return;
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><img src="${item.img}" alt="" onerror="this.style.display='none'"></td>
+        <td><strong>${item.name}</strong><br><span style="color:#666;font-size:12px;">${item.desc || ""}</span></td>
+        <td>${item.price}</td>
+        <td>
+          <button class="btn-edit" onclick="editProduct(${idx})">Sửa</button>
+          <button class="btn-danger" onclick="deleteProduct(${idx})">Xóa</button>
+        </td>
+      `;
+      els.productTableBody.appendChild(tr);
+    });
+
+    els.jsOutput.value = buildJsFileContent();
+  }
+
+  function resetForm() {
+    editingIndex = -1;
+    els.formTitle.textContent = `Thêm vào: ${currentCat.label}`;
+    els.saveBtn.textContent = "Lưu sản phẩm";
+    els.fileInput.value = "";
+    els.imgUrl.value = "";
+    els.name.value = "";
+    els.price.value = "Liên hệ";
+    els.desc.value = "";
+    els.uploadStatus.textContent = "";
+    els.codeHint.textContent = `Gợi ý mã kế tiếp: ${generateNextCode()}`;
+    showPreview("");
+  }
+
+  window.editProduct = function(idx) {
+    const item = products[idx];
+    if (!item) return;
+    editingIndex = idx;
+    els.formTitle.textContent = `Đang sửa mẫu #${idx + 1}`;
+    els.saveBtn.textContent = "Cập nhật sản phẩm";
+    els.imgUrl.value = item.img || "";
+    els.name.value = item.name || "";
+    els.price.value = item.price || "Liên hệ";
+    els.desc.value = item.desc || "";
+    showPreview(item.img);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  window.deleteProduct = function(idx) {
+    if (!confirm(`Xóa "${products[idx].name}"?`)) return;
+    products.splice(idx, 1);
+    renderAll();
+  };
+
+  els.saveBtn.addEventListener("click", () => {
+    const img = els.imgUrl.value.trim();
+    const name = els.name.value.trim();
+    const price = els.price.value.trim() || "Liên hệ";
+    const desc = els.desc.value.trim() || name.replace(/\s+[A-Z]+-\d+[A-Z0-9]*$/i, "").trim();
+
+    if (!img || !name) {
+      alert("Vui lòng nhập đủ Link ảnh (img) và Tên sản phẩm (name)!");
+      return;
+    }
+
+    const obj = { img, name, price, desc };
+    if (editingIndex >= 0) {
+      products[editingIndex] = obj;
+    } else {
+      products.unshift(obj);
+    }
+
+    renderAll();
+    resetForm();
+  });
+
+  els.resetBtn.addEventListener("click", resetForm);
+  els.searchInput.addEventListener("input", renderAll);
+
+  els.downloadJsBtn.addEventListener("click", () => {
+    const blob = new Blob([buildJsFileContent()], { type: "application/javascript;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = currentCat.fileName;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  async function copyAndGoEditor(text) {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        els.jsOutput.classList.remove("hidden");
+        els.jsOutput.select();
+        document.execCommand("copy");
+        if (!isCodeVisible) els.jsOutput.classList.add("hidden");
+      }
+    } catch (err) {
+      els.jsOutput.classList.remove("hidden");
+      els.jsOutput.select();
+      document.execCommand("copy");
+      if (!isCodeVisible) els.jsOutput.classList.add("hidden");
+    }
+    setTimeout(() => {
+      window.location.href = ADMIN_EDITOR_URL;
+    }, 200);
+  }
+
+  els.copyJsBtn.addEventListener("click", () => {
+    copyAndGoEditor(els.jsOutput.value);
+  });
+
+  els.toggleCodeBtn.addEventListener("click", () => {
+    isCodeVisible = !isCodeVisible;
+    els.jsOutput.classList.toggle("hidden", !isCodeVisible);
+    els.toggleCodeBtn.textContent = isCodeVisible ? "Ẩn code" : "Hiện code";
+  });
+
+  loadCategoryData(DETAIL_CATEGORIES[0]);
+</script>
+</body>
+</html>

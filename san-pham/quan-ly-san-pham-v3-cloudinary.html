@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quản lý Sản Phẩm — 2 Nhóm x 8 Danh Mục</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f5f5f5; margin: 0; padding: 20px; color: #222; }
+    .container { max-width: 1180px; margin: 0 auto; background: #fff; padding: 24px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+    h1 { margin: 0; color: #8b1e24; font-size: 22px; }
+    .selectors { display: flex; gap: 10px; flex-wrap: wrap; }
+    .sel-box { display: flex; align-items: center; gap: 6px; background: #fdf2f2; border: 1px solid #e6b8bc; padding: 7px 10px; border-radius: 8px; }
+    .sel-box label { margin: 0; font-size: 13px; color: #8b1e24; }
+    select { padding: 6px 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 13px; font-weight: bold; background: #fff; }
+    .notice { background: #fff8e1; border: 1px solid #ffe082; padding: 10px 14px; border-radius: 6px; margin-bottom: 16px; font-size: 13px; }
+    .grid { display: grid; grid-template-columns: 1fr 1.45fr; gap: 24px; }
+    @media (max-width: 880px) { .grid { grid-template-columns: 1fr; } }
+    .box { background: #fafafa; border: 1px solid #e5e5e5; padding: 16px; border-radius: 8px; }
+    label { display: block; font-weight: bold; margin-top: 10px; margin-bottom: 4px; font-size: 14px; }
+    input, textarea { width: 100%; box-sizing: border-box; padding: 8px 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+    .row { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; align-items: center; }
+    button { padding: 9px 14px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 14px; }
+    .btn-primary { background: #8b1e24; color: #fff; }
+    .btn-secondary { background: #e0e0e0; color: #222; }
+    .btn-success { background: #1f7a4c; color: #fff; }
+    .btn-danger { background: #c62828; color: #fff; padding: 5px 10px; font-size: 12px; }
+    .btn-edit { background: #1565c0; color: #fff; padding: 5px 10px; font-size: 12px; }
+    .preview-img { width: 110px; height: 110px; object-fit: cover; border-radius: 6px; border: 1px solid #ddd; margin-top: 8px; display: none; }
+    .toolbar { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { border-bottom: 1px solid #e5e5e5; padding: 8px; text-align: left; vertical-align: middle; }
+    td img { width: 48px; height: 48px; object-fit: cover; border-radius: 4px; }
+    .status { margin-top: 8px; font-size: 13px; color: #1f7a4c; min-height: 18px; }
+    .code-out-wrap { display: none; margin-top: 12px; }
+    .code-out-wrap.show { display: block; }
+    textarea.code-out { font-family: Consolas, monospace; font-size: 12px; height: 210px; margin-top: 0; background: #1e1e1e; color: #d4d4d4; }
+    .hidden-field { display: none; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="top-bar">
+    <h1 id="pageTitle">Quản lý Sản Phẩm</h1>
+    <div class="selectors">
+      <div class="sel-box">
+        <label for="groupSelect">Nhóm Sản Phẩm:</label>
+        <select id="groupSelect">
+          <option value="group1">Danh Mục Sản Phẩm</option>
+          <option value="group2">Danh Mục Sản Phẩm Liên Quan</option>
+        </select>
+      </div>
+      <div class="sel-box">
+        <label for="categorySelect">Danh mục:</label>
+        <select id="categorySelect"></select>
+      </div>
+    </div>
+  </div>
+
+  <div class="notice" id="dataStatus">Đang khởi tạo...</div>
+
+  <div class="grid">
+    <!-- FORM THÊM / SỬA -->
+    <div class="box">
+      <h2 id="formTitle" style="margin-top:0;">Thêm sản phẩm mới</h2>
+
+      <label>Cloud Name (Cloudinary)</label>
+      <input type="text" id="cloudName" placeholder="Ví dụ: a6goixuq" />
+
+      <label>Upload Preset (Unsigned)</label>
+      <input type="text" id="uploadPreset" placeholder="Ví dụ: thiep_cuoi_online" />
+
+      <label>Chọn ảnh từ máy tính</label>
+      <input type="file" id="fileInput" accept="image/*" />
+      <img id="previewImg" class="preview-img" alt="Xem trước ảnh" />
+      <div id="uploadStatus" class="status"></div>
+
+      <label>Link ảnh (tự điền sau khi upload hoặc dán link)</label>
+      <input type="text" id="imageUrl" placeholder="https://res.cloudinary.com/..." />
+
+      <div id="codeFieldWrap">
+        <label>Mã sản phẩm (code)</label>
+        <input type="text" id="code" placeholder="Ví dụ: HHY-6180" />
+      </div>
+
+      <label>Tên sản phẩm (name)</label>
+      <input type="text" id="name" placeholder="Ví dụ: Thiệp cưới độc quyền HHY-6180" />
+
+      <label>Giá (price)</label>
+      <input type="text" id="price" value="Liên hệ" />
+
+      <div id="detailUrlFieldWrap">
+        <label>Link chi tiết (detailUrl)</label>
+        <input type="text" id="detailUrl" value="chi-tiet-doc-quyen.html" />
+      </div>
+
+      <label>Mô tả (desc)</label>
+      <input type="text" id="desc" placeholder="Ví dụ: Thiệp cưới độc quyền" />
+
+      <div class="row">
+        <button class="btn-primary" id="saveBtn" type="button">Lưu sản phẩm</button>
+        <button class="btn-secondary" id="resetBtn" type="button">Làm mới / Hủy sửa</button>
+      </div>
+    </div>
+
+    <!-- DANH SÁCH & XUẤT FILE .JS -->
+    <div class="box">
+      <div class="toolbar">
+        <input type="text" id="searchInput" placeholder="Tìm theo tên, mã hoặc mô tả..." style="max-width: 210px;" />
+        <div class="row" style="margin-top:0;">
+          <label class="btn-secondary" style="margin:0; font-weight:bold; cursor:pointer;">
+            Nạp file .js
+            <input type="file" id="loadJsInput" accept=".js" style="display:none;" />
+          </label>
+          <button class="btn-secondary" id="reloadFromFileBtn" type="button">Đọc lại file gốc</button>
+          <button class="btn-success" id="downloadJsBtn" type="button">Tải file .js</button>
+          <button class="btn-secondary" id="toggleCodeBtn" type="button">Xem code</button>
+          <button class="btn-secondary" id="copyJsBtn" type="button">Copy code</button>
+        </div>
+      </div>
+
+      <div style="max-height: 440px; overflow-y: auto;">
+        <table>
+          <thead>
+            <tr>
+              <th>Ảnh</th>
+              <th id="thCode">Mã</th>
+              <th>Tên</th>
+              <th>Giá</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="productTableBody"></tbody>
+        </table>
+      </div>
+
+      <div id="codeOutWrap" class="code-out-wrap">
+        <textarea id="jsOutput" class="code-out" readonly></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+  const EDITOR_PAGE_URL = "admin-editor-auth.html"; // Đổi thành "../admin-editor-auth.html" nếu file quản lý nằm trong thư mục con
+  const CLOUD_NAME = "a6goixuq";
+  const UPLOAD_PRESET = "thiep_cuoi_online";
+
+  const GROUPS = {
+    group1: {
+      schema: "catalog",
+      categories: [
+        { id: "g1_1", label: "1. Thiệp Cưới Độc Quyền", fileName: "data-docquyen.js", varName: "docQuyenProducts", folder: "san-pham/danh-muc/doc-quyen", prefix: "HHY-", defaultStartNum: 6179, defaultDetailUrl: "chi-tiet-doc-quyen.html", header: "// Dữ liệu danh mục Thiệp Cưới Độc Quyền" },
+        { id: "g1_2", label: "2. Thiệp Công Giáo", fileName: "data-conggiao.js", varName: "conggiaoProducts", folder: "san-pham/danh-muc/cong-giao", prefix: "HHY-", defaultStartNum: 100, defaultDetailUrl: "chi-tiet.html", header: "// Dữ liệu danh mục Thiệp Công Giáo" },
+        { id: "g1_3", label: "3. Thiệp Cưới DQ-25", fileName: "data-dq25.js", varName: "dq25Products", folder: "san-pham/danh-muc/dq25", prefix: "HHY-", defaultStartNum: 100, defaultDetailUrl: "chi-tiet.html", header: "// Dữ liệu danh mục DQ25" },
+        { id: "g1_4", label: "4. Thiệp Cưới Hiện Đại", fileName: "data-hiendai.js", varName: "hienDaiProducts", folder: "san-pham/danh-muc/hien-dai", prefix: "HHY-", defaultStartNum: 100, defaultDetailUrl: "chi-tiet.html", header: "// Dữ liệu danh mục Hiện Đại" },
+        { id: "g1_5", label: "5. Thiệp Sinh Nhật", fileName: "data-sinhnhat.js", varName: "sinhnhatProducts", folder: "san-pham/danh-muc/sinh-nhat", prefix: "HHY-", defaultStartNum: 100, defaultDetailUrl: "chi-tiet.html", header: "// Dữ liệu danh mục Sinh Nhật" },
+        { id: "g1_6", label: "6. Thiệp Tân Gia", fileName: "data-tangia.js", varName: "tangiaProducts", folder: "san-pham/danh-muc/tan-gia", prefix: "HHY-", defaultStartNum: 100, defaultDetailUrl: "chi-tiet.html", header: "// Dữ liệu danh mục Tân Gia" },
+        { id: "g1_8", label: "8. Thiệp cưới Truyền Thống", fileName: "data-truyenthong.js", varName: "truyenthongProducts", folder: "san-pham/danh-muc/truyen-thong", prefix: "HHY-", defaultStartNum: 100, defaultDetailUrl: "chi-tiet.html", header: "// Dữ liệu danh mục Truyền Thống" }
+      ]
+    },
+    group2: {
+      schema: "detail",
+      categories: [
+        { id: "g2_1", label: "1. Chi Tiết Độc Quyền", fileName: "data-chitiet-docquyen.js", varName: "Dqproducts", folder: "san-pham/chi-tiet/doc-quyen", prefix: "HHY-", defaultStartNum: 6179, header: "// Dữ liệu danh mục Thiệp Cưới Hiện Đại (Dùng chung cho trang chi tiết)" },
+        { id: "g2_2", label: "2. Chi Tiết Công Giáo", fileName: "data-chitiet-conggiao.js", varName: "Toproducts", folder: "san-pham/chi-tiet/cong-giao", prefix: "HHY-", defaultStartNum: 100, header: "// Dữ liệu chi tiết Công Giáo" },
+        { id: "g2_3", label: "3. Chi Tiết DQ25", fileName: "data-chitiet-dq25.js", varName: "Dq25products", folder: "san-pham/chi-tiet/dq25", prefix: "HHY-", defaultStartNum: 100, header: "// Dữ liệu chi tiết DQ25" },
+        { id: "g2_4", label: "4. Chi Tiết Hiện Đại", fileName: "data-chitiet-hiendai.js", varName: "products", folder: "san-pham/chi-tiet/hien-dai", prefix: "HHY-", defaultStartNum: 100, header: "// Dữ liệu chi tiết Hiện Đại" },
+        { id: "g2_5", label: "5. Chi Tiết Sinh Nhật", fileName: "data-chitiet-sinhnhat.js", varName: "Snproducts", folder: "san-pham/chi-tiet/sinh-nhat", prefix: "HHY-", defaultStartNum: 100, header: "// Dữ liệu chi tiết Sinh Nhật" },
+        { id: "g2_6", label: "6. Chi Tiết Tân Gia", fileName: "data-chitiet-tangia.js", varName: "Tgproducts", folder: "san-pham/chi-tiet/tan-gia", prefix: "HHY-", defaultStartNum: 100, header: "// Dữ liệu chi tiết Tân Gia" },
+        { id: "g2_8", label: "8. Chi Tiết Truyền Thống", fileName: "data-chitiet-truyenthong.js", varName: "Ttproducts", folder: "san-pham/chi-tiet/truyen-thong", prefix: "HHY-", defaultStartNum: 100, header: "// Dữ liệu chi tiết Truyền Thống" }
+      ]
+    }
+  };
+
+  const store = {};
+  Object.values(GROUPS).forEach(g => g.categories.forEach(c => { store[c.id] = []; }));
+
+  let currentGroupKey = localStorage.getItem("active_group") || "group1";
+  if (!GROUPS[currentGroupKey]) currentGroupKey = "group1";
+
+  let currentCatId = localStorage.getItem("active_cat") || GROUPS[currentGroupKey].categories[0].id;
+  if (!store[currentCatId]) currentCatId = GROUPS[currentGroupKey].categories[0].id;
+
+  let editingIndex = -1;
+  let activeScriptEl = null;
+
+  const els = {
+    groupSelect: document.getElementById("groupSelect"),
+    categorySelect: document.getElementById("categorySelect"),
+    pageTitle: document.getElementById("pageTitle"),
+    dataStatus: document.getElementById("dataStatus"),
+    cloudName: document.getElementById("cloudName"),
+    uploadPreset: document.getElementById("uploadPreset"),
+    fileInput: document.getElementById("fileInput"),
+    previewImg: document.getElementById("previewImg"),
+    uploadStatus: document.getElementById("uploadStatus"),
+    imageUrl: document.getElementById("imageUrl"),
+    codeFieldWrap: document.getElementById("codeFieldWrap"),
+    code: document.getElementById("code"),
+    name: document.getElementById("name"),
+    price: document.getElementById("price"),
+    detailUrlFieldWrap: document.getElementById("detailUrlFieldWrap"),
+    detailUrl: document.getElementById("detailUrl"),
+    desc: document.getElementById("desc"),
+    formTitle: document.getElementById("formTitle"),
+    saveBtn: document.getElementById("saveBtn"),
+    resetBtn: document.getElementById("resetBtn"),
+    searchInput: document.getElementById("searchInput"),
+    loadJsInput: document.getElementById("loadJsInput"),
+    reloadFromFileBtn: document.getElementById("reloadFromFileBtn"),
+    thCode: document.getElementById("thCode"),
+    productTableBody: document.getElementById("productTableBody"),
+    codeOutWrap: document.getElementById("codeOutWrap"),
+    jsOutput: document.getElementById("jsOutput"),
+    downloadJsBtn: document.getElementById("downloadJsBtn"),
+    toggleCodeBtn: document.getElementById("toggleCodeBtn"),
+    copyJsBtn: document.getElementById("copyJsBtn")
+  };
+
+  function getGroup() { return GROUPS[currentGroupKey]; }
+  function getCat() {
+    const grp = getGroup();
+    return grp.categories.find(c => c.id === currentCatId) || grp.categories[0];
+  }
+  function getList() { return store[getCat().id] || []; }
+  function cacheKey(catId) { return `cat_draft_${catId}`; }
+
+  function saveDraft(catId, arr) {
+    try { localStorage.setItem(cacheKey(catId), JSON.stringify(arr)); } catch (e) {}
+  }
+
+  function readDraft(catId) {
+    try {
+      const raw = localStorage.getItem(cacheKey(catId));
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed : null;
+    } catch (e) { return null; }
+  }
+
+  function clearDraft(catId) {
+    try { localStorage.removeItem(cacheKey(catId)); } catch (e) {}
+  }
+
+  function getItemImage(item) {
+    return getGroup().schema === "detail" ? (item.img || "") : (item.image || "");
+  }
+
+  function extractCodeDisplay(item) {
+    if (getGroup().schema === "catalog") return item.code || "";
+    const m = String(item.name || "").match(/([A-Z0-9]+-\d+[A-Z0-9]*)/i);
+    return m ? m[1] : "-";
+  }
+
+  function generateNextCode() {
+    const cat = getCat();
+    const list = getList();
+    let maxNum = cat.defaultStartNum;
+    const escaped = cat.prefix.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const regex = new RegExp(`${escaped}(\\d+)`, "i");
+
+    list.forEach(p => {
+      const sourceText = getGroup().schema === "catalog" ? (p.code || "") : (p.name || "");
+      const match = String(sourceText).match(regex);
+      if (match) {
+        const num = parseInt(match[1], 10);
+        if (num > maxNum) maxNum = num;
+      }
+    });
+    return `${cat.prefix}${maxNum + 1}`;
+  }
+
+  function showPreview(url) {
+    if (url) {
+      els.previewImg.src = url;
+      els.previewImg.style.display = "block";
+    } else {
+      els.previewImg.style.display = "none";
+    }
+  }
+
+  function esc(str) {
+    return String(str ?? "").replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+  }
+
+  function buildJsFileContent() {
+    const grp = getGroup();
+    const cat = getCat();
+    const list = getList();
+
+    const items = list.map(p => {
+      if (grp.schema === "detail") {
+        return `    {\n        img: "${esc(p.img ?? p.image)}",\n        name: "${esc(p.name)}",\n        price: "${esc(p.price)}",\n        desc: "${esc(p.desc)}"\n    }`;
+      }
+      return `    {\n        code: "${esc(p.code)}",\n        name: "${esc(p.name)}",\n        price: "${esc(p.price)}",\n        image: "${esc(p.image ?? p.img)}",\n        detailUrl: "${esc(p.detailUrl || cat.defaultDetailUrl)}",\n        desc: "${esc(p.desc)}"\n    }`;
+    }).join(",\n");
+
+    return `${cat.header}\nconst ${cat.varName} = [\n${items}\n];\n`;
+  }
+
+  function renderTableAndCode(sourceNote = "") {
+    const grp = getGroup();
+    const cat = getCat();
+    const list = getList();
+    const keyword = els.searchInput.value.trim().toLowerCase();
+
+    els.pageTitle.textContent = `Quản lý — ${cat.label}`;
+    els.downloadJsBtn.textContent = `Tải ${cat.fileName}`;
+    els.thCode.textContent = grp.schema === "catalog" ? "Mã" : "Mã (tên)";
+    els.dataStatus.innerHTML = `<strong>${cat.label}</strong> · Biến <code>${cat.varName}</code> · Thư mục Cloudinary: <code>${cat.folder || "mặc định"}</code> · Có <strong>${list.length}</strong> sản phẩm${sourceNote ? ` (${sourceNote})` : ""}.`;
+
+    els.productTableBody.innerHTML = "";
+    list.forEach((item, idx) => {
+      const imgSrc = getItemImage(item);
+      const codeText = extractCodeDisplay(item);
+      const blob = `${codeText} ${item.name || ""} ${item.desc || ""} ${item.code || ""}`.toLowerCase();
+      if (keyword && !blob.includes(keyword)) return;
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><img src="${imgSrc}" alt="${item.name || ""}" onerror="this.style.display='none'"></td>
+        <td><strong>${codeText}</strong></td>
+        <td>${item.name || ""}</td>
+        <td>${item.price || ""}</td>
+        <td>
+          <button class="btn-edit" type="button" onclick="editProduct(${idx})">Sửa</button>
+          <button class="btn-danger" type="button" onclick="deleteProduct(${idx})">Xóa</button>
+        </td>
+      `;
+      els.productTableBody.appendChild(tr);
+    });
+
+    els.jsOutput.value = buildJsFileContent();
+  }
+
+  function resetForm() {
+    const grp = getGroup();
+    const cat = getCat();
+    editingIndex = -1;
+    els.formTitle.textContent = `Thêm sản phẩm — ${cat.label}`;
+    els.saveBtn.textContent = "Lưu sản phẩm";
+    els.fileInput.value = "";
+    els.imageUrl.value = "";
+    els.code.value = generateNextCode();
+    els.name.value = "";
+    els.price.value = "Liên hệ";
+    els.detailUrl.value = cat.defaultDetailUrl || "chi-tiet.html";
+    els.desc.value = "";
+    els.uploadStatus.textContent = "";
+    showPreview("");
+
+    if (grp.schema === "detail") {
+      els.codeFieldWrap.classList.add("hidden-field");
+      els.detailUrlFieldWrap.classList.add("hidden-field");
+    } else {
+      els.codeFieldWrap.classList.remove("hidden-field");
+      els.detailUrlFieldWrap.classList.remove("hidden-field");
+    }
+  }
+
+  function loadCurrentCategoryFile(forceFromDisk = false) {
+    const cat = getCat();
+
+    if (!forceFromDisk) {
+      const draft = readDraft(cat.id);
+      if (draft && draft.length > 0) {
+        store[cat.id] = draft;
+        resetForm();
+        renderTableAndCode("");
+        return;
+      }
+    }
+
+    if (activeScriptEl && activeScriptEl.parentNode) {
+      activeScriptEl.parentNode.removeChild(activeScriptEl);
+      activeScriptEl = null;
+    }
+
+    const s = document.createElement("script");
+    s.src = cat.fileName + "?t=" + Date.now();
+    activeScriptEl = s;
+
+    s.onload = function() {
+      const arr = window[cat.varName];
+      if (Array.isArray(arr)) {
+        store[cat.id] = [...arr];
+        if (forceFromDisk) clearDraft(cat.id);
+        resetForm();
+        renderTableAndCode(`tự nạp từ ${cat.fileName}`);
+      } else {
+        store[cat.id] = [];
+        resetForm();
+        renderTableAndCode(`không thấy mảng ${cat.varName} trong ${cat.fileName}`);
+      }
+    };
+
+    s.onerror = function() {
+      store[cat.id] = [];
+      resetForm();
+      renderTableAndCode(`chưa nạp được ${cat.fileName} — bấm Nạp file .js hoặc thêm mới`);
+    };
+
+    document.body.appendChild(s);
+  }
+
+  function populateCategoryDropdown() {
+    const grp = getGroup();
+    els.categorySelect.innerHTML = "";
+    grp.categories.forEach(c => {
+      const opt = document.createElement("option");
+      opt.value = c.id;
+      opt.textContent = c.label;
+      if (c.id === currentCatId) opt.selected = true;
+      els.categorySelect.appendChild(opt);
+    });
+  }
+
+  function onCategoryChange() {
+    const cat = getCat();
+    localStorage.setItem("active_group", currentGroupKey);
+    localStorage.setItem("active_cat", cat.id);
+    loadCurrentCategoryFile(false);
+  }
+
+  window.editProduct = function(idx) {
+    const grp = getGroup();
+    const cat = getCat();
+    const item = getList()[idx];
+    if (!item) return;
+
+    editingIndex = idx;
+    els.formTitle.textContent = `Đang sửa sản phẩm #${idx + 1}`;
+    els.saveBtn.textContent = "Cập nhật sản phẩm";
+
+    const imgVal = getItemImage(item);
+    els.imageUrl.value = imgVal;
+    showPreview(imgVal);
+
+    els.code.value = item.code || generateNextCode();
+    els.name.value = item.name || "";
+    els.price.value = item.price || "Liên hệ";
+    els.detailUrl.value = item.detailUrl || cat.defaultDetailUrl || "chi-tiet.html";
+    els.desc.value = item.desc || "";
+
+    if (grp.schema === "detail") {
+      els.codeFieldWrap.classList.add("hidden-field");
+      els.detailUrlFieldWrap.classList.add("hidden-field");
+    } else {
+      els.codeFieldWrap.classList.remove("hidden-field");
+      els.detailUrlFieldWrap.classList.remove("hidden-field");
+    }
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  window.deleteProduct = function(idx) {
+    const cat = getCat();
+    const list = getList();
+    const label = list[idx]?.name || `#${idx + 1}`;
+    if (!confirm(`Xóa sản phẩm "${label}"?`)) return;
+    list.splice(idx, 1);
+    saveDraft(cat.id, list);
+    renderTableAndCode("đã lưu bản nháp");
+  };
+
+  els.loadJsInput.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const cat = getCat();
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      try {
+        const text = String(ev.target.result || "");
+        const regex = new RegExp(`(?:const|let|var)\\s+${cat.varName}\\s*=\\s*(\\[[\\s\\S]*\\])\\s*;?`);
+        const match = text.match(regex);
+        if (!match) throw new Error(`Không tìm thấy mảng ${cat.varName} trong file`);
+        const parsed = Function('"use strict"; return (' + match[1] + ');')();
+        if (!Array.isArray(parsed)) throw new Error("Dữ liệu không phải mảng");
+        store[cat.id] = parsed;
+        saveDraft(cat.id, parsed);
+        resetForm();
+        renderTableAndCode(`nạp từ ${file.name}`);
+      } catch (err) {
+        alert("Không đọc được file .js: " + err.message);
+      }
+    };
+    reader.readAsText(file, "UTF-8");
+  });
+
+  els.reloadFromFileBtn.addEventListener("click", () => {
+    if (!confirm(`Đọc lại trực tiếp từ file ${getCat().fileName} (bỏ bản nháp đang sửa)?`)) return;
+    clearDraft(getCat().id);
+    loadCurrentCategoryFile(true);
+  });
+
+  els.groupSelect.value = currentGroupKey;
+  els.groupSelect.addEventListener("change", (e) => {
+    currentGroupKey = e.target.value;
+    currentCatId = GROUPS[currentGroupKey].categories[0].id;
+    populateCategoryDropdown();
+    onCategoryChange();
+  });
+
+  els.categorySelect.addEventListener("change", (e) => {
+    currentCatId = e.target.value;
+    onCategoryChange();
+  });
+
+  els.cloudName.value = localStorage.getItem("cld_name") || CLOUD_NAME;
+  els.uploadPreset.value = localStorage.getItem("cld_preset") || UPLOAD_PRESET;
+  els.cloudName.addEventListener("input", () => localStorage.setItem("cld_name", els.cloudName.value.trim()));
+  els.uploadPreset.addEventListener("input", () => localStorage.setItem("cld_preset", els.uploadPreset.value.trim()));
+  els.imageUrl.addEventListener("input", () => showPreview(els.imageUrl.value.trim()));
+
+  els.fileInput.addEventListener("change", async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const cloudName = els.cloudName.value.trim() || CLOUD_NAME;
+    const uploadPreset = els.uploadPreset.value.trim() || UPLOAD_PRESET;
+    const cat = getCat();
+
+    if (!cloudName || !uploadPreset) {
+      els.uploadStatus.style.color = "#c62828";
+      els.uploadStatus.textContent = "Vui lòng nhập Cloud Name và Upload Preset trước!";
+      return;
+    }
+
+    els.uploadStatus.style.color = "#1565c0";
+    els.uploadStatus.textContent = `Đang tải ảnh lên thư mục "${cat.folder || "mặc định"}"...`;
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", uploadPreset);
+    if (cat.folder) {
+      formData.append("folder", cat.folder);
+    }
+
+    try {
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+        method: "POST",
+        body: formData
+      });
+      const data = await res.json();
+      if (!res.ok || !data.secure_url) {
+        throw new Error(data.error?.message || "Upload thất bại");
+      }
+      els.imageUrl.value = data.secure_url;
+      showPreview(data.secure_url);
+      if (editingIndex === -1 && !els.code.value.trim()) {
+        els.code.value = generateNextCode();
+      }
+      els.uploadStatus.style.color = "#1f7a4c";
+      els.uploadStatus.textContent = `Upload thành công vào "${cat.folder || "mặc định"}"!`;
+    } catch (err) {
+      els.uploadStatus.style.color = "#c62828";
+      els.uploadStatus.textContent = "Lỗi: " + err.message;
+    }
+  });
+
+  els.saveBtn.addEventListener("click", () => {
+    const grp = getGroup();
+    const cat = getCat();
+    const list = getList();
+
+    const imgVal = els.imageUrl.value.trim();
+    const name = els.name.value.trim();
+    const price = els.price.value.trim() || "Liên hệ";
+    const desc = els.desc.value.trim() || name;
+
+    if (!name || !imgVal) {
+      alert("Vui lòng nhập đủ Tên sản phẩm và Link ảnh!");
+      return;
+    }
+
+    let obj;
+    if (grp.schema === "detail") {
+      obj = { img: imgVal, name, price, desc };
+    } else {
+      const code = els.code.value.trim();
+      const detailUrl = els.detailUrl.value.trim() || cat.defaultDetailUrl || "chi-tiet.html";
+      if (!code) {
+        alert("Vui lòng nhập Mã sản phẩm!");
+        return;
+      }
+      obj = { code, name, price, image: imgVal, detailUrl, desc };
+    }
+
+    if (editingIndex >= 0) {
+      list[editingIndex] = obj;
+    } else {
+      list.unshift(obj);
+    }
+
+    saveDraft(cat.id, list);
+    resetForm();
+    renderTableAndCode("đã lưu bản nháp");
+  });
+
+  els.resetBtn.addEventListener("click", resetForm);
+  els.searchInput.addEventListener("input", () => renderTableAndCode());
+
+  els.toggleCodeBtn.addEventListener("click", () => {
+    const isOpen = els.codeOutWrap.classList.toggle("show");
+    els.toggleCodeBtn.textContent = isOpen ? "Ẩn code" : "Xem code";
+  });
+
+  els.downloadJsBtn.addEventListener("click", () => {
+    const cat = getCat();
+    const blob = new Blob([buildJsFileContent()], { type: "application/javascript;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = cat.fileName;
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+els.copyJsBtn.addEventListener("click", async () => {
+    try {
+      await navigator.clipboard.writeText(els.jsOutput.value);
+    } catch (err) {
+      els.codeOutWrap.classList.add("show");
+      els.toggleCodeBtn.textContent = "Ẩn code";
+      els.jsOutput.select();
+      document.execCommand("copy");
+    }
+
+    // Nếu đang nằm trong khung của admin-tong.html thì yêu cầu trang cha chuyển sang trang quản lý code
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage(
+        {
+          type: "OPEN_ADMIN_TOOL",
+          toolId: "code-editor", // Khớp với id trong TOOL_GROUPS của admin-tong.html
+          url: "../../admin-editor-auth.html" // Đường dẫn từ thư mục san-pham/danh-muc ra thư mục gốc
+        },
+        "*"
+      );
+    } else {
+      window.open("../../admin-editor-auth.html", "_blank");
+    }
+  });
+
+  populateCategoryDropdown();
+  onCategoryChange();
+</script>
+</body>
+</html>

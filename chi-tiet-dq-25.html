@@ -212,6 +212,62 @@
             .mobile-dropdown-content { position: absolute; top: 100%; left: 0; background-color: #435247; min-width: 200px; box-shadow: 0px 8px 16px rgba(0,0,0,0.25); border-radius: 6px; margin-top: 8px; overflow: hidden; z-index: 1000; }
             .mobile-dropdown-content a { color: #ffffff; padding: 10px 16px; text-decoration: none; display: block; font-size: 13.5px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
         }
+                        /* --- KHUNG BỌC CARD SẢN PHẨM CÙNG LOẠI --- */
+.product_noibat_item .pro-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #ffffff;
+    border: 1px solid #ece6e4;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 2px 8px rgba(82, 100, 86, 0.06);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.product_noibat_item .pro-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 22px rgba(106, 7, 22, 0.12);
+    border-color: #d8b4b8;
+}
+
+.product_noibat_item .img_pro {
+    border-radius: 7px;
+    margin-bottom: 10px;
+    background: #faf8f7;
+}
+
+.product_noibat_item .img_pro img {
+    height: 210px;
+}
+
+.product_noibat_item .pro-card:hover .img_pro img {
+    transform: scale(1.05);
+}
+
+.product_noibat_item h3 {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+    height: 39px;
+    overflow: hidden;
+}
+
+.product_noibat_item .box_price_box {
+    margin-top: auto;
+    padding-top: 6px;
+    border-top: 1px dashed #f0eaea;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+}
+
+.product_noibat_item .box_price_box strong {
+    color: #c82333;
+    font-size: 14.5px;
+}
     </style>
 </head>
 <body>
@@ -330,24 +386,24 @@
         <div class="pagination" id="pagination"></div>
     </section>
 
-    <!-- 5. FOOTER -->
+    <!-------------------------- 4. CHÂN TRANG (FOOTER) ------------------------>
     <footer>
         <div class="footer-container">
             <div class="footer-col">
                 <h3>🏠 NHÀ IN THIỆP CƯỚI NGỌC THƯƠNG</h3>
-                <p><strong>Cơ sở in:</strong> Hệ thống in ấn thiệp cưới cao cấp Ngọc Thương</p>
-                <p><strong>Địa chỉ xưởng:</strong> 123 Đường Nguyễn Trãi, Quận 1, TP. Hồ Chí Minh</p>
+                <p><strong>Cơ sở in:</strong> In ấn thiệp cưới cao cấp Ngọc Thương</p>
+                <p><strong>Địa chỉ xưởng:</strong> 135, Tổ 6 - Ấp 8 - Xuân Đông - Tp. Đồng Nai</p>
             </div>
             <div class="footer-col">
                 <h3>⏰ THỜI GIAN LÀM VIỆC</h3>
                 <p><strong>Tư vấn trực tiếp:</strong> 08:00 - 21:00 (Hàng ngày)</p>
-                <p><strong>Hỗ trợ trực tuyến:</strong> 24/7 qua Zalo / Hotline</p>
+                <p><strong>Hỗ trợ trực tuyến:</strong> 24/7 qua Zalo / 0773060379</p>
             </div>
             <div class="footer-col">
                 <h3>🔗 CHÍNH SÁCH DỊCH VỤ</h3>
                 <ul class="footer-links">
-                    <li><a href="#">▶ Hướng dẫn quy trình duyệt thiết kế</a></li>
-                    <li><a href="#">▶ Chính sách in bù lỗi phát sinh 100%</a></li>
+                    <li><a href="huong-dan-dat-thiep.html"target="_blank" rel="noopener noreferrer">▶ Hướng dẫn đặt thiệp</a></li>
+                    <li><a href="huong-dan-viet-thiep.html"target="_blank" rel="noopener noreferrer">▶ Hướng dẫn viết thiệp cưới</a></li>
                     <li><a href="#">▶ Giao hàng tận nơi toàn quốc</a></li>
                 </ul>
             </div>
@@ -357,10 +413,10 @@
         </div>
     </footer>
 
-    <!-- FOOTER DI ĐỘNG -->
+    <!-- FOOTER MOBILE -->
     <div class="footer-mobile">
         <h4>THIỆP CƯỚI NGỌC THƯƠNG</h4>
-        <p>📍 123 Nguyễn Trãi, Quận 1, TP.HCM</p>
+        <p>📍 135, Tổ 6, Ấp 8, Xuân Đông,Tp. Đồng Nai</p>
         <div class="footer-mobile-actions">
             <a href="tel:0773060379">📞 Gọi Ngay</a>
             <a href="https://zalo.me/0773060379" target="_blank">💬 Nhắn Zalo</a>
@@ -371,20 +427,20 @@
     </div>
 
     <!-- 6. NHÚNG FILE DỮ LIỆU JS RIÊNG VÀ SCRIPT XỬ LÝ -->
-    <script src="san-pham/chi-tiet/data-chitiet-dq25.js"></script>
+    <script src="san-pham/data-dq25.js"></script>
     <script>
         const itemsPerPage = 20;
         let currentPage = 1;
 
         window.onload = function() {
             // Kiểm tra xem file data-hiendai.js có tồn tại mảng products không
-            const allProducts = typeof Dq25products !== 'undefined' ? Dq25products : [];
+            const allProducts = typeof dq25Products !== 'undefined' ? dq25Products : [];
 
             if (allProducts.length > 0) {
                 var firstProd = allProducts[0];
                 var name = localStorage.getItem('clickProdName') || firstProd.name;
                 var price = localStorage.getItem('clickProdPrice') || firstProd.price;
-                var imgUrl = localStorage.getItem('clickProdImg') || firstProd.img;
+                var imgUrl = localStorage.getItem('clickProdImg') || firstProd.image;
                 var description = localStorage.getItem('clickProdDesc') || firstProd.desc;
 
                 document.getElementById("prod-title").innerText = name;
@@ -405,27 +461,29 @@
 
         function renderPage(page) {
             currentPage = page;
-            const allProducts = typeof Dq25products !== 'undefined' ? Dq25products : [];
+            const allProducts = typeof dq25Products !== 'undefined' ? dq25Products : [];
             const start = (page - 1) * itemsPerPage;
             const end = start + itemsPerPage;
             const paginatedItems = allProducts.slice(start, end);
 
             const productListHTML = paginatedItems.map(item => `
-                <div class="product_noibat_item" data-description="${escapeHtml(item.desc)}">
-                    <a class="img_pro" href="#" onclick="event.preventDefault(); chonMau(this, '${escapeHtml(item.price)}', '${escapeHtml(item.desc)}');">
-                        <img src="${item.img}" alt="${escapeHtml(item.name)}">
-                    </a>
-                    <h3><a href="#" class="text-split" onclick="event.preventDefault(); chonMau(this, '${escapeHtml(item.price)}', '${escapeHtml(item.desc)}');">${escapeHtml(item.name)}</a></h3>
-                    <div class="box_price_box"><strong>${escapeHtml(item.price)}</strong></div>
-                </div>
-            `).join('');
+    <div class="product_noibat_item" data-description="${escapeHtml(item.desc)}">
+        <div class="pro-card">
+            <a class="img_pro" href="#" onclick="event.preventDefault(); chonMau(this, '${escapeHtml(item.price)}', '${escapeHtml(item.desc)}');">
+                <img src="${item.image}" alt="${escapeHtml(item.name)}">
+            </a>
+            <h3><a href="#" class="text-split" onclick="event.preventDefault(); chonMau(this, '${escapeHtml(item.price)}', '${escapeHtml(item.desc)}');">${escapeHtml(item.name)}</a></h3>
+            <div class="box_price_box"><strong>${escapeHtml(item.price)}</strong></div>
+        </div>
+    </div>
+`).join('');
 
             document.getElementById('product-list').innerHTML = productListHTML;
             renderPagination();
         }
 
         function renderPagination() {
-            const allProducts = typeof Dq25products !== 'undefined' ? Dq25products : [];
+            const allProducts = typeof dq25Products !== 'undefined' ? dq25Products : [];
             const pageCount = Math.ceil(allProducts.length / itemsPerPage);
             let paginationHTML = '';
 

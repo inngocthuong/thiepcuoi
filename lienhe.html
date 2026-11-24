@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liên hệ</title>
+    <link rel="icon" type="image/png" href="anh/logo.png">
     <style>
         /* --- 1. CÀI ĐẶT CHUNG --- */
         * {
@@ -664,7 +665,7 @@ z-index: 10;
 <!---------------------------------NOI DUNG--------------------------------------------->
 <style>
 /* ================================
-   FORM LIÊN HỆ - GIÁO XỨ HỒNG ÂN
+   FORM LIÊN HỆ 
    ================================ */
 
 .container-lienhe {
@@ -858,13 +859,13 @@ z-index: 10;
         <input type="hidden"
                name="from_name"
                id="fromName"
-               value="Website Giáo xứ Hồng Ân">
+               value="Website Thiệp cưới Ngọc Thương">
 
 
         <!-- TIÊU ĐỀ EMAIL -->
         <input type="hidden"
                name="subject"
-               value="Có lời nhắn liên hệ mới từ Website Giáo xứ Hồng Ân">
+               value="Có lời nhắn liên hệ mới từ Website Thiệp cưới Ngọc Thương">
 
 
         <!-- EMAIL TRẢ LỜI -->
@@ -986,7 +987,7 @@ document.getElementById("formLienHe").addEventListener("submit", async function(
     document.getElementById("emailMessage").value = emailContent;
 
     document.getElementById("fromName").value =
-        name + " - Website Giáo xứ Hồng Ân";
+        name + " - Website Thiệp cưới Ngọc thương";
 
     document.getElementById("replyTo").value = email;
 
@@ -1015,7 +1016,7 @@ document.getElementById("formLienHe").addEventListener("submit", async function(
                 "thong-bao-lienhe thanh-cong";
 
             thongBao.innerHTML =
-                "✓ Cảm ơn bạn! Lời nhắn đã được gửi thành công đến Giáo xứ Hồng Ân.";
+                "✓ Cảm ơn bạn! Lời nhắn đã được gửi thành công đến Thiệp cưới Ngọc thương.";
 
             /* Xóa form */
             document.getElementById("name").value = "";
@@ -1049,27 +1050,24 @@ document.getElementById("formLienHe").addEventListener("submit", async function(
 
 </script>
 
-
-
- <!-- 4. KHU VỰC CHÂN TRANG (FOOTER) DƯỚI CÙNG -->
-
+    <!-------------------------- 4. CHÂN TRANG (FOOTER) ------------------------>
     <footer>
         <div class="footer-container">
             <div class="footer-col">
                 <h3>🏠 NHÀ IN THIỆP CƯỚI NGỌC THƯƠNG</h3>
-                <p><strong>Cơ sở in:</strong> Hệ thống in ấn thiệp cưới cao cấp Ngọc Thương</p>
-                <p><strong>Địa chỉ xưởng:</strong> 123 Đường Nguyễn Trãi, Quận 1, TP. Hồ Chí Minh</p>
+                <p><strong>Cơ sở in:</strong> In ấn thiệp cưới cao cấp Ngọc Thương</p>
+                <p><strong>Địa chỉ xưởng:</strong> 135, Tổ 6 - Ấp 8 - Xuân Đông - Tp. Đồng Nai</p>
             </div>
             <div class="footer-col">
                 <h3>⏰ THỜI GIAN LÀM VIỆC</h3>
                 <p><strong>Tư vấn trực tiếp:</strong> 08:00 - 21:00 (Hàng ngày)</p>
-                <p><strong>Hỗ trợ trực tuyến:</strong> 24/7 qua Zalo / Hotline</p>
+                <p><strong>Hỗ trợ trực tuyến:</strong> 24/7 qua Zalo / 0773060379</p>
             </div>
             <div class="footer-col">
                 <h3>🔗 CHÍNH SÁCH DỊCH VỤ</h3>
                 <ul class="footer-links">
-                    <li><a href="#">▶ Hướng dẫn quy trình duyệt thiết kế</a></li>
-                    <li><a href="#">▶ Chính sách in bù lỗi phát sinh 100%</a></li>
+                    <li><a href="huong-dan-dat-thiep.html"target="_blank" rel="noopener noreferrer">▶ Hướng dẫn đặt thiệp</a></li>
+                    <li><a href="huong-dan-viet-thiep.html"target="_blank" rel="noopener noreferrer">▶ Hướng dẫn viết thiệp cưới</a></li>
                     <li><a href="#">▶ Giao hàng tận nơi toàn quốc</a></li>
                 </ul>
             </div>
@@ -1078,10 +1076,11 @@ document.getElementById("formLienHe").addEventListener("submit", async function(
             <p>© 2026 Thiệp Cưới Ngọc Thương - Tinh Tế Trong Từng Đường Nét</p>
         </div>
     </footer>
-      <!-- KHU VỰC FOOTER THU GỌN RIÊNG CHO ĐIỆN THOẠI (FOOTER MOBILE) -->
+
+    <!-- FOOTER MOBILE -->
     <div class="footer-mobile">
         <h4>THIỆP CƯỚI NGỌC THƯƠNG</h4>
-        <p>📍 123 Nguyễn Trãi, Quận 1, TP.HCM</p>
+        <p>📍 135, Tổ 6, Ấp 8, Xuân Đông,Tp. Đồng Nai</p>
         <div class="footer-mobile-actions">
             <a href="tel:0773060379">📞 Gọi Ngay</a>
             <a href="https://zalo.me/0773060379" target="_blank">💬 Nhắn Zalo</a>

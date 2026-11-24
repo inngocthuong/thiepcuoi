@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kho Link Ảnh & Nhạc Thiệp Cưới (Firebase)</title>
+  <link rel="icon" type="image/png" href="../anh/logo.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- Firebase SDK (v9 Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <style>
+    .custom-scroll::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #f5f5f4;
+      border-radius: 9999px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #a8a29e;
+      border-radius: 9999px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #78716c;
+    }
+
+       .action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    width: 100%;
+    justify-content: right;
+}
+
+/* Giao diện của từng nút */
+.home-btn { 
+    background-color: #035730; 
+    color: white; 
+    text-decoration: none; 
+    padding: 8px 15px; 
+    border-radius: 10px; 
+    font-weight: 500; 
+    display: inline-block; 
+    margin-bottom: 20px; 
+    transition: background-color 0.3s ease; 
+}
+
+/* Đổi màu khi rê chuột vào */
+.home-btn:hover {
+    background-color: #3c6d54;
+    color: white;
+}
+  </style>
+</head>
+<body class="bg-stone-100 text-stone-800 min-h-screen p-4 sm:p-8">
+  <div class="max-w-6xl mx-auto space-y-8">
+
+    <!-- Header -->
+    <header class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+      <div>
+        <div class="flex flex-wrap items-center gap-2.5">
+          <h1 class="text-2xl font-bold text-rose-900">
+            <i class="fas fa-photo-film mr-2 text-amber-600"></i>Kho Link Ảnh & Nhạc Thiệp Cưới Ngọc Thương
+          </h1>
+          <span id="syncBadge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+            <i class="fas fa-spinner fa-spin"></i> Đang kết nối Firebase...
+          </span>
+        </div>
+        <p class="text-sm text-stone-500 mt-1">
+          Phân loại theo từng bộ ảnh, hỗ trợ link URL, quét thư mục có sẵn hoặc chép ảnh từ máy vào thư mục con (<code class="bg-stone-100 px-1 rounded">album-01</code>, <code class="bg-stone-100 px-1 rounded">album-02</code>...) và đồng bộ Firebase.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap gap-2">
+<a href="https://console.cloudinary.com/console/media_library/folders/home" target="_blank" rel="noopener noreferrer"
+   class="px-3.5 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-semibold shadow-sm inline-flex items-center">
+  <i class="fas fa-cloud mr-1.5"></i> Mở Cloudinary
+</a>
+
+        <button type="button" onclick="syncNowToFirebase()" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold shadow-sm">
+          <i class="fas fa-cloud-arrow-up mr-1"></i> Lưu lên Firebase
+        </button>
+        <button type="button" onclick="exportData()" class="px-3.5 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold border border-stone-300">
+          <i class="fas fa-download mr-1"></i> Xuất JSON
+        </button>
+        <label class="px-3.5 py-2 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-700 text-xs font-semibold border border-stone-300 cursor-pointer">
+          <i class="fas fa-upload mr-1"></i> Nhập JSON
+          <input type="file" id="importFile" accept=".json" onchange="importData(event)" class="hidden" />
+        </label>
+        <button type="button" onclick="resetDefaultData()" class="px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold border border-rose-200">
+          <i class="fas fa-rotate-left mr-1"></i> Mẫu mặc định
+        </button>
+      </div>
+    </header>
+
+
+    <!-- PHẦN 1: QUẢN LÝ LINK ẢNH / ẢNH THƯ MỤC THEO BỘ -->
+    <section class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200 space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 border-b pb-4">
+        <div>
+          <h2 class="text-lg font-bold text-stone-800">
+            <i class="fas fa-images mr-2 text-rose-800"></i>1. Danh Sách Ảnh & Link Ảnh (<span id="imageCount">0</span>)
+          </h2>
+          <p class="text-xs text-stone-500 mt-0.5">
+            Bấm vào ảnh để xem kích thước lớn. Hỗ trợ cả link online (<code class="bg-stone-100 px-1.5 py-0.5 rounded">https://...</code>) và ảnh trong thư mục (<code class="bg-stone-100 px-1.5 py-0.5 rounded">../anh-cuoi/album/anh-cuoi-01.jpg</code>).
+          </p>
+        </div>
+        <input type="text" id="searchImage" oninput="renderImages()" placeholder="Tìm theo tên gợi nhớ, bộ hoặc đường dẫn..."
+          class="w-full md:w-72 px-3.5 py-2 rounded-xl border border-stone-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500" />
+      </div>
+
+
+<!-- KHỐI UPLOAD ẢNH & NHẠC LÊN CLOUDINARY VÀO ALBUM TÙY CHỌN -->
+<div class="bg-sky-50/80 border border-sky-200 rounded-xl p-4 space-y-3">
+  <div class="flex flex-wrap items-center justify-between gap-2">
+    <p class="text-sm font-bold text-sky-950">
+      <i class="fas fa-cloud-arrow-up mr-1.5 text-sky-700"></i>
+      Đưa Ảnh & vào Album Tùy Chọn & Lưu Trên Cloudinary
+    </p>
+    <span id="cloudinaryStatus" class="text-xs font-semibold text-sky-800 bg-white px-2.5 py-1 rounded-full border border-sky-200">
+      Sẵn sàng upload
+    </span>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
+    <div class="md:col-span-4">
+      <label class="block text-xs font-semibold text-stone-700 mb-1">Chọn album có sẵn</label>
+      <select id="cldAlbumSelect" class="w-full px-3 py-2 rounded-lg border border-sky-300 bg-white text-xs font-semibold">
+        <option value="Ảnh bìa">Ảnh bìa</option>
+        <option value="Hình nền">Hình nền</option>
+        <option value="Chân dung">Chân dung</option>
+        <option value="Album cưới" selected>Album cưới</option>
+        <option value="Album cưới 01">Album cưới 01</option>
+        <option value="Album cưới 02">Album cưới 02</option>
+        <option value="Album cưới 03">Album cưới 03</option>
+        <option value="Album cưới 04">Album cưới 04</option>
+        <option value="Album cưới 05">Album cưới 05</option>
+        <option value="Album cưới 06">Album cưới 06</option>
+        <option value="Album cưới 07">Album cưới 07</option>
+        <option value="Album cưới 08">Album cưới 08</option>
+        <option value="Album cưới 09">Album cưới 09</option>
+        <option value="Album cưới 10">Album cưới 10</option>
+      </select>
+    </div>
+
+    <div class="md:col-span-4">
+      <label class="block text-xs font-semibold text-stone-700 mb-1">Hoặc nhập tên album tùy chọn mới</label>
+      <input type="text" id="cldCustomAlbum" placeholder="VD: Album Khách Anh Minh"
+        class="w-full px-3 py-2 rounded-lg border border-sky-300 bg-white text-xs" />
+    </div>
+
+    <div class="md:col-span-4 flex flex-wrap gap-2">
+      <label class="flex-1 text-center px-3 py-2 rounded-lg bg-sky-700 hover:bg-sky-800 text-white text-xs font-semibold cursor-pointer shadow-sm">
+        <i class="fas fa-image mr-1"></i> Chọn Ảnh
+        <input type="file" accept="image/*" multiple onchange="handleCloudinaryUpload(event, 'image')" class="hidden" />
+      </label>
+    </div>
+  </div>
+</div>
+
+      <!-- CÁCH 1 (NHƯ BẢN CŨ): Quét nhanh thư mục ảnh trên máy -->
+      <div class="flex flex-wrap items-center justify-between gap-3 bg-rose-50/70 border border-rose-200/80 rounded-xl p-3.5">
+        <div class="text-xs text-stone-700">
+          <p class="font-bold text-rose-900"><i class="fas fa-folder-open mr-1"></i>Lấy nhanh thư mục ảnh từ thư mục gốc</p>
+          <p class="text-stone-500 mt-0.5">Tự tạo đường dẫn dạng <code id="folderPathPreviewHint" class="bg-white px-1.5 py-0.5 rounded border">../anh-cuoi/album/ten-file.jpg</code> và đồng bộ Firebase.</p>
+        </div>
+        
+        <div class="flex flex-wrap items-center gap-2">
+          <select id="folderImgCategory" onchange="updateFolderHintByCategory()" class="px-3 py-2 rounded-lg border border-stone-300 bg-white text-xs font-semibold text-stone-700">
+            <option value="Ảnh bìa">Ảnh bìa</option>
+            <option value="Hình nền">Hình nền</option>
+            <option value="Chân dung">Chân dung</option>
+            <option value="Album cưới" selected>Album cưới</option>
+            <option value="Album cưới 01">Album cưới 01</option>
+            <option value="Album cưới 02">Album cưới 02</option>
+            <option value="Album cưới 03">Album cưới 03</option>
+            <option value="Album cưới 04">Album cưới 04</option>
+            <option value="Album cưới 05">Album cưới 05</option>
+            <option value="Album cưới 06">Album cưới 06</option>
+            <option value="Album cưới 07">Album cưới 07</option>
+            <option value="Album cưới 08">Album cưới 08</option>
+            <option value="Album cưới 07">Album cưới 09</option>
+            <option value="Album cưới 08">Album cưới 10</option>
+          </select>
+
+
+          <label class="px-3.5 py-2 rounded-lg bg-rose-900 hover:bg-rose-800 text-white text-xs font-semibold cursor-pointer shadow-sm">
+            <i class="fas fa-folder-open mr-1 text-white"></i> Chọn thư mục ảnh
+            <input type="file" id="folderImageInput" webkitdirectory directory multiple accept="image/*"
+              onchange="handleFolderImagesSelected(event)" class="hidden" />
+          </label>
+        </div>
+      </div>
+
+      
+
+      <!-- Form thêm ảnh (URL hoặc đường dẫn thư mục) -->
+      <form onsubmit="addImage(event)" class="grid grid-cols-1 md:grid-cols-12 gap-3 bg-stone-50 p-4 rounded-xl border border-stone-200">
+        <div class="md:col-span-3">
+          <label class="block text-xs font-semibold text-stone-600 mb-1">Bộ ảnh (Phân loại)</label>
+          <select id="imgCategory" class="w-full px-3 py-2 rounded-lg border border-stone-300 bg-white text-sm font-medium">
+            <option value="Ảnh bìa">Ảnh bìa</option>
+            <option value="Hình nền">Hình nền</option>
+            <option value="Chân dung">Chân dung</option>
+            <option value="Album cưới" selected>Album cưới</option>
+            <option value="Album cưới 01">Album cưới 01</option>
+            <option value="Album cưới 02">Album cưới 02</option>
+            <option value="Album cưới 03">Album cưới 03</option>
+            <option value="Album cưới 04">Album cưới 04</option>
+            <option value="Album cưới 05">Album cưới 05</option>
+            <option value="Album cưới 06">Album cưới 06</option>
+            <option value="Album cưới 07">Album cưới 07</option>
+            <option value="Album cưới 08">Album cưới 08</option>
+            <option value="Album cưới 07">Album cưới 09</option>
+            <option value="Album cưới 08">Album cưới 10</option>
+          </select>
+        </div>
+        <div class="md:col-span-3">
+          <label class="block text-xs font-semibold text-stone-600 mb-1">Tên gợi nhớ</label>
+          <input type="text" id="imgTitle" required placeholder="VD: Ảnh bìa đôi uyên ương"
+            class="w-full px-3 py-2 rounded-lg border border-stone-300 bg-white text-sm" />
+        </div>
+        <div class="md:col-span-4">
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-xs font-semibold text-stone-600">Nhập link ảnh hoặc đường dẫn thư mục</label>
+            <button type="button" onclick="fillFolderImageSample()" class="text-[11px] font-semibold text-rose-800 hover:underline">
+              + Mẫu thư mục
+            </button>
+          </div>
+          <input type="text" id="imgUrl" required placeholder="https://... hoặc ../anh-cuoi/album/anh-cuoi-01.jpg"
+            class="w-full px-3 py-2 rounded-lg border border-stone-300 bg-white text-sm font-mono" />
+        </div>
+        <div class="md:col-span-2 flex items-end">
+          <button type="submit" class="w-full py-2 px-4 rounded-lg bg-rose-900 hover:bg-rose-800 text-white text-sm font-semibold shadow-sm">
+            <i class="fas fa-plus mr-1"></i> Thêm ảnh
+          </button>
+        </div>
+      </form>
+
+      <!-- CÁCH 2 (NÂNG CẤP): Lấy ảnh ở bất kỳ đâu trên máy & tự tạo thư mục con trong anh-cuoi -->
+      <div class="bg-gradient-to-r from-emerald-50/90 to-teal-50/70 border border-emerald-200 rounded-xl p-4 space-y-3.5">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+          <div class="text-xs text-stone-700 space-y-1">
+            <div class="flex flex-wrap items-center gap-2">
+              <p class="font-bold text-emerald-950 text-sm">
+                <i class="fas fa-folder-tree mr-1.5 text-emerald-700"></i>Lấy ảnh từ bất kỳ đâu & Tự tạo thư mục con trong <code class="bg-white px-1.5 py-0.5 rounded border border-emerald-200 text-emerald-800">anh-cuoi</code>
+              </p>
+              <span id="rootDirBadge" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-800 border border-amber-200">
+                <i class="fas fa-link-slash"></i> Chưa chọn thư mục anh-cuoi
+              </span>
+            </div>
+            <p class="text-stone-600">
+              Chọn ảnh từ Desktop/Download/ổ D... &rarr; tự tạo thư mục con <code id="autoSaveSubfolderHint" class="bg-white px-1.5 py-0.5 rounded border font-semibold text-rose-800">anh-cuoi/album-02/</code>, chép file ảnh vào đó và lưu đường dẫn lên Firebase.
+            </p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2 shrink-0">
+            <button type="button" onclick="connectRootAnhCuoiFolder()"
+              class="px-3.5 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-semibold shadow-sm">
+              <svg class="w-4 h-4 mr-1 text-white inline-block" fill="currentColor" viewBox="0 0 512 512" xmlns="http://w3.org"><path d="M448 96H272l-64-64H64C28.7 32 0 60.7 0 96v320c0 35.3 28.7 64 64 64h384c35.3 0 64-28.7 64-64V160c0-35.3-28.7-64-64-64zM280 340.7l-48 48c-9.4 9.4-24.6 9.4-33.9 0l-48-48c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l7 7V216c0-13.3 10.7-24 24-24s24 10.7 24 24v97.7l7-7c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/>
+              </svg>Chọn thư mục lưu:      <span class="underline">anh-cuoi</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2.5 pt-2 border-t border-emerald-200/70">
+          <div class="flex items-center gap-1.5">
+            <span class="text-xs font-semibold text-stone-700">Nơi lưu:</span>
+            <select id="importTargetCategory" onchange="updateImportTargetHint()"
+              class="px-3 py-2 rounded-lg border border-emerald-300 bg-white text-xs font-bold text-stone-800">
+              <option value="Ảnh bìa">Ảnh bìa (&rarr; anh-bia)</option>
+              <option value="Hình nền">Hình nền (&rarr; hinh-nen)</option>
+              <option value="Chân dung">Chân dung (&rarr; chan-dung)</option>
+              <option value="Album cưới">Album cưới (&rarr; album)</option>
+              <option value="Album cưới 01">Album cưới 01 (&rarr; album-01)</option>
+              <option value="Album cưới 02" selected>Album cưới 02 (&rarr; album-02)</option>
+              <option value="Album cưới 03">Album cưới 03 (&rarr; album-03)</option>
+              <option value="Album cưới 04">Album cưới 04 (&rarr; album-04)</option>
+              <option value="Album cưới 05">Album cưới 05 (&rarr; album-05)</option>
+              <option value="Album cưới 06">Album cưới 06 (&rarr; album-06)</option>
+              <option value="Album cưới 07">Album cưới 07 (&rarr; album-07)</option>
+              <option value="Album cưới 08">Album cưới 08 (&rarr; album-08)</option>
+              <option value="Album cưới 07">Album cưới 09 (&rarr; album-09)</option>
+              <option value="Album cưới 08">Album cưới 10 (&rarr; album-10)</option>
+            </select>
+          </div>
+
+          <label class="px-3.5 py-2 rounded-lg bg-white hover:bg-emerald-50 text-emerald-900 border border-emerald-300 text-xs font-semibold cursor-pointer shadow-2xs">
+            <i class="fas fa-images mr-1 text-emerald-700"></i>Chọn ảnh
+            <input type="file" id="pickAnyImagesInput" multiple accept="image/*"
+              onchange="stagePickedImages(event)" class="hidden" />
+          </label>
+
+          <label class="px-3.5 py-2 rounded-lg bg-white hover:bg-emerald-50 text-emerald-900 border border-emerald-300 text-xs font-semibold cursor-pointer shadow-2xs">
+            <i class="fas fa-folder-open mr-1 text-emerald-700"></i> Chọn thư mục ảnh
+            <input type="file" id="pickAnyFolderInput" webkitdirectory directory multiple accept="image/*"
+              onchange="stagePickedImages(event)" class="hidden" />
+          </label>
+
+          <label class="px-3.5 py-2 rounded-lg bg-white hover:bg-emerald-50 text-emerald-900 border border-emerald-300 text-xs font-semibold cursor-pointer shadow-2xs">
+            <a href="https://github.com/inngocthuong/thiepcuoi/tree/main/anh-cuoi" target="_blank" rel="noopener noreferrer">⬆️ Tải thư mục ảnh lên github</a>
+            <input type="file" id="pickAnyFolderInput" webkitdirectory directory multiple accept="image/*"
+              onchange="stagePickedImages(event)" class="hidden" />
+          </label>
+
+          <button type="button" id="btnSaveStagedImages" onclick="saveStagedImagesToAlbum()" disabled
+            class="ml-auto px-4 py-2 rounded-lg bg-rose-900 hover:bg-rose-800 disabled:bg-stone-300 disabled:cursor-not-allowed text-white text-xs font-bold shadow-sm">
+            <i class="fas fa-floppy-disk mr-1"></i> Lưu ảnh vào <span id="btnTargetFolderLabel">album-02</span> (<span id="stagedCount">0</span>)
+          </button>
+        </div>
+
+        <!-- Khay xem trước các ảnh vừa chọn chờ lưu -->
+        <div id="stagedPreviewBox" class="hidden bg-white/90 rounded-lg border border-emerald-200 p-3 space-y-2">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-bold text-stone-700">
+              <i class="fas fa-list-check mr-1 text-emerald-600"></i>Ảnh đang chờ lưu vào <code id="stagedTargetCode" class="text-rose-800 font-mono">../anh-cuoi/album-02/</code>:
+            </span>
+            <button type="button" onclick="clearStagedImages()" class="text-red-600 hover:underline font-semibold">
+              Xóa danh sách chờ
+            </button>
+          </div>
+          <div id="stagedThumbList" class="custom-scroll flex gap-2.5 overflow-x-auto pb-1"></div>
+        </div>
+      </div>
+
+      <!-- Thanh lọc theo bộ ảnh -->
+      <div id="categoryTabs" class="flex flex-wrap gap-2"></div>
+
+      <!-- Khung có thanh cuộn dọc khi có nhiều ảnh -->
+      <div class="rounded-xl border border-stone-200 bg-stone-50/60 p-3">
+        <div id="imageGrid" class="custom-scroll grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-h-[620px] overflow-y-auto pr-2"></div>
+      </div>
+    </section>
+
+    <!-- PHẦN 2: QUẢN LÝ TÊN FILE NHẠC -->
+
+    <section class="bg-white rounded-2xl p-6 shadow-sm border border-stone-200 space-y-6">
+      <div class="border-b pb-4">
+        <h2 class="text-lg font-bold text-stone-800">
+          <i class="fas fa-music mr-2 text-amber-600"></i>2. Danh Sách Tên File Nhạc (<span id="musicCount">0</span>)
+        </h2>
+
+    <!-- TẢI NHẠC LÊN CLOUDINARY (KHÔNG CẦN CHỌN ALBUM ẢNH) -->
+<div class="flex flex-wrap items-center justify-between gap-3 bg-sky-50/80 border border-sky-200 rounded-xl p-3.5">
+  <div class="text-xs text-stone-700">
+    <p class="font-bold text-sky-950">
+      <i class="fas fa-cloud-arrow-up mr-1.5 text-sky-700"></i>Tải nhạc lên Cloudinary & lưu link nhạc
+    </p>
+    <p class="text-stone-500 mt-0.5">
+      Tự động tải file nhạc lên thư mục <code class="bg-white px-1.5 py-0.5 rounded border">thiep-cuoi/nhac-nen</code> trên Cloudinary, lấy link & đồng bộ Firebase.
+    </p>
+  </div>
+  <div class="flex items-center gap-2.5">
+    <span id="cloudinaryMusicStatus" class="text-xs font-semibold text-sky-800"></span>
+    <label class="px-3.5 py-2 rounded-lg bg-sky-700 hover:bg-sky-800 text-white text-xs font-semibold cursor-pointer shadow-sm">
+      <i class="fas fa-music mr-1"></i> Chọn nhạc
+      <input type="file" accept="audio/*" multiple onchange="handleCloudinaryUpload(event, 'music')" class="hidden" />
+    </label>
+  </div>
+</div>
+    
+      </div>
+
+      <!-- Quét nhanh thư mục nhạc trên máy -->
+      <div class="flex flex-wrap items-center justify-between gap-3 bg-amber-50/70 border border-amber-200/80 rounded-xl p-3.5">
+        <div class="text-xs text-stone-700">
+          <p class="font-bold text-amber-900"><i class="fas fa-folder-open mr-1"></i>Quét nhanh thư mục nhạc trên máy</p>
+          <p class="text-stone-500 mt-0.5">Tự tạo đường dẫn dạng <code class="bg-white px-1.5 py-0.5 rounded border">../nhac/ten-file.mp3</code> và đồng bộ Firebase.</p>
+        </div>
+
+       
+
+        <label class="px-3.5 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold cursor-pointer shadow-sm">
+          <i class="fas fa-music mr-1"></i> Chọn thư mục nhạc
+          <input type="file" id="folderMusicInput" webkitdirectory directory multiple accept="audio/*"
+            onchange="handleFolderMusicsSelected(event)" class="hidden" />
+        </label>
+      </div>
+   
+      </form>
+
+      <!-- Danh sách nhạc -->
+      <div id="musicList" class="custom-scroll space-y-3 max-h-[380px] overflow-y-auto pr-2"></div>
+    </section>
+
+  </div>
+
+  <!-- Modal xem ảnh lớn -->
+  <div id="imageModal" onclick="if(event.target === this) closeImageModal()"
+    class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="relative max-w-4xl w-full bg-stone-950 rounded-2xl border border-stone-700 overflow-hidden shadow-2xl">
+      <div class="flex items-center justify-between gap-3 px-4 py-3 bg-stone-900 border-b border-stone-800 text-white">
+        <div class="min-w-0">
+          <p id="modalImageTitle" class="text-sm font-bold truncate"></p>
+          <p id="modalImageMeta" class="text-[11px] font-mono text-stone-400 truncate"></p>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <button id="modalCopyBtn" type="button"
+            class="px-3 py-1.5 rounded-lg bg-rose-700 hover:bg-rose-600 text-white text-xs font-semibold">
+            <i class="fas fa-copy mr-1"></i> Copy
+          </button>
+          <button type="button" onclick="closeImageModal()" title="Đóng"
+            class="w-8 h-8 rounded-lg bg-stone-800 hover:bg-stone-700 text-stone-200 flex items-center justify-center">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      </div>
+      <div class="p-4 flex items-center justify-center bg-black/60 max-h-[78vh] overflow-auto">
+        <img id="modalImagePreview" src="" alt="" class="max-h-[72vh] max-w-full object-contain rounded-lg" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio player dùng chung để nghe thử -->
+  <audio id="previewPlayer" preload="none"></audio>
+
+  <!-- Toast thông báo -->
+  <div id="toast" class="fixed bottom-6 right-6 bg-stone-900 text-white text-xs font-semibold px-4 py-3 rounded-xl shadow-lg opacity-0 pointer-events-none transition-opacity duration-300 z-50">
+    <i class="fas fa-check-circle text-emerald-400 mr-1.5"></i>
+    <span id="toastText">Đã sao chép!</span>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBBvtAXdPHBSpBUWCx9X91NJ6ZpJ7vDiJo",
+      authDomain: "thiep-online-03.firebaseapp.com",
+      projectId: "thiep-online-03",
+      storageBucket: "thiep-online-03.firebasestorage.app",
+      messagingSenderId: "1038725825609",
+      appId: "1:1038725825609:web:2542b10c297505d6c82b98"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
+    const vaultRef = db.collection('media_vault').doc('main_vault');
+
+    const STORAGE_KEY = 'wedding_media_vault_v2';
+    const CATEGORIES = [
+      'Tất cả',
+      'Ảnh bìa',
+      'Hình nền',
+      'Chân dung',
+      'Album cưới',
+      'Album cưới 01',
+      'Album cưới 02',
+      'Album cưới 03',
+      'Album cưới 04',
+      'Album cưới 05',
+      'Album cưới 06',
+      'Album cưới 07',
+      'Album cưới 08',
+      'Album cưới 09',
+      'Album cưới 10'
+    ];
+    const IMAGE_EXT_REGEX = /\.(jpe?g|png|webp|gif|avif|bmp)$/i;
+    const MUSIC_EXT_REGEX = /\.(mp3|wav|ogg|m4a|aac|flac)$/i;
+
+    // Giữ nguyên y hệt bản gốc của bạn
+    const CATEGORY_FOLDER_MAP = {
+      'Ảnh bìa': '../anh-cuoi/anh-bia',
+      'Hình nền': '../anh-cuoi/hinh-nen',
+      'Chân dung': '../anh-cuoi/chan-dung',
+      'Album cưới': '../anh-cuoi/album',
+      'Album cưới 01': '../anh-cuoi/album-01',
+      'Album cưới 02': '../anh-cuoi/album-02',
+      'Album cưới 03': '../anh-cuoi/album-03',
+      'Album cưới 04': '../anh-cuoi/album-04',
+      'Album cưới 05': '../anh-cuoi/album-05',
+      'Album cưới 06': '../anh-cuoi/album-06',
+      'Album cưới 07': '../anh-cuoi/album-07',
+      'Album cưới 08': '../anh-cuoi/album-08',
+      'Album cưới 07': '../anh-cuoi/album-09',
+      'Album cưới 08': '../anh-cuoi/album-10'
+    };
+
+    const DEFAULT_DATA = {
+      images: [
+        {
+          id: 'img-1',
+          category: 'Ảnh bìa',
+          title: 'Ảnh bìa chính đôi uyên ương',
+          url: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80'
+        },
+        {
+          id: 'img-2',
+          category: 'Album cưới',
+          title: 'Ảnh thư mục mẫu 01',
+          url: '../anh-cuoi/album/anh-cuoi-01.jpg'
+        },
+        {
+          id: 'img-3',
+          category: 'Chân dung',
+          title: 'Ảnh chân dung chú rể (1:1)',
+          url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80'
+        },
+        {
+          id: 'img-4',
+          category: 'Chân dung',
+          title: 'Ảnh chân dung cô dâu (1:1)',
+          url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80'
+        },
+        {
+          id: 'img-5',
+          category: 'Hình nền',
+          title: 'Hình nền tiệc cưới lãng mạn',
+          url: 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=800&q=80'
+        }
+      ],
+      musics: [
+        { id: 'mus-1', title: 'Nhạc cưới thư mục 01', path: '../nhac/nhac-cuoi-01.mp3' },
+        { id: 'mus-2', title: 'Nhạc cưới thư mục 02', path: '../nhac/nhac-cuoi-02.mp3' }
+      ]
+    };
+
+    let activeCategory = 'Tất cả';
+    let state = loadLocalState();
+    let isRemoteUpdating = false;
+    let playingMusicId = null;
+    let viewingImageId = null;
+
+    // Handle thư mục gốc anh-cuoi (File System Access API) & danh sách file chờ lưu
+    let anhCuoiRootHandle = null;
+    let stagedFiles = [];
+
+    const previewPlayer = document.getElementById('previewPlayer');
+    previewPlayer.addEventListener('ended', () => {
+      playingMusicId = null;
+      renderMusics();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && viewingImageId) {
+        closeImageModal();
+      }
+    });
+
+    function getFolderPrefixByCategory(category) {
+      return CATEGORY_FOLDER_MAP[category] || '../anh-cuoi/album';
+    }
+
+    // Lấy tên thư mục con (ví dụ: '../anh-cuoi/album-02' -> 'album-02')
+    function getSubfolderNameByCategory(category) {
+      const fullPrefix = getFolderPrefixByCategory(category);
+      const parts = fullPrefix.split('/').filter(Boolean);
+      return parts[parts.length - 1] || 'album';
+    }
+
+    function updateFolderHintByCategory() {
+      const category = document.getElementById('folderImgCategory')?.value || 'Album cưới';
+      const hintEl = document.getElementById('folderPathPreviewHint');
+      if (hintEl) {
+        hintEl.textContent = `${getFolderPrefixByCategory(category)}/ten-file.jpg`;
+      }
+    }
+
+    function updateImportTargetHint() {
+      const category = document.getElementById('importTargetCategory')?.value || 'Album cưới 02';
+      const fullPrefix = getFolderPrefixByCategory(category);
+      const subfolder = getSubfolderNameByCategory(category);
+      const hintEl = document.getElementById('autoSaveSubfolderHint');
+      const btnLabel = document.getElementById('btnTargetFolderLabel');
+      const stagedCode = document.getElementById('stagedTargetCode');
+
+      if (hintEl) hintEl.textContent = `anh-cuoi/${subfolder}/`;
+      if (btnLabel) btnLabel.textContent = subfolder;
+      if (stagedCode) stagedCode.textContent = `${fullPrefix}/`;
+    }
+
+    function updateRootDirBadge() {
+      const badge = document.getElementById('rootDirBadge');
+      if (!badge) return;
+      if (anhCuoiRootHandle) {
+        badge.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300';
+        badge.innerHTML = `<i class="fas fa-folder-open"></i> Đã kết nối: ${escapeHtml(anhCuoiRootHandle.name)}`;
+      } else {
+        badge.className = 'inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-800 border border-amber-200';
+        badge.innerHTML = `<i class="fas fa-link-slash"></i> Chưa chọn thư mục anh-cuoi`;
+      }
+    }
+
+    // Bước 1: Kết nối trực tiếp tới thư mục gốc anh-cuoi trên ổ cứng
+    async function connectRootAnhCuoiFolder() {
+      if (!('showDirectoryPicker' in window)) {
+        alert('Trình duyệt hiện tại chưa hỗ trợ ghi trực tiếp vào thư mục trên máy. Hãy dùng Google Chrome hoặc Microsoft Edge trên máy tính nhé!');
+        return false;
+      }
+      try {
+        const handle = await window.showDirectoryPicker({
+          id: 'wedding-anh-cuoi-root',
+          mode: 'readwrite'
+        });
+        anhCuoiRootHandle = handle;
+        updateRootDirBadge();
+        showToast(`Đã kết nối thư mục "${handle.name}"!`);
+        return true;
+      } catch (err) {
+        if (err && err.name !== 'AbortError') {
+          console.error(err);
+          showToast('Không thể mở quyền ghi thư mục anh-cuoi.');
+        }
+        return false;
+      }
+    }
+
+    // Chuẩn hóa tên file gọn gàng để không lỗi URL trên trình duyệt
+    function sanitizeAssetFileName(originalName) {
+      const dotIdx = originalName.lastIndexOf('.');
+      const rawBase = dotIdx > 0 ? originalName.slice(0, dotIdx) : originalName;
+      const ext = dotIdx > 0 ? originalName.slice(dotIdx).toLowerCase() : '.jpg';
+
+      const normalizedBase = rawBase
+        .normalize('NFD')
+        .replace(/[̀-ͯ]/g, '')
+        .replace(/đ/g, 'd')
+        .replace(/Đ/g, 'D')
+        .replace(/[^a-zA-Z0-9_-]+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '')
+        .toLowerCase();
+
+      return `${normalizedBase || 'anh-cuoi'}${ext}`;
+    }
+
+    // Bước 2: Chọn ảnh từ bất kỳ thư mục nào trên máy đưa vào hàng chờ
+    function stagePickedImages(e) {
+      const files = Array.from(e.target.files || []);
+      e.target.value = '';
+      if (!files.length) return;
+
+      const existingNames = new Set(stagedFiles.map(item => item.fileName.toLowerCase()));
+      let added = 0;
+
+      files.forEach((file, idx) => {
+        if (!IMAGE_EXT_REGEX.test(file.name)) return;
+        let cleanName = sanitizeAssetFileName(file.name);
+
+        if (existingNames.has(cleanName.toLowerCase())) {
+          const dotIdx = cleanName.lastIndexOf('.');
+          const base = cleanName.slice(0, dotIdx);
+          const ext = cleanName.slice(dotIdx);
+          cleanName = `${base}-${Date.now().toString().slice(-4)}-${idx}${ext}`;
+        }
+        existingNames.add(cleanName.toLowerCase());
+
+        stagedFiles.push({
+          id: `stage-${Date.now()}-${idx}-${Math.random().toString(36).slice(2, 6)}`,
+          file,
+          fileName: cleanName,
+          previewUrl: URL.createObjectURL(file)
+        });
+        added++;
+      });
+
+      if (!added) {
+        showToast('Không có file ảnh hợp lệ nào được chọn.');
+        return;
+      }
+
+      renderStagedImages();
+      showToast(`Đã chọn ${added} ảnh chờ lưu!`);
+    }
+
+    function removeStagedItem(id) {
+      const idx = stagedFiles.findIndex(item => item.id === id);
+      if (idx === -1) return;
+      URL.revokeObjectURL(stagedFiles[idx].previewUrl);
+      stagedFiles.splice(idx, 1);
+      renderStagedImages();
+    }
+
+    function clearStagedImages() {
+      stagedFiles.forEach(item => URL.revokeObjectURL(item.previewUrl));
+      stagedFiles = [];
+      renderStagedImages();
+    }
+
+    function renderStagedImages() {
+      const countEl = document.getElementById('stagedCount');
+      const saveBtn = document.getElementById('btnSaveStagedImages');
+      const box = document.getElementById('stagedPreviewBox');
+      const listEl = document.getElementById('stagedThumbList');
+
+      if (countEl) countEl.textContent = stagedFiles.length;
+      if (saveBtn) saveBtn.disabled = stagedFiles.length === 0;
+
+      if (!box || !listEl) return;
+      if (stagedFiles.length === 0) {
+        box.classList.add('hidden');
+        listEl.innerHTML = '';
+        return;
+      }
+
+      box.classList.remove('hidden');
+      listEl.innerHTML = '';
+
+      stagedFiles.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'relative shrink-0 w-28 bg-stone-50 border border-stone-200 rounded-lg p-1.5 text-center';
+        card.innerHTML = `
+          <button type="button" onclick="removeStagedItem('${escapeAttr(item.id)}')" title="Bỏ ảnh này"
+            class="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-red-600 text-white text-[10px] flex items-center justify-center shadow">
+            <i class="fas fa-times"></i>
+          </button>
+          <img src="${escapeAttr(item.previewUrl)}" alt="${escapeAttr(item.fileName)}"
+            class="w-full h-16 object-cover rounded mb-1" />
+          <p class="text-[10px] font-mono text-stone-700 truncate" title="${escapeAttr(item.fileName)}">${escapeHtml(item.fileName)}</p>
+        `;
+        listEl.appendChild(card);
+      });
+    }
+
+    // Bước 3: Tự động sinh thư mục con trong anh-cuoi, chép ảnh vào & lưu đường dẫn chuẩn ../anh-cuoi/...
+    async function saveStagedImagesToAlbum() {
+      if (!stagedFiles.length) return;
+
+      if (!anhCuoiRootHandle) {
+        const connected = await connectRootAnhCuoiFolder();
+        if (!connected) return;
+      }
+
+      let perm = await anhCuoiRootHandle.queryPermission({ mode: 'readwrite' });
+      if (perm !== 'granted') {
+        perm = await anhCuoiRootHandle.requestPermission({ mode: 'readwrite' });
+      }
+      if (perm !== 'granted') {
+        alert('Bạn cần cấp quyền ghi tệp để tạo thư mục con và lưu ảnh vào anh-cuoi.');
+        return;
+      }
+
+      const category = document.getElementById('importTargetCategory')?.value || 'Album cưới 02';
+      const fullPrefix = getFolderPrefixByCategory(category);
+      const subfolderName = getSubfolderNameByCategory(category);
+      const saveBtn = document.getElementById('btnSaveStagedImages');
+      const originalBtnHtml = saveBtn ? saveBtn.innerHTML : '';
+
+      if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = `<i class="fas fa-spinner fa-spin mr-1"></i> Đang lưu vào ${escapeHtml(subfolderName)}...`;
+      }
+
+      try {
+        // Nếu người dùng chọn thư mục cha của anh-cuoi thì tự đi vào anh-cuoi, còn nếu đã chọn thẳng anh-cuoi thì dùng luôn
+        let baseAnhCuoiHandle = anhCuoiRootHandle;
+        if (anhCuoiRootHandle.name.toLowerCase() !== 'anh-cuoi') {
+          baseAnhCuoiHandle = await anhCuoiRootHandle.getDirectoryHandle('anh-cuoi', { create: true });
+        }
+
+        const targetDirHandle = await baseAnhCuoiHandle.getDirectoryHandle(subfolderName, { create: true });
+
+        const existingUrls = new Set(state.images.map(img => String(img.url || '').trim().toLowerCase()));
+        const addedItems = [];
+
+        for (let i = 0; i < stagedFiles.length; i++) {
+          const item = stagedFiles[i];
+          const fileHandle = await targetDirHandle.getFileHandle(item.fileName, { create: true });
+          const writable = await fileHandle.createWritable();
+          await writable.write(item.file);
+          await writable.close();
+
+          const webPath = `${fullPrefix}/${item.fileName}`;
+          if (!existingUrls.has(webPath.toLowerCase())) {
+            existingUrls.add(webPath.toLowerCase());
+            addedItems.push({
+              id: `img-${Date.now()}-${i}-${Math.random().toString(36).slice(2, 6)}`,
+              category,
+              title: formatTitleFromFilename(item.fileName),
+              url: webPath
+            });
+          }
+        }
+
+        clearStagedImages();
+        if (addedItems.length) {
+          state.images = [...addedItems, ...state.images];
+        }
+        activeCategory = category;
+        await persistState(`Đã tạo "${subfolderName}", lưu ${addedItems.length} ảnh & đồng bộ!`);
+      } catch (err) {
+        console.error(err);
+        alert('Có lỗi khi ghi file vào thư mục: ' + (err?.message || err));
+      } finally {
+        if (saveBtn) {
+          saveBtn.innerHTML = originalBtnHtml;
+          updateImportTargetHint();
+          saveBtn.disabled = stagedFiles.length === 0;
+        }
+      }
+    }
+
+    function formatTitleFromFilename(filename) {
+      const withoutExt = filename.replace(/\.[^/.]+$/, '');
+      const cleaned = withoutExt.replace(/[-_]+/g, ' ').trim();
+      return cleaned ? cleaned.charAt(0).toUpperCase() + cleaned.slice(1) : filename;
+    }
+
+    function buildRelativeWebPath(file, baseFolder) {
+      const rawRel = (file && (file.webkitRelativePath || file.name)) || '';
+      const rel = String(rawRel).split('\\').join('/').replace(/^\/+/, '');
+      const parts = rel.split('/').filter(Boolean);
+      const innerPath = parts.length > 1 ? parts.slice(1).join('/') : (parts[0] || '');
+      const cleanBase = String(baseFolder || '').replace(/\/+$/g, '');
+      if (!cleanBase) return innerPath;
+      if (!innerPath) return cleanBase;
+      return innerPath.startsWith(cleanBase + '/') ? innerPath : cleanBase + '/' + innerPath;
+    }
+
+    async function handleFolderImagesSelected(e) {
+      const files = Array.from(e.target.files || []);
+      e.target.value = '';
+      if (!files.length) return;
+
+      const category = document.getElementById('folderImgCategory')?.value || 'Album cưới';
+      const baseFolder = getFolderPrefixByCategory(category);
+      const existingUrls = new Set(state.images.map(img => String(img.url || '').trim().toLowerCase()));
+
+      const newItems = [];
+      files.forEach((file, idx) => {
+        if (!IMAGE_EXT_REGEX.test(file.name)) return;
+        const webPath = buildRelativeWebPath(file, baseFolder);
+        const key = webPath.toLowerCase();
+        if (existingUrls.has(key)) return;
+        existingUrls.add(key);
+
+        newItems.push({
+          id: `img-${Date.now()}-${idx}-${Math.random().toString(36).slice(2, 6)}`,
+          category,
+          title: formatTitleFromFilename(file.name),
+          url: webPath
+        });
+      });
+
+      if (!newItems.length) {
+        showToast('Không có file ảnh mới nào để thêm (hoặc đã tồn tại).');
+        return;
+      }
+
+      state.images = [...newItems, ...state.images];
+      await persistState(`Đã thêm ${newItems.length} ảnh từ thư mục & đồng bộ!`);
+    }
+
+    async function handleFolderMusicsSelected(e) {
+      const files = Array.from(e.target.files || []);
+      e.target.value = '';
+      if (!files.length) return;
+
+      const existingPaths = new Set(state.musics.map(mus => String(mus.path || '').trim().toLowerCase()));
+
+      const newItems = [];
+      files.forEach((file, idx) => {
+        if (!MUSIC_EXT_REGEX.test(file.name)) return;
+        const webPath = buildRelativeWebPath(file, '../nhac');
+        const key = webPath.toLowerCase();
+        if (existingPaths.has(key)) return;
+        existingPaths.add(key);
+
+        newItems.push({
+          id: `mus-${Date.now()}-${idx}-${Math.random().toString(36).slice(2, 6)}`,
+          title: formatTitleFromFilename(file.name),
+          path: webPath
+        });
+      });
+
+      if (!newItems.length) {
+        showToast('Không có file nhạc mới nào để thêm (hoặc đã tồn tại).');
+        return;
+      }
+
+      state.musics = [...newItems, ...state.musics];
+      await persistState(`Đã thêm ${newItems.length} bài nhạc từ thư mục & đồng bộ!`);
+    }
+
+    function openImageModal(id) {
+      const item = state.images.find(img => img.id === id);
+      if (!item || !item.url) return;
+
+      viewingImageId = id;
+      document.getElementById('modalImageTitle').textContent = item.title;
+      document.getElementById('modalImageMeta').textContent = `[${item.category || 'Album cưới'}] ${item.url}`;
+      const imgEl = document.getElementById('modalImagePreview');
+      imgEl.src = item.url;
+      imgEl.alt = item.title;
+
+      const copyBtn = document.getElementById('modalCopyBtn');
+      copyBtn.onclick = () => copyImageById(item.id);
+
+      document.getElementById('imageModal').classList.remove('hidden');
+    }
+
+    function closeImageModal() {
+      viewingImageId = null;
+      document.getElementById('imageModal').classList.add('hidden');
+      document.getElementById('modalImagePreview').src = '';
+    }
+
+    function fillFolderImageSample() {
+      const input = document.getElementById('imgUrl');
+      if (!input.value.trim()) {
+        input.value = '../anh-cuoi/album/anh-cuoi-01.jpg';
+      }
+      input.focus();
+    }
+
+    function isFolderPath(pathOrUrl) {
+      return !/^(https?:\/\/|data:|blob:)/i.test(String(pathOrUrl || '').trim());
+    }
+
+    function setSyncBadge(status, text) {
+      const badge = document.getElementById('syncBadge');
+      if (status === 'synced') {
+        badge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200';
+        badge.innerHTML = `<i class="fas fa-cloud-check"></i> ${escapeHtml(text)}`;
+      } else if (status === 'syncing') {
+        badge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200';
+        badge.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${escapeHtml(text)}`;
+      } else {
+        badge.className = 'inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-50 text-rose-700 border border-rose-200';
+        badge.innerHTML = `<i class="fas fa-triangle-exclamation"></i> ${escapeHtml(text)}`;
+      }
+    }
+
+    function normalizeState(data) {
+      return {
+        images: Array.isArray(data?.images)
+          ? data.images.map((item, idx) => ({
+              id: String(item.id || ('img-' + Date.now() + '-' + idx)),
+              category: String(item.category || 'Album cưới'),
+              title: String(item.title || 'Ảnh chưa đặt tên'),
+              url: String(item.url || '')
+            }))
+          : [...DEFAULT_DATA.images],
+        musics: Array.isArray(data?.musics)
+          ? data.musics.map((item, idx) => ({
+              id: String(item.id || ('mus-' + Date.now() + '-' + idx)),
+              title: String(item.title || 'Nhạc chưa đặt tên'),
+              path: String(item.path || '')
+            }))
+          : [...DEFAULT_DATA.musics]
+      };
+    }
+
+    function loadLocalState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) return normalizeState(JSON.parse(raw));
+      } catch (e) {
+        console.error(e);
+      }
+      return normalizeState(DEFAULT_DATA);
+    }
+
+    function saveLocalState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    async function persistState(toastMsg = null) {
+      saveLocalState();
+      renderCategoryTabs();
+      renderImages();
+      renderMusics();
+      if (toastMsg) showToast(toastMsg);
+
+      if (isRemoteUpdating) return;
+      setSyncBadge('syncing', 'Đang lưu Firebase...');
+      try {
+        await vaultRef.set({
+          images: state.images,
+          musics: state.musics,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        setSyncBadge('synced', 'Đã đồng bộ Firebase');
+      } catch (err) {
+        console.error(err);
+        setSyncBadge('error', 'Lỗi lưu Firebase (kiểm tra Rules)');
+      }
+    }
+
+    async function syncNowToFirebase() {
+      await persistState('Đã đồng bộ kho link lên Firebase!');
+    }
+
+    function initFirebaseRealtime() {
+      setSyncBadge('syncing', 'Đang đồng bộ...');
+      vaultRef.onSnapshot(
+        (doc) => {
+          if (doc.exists) {
+            const remoteData = doc.data();
+            isRemoteUpdating = true;
+            state = normalizeState(remoteData);
+            saveLocalState();
+            renderCategoryTabs();
+            renderImages();
+            renderMusics();
+            isRemoteUpdating = false;
+            setSyncBadge('synced', 'Đã đồng bộ Firebase');
+          } else {
+            persistState();
+          }
+        },
+        (err) => {
+          console.error(err);
+          setSyncBadge('error', 'Chế độ local (lỗi Firebase)');
+        }
+      );
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastText').innerText = message;
+      toast.classList.remove('opacity-0');
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => {
+        toast.classList.add('opacity-0');
+      }, 2200);
+    }
+
+    function fallbackCopy(text) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'fixed';
+      textarea.style.top = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      try {
+        document.execCommand('copy');
+      } catch (e) {
+        console.error('Copy fallback failed:', e);
+      }
+      document.body.removeChild(textarea);
+    }
+
+    async function copyText(text, label = 'Đã sao chép') {
+      if (!text) return;
+      if (navigator.clipboard && window.isSecureContext) {
+        try {
+          await navigator.clipboard.writeText(text);
+          showToast(`${label}: ${text}`);
+          return;
+        } catch (err) {
+          fallbackCopy(text);
+          showToast(`${label}: ${text}`);
+          return;
+        }
+      }
+      fallbackCopy(text);
+      showToast(`${label}: ${text}`);
+    }
+
+    function copyImageById(id) {
+      const item = state.images.find(img => img.id === id);
+      if (item && item.url) {
+        copyText(item.url, 'Đã copy đường dẫn ảnh');
+      }
+    }
+
+    function copyMusicById(id) {
+      const item = state.musics.find(mus => mus.id === id);
+      if (item && item.path) {
+        copyText(item.path, 'Đã copy tên nhạc');
+      }
+    }
+
+    function togglePreviewMusic(id) {
+      const item = state.musics.find(mus => mus.id === id);
+      if (!item || !item.path) return;
+
+      if (playingMusicId === id && !previewPlayer.paused) {
+        previewPlayer.pause();
+        playingMusicId = null;
+        renderMusics();
+        return;
+      }
+
+      previewPlayer.src = item.path;
+      previewPlayer.play()
+        .then(() => {
+          playingMusicId = id;
+          renderMusics();
+        })
+        .catch(() => {
+          playingMusicId = null;
+          renderMusics();
+          showToast(`Không phát được "${item.path}" (kiểm tra đường dẫn/thư mục)`);
+        });
+    }
+
+    function selectCategory(cat) {
+      activeCategory = cat;
+      renderCategoryTabs();
+      renderImages();
+    }
+
+    function renderCategoryTabs() {
+      const tabsEl = document.getElementById('categoryTabs');
+      tabsEl.innerHTML = '';
+
+      CATEGORIES.forEach(cat => {
+        const count = cat === 'Tất cả'
+          ? state.images.length
+          : state.images.filter(img => img.category === cat).length;
+
+        const isActive = activeCategory === cat;
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.onclick = () => selectCategory(cat);
+        btn.className = isActive
+          ? 'px-3.5 py-1.5 rounded-full text-xs font-semibold bg-rose-900 text-white shadow-sm'
+          : 'px-3.5 py-1.5 rounded-full text-xs font-semibold bg-stone-100 hover:bg-stone-200 text-stone-700 border border-stone-200';
+        btn.innerHTML = `${escapeHtml(cat)} <span class="ml-1 opacity-80">(${count})</span>`;
+        tabsEl.appendChild(btn);
+      });
+    }
+
+    async function addImage(e) {
+      e.preventDefault();
+      const category = document.getElementById('imgCategory').value;
+      const title = document.getElementById('imgTitle').value.trim();
+      const url = document.getElementById('imgUrl').value.trim();
+      if (!title || !url) return;
+
+      state.images.unshift({
+        id: 'img-' + Date.now(),
+        category,
+        title,
+        url
+      });
+
+      e.target.reset();
+      document.getElementById('imgCategory').value = category;
+      await persistState('Đã thêm ảnh & đồng bộ!');
+    }
+
+    async function changeImageCategory(id, newCategory) {
+      const target = state.images.find(item => item.id === id);
+      if (!target) return;
+      target.category = newCategory;
+      await persistState(`Đã chuyển sang bộ "${newCategory}"`);
+    }
+
+    async function deleteImage(id) {
+      state.images = state.images.filter(item => item.id !== id);
+      await persistState('Đã xóa ảnh');
+    }
+
+    function renderImages() {
+      const keyword = (document.getElementById('searchImage').value || '').toLowerCase().trim();
+      const filtered = state.images.filter(item => {
+        const matchCat = activeCategory === 'Tất cả' || item.category === activeCategory;
+        const matchText = item.title.toLowerCase().includes(keyword)
+          || item.url.toLowerCase().includes(keyword)
+          || (item.category || '').toLowerCase().includes(keyword);
+        return matchCat && matchText;
+      });
+
+      document.getElementById('imageCount').innerText = filtered.length;
+      const grid = document.getElementById('imageGrid');
+      grid.innerHTML = '';
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<p class="col-span-full text-center text-sm text-stone-400 py-8">Chưa có ảnh nào trong bộ này.</p>`;
+        return;
+      }
+
+      const categoryOptions = CATEGORIES.filter(c => c !== 'Tất cả');
+
+      filtered.forEach(item => {
+        const folderMode = isFolderPath(item.url);
+        const card = document.createElement('div');
+        card.className = 'border border-stone-200 rounded-xl overflow-hidden bg-white flex flex-col justify-between shadow-2xs';
+        card.innerHTML = `
+          <div>
+            <div onclick="openImageModal('${escapeAttr(item.id)}')" title="Bấm để xem ảnh lớn"
+              class="aspect-video bg-stone-200 overflow-hidden relative cursor-zoom-in group">
+              <span class="absolute top-2.5 left-2.5 z-10 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-black/70 text-white backdrop-blur-xs">
+                ${escapeHtml(item.category || 'Album cưới')}
+              </span>
+              <span class="absolute top-2.5 right-2.5 z-10 px-2 py-1 rounded-full text-[10px] font-semibold ${folderMode ? 'bg-amber-500/90 text-white' : 'bg-sky-700/85 text-white'}">
+                ${folderMode ? 'Thư mục' : 'Link URL'}
+              </span>
+              <span class="absolute bottom-2.5 right-2.5 z-10 px-2 py-1 rounded-lg text-[10px] font-semibold bg-black/65 text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                <i class="fas fa-magnifying-glass-plus mr-1"></i>Xem lớn
+              </span>
+              <img src="${escapeAttr(item.url)}" alt="${escapeAttr(item.title)}"
+                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                onerror="this.parentElement.innerHTML='<div class=&quot;h-full flex items-center justify-center text-xs text-stone-600 p-3 text-center&quot;>Chưa tìm thấy ảnh xem trước.<br><span class=&quot;font-mono text-[11px] text-rose-700&quot;>${escapeHtml(item.url)}</span></div>'">
+            </div>
+            <div class="p-3.5 space-y-2">
+              <div class="flex items-center justify-between gap-2">
+                <p class="font-bold text-sm text-stone-800 truncate">${escapeHtml(item.title)}</p>
+                <select onchange="changeImageCategory('${escapeAttr(item.id)}', this.value)"
+                  class="text-[11px] px-2 py-1 rounded border border-stone-300 bg-stone-50 text-stone-700">
+                  ${categoryOptions.map(c =>
+                    `<option value="${c}" ${item.category === c ? 'selected' : ''}>${c}</option>`
+                  ).join('')}
+                </select>
+              </div>
+              <p class="text-[11px] font-mono text-stone-600 break-all bg-stone-50 p-2 rounded border border-stone-200">${escapeHtml(item.url)}</p>
+            </div>
+          </div>
+          <div class="px-3.5 pb-3.5 flex items-center gap-2">
+  <button type="button" onclick="copyImageById('${escapeAttr(item.id)}')"
+    class="flex-1 py-2 px-3 rounded-lg bg-rose-900 hover:bg-rose-800 text-white text-xs font-semibold">
+    <i class="fas fa-copy mr-1"></i> ${folderMode ? 'Copy Đường Dẫn' : 'Copy Link'}
+  </button>
+  <a href="${escapeAttr(item.url)}" target="_blank" rel="noopener noreferrer" title="Mở xem link gốc"
+    class="py-2 px-3 rounded-lg bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 text-xs font-semibold">
+    <i class="fas fa-arrow-up-right-from-square"></i>
+  </a>
+  <button type="button" onclick="deleteImage('${escapeAttr(item.id)}')" title="Xóa"
+    class="py-2 px-3 rounded-lg bg-stone-50 hover:bg-red-50 text-red-600 border border-stone-200 text-xs">
+    <i class="fas fa-trash"></i>
+  </button>
+</div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    async function addMusic(e) {
+      e.preventDefault();
+      const title = document.getElementById('musicTitle').value.trim();
+      const path = document.getElementById('musicPath').value.trim();
+      if (!title || !path) return;
+
+      state.musics.unshift({
+        id: 'mus-' + Date.now(),
+        title,
+        path
+      });
+
+      e.target.reset();
+      await persistState('Đã thêm tên file nhạc & đồng bộ!');
+    }
+
+    async function deleteMusic(id) {
+      if (playingMusicId === id) {
+        previewPlayer.pause();
+        playingMusicId = null;
+      }
+      state.musics = state.musics.filter(item => item.id !== id);
+      await persistState('Đã xóa tên file nhạc');
+    }
+
+    function renderMusics() {
+      document.getElementById('musicCount').innerText = state.musics.length;
+      const list = document.getElementById('musicList');
+      list.innerHTML = '';
+
+      if (state.musics.length === 0) {
+        list.innerHTML = `<p class="text-center text-sm text-stone-400 py-4">Chưa có tên file nhạc nào.</p>`;
+        return;
+      }
+
+      state.musics.forEach(item => {
+        const isPlaying = playingMusicId === item.id;
+        const row = document.createElement('div');
+        row.className = 'p-3.5 rounded-xl border border-stone-200 bg-stone-50 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3';
+        row.innerHTML = `
+          <div class="space-y-1">
+            <p class="font-bold text-sm text-stone-800">${escapeHtml(item.title)}</p>
+            <p class="text-xs font-mono text-amber-800 bg-amber-50 border border-amber-200 inline-block px-2.5 py-1 rounded-lg">${escapeHtml(item.path)}</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <button type="button" onclick="togglePreviewMusic('${escapeAttr(item.id)}')"
+              class="py-2 px-3.5 rounded-lg ${isPlaying ? 'bg-rose-700 hover:bg-rose-800' : 'bg-stone-800 hover:bg-stone-700'} text-white text-xs font-semibold">
+              <i class="fas ${isPlaying ? 'fa-stop' : 'fa-play'} mr-1"></i> ${isPlaying ? 'Dừng' : 'Nghe thử'}
+            </button>
+            <button type="button" onclick="copyMusicById('${escapeAttr(item.id)}')"
+              class="py-2 px-4 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold">
+              <i class="fas fa-copy mr-1"></i> Copy Đường Dẫn
+            </button>
+            <button type="button" onclick="deleteMusic('${escapeAttr(item.id)}')" title="Xóa"
+              class="py-2 px-3 rounded-lg bg-white hover:bg-red-50 text-red-600 border border-stone-200 text-xs">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        `;
+        list.appendChild(row);
+      });
+    }
+
+    function exportData() {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'kho-link-thiep-cuoi.json';
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('Đã xuất file JSON!');
+    }
+
+    function importData(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = async function(evt) {
+        try {
+          const parsed = JSON.parse(evt.target.result);
+          state = normalizeState(parsed);
+          await persistState('Đã nhập JSON & đồng bộ Firebase!');
+        } catch (err) {
+          alert('File JSON không hợp lệ.');
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    }
+
+    async function resetDefaultData() {
+      if (!confirm('Khôi phục danh sách mẫu mặc định và đồng bộ lên Firebase?')) return;
+      state = normalizeState(DEFAULT_DATA);
+      await persistState('Đã khôi phục mẫu mặc định!');
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+      }[m]));
+    }
+
+    function escapeAttr(str) {
+      return String(str).replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+      }[m]));
+    }
+
+    updateFolderHintByCategory();
+    updateImportTargetHint();
+    updateRootDirBadge();
+    renderCategoryTabs();
+    renderImages();
+    renderMusics();
+    initFirebaseRealtime();
+
+//--------------------------------------------------------------------------------------------
+  const CLOUDINARY_CONFIG = {
+    cloudName: 'a6goixuq',         // Thay bằng Cloud name của bạn
+    uploadPreset: 'thiep_cuoi_online'  // Thay bằng Unsigned upload preset của bạn
+  };
+
+  function getSelectedCloudinaryAlbum() {
+    const custom = (document.getElementById('cldCustomAlbum')?.value || '').trim();
+    if (custom) return custom;
+    return document.getElementById('cldAlbumSelect')?.value || 'Album cưới';
+  }
+
+  function slugifyFolder(name) {
+    return String(name || 'album')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/đ/g, 'd').replace(/Đ/g, 'D')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '') || 'album';
+  }
+
+  async function uploadSingleFileToCloudinary(file, albumName, mediaType) {
+    if (
+      CLOUDINARY_CONFIG.cloudName === 'YOUR_CLOUD_NAME' ||
+      CLOUDINARY_CONFIG.uploadPreset === 'YOUR_UNSIGNED_PRESET'
+    ) {
+      throw new Error('Bạn chưa cấu hình cloudName hoặc uploadPreset của Cloudinary.');
+    }
+
+    const endpointType = mediaType === 'music' ? 'video' : 'image';
+    const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloudName}/${endpointType}/upload`;
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_CONFIG.uploadPreset);
+    formData.append('folder', `thiep-cuoi/${slugifyFolder(albumName)}`);
+
+    const res = await fetch(url, {
+      method: 'POST',
+      body: formData
+    });
+
+    const data = await res.json();
+    if (!res.ok || !data.secure_url) {
+      throw new Error(data?.error?.message || 'Upload Cloudinary thất bại');
+    }
+    return data.secure_url;
+  }
+
+  async function handleCloudinaryUpload(event, mediaType) {
+    const files = Array.from(event.target.files || []);
+    event.target.value = '';
+    if (!files.length) return;
+
+    const albumName = getSelectedCloudinaryAlbum();
+    const statusEl = document.getElementById('cloudinaryStatus');
+    let successCount = 0;
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      if (statusEl) {
+        statusEl.textContent = `Đang tải ${i + 1}/${files.length}: ${file.name}...`;
+      }
+
+      try {
+        const secureUrl = await uploadSingleFileToCloudinary(file, albumName, mediaType);
+        const title = formatTitleFromFilename(file.name);
+
+        if (mediaType === 'image') {
+          state.images.unshift({
+            id: 'img-' + Date.now() + '-' + i,
+            category: albumName,
+            title,
+            url: secureUrl
+          });
+        } else {
+          state.musics.unshift({
+            id: 'mus-' + Date.now() + '-' + i,
+            title: `[${albumName}] ${title}`,
+            path: secureUrl
+          });
+        }
+        successCount++;
+      } catch (err) {
+        console.error(err);
+        alert(`Lỗi tải "${file.name}": ${err.message}`);
+      }
+    }
+
+    if (successCount > 0) {
+      if (mediaType === 'image') {
+        activeCategory = albumName;
+      }
+      await persistState(`Đã lưu ${successCount} file vào "${albumName}" trên Cloudinary & Firebase!`);
+    }
+
+    if (statusEl) {
+      statusEl.textContent = 'Sẵn sàng upload';
+    }
+  }
+
+//-------------------------------------------------
+
+async function handleCloudinaryUpload(event, mediaType) {
+  const files = Array.from(event.target.files || []);
+  event.target.value = '';
+  if (!files.length) return;
+
+  const isMusic = mediaType === 'music';
+  const albumName = isMusic ? 'Nhạc nền' : getSelectedCloudinaryAlbum();
+  const folderSlug = isMusic ? 'nhac-nen' : slugifyFolder(albumName);
+  const statusEl = isMusic
+    ? document.getElementById('cloudinaryMusicStatus')
+    : document.getElementById('cloudinaryStatus');
+
+  let successCount = 0;
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    if (statusEl) {
+      statusEl.textContent = `Đang tải ${i + 1}/${files.length}: ${file.name}...`;
+    }
+
+    try {
+      const secureUrl = await uploadSingleFileToCloudinaryWithFolder(file, folderSlug, mediaType);
+      const title = formatTitleFromFilename(file.name);
+
+      if (!isMusic) {
+        state.images.unshift({
+          id: 'img-' + Date.now() + '-' + i,
+          category: albumName,
+          title,
+          url: secureUrl
+        });
+      } else {
+        state.musics.unshift({
+          id: 'mus-' + Date.now() + '-' + i,
+          title,
+          path: secureUrl
+        });
+      }
+      successCount++;
+    } catch (err) {
+      console.error(err);
+      alert(`Lỗi tải "${file.name}": ${err.message}`);
+    }
+  }
+
+  if (successCount > 0) {
+    if (!isMusic) {
+      activeCategory = albumName;
+      await persistState(`Đã lưu ${successCount} ảnh vào "${albumName}" trên Cloudinary & Firebase!`);
+    } else {
+      await persistState(`Đã lưu ${successCount} bài nhạc lên Cloudinary & Firebase!`);
+    }
+  }
+
+  if (statusEl) {
+    statusEl.textContent = '';
+  }
+}
+
+async function uploadSingleFileToCloudinaryWithFolder(file, folderSlug, mediaType) {
+  if (
+    CLOUDINARY_CONFIG.cloudName === 'YOUR_CLOUD_NAME' ||
+    CLOUDINARY_CONFIG.uploadPreset === 'YOUR_UNSIGNED_PRESET'
+  ) {
+    throw new Error('Bạn chưa cấu hình cloudName hoặc uploadPreset của Cloudinary.');
+  }
+
+  const endpointType = mediaType === 'music' ? 'video' : 'image';
+  const url = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CONFIG.cloudName}/${endpointType}/upload`;
+
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('upload_preset', CLOUDINARY_CONFIG.uploadPreset);
+  formData.append('folder', `thiep-cuoi/${folderSlug}`);
+
+  const res = await fetch(url, {
+    method: 'POST',
+    body: formData
+  });
+
+  const data = await res.json();
+  if (!res.ok || !data.secure_url) {
+    throw new Error(data?.error?.message || 'Upload Cloudinary thất bại');
+  }
+  return data.secure_url;
+}
+
+
+
+
+  </script>
+</body>
+</html>

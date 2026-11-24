@@ -15,8 +15,13 @@
     .grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 24px; }
     @media (max-width: 880px) { .grid { grid-template-columns: 1fr; } }
     .box { background: #fafafa; border: 1px solid #e5e5e5; padding: 16px; border-radius: 8px; }
+    .label-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: 10px; margin-bottom: 4px; flex-wrap: wrap; }
+    .label-row label { margin: 0; }
     label { display: block; font-weight: bold; margin-top: 10px; margin-bottom: 4px; font-size: 14px; }
     input, textarea { width: 100%; box-sizing: border-box; padding: 8px 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+    .preset-btns { display: flex; gap: 5px; }
+    .btn-mini { padding: 3px 8px; font-size: 11px; border-radius: 4px; background: #ececec; color: #333; border: 1px solid #ccc; }
+    .btn-mini.active { background: #8b1e24; color: #fff; border-color: #8b1e24; }
     .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     @media (max-width: 520px) { .two-col { grid-template-columns: 1fr; } }
     .row { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
@@ -57,16 +62,25 @@
     <div class="box">
       <h2 id="formTitle" style="margin-top:0; font-size: 18px;">Thêm sản phẩm mới</h2>
 
-      <div class="two-col">
-        <div>
-          <label>Cloud Name (Cloudinary)</label>
-          <input type="text" id="cloudName" placeholder="Ví dụ: dxyz123abc" />
-        </div>
-        <div>
-          <label>Upload Preset (Unsigned)</label>
-          <input type="text" id="uploadPreset" placeholder="Ví dụ: thiep_cuoi_preset" />
+      <div class="label-row">
+        <label for="cloudName">Cloud Name (Cloudinary)</label>
+        <div class="preset-btns">
+          <button type="button" class="btn-mini" id="useTk1Btn">TK 1 (a6goixuq)</button>
+          <button type="button" class="btn-mini" id="useTk2Btn">TK 2 (regktwu0)</button>
         </div>
       </div>
+      <input type="text" id="cloudName" list="cloudNameList" placeholder="Chọn hoặc nhập Cloud Name" />
+      <datalist id="cloudNameList">
+        <option value="a6goixuq">Tài khoản 1 (a6goixuq)</option>
+        <option value="regktwu0">Tài khoản 2 (regktwu0)</option>
+      </datalist>
+
+      <label for="uploadPreset">Upload Preset (Unsigned)</label>
+      <input type="text" id="uploadPreset" list="uploadPresetList" placeholder="Chọn hoặc nhập Upload Preset" />
+      <datalist id="uploadPresetList">
+        <option value="thiep_cuoi_online">Preset TK 1 (thiep_cuoi_online)</option>
+        <option value="anh-mau-thiep-cuoi">Preset TK 2 (anh-mau-thiep-cuoi)</option>
+      </datalist>
 
       <label>Chọn ảnh từ máy tính</label>
       <input type="file" id="fileInput" accept="image/*" />
@@ -146,9 +160,12 @@
 
 <script>
   const ADMIN_EDITOR_URL = "../admin-editor-auth.html";
-  const CLOUD_NAME = "a6goixuq";
-  const UPLOAD_PRESET = "thiep_cuoi_online";
   const DATA_FILE_NAME = "data-trangchu.js";
+
+  const CLOUDINARY_ACCOUNTS = [
+    { cloudName: "a6goixuq", uploadPreset: "thiep_cuoi_online" },
+    { cloudName: "regktwu0", uploadPreset: "anh-mau-thiep-cuoi" }
+  ];
 
   const TABS = [
     { key: "best-seller", label: "Tab 1: Bán chạy (best-seller)", prefix: "NT-2026" },
@@ -156,7 +173,6 @@
     { key: "on-sale", label: "Tab 3: Khuyến mãi (on-sale)", prefix: "SALE-" }
   ];
 
-  // Dữ liệu 3 tab (sẽ tự ghi đè nếu nạp được file data-trangchu.js bên ngoài)
   let tabData = {
     "best-seller": [],
     "new-arrival": [],
@@ -173,6 +189,8 @@
     countBadge: document.getElementById("countBadge"),
     cloudName: document.getElementById("cloudName"),
     uploadPreset: document.getElementById("uploadPreset"),
+    useTk1Btn: document.getElementById("useTk1Btn"),
+    useTk2Btn: document.getElementById("useTk2Btn"),
     fileInput: document.getElementById("fileInput"),
     previewImg: document.getElementById("previewImg"),
     uploadStatus: document.getElementById("uploadStatus"),
@@ -202,10 +220,38 @@
     els.tabSelect.appendChild(opt);
   });
 
-  els.cloudName.value = localStorage.getItem("cld_name") || CLOUD_NAME;
-  els.uploadPreset.value = localStorage.getItem("cld_preset") || UPLOAD_PRESET;
-  els.cloudName.addEventListener("input", () => localStorage.setItem("cld_name", els.cloudName.value.trim()));
-  els.uploadPreset.addEventListener("input", () => localStorage.setItem("cld_preset", els.uploadPreset.value.trim()));
+  function updateAccountBtnState() {
+    const c = els.cloudName.value.trim();
+    const p = els.uploadPreset.value.trim();
+    els.useTk1Btn.classList.toggle("active", c === CLOUDINARY_ACCOUNTS[0].cloudName && p === CLOUDINARY_ACCOUNTS[0].uploadPreset);
+    els.useTk2Btn.classList.toggle("active", c === CLOUDINARY_ACCOUNTS[1].cloudName && p === CLOUDINARY_ACCOUNTS[1].uploadPreset);
+  }
+
+  function applyCloudinaryAccount(index) {
+    const acc = CLOUDINARY_ACCOUNTS[index];
+    if (!acc) return;
+    els.cloudName.value = acc.cloudName;
+    els.uploadPreset.value = acc.uploadPreset;
+    localStorage.setItem("cld_name", acc.cloudName);
+    localStorage.setItem("cld_preset", acc.uploadPreset);
+    updateAccountBtnState();
+  }
+
+  els.cloudName.value = localStorage.getItem("cld_name") || CLOUDINARY_ACCOUNTS[0].cloudName;
+  els.uploadPreset.value = localStorage.getItem("cld_preset") || CLOUDINARY_ACCOUNTS[0].uploadPreset;
+  updateAccountBtnState();
+
+  els.useTk1Btn.addEventListener("click", () => applyCloudinaryAccount(0));
+  els.useTk2Btn.addEventListener("click", () => applyCloudinaryAccount(1));
+
+  els.cloudName.addEventListener("input", () => {
+    localStorage.setItem("cld_name", els.cloudName.value.trim());
+    updateAccountBtnState();
+  });
+  els.uploadPreset.addEventListener("input", () => {
+    localStorage.setItem("cld_preset", els.uploadPreset.value.trim());
+    updateAccountBtnState();
+  });
 
   function getCurrentList() {
     if (!Array.isArray(tabData[currentTabKey])) tabData[currentTabKey] = [];

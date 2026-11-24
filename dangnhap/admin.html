@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hệ Thống Quản Trị Tổng — Thiệp Cưới & Sản Phẩm</title>
+  <style>
+    :root {
+      --bg-dark: #0f111a;
+      --bg-sidebar: #161926;
+      --bg-header: #1c2030;
+      --accent: #8b1e24;
+      --accent-light: #e0535a;
+      --gold: #f5c26b;
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border: #2a3045;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
+    body { background: var(--bg-dark); color: var(--text-main); height: 100vh; display: flex; overflow: hidden; }
+
+    /* MÀN HÌNH ĐĂNG NHẬP FIREBASE AUTH */
+    #hubAuthScreen {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #0f111a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .hub-login-box {
+      width: 100%;
+      max-width: 360px;
+      background: #161926;
+      border: 1px solid #2a3045;
+      border-radius: 12px;
+      padding: 24px;
+      color: #f1f5f9;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+    }
+    .hub-login-box h2 { font-size: 18px; margin-bottom: 8px; color: #f5c26b; }
+    .hub-login-box p.sub { font-size: 13px; color: #94a3b8; margin-bottom: 16px; }
+    .hub-login-box input {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #2a3045;
+      background: #0f111a;
+      color: #fff;
+      font-size: 14px;
+      margin-bottom: 10px;
+      outline: none;
+    }
+    .hub-login-box input:focus { border-color: #f5c26b; }
+    .hub-login-box button {
+      width: 100%;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 8px;
+      background: #8b1e24;
+      color: #fff;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    .hub-login-box button:hover { background: #a3242b; }
+    #hubAuthError { color: #f87171; font-size: 12.5px; margin-top: 10px; display: none; }
+
+    /* SIDEBAR MENU */
+    aside {
+      width: 270px;
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      transition: width 0.2s;
+    }
+    aside.collapsed { width: 68px; }
+    aside.collapsed .brand-text,
+    aside.collapsed .nav-group-title,
+    aside.collapsed .nav-label,
+    aside.collapsed .nav-badge { display: none; }
+
+    .brand {
+      height: 58px;
+      padding: 0 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-header);
+    }
+    .brand-left { display: flex; align-items: center; gap: 10px; overflow: hidden; }
+    .brand-logo {
+      width: 34px; height: 34px; border-radius: 8px;
+      background: linear-gradient(135deg, #8b1e24, #c93b42);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: bold; font-size: 16px; color: #fff; flex-shrink: 0;
+    }
+    .brand-text h2 { font-size: 15px; color: #fff; white-space: nowrap; }
+    .brand-text span { font-size: 11px; color: var(--gold); display: block; }
+
+    .toggle-btn {
+      background: transparent; border: 1px solid var(--border); color: var(--text-muted);
+      width: 28px; height: 28px; border-radius: 6px; cursor: pointer; flex-shrink: 0;
+    }
+    .toggle-btn:hover { color: #fff; border-color: var(--text-muted); }
+
+    .nav-scroll { flex: 1; overflow-y: auto; padding: 12px 10px; }
+    .nav-group-title {
+      font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px;
+      color: var(--text-muted); padding: 10px 10px 6px; font-weight: 700;
+    }
+
+    .nav-item {
+      width: 100%;
+      background: transparent;
+      border: none;
+      color: var(--text-main);
+      padding: 10px 12px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      cursor: pointer;
+      text-align: left;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+      transition: 0.15s;
+      text-decoration: none;
+    }
+    .nav-item:hover { background: rgba(255, 255, 255, 0.06); }
+    .nav-item.active {
+      background: linear-gradient(90deg, rgba(139, 30, 36, 0.85), rgba(139, 30, 36, 0.45));
+      color: #fff;
+      font-weight: 600;
+      border-left: 3px solid var(--gold);
+    }
+    .nav-left { display: flex; align-items: center; gap: 10px; overflow: hidden; }
+    .nav-icon { font-size: 17px; width: 22px; text-align: center; flex-shrink: 0; }
+    .nav-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .nav-badge {
+      font-size: 10px; padding: 2px 6px; border-radius: 999px;
+      background: rgba(255,255,255,0.1); color: var(--gold); flex-shrink: 0;
+    }
+
+    /* MAIN AREA */
+    .main-wrap { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    header {
+      height: 58px;
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .header-title { display: flex; align-items: center; gap: 10px; }
+    .header-title h1 { font-size: 16px; font-weight: 600; }
+    .path-pill {
+      font-size: 12px; color: var(--text-muted); background: var(--bg-dark);
+      padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border);
+      font-family: Consolas, monospace;
+    }
+
+    .header-actions { display: flex; align-items: center; gap: 8px; }
+    .action-btn {
+      padding: 7px 12px; border-radius: 6px; border: 1px solid var(--border);
+      background: rgba(255,255,255,0.05); color: var(--text-main);
+      font-size: 12.5px; font-weight: 600; cursor: pointer; text-decoration: none;
+      display: inline-flex; align-items: center; gap: 6px; transition: 0.15s;
+    }
+    .action-btn:hover { background: rgba(255,255,255,0.12); border-color: var(--text-muted); }
+    .action-btn.primary { background: var(--accent); border-color: var(--accent-light); color: #fff; }
+    .action-btn.primary:hover { background: #a3242b; }
+
+    /* IFRAME WORKSPACE */
+    .frame-container { flex: 1; position: relative; background: #fff; }
+    iframe { width: 100%; height: 100%; border: none; display: block; }
+
+    /* TRANG CHÀO MỪNG / TỔNG QUAN NHANH */
+    #dashboard-view {
+      position: absolute; inset: 0; background: var(--bg-dark);
+      padding: 28px; overflow-y: auto; display: none;
+    }
+    #dashboard-view.show { display: block; }
+    .dash-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px; margin-top: 20px;
+    }
+    .dash-card {
+      background: var(--bg-sidebar); border: 1px solid var(--border);
+      border-radius: 10px; padding: 18px; cursor: pointer; transition: 0.2s;
+    }
+    .dash-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+    .dash-card .icon { font-size: 28px; margin-bottom: 10px; }
+    .dash-card h3 { font-size: 16px; margin-bottom: 6px; color: #fff; }
+    .dash-card p { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+  </style>
+</head>
+<body>
+
+  <!-- MÀN HÌNH ĐĂNG NHẬP FIREBASE AUTH -->
+  <div id="hubAuthScreen">
+    <div class="hub-login-box">
+      <h2>🔒 Đăng Nhập Admin Tổng</h2>
+      <p class="sub">Đăng nhập bằng tài khoản Firebase quản trị.</p>
+      <input type="email" id="hubEmailInput" placeholder="Email quản trị..." autocomplete="username" />
+      <input type="password" id="hubPasswordInput" placeholder="Mật khẩu..." autocomplete="current-password" />
+      <button type="button" id="hubSignInBtn">Đăng nhập</button>
+      <p id="hubAuthError"></p>
+    </div>
+  </div>
+
+  <!-- MENU BÊN TRÁI -->
+  <aside id="sidebar">
+    <div class="brand">
+      <div class="brand-left">
+        <div class="brand-logo">NT</div>
+        <div class="brand-text">
+          <h2>Quản trị Website</h2>
+          <span>Thiệp Cưới Ngọc Thương</span>
+        </div>
+      </div>
+      <button class="toggle-btn" id="toggleSidebarBtn" title="Thu gọn / Mở rộng menu">☰</button>
+    </div>
+
+    <div class="nav-scroll" id="navMenu"></div>
+  </aside>
+
+  <!-- KHUNG LÀM VIỆC BÊN PHẢI -->
+  <div class="main-wrap">
+    <header>
+      <div class="header-title">
+        <h1 id="activeToolTitle">Tổng quan hệ thống</h1>
+        <span class="path-pill" id="activeToolPath">dashboard</span>
+      </div>
+      <div class="header-actions">
+        <button class="action-btn" id="reloadFrameBtn" type="button" title="Tải lại khung hiện tại">↻ Tải lại</button>
+        <a class="action-btn primary" id="openNewTabBtn" href="#" target="_blank" rel="noopener">Mở tab mới ↗</a>
+        <button class="action-btn" id="hubLogoutBtn" type="button" title="Đăng xuất tài khoản">Thoát</button>
+      </div>
+    </header>
+
+    <div class="frame-container">
+      <div id="dashboard-view">
+        <h2 style="font-size: 22px; margin-bottom: 6px;">Xin chào! Chọn phân hệ bạn muốn quản lý</h2>
+        <p style="color: var(--text-muted); font-size: 14px;">Tất cả công cụ chỉnh sửa mã nguồn, sản phẩm và thiệp cưới online đều được gom tại đây.</p>
+        <div class="dash-grid" id="dashboardCards"></div>
+      </div>
+
+      <iframe id="workspaceFrame" src="about:blank" allow="clipboard-read; clipboard-write"></iframe>
+    </div>
+  </div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+
+  const hubFirebaseConfig = {
+    apiKey: "AIzaSyBdFVN7qwuxgkiHo9Fejr4K7pLceEu6gh4",
+    authDomain: "quan-ly-san-pham-55ec5.firebaseapp.com",
+    projectId: "quan-ly-san-pham-55ec5",
+    storageBucket: "quan-ly-san-pham-55ec5.firebasestorage.app",
+    messagingSenderId: "845660088489",
+    appId: "1:845660088489:web:49635a861acff93c6a21b8"
+  };
+
+  const hubApp = initializeApp(hubFirebaseConfig, "admin-tong-auth-app");
+  const hubAuth = getAuth(hubApp);
+
+  const hubAuthScreen = document.getElementById("hubAuthScreen");
+  const hubEmailInput = document.getElementById("hubEmailInput");
+  const hubPasswordInput = document.getElementById("hubPasswordInput");
+  const hubSignInBtn = document.getElementById("hubSignInBtn");
+  const hubAuthError = document.getElementById("hubAuthError");
+  const hubLogoutBtn = document.getElementById("hubLogoutBtn");
+
+  function showHubAuthError(msg) {
+    hubAuthError.textContent = msg;
+    hubAuthError.style.display = "block";
+  }
+
+  function hideHubAuthError() {
+    hubAuthError.textContent = "";
+    hubAuthError.style.display = "none";
+  }
+
+  async function handleHubSignIn() {
+    const email = (hubEmailInput.value || "").trim();
+    const password = hubPasswordInput.value || "";
+    hideHubAuthError();
+
+    if (!email || !password) {
+      showHubAuthError("Vui lòng nhập đầy đủ email và mật khẩu!");
+      return;
+    }
+
+    hubSignInBtn.disabled = true;
+    hubSignInBtn.textContent = "Đang đăng nhập...";
+
+    try {
+      await signInWithEmailAndPassword(hubAuth, email, password);
+      hubPasswordInput.value = "";
+    } catch (err) {
+      const code = err?.code || "";
+      if (code === "auth/invalid-email") {
+        showHubAuthError("Định dạng email không hợp lệ!");
+      } else if (
+        code === "auth/invalid-credential" ||
+        code === "auth/user-not-found" ||
+        code === "auth/wrong-password"
+      ) {
+        showHubAuthError("Email hoặc mật khẩu không chính xác!");
+      } else {
+        showHubAuthError("Đăng nhập thất bại: " + (err?.message || code));
+      }
+    } finally {
+      hubSignInBtn.disabled = false;
+      hubSignInBtn.textContent = "Đăng nhập";
+    }
+  }
+
+  hubSignInBtn.addEventListener("click", handleHubSignIn);
+  hubPasswordInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") handleHubSignIn();
+  });
+  hubEmailInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") handleHubSignIn();
+  });
+
+  hubLogoutBtn.addEventListener("click", async () => {
+    try {
+      await signOut(hubAuth);
+    } catch (err) {
+      console.warn("Lỗi đăng xuất:", err);
+    }
+  });
+
+  onAuthStateChanged(hubAuth, (user) => {
+    if (user) {
+      hubAuthScreen.style.display = "none";
+    } else {
+      hubAuthScreen.style.display = "flex";
+      setTimeout(() => hubEmailInput?.focus(), 50);
+    }
+  });
+
+  // =========================================================================
+  // CẤU HÌNH DANH SÁCH CÁC TRANG QUẢN LÝ CỦA BẠN
+  // =========================================================================
+  const TOOL_GROUPS = [
+    {
+      groupName: "Tổng Quan",
+      items: [
+        {
+          id: "dashboard",
+          label: "Bảng điều khiển tổng",
+          icon: "🏠",
+          url: "",
+          desc: "Xem nhanh toàn bộ các công cụ quản lý trong dự án."
+        }
+      ]
+    },
+    {
+      groupName: "Quản Lý Mã Nguồn",
+      items: [
+        {
+          id: "code-editor",
+          label: "Quản lý file .HTML",
+          icon: "💻",
+          url: "../admin-editor-auth.html",
+          badge: "Code",
+          desc: "Mở thư mục dự án, chỉnh sửa trực tiếp các file .html, .js, .css, .json và lưu xuống máy."
+        }
+  
+      ]
+      
+    },
+        {
+      groupName: "Quản Lý Danh Mục",
+      items: [
+        {
+          id: "product-manager",
+          label: "Danh Mục Sản Phẩm",
+          icon: "🛍️",
+          url: "../san-pham/quan-ly-san-pham-chinh.html",
+          badge: "Thiệp",
+          desc: "Thêm/sửa/xóa sản phẩm 2 nhóm danh mục, upload ảnh Cloudinary theo thư mục và xuất code .js."
+        },
+        {
+          id: "product-home",
+          label: "Sản Phẩm Trang Chủ",
+          icon: "🛍️",
+          url: "../san-pham/quan-ly-san-pham-trangchu.html",
+          badge: "Thiệp",
+          desc: "Thêm/sửa/xóa sản phẩm 2 nhóm danh mục, upload ảnh Cloudinary theo thư mục và xuất code .js."
+        },
+        {
+          id: "orders-manager",
+          label: "Quản lý Đơn Hàng",
+          icon: "📦",
+          url: "../trang-quan-ly-don-hang-v05.html",
+          badge: "Đơn",
+          desc: "Xem, lọc trạng thái, in đơn A4 và xử lý đơn đặt hàng."
+        }
+      ]
+      
+    },
+    {
+      groupName: "Thiệp Cưới Online",
+      items: [
+        {
+          id: "wedding-links",
+          label: "Quản lý Link Thiệp Cưới",
+          icon: "💌",
+          url: "../thiep-online/quan-ly-link-album-map.html",
+          badge: "Thiệp",
+          desc: "Quản lý kho link ảnh, nhạc và thư mục thiệp cưới online."
+        }
+        
+      ]
+    },
+    {
+      groupName: "Liên Kết Nhanh (Mở Tab Mới)",
+      items: [
+        {
+          id: "github-repo",
+          label: "Kho GitHub Dự Án",
+          icon: "🐙",
+          url: "https://github.com/inngocthuong/thiepcuoi/tree/main",
+          external: true,
+          desc: "Mở repository GitHub để kiểm tra và đẩy cập nhật lên web."
+        },
+        {
+          id: "cloudinary-media",
+          label: "Thư Viện Ảnh Cloudinary",
+          icon: "☁️",
+          url: "https://console.cloudinary.com/console/media_library",
+          external: true,
+          desc: "Quản lý các thư mục hình ảnh sản phẩm và thiệp cưới trên Cloudinary."
+        }
+      ]
+    }
+  ];
+
+  const navMenu = document.getElementById("navMenu");
+  const dashboardView = document.getElementById("dashboard-view");
+  const dashboardCards = document.getElementById("dashboardCards");
+  const workspaceFrame = document.getElementById("workspaceFrame");
+  const activeToolTitle = document.getElementById("activeToolTitle");
+  const activeToolPath = document.getElementById("activeToolPath");
+  const openNewTabBtn = document.getElementById("openNewTabBtn");
+  const reloadFrameBtn = document.getElementById("reloadFrameBtn");
+  const sidebar = document.getElementById("sidebar");
+
+  const flatItems = [];
+  TOOL_GROUPS.forEach(g => g.items.forEach(item => flatItems.push(item)));
+
+  function renderSidebarAndCards() {
+    navMenu.innerHTML = "";
+    dashboardCards.innerHTML = "";
+
+    TOOL_GROUPS.forEach(group => {
+      const titleDiv = document.createElement("div");
+      titleDiv.className = "nav-group-title";
+      titleDiv.textContent = group.groupName;
+      navMenu.appendChild(titleDiv);
+
+      group.items.forEach(item => {
+        if (item.external) {
+          const a = document.createElement("a");
+          a.className = "nav-item";
+          a.href = item.url;
+          a.target = "_blank";
+          a.rel = "noopener noreferrer";
+          a.innerHTML = `
+            <span class="nav-left">
+              <span class="nav-icon">${item.icon}</span>
+              <span class="nav-label">${item.label}</span>
+            </span>
+            <span class="nav-badge">↗</span>
+          `;
+          navMenu.appendChild(a);
+        } else {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "nav-item";
+          btn.dataset.id = item.id;
+          btn.innerHTML = `
+            <span class="nav-left">
+              <span class="nav-icon">${item.icon}</span>
+              <span class="nav-label">${item.label}</span>
+            </span>
+            ${item.badge ? `<span class="nav-badge">${item.badge}</span>` : ""}
+          `;
+          btn.onclick = () => selectTool(item.id);
+          navMenu.appendChild(btn);
+        }
+
+        if (item.id !== "dashboard") {
+          const card = document.createElement("div");
+          card.className = "dash-card";
+          card.innerHTML = `
+            <div class="icon">${item.icon}</div>
+            <h3>${item.label}</h3>
+            <p>${item.desc || ""}</p>
+          `;
+          card.onclick = () => {
+            if (item.external) window.open(item.url, "_blank", "noopener");
+            else selectTool(item.id);
+          };
+          dashboardCards.appendChild(card);
+        }
+      });
+    });
+  }
+
+  function selectTool(toolId) {
+    const item = flatItems.find(x => x.id === toolId) || flatItems[0];
+    localStorage.setItem("admin_hub_active_tool", item.id);
+
+    document.querySelectorAll(".nav-item[data-id]").forEach(el => {
+      el.classList.toggle("active", el.dataset.id === item.id);
+    });
+
+    activeToolTitle.textContent = `${item.icon} ${item.label}`;
+
+    if (!item.url) {
+      dashboardView.classList.add("show");
+      workspaceFrame.style.display = "none";
+      activeToolPath.textContent = "admin-tong.html";
+      openNewTabBtn.style.display = "none";
+      reloadFrameBtn.style.display = "none";
+    } else {
+      dashboardView.classList.remove("show");
+      workspaceFrame.style.display = "block";
+      workspaceFrame.src = item.url;
+      activeToolPath.textContent = item.url;
+      openNewTabBtn.href = item.url;
+      openNewTabBtn.style.display = "inline-flex";
+      reloadFrameBtn.style.display = "inline-flex";
+    }
+  }
+
+  window.addEventListener("message", (event) => {
+    const data = event.data;
+    if (!data || data.type !== "OPEN_ADMIN_TOOL") return;
+
+    if (data.toolId && flatItems.some(x => x.id === data.toolId)) {
+      selectTool(data.toolId);
+      return;
+    }
+
+    if (data.url) {
+      dashboardView.classList.remove("show");
+      workspaceFrame.style.display = "block";
+      workspaceFrame.src = data.url;
+      activeToolTitle.textContent = "💻 Quản lý file .HTML / .JS";
+      activeToolPath.textContent = data.url;
+      openNewTabBtn.href = data.url;
+      openNewTabBtn.style.display = "inline-flex";
+      reloadFrameBtn.style.display = "inline-flex";
+    }
+  });
+
+  document.getElementById("toggleSidebarBtn").addEventListener("click", () => {
+    sidebar.classList.toggle("collapsed");
+  });
+
+  reloadFrameBtn.addEventListener("click", () => {
+    if (workspaceFrame.src && workspaceFrame.src !== "about:blank") {
+      workspaceFrame.contentWindow.location.reload();
+    }
+  });
+
+  renderSidebarAndCards();
+  const savedToolId = localStorage.getItem("admin_hub_active_tool") || "dashboard";
+  selectTool(savedToolId);
+</script>
+</body>
+</html>

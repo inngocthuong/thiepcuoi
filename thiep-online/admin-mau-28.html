@@ -91,6 +91,7 @@
       display: flex;
       gap: 10px;
       margin-bottom: 20px;
+      flex-wrap: wrap;
     }
     .tab-btn {
       padding: 10px 20px;
@@ -165,6 +166,7 @@
     }
     .btn:hover { opacity: 0.92; }
     .btn:active { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
     .btn-primary { background: var(--olive-dark); color: var(--gold); }
     .btn-success { background: #2e7d32; color: #fff; }
     .btn-outline { background: transparent; border: 1px solid var(--olive-main); color: var(--olive-dark); }
@@ -248,35 +250,53 @@
     th { background: #eef2eb; font-weight: 700; color: var(--olive-dark); }
     .sig-thumb { max-height: 44px; border: 1px solid #ddd; border-radius: 4px; background: #fff; }
 
-      /* Khung bao ngoài để đẩy 2 nút sang phải */
-.action-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    width: 100%;
-    justify-content: right;
-}
+    /* Khung bao ngoài để đẩy các nút sang phải */
+    .action-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      width: 100%;
+      justify-content: right;
+    }
 
-/* Giao diện của từng nút */
-.home-btn { 
-    background-color: #2E3729; 
-    font-family: 'Montserrat', sans-serif;
-     border: 1px solid #5a6b51;
-    color: rgb(255, 255, 255); 
-    text-decoration: none; 
-    padding: 8px 15px; 
-    border-radius: 10px; 
-    font-weight: 500; 
-    display: inline-block; 
-    margin-bottom: 20px; 
-    transition: background-color 0.3s ease; 
-}
+    /* Giao diện của từng nút */
+    .home-btn { 
+      background-color: #2E3729; 
+      font-family: 'Montserrat', sans-serif;
+      border: 1px solid #5a6b51;
+      color: rgb(255, 255, 255); 
+      text-decoration: none; 
+      padding: 8px 15px; 
+      border-radius: 10px; 
+      font-weight: 500; 
+      display: inline-block; 
+      margin-bottom: 20px; 
+      transition: background-color 0.3s ease; 
+    }
 
-/* Đổi màu khi rê chuột vào */
-.home-btn:hover {
-    background-color: #5a6b51;
-    color: white;
-}
+    /* Đổi màu khi rê chuột vào */
+    .home-btn:hover {
+      background-color: #5a6b51;
+      color: white;
+    }
+
+    /* Nút tải ảnh / nhạc lên Cloudinary */
+    .upload-row { display: flex; gap: 6px; align-items: center; }
+    .upload-row input { flex: 1; min-width: 0; }
+    .btn-upload {
+      background-color: #2E3729;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 9px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-upload:hover { background-color: #5a6b51; }
+    .btn-upload:disabled { opacity: 0.6; cursor: not-allowed; }
+    .upload-status { font-size: 11px; color: #0284c7; margin-top: 4px; min-height: 16px; }
   </style>
 </head>
 <body>
@@ -321,8 +341,8 @@
       <button class="tab-btn active" onclick="switchTab('settings', this)">⚙️ Cấu Hình Nội Dung Thiệp</button>
       <button class="tab-btn" onclick="switchTab('rsvp', this)">💌 Danh Sách RSVP & Lời Chúc</button>
       <a href="https://postimages.org/vi/" class="home-btn"  target="_blank" rel="noopener noreferrer">⬆️ Tải ảnh lên</a>
-    <a href="quan-ly-link-album-map.html" class="home-btn" target="_blank" rel="noopener noreferrer">🖼️ Ảnh & ♫ Nhạc</a>
-    <a href="https://console.firebase.google.com/project/thiep-cuoi-online-fa5d4/firestore/databases/-default-/data/~2Frsvp_mau_06~2FaFG7kqTAYHDexZnTOji4" class="home-btn" target="_blank" rel="noopener noreferrer">🔥 Firebase</a>
+      <a href="quan-ly-link-album-map.html" class="home-btn" target="_blank" rel="noopener noreferrer">🖼️ Ảnh & ♫ Nhạc</a>
+      <a href="https://console.firebase.google.com/project/thiep-cuoi-online-fa5d4/firestore/databases/-default-/data/~2Frsvp_mau_06~2FaFG7kqTAYHDexZnTOji4" class="home-btn" target="_blank" rel="noopener noreferrer">🔥 Firebase</a>
     </div>
 
     <!-- TAB 1: CẤU HÌNH NỘI DUNG THIỆP -->
@@ -369,11 +389,55 @@
         <div class="grid-2">
           <div class="box">
             <h3>3. Hình Ảnh & Nhạc Nền MP3</h3>
-            <div class="form-group"><label>Link Ảnh Bìa Chính</label><input type="url" id="coverImg" value="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80"></div>
-            <div class="form-group"><label>Link Ảnh Chân Dung Chú Rể</label><input type="url" id="groomImg" value="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=500&q=80"></div>
-            <div class="form-group"><label>Link Ảnh Chân Dung Cô Dâu</label><input type="url" id="brideImg" value="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=500&q=80"></div>
-            <div class="form-group"><label>Link Nhạc Nền MP3</label><input type="text" id="musicUrl" value="https://cdn.pixabay.com/download/audio/2022/02/15/audio_8860669422.mp3?filename=romantic-piano-11157.mp3"></div>
-            <div class="form-group"><label>Danh sách Link Ảnh Album (mỗi link 1 dòng)</label><textarea id="albumUrls" rows="4">https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=600&q=80&#10;https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=600&q=80&#10;https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=900&q=80&#10;https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=600&q=80</textarea></div>
+            <div class="form-group upload-field-wrap">
+              <label>Link Ảnh Bìa Chính</label>
+              <div class="upload-row">
+                <input type="url" id="coverImg" value="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80">
+                <button type="button" class="btn-upload" onclick="triggerUpload('fileCoverImg')">🖼️ Chọn ảnh</button>
+              </div>
+              <div id="status_coverImg" class="upload-status"></div>
+              <input type="file" id="fileCoverImg" accept="image/*" style="display:none" onchange="handleFileSelect(this, 'coverImg')">
+            </div>
+
+            <div class="form-group upload-field-wrap">
+              <label>Link Ảnh Chân Dung Chú Rể</label>
+              <div class="upload-row">
+                <input type="url" id="groomImg" value="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=500&q=80">
+                <button type="button" class="btn-upload" onclick="triggerUpload('fileGroomImg')">🖼️ Chọn ảnh</button>
+              </div>
+              <div id="status_groomImg" class="upload-status"></div>
+              <input type="file" id="fileGroomImg" accept="image/*" style="display:none" onchange="handleFileSelect(this, 'groomImg')">
+            </div>
+
+            <div class="form-group upload-field-wrap">
+              <label>Link Ảnh Chân Dung Cô Dâu</label>
+              <div class="upload-row">
+                <input type="url" id="brideImg" value="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=500&q=80">
+                <button type="button" class="btn-upload" onclick="triggerUpload('fileBrideImg')">🖼️ Chọn ảnh</button>
+              </div>
+              <div id="status_brideImg" class="upload-status"></div>
+              <input type="file" id="fileBrideImg" accept="image/*" style="display:none" onchange="handleFileSelect(this, 'brideImg')">
+            </div>
+
+            <div class="form-group upload-field-wrap">
+              <label>Link Nhạc Nền MP3</label>
+              <div class="upload-row">
+                <input type="text" id="musicUrl" value="https://cdn.pixabay.com/download/audio/2022/02/15/audio_8860669422.mp3?filename=romantic-piano-11157.mp3">
+                <button type="button" class="btn-upload" onclick="triggerUpload('fileMusicUrl')">🎵 Chọn nhạc</button>
+              </div>
+              <div id="status_musicUrl" class="upload-status"></div>
+              <input type="file" id="fileMusicUrl" accept="audio/*" style="display:none" onchange="handleFileSelect(this, 'musicUrl')">
+            </div>
+
+            <div class="form-group upload-field-wrap">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:5px;">
+                <label style="margin:0;">Danh sách Link Ảnh Album (mỗi link 1 dòng)</label>
+                <button type="button" class="btn-upload" onclick="triggerUpload('fileAlbumBatch')">🖼️ Chọn thêm nhiều ảnh album</button>
+              </div>
+              <textarea id="albumUrls" rows="4">https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=600&q=80&#10;https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=600&q=80&#10;https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=900&q=80&#10;https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=600&q=80</textarea>
+              <div id="status_album_batch" class="upload-status"></div>
+              <input type="file" id="fileAlbumBatch" accept="image/*" multiple style="display:none" onchange="handleAlbumBatchSelect(this, 'albumUrls')">
+            </div>
           </div>
 
           <div class="box">
@@ -452,16 +516,100 @@
       appId: "1:261787760014:web:5e9c246306b95ec7cca0df"
     };
 
+    const CLOUDINARY_CLOUD_NAME = "a6goixuq";
+    const CLOUDINARY_UPLOAD_PRESET = "thiep_cuoi_online";
+
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
     let unsubscribeRsvp = null;
     let currentRsvpList = [];
 
-    // Hàm tạo đường dẫn file thiệp chính xác dựa trên file admin hiện tại
+    window.triggerUpload = function(fileInputId) {
+      const input = document.getElementById(fileInputId);
+      if (input) {
+        input.value = "";
+        input.click();
+      }
+    };
+
+    async function uploadSingleFileToCloudinary(file) {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`, {
+        method: "POST",
+        body: formData
+      });
+      const result = await res.json();
+      if (!res.ok) {
+        throw new Error(result.error?.message || "Tải file lên Cloudinary thất bại");
+      }
+      return result.secure_url;
+    }
+
+    window.handleFileSelect = async function(fileInput, targetFieldId) {
+      const files = Array.from(fileInput.files || []);
+      if (!files.length) return;
+
+      const file = files[0];
+      const targetEl = document.getElementById(targetFieldId);
+      const statusEl = document.getElementById(`status_${targetFieldId}`);
+      const wrapEl = fileInput.closest(".upload-field-wrap");
+      const buttons = wrapEl ? wrapEl.querySelectorAll("button") : [];
+
+      buttons.forEach(btn => btn.disabled = true);
+      try {
+        if (statusEl) statusEl.textContent = `⏳ Đang tải: ${file.name}...`;
+        const url = await uploadSingleFileToCloudinary(file);
+        if (targetEl) targetEl.value = url;
+        if (statusEl) statusEl.textContent = `✅ Đã lấy link: ${file.name} (nhớ bấm "Lưu Cấu Hình Thiệp Lên Firebase")`;
+      } catch (err) {
+        if (statusEl) statusEl.textContent = `❌ Lỗi: ${err.message}`;
+        alert(`Lỗi tải lên Cloudinary: ${err.message}`);
+      } finally {
+        buttons.forEach(btn => btn.disabled = false);
+      }
+    };
+
+    window.handleAlbumBatchSelect = async function(fileInput, targetTextareaId) {
+      const files = Array.from(fileInput.files || []);
+      if (!files.length) return;
+
+      const targetEl = document.getElementById(targetTextareaId);
+      const statusEl = document.getElementById("status_album_batch");
+      const wrapEl = fileInput.closest(".upload-field-wrap");
+      const buttons = wrapEl ? wrapEl.querySelectorAll("button") : [];
+
+      buttons.forEach(btn => btn.disabled = true);
+      try {
+        const uploadedUrls = [];
+        for (let i = 0; i < files.length; i++) {
+          if (statusEl) statusEl.textContent = `⏳ Đang tải (${i + 1}/${files.length}): ${files[i].name}...`;
+          const url = await uploadSingleFileToCloudinary(files[i]);
+          uploadedUrls.push(url);
+        }
+        if (targetEl && uploadedUrls.length) {
+          const existingLines = targetEl.value
+            .split("\n")
+            .map(line => line.trim())
+            .filter(Boolean);
+          targetEl.value = [...existingLines, ...uploadedUrls].join("\n");
+        }
+        if (statusEl) {
+          statusEl.textContent = `✅ Đã thêm ${uploadedUrls.length} ảnh vào album (nhớ bấm "Lưu Cấu Hình Thiệp Lên Firebase")`;
+        }
+      } catch (err) {
+        if (statusEl) statusEl.textContent = `❌ Lỗi: ${err.message}`;
+        alert(`Lỗi tải album lên Cloudinary: ${err.message}`);
+      } finally {
+        buttons.forEach(btn => btn.disabled = false);
+      }
+    };
+
     function getInvitationUrl(cardId, guestName = "") {
       const urlObj = new URL(window.location.href);
-      // Tự động đổi tên file admin-mau-28*.html thành thiep-online-mau-28.html
       urlObj.pathname = urlObj.pathname.replace(/admin-mau-28[^/]*\.html$/i, "thiep-online-mau-28.html");
       urlObj.search = "";
       urlObj.searchParams.set("id", cardId);
@@ -471,7 +619,6 @@
       return urlObj.toString();
     }
 
-    // Kiểm tra mật khẩu đăng nhập Admin
     window.checkAdminLogin = function() {
       const pass = document.getElementById("adminPassInput").value;
       if (pass === "Thong@121976") {
@@ -489,9 +636,9 @@
       document.getElementById("panel-" + tabName).classList.add("active");
     };
 
-    // Tải dữ liệu cấu hình của card_id và lắng nghe RSVP
     window.loadCardSettings = async function() {
       const cardId = document.getElementById("cardIdInput").value.trim() || "default_mau_28";
+      document.querySelectorAll(".upload-status").forEach(el => el.textContent = "");
       listenRsvpForCard(cardId);
 
       try {
@@ -512,12 +659,10 @@
             }
           });
 
-          // Sửa lỗi ID albumUrls
           if (Array.isArray(d.albumUrls) && document.getElementById("albumUrls")) {
             document.getElementById("albumUrls").value = d.albumUrls.join("\n");
           }
 
-          // Nạp lại Chương trình hôn lễ vào scheduleText
           if (Array.isArray(d.schedule) && document.getElementById("scheduleText")) {
             document.getElementById("scheduleText").value = d.schedule
               .map(s => `${s.time} | ${s.event}`)
@@ -533,7 +678,6 @@
       }
     };
 
-    // Lưu cấu hình lên Firestore
     document.getElementById("settingsForm").addEventListener("submit", async (e) => {
       e.preventDefault();
       const saveBtn = document.getElementById("saveBtn");
@@ -541,7 +685,6 @@
       saveBtn.disabled = true;
       saveBtn.textContent = "⏳ Đang lưu dữ liệu...";
 
-      // Xử lý dữ liệu Chương trình hôn lễ
       const rawScheduleLines = document.getElementById("scheduleText").value.split("\n");
       const schedule = rawScheduleLines.map(line => {
         const trimmedLine = line.trim();
@@ -592,7 +735,6 @@
       try {
         await setDoc(doc(db, "wedding_mau_28", cardId), payload, { merge: true });
         
-        // Hiển thị khung chức năng Sao chép link & Xem thiệp ngay bên dưới nút Lưu
         const fullLink = getInvitationUrl(cardId);
         document.getElementById("savedCardUrlText").textContent = fullLink;
         document.getElementById("viewSavedCardBtn").href = fullLink;
@@ -618,7 +760,6 @@
       });
     };
 
-    // Lắng nghe danh sách RSVP theo card_id
     function listenRsvpForCard(cardId) {
       if (unsubscribeRsvp) unsubscribeRsvp();
 

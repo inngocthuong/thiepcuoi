@@ -98,12 +98,66 @@
       gap: 6px;
     }
     .btn-gold { background: linear-gradient(135deg, #d8ab46, #b88928); color: #fffdf8; }
-    .btn-gold:hover { opacity: 0.92; }
+    .btn-gold:hover:not(:disabled) { opacity: 0.92; }
+    .btn-gold:disabled, .btn-pick:disabled { opacity: 0.6; cursor: not-allowed; }
     .btn-outline { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
     .btn-outline:hover { background: rgba(184, 137, 40, 0.08); }
     .btn-success { background: var(--success); color: #fff; }
     .btn-success:hover { opacity: 0.9; }
     .btn-danger { background: var(--danger); color: #fff; padding: 5px 10px; font-size: 12px; }
+
+    /* Ô nhập link + nút tải lên Cloudinary */
+    .upload-row {
+      display: flex;
+      gap: 6px;
+      align-items: stretch;
+    }
+    .upload-row input {
+      flex: 1;
+      min-width: 0;
+    }
+    .btn-pick {
+      padding: 0 11px;
+      border-radius: 8px;
+      border: 1px solid var(--gold);
+      background: linear-gradient(135deg, #f3dca2, #d4a644);
+      color: #3b2b13;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .btn-pick:hover:not(:disabled) { filter: brightness(1.04); }
+    .album-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .album-toolbar label { margin-bottom: 0 !important; }
+    .btn-quick-6 {
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--gold);
+      background: linear-gradient(135deg, #ffe8a3, #d8ab46);
+      color: #3b2b13;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-quick-6:hover:not(:disabled) { filter: brightness(1.04); }
+    .btn-quick-6:disabled { opacity: 0.6; cursor: not-allowed; }
+    .upload-hint {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 3px;
+      min-height: 15px;
+    }
+    .upload-hint.ok { color: var(--success); font-weight: 600; }
+    .upload-hint.err { color: var(--danger); font-weight: 600; }
 
     .tabs { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
     .tab-btn {
@@ -181,35 +235,23 @@
     .badge-yes { background: rgba(36, 158, 93, 0.15); color: var(--success); }
     .badge-no { background: rgba(209, 67, 82, 0.15); color: var(--danger); }
 
-    /* Khung bao ngoài để đẩy 2 nút sang phải */
-.action-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    width: 100%;
-    justify-content: right;
-}
-
-/* Giao diện của từng nút */
-.home-btn { 
-    background-color: #b88928; 
-    font-family: 'Montserrat', sans-serif;
-     border: 1px solid #ffffff;
-    color: rgb(255, 255, 255); 
-    text-decoration: none; 
-    padding: 8px 15px; 
-    border-radius: 10px; 
-    font-weight: 500; 
-    display: inline-block; 
-    margin-bottom: 20px; 
-    transition: background-color 0.3s ease; 
-}
-
-/* Đổi màu khi rê chuột vào */
-.home-btn:hover {
-    background-color: #e8c782;
-    color: rgb(37, 19, 19);
-}
+    .home-btn { 
+      background-color: #b88928; 
+      font-family: inherit;
+      border: 1px solid #ffffff;
+      color: #ffffff; 
+      text-decoration: none; 
+      padding: 8px 15px; 
+      border-radius: 10px; 
+      font-weight: 500; 
+      display: inline-block; 
+      margin-bottom: 20px; 
+      transition: background-color 0.3s ease; 
+    }
+    .home-btn:hover {
+      background-color: #e8c782;
+      color: rgb(37, 19, 19);
+    }
   </style>
 </head>
 <body>
@@ -239,11 +281,11 @@
 
     <div class="tabs">
       <button class="tab-btn active" onclick="switchTab('configTab', this)">1. Nội Dung Thiệp</button>
-      <button class="tab-btn" onclick="switchTab('rsvpTab', this)">2.Lời Chúc (<span id="rsvpCountBadge">0</span>)</button>
+      <button class="tab-btn" onclick="switchTab('rsvpTab', this)">2. Lời Chúc (<span id="rsvpCountBadge">0</span>)</button>
       <button class="tab-btn" onclick="switchTab('shareTab', this)">3. Tạo Link Gửi Khách</button>
-        <a href="https://postimages.org/vi/" class="home-btn"  target="_blank" rel="noopener noreferrer">⬆️ Tải ảnh lên</a>
-    <a href="quan-ly-link-album-map.html" class="home-btn" target="_blank" rel="noopener noreferrer">🖼️ Ảnh & ♫ Nhạc</a>
-    <a href="https://console.firebase.google.com/project/thiep-cuoi-online-fa5d4/firestore/databases/-default-/data/~2Frsvp_mau_06~2FaFG7kqTAYHDexZnTOji4" class="home-btn" target="_blank" rel="noopener noreferrer">🔥 Firebase</a>
+      <a href="https://postimages.org/vi/" class="home-btn" target="_blank" rel="noopener noreferrer">⬆️ Tải ảnh lên</a>
+      <a href="quan-ly-link-album-map.html" class="home-btn" target="_blank" rel="noopener noreferrer">🖼️ Ảnh &amp; ♫ Nhạc</a>
+      <a href="https://console.firebase.google.com/project/thiep-cuoi-online-fa5d4/firestore/databases/-default-/data/~2Frsvp_mau_06~2FaFG7kqTAYHDexZnTOji4" class="home-btn" target="_blank" rel="noopener noreferrer">🔥 Firebase</a>
     </div>
 
     <!-- TAB 1: CẤU HÌNH -->
@@ -314,21 +356,94 @@ Ba Đình, Hà Nội</textarea></div>
         </div>
 
         <div class="section-card">
-          <h2>Hình Ảnh, Nhạc Nền &amp; Mừng Cưới (VietQR)</h2>
+          <h2>Hình Ảnh, Nhạc Nền (Cloudinary) &amp; Mừng Cưới (VietQR)</h2>
           <div class="grid-3">
-            <div class="field"><label>Link Ảnh Bìa Chính</label><input type="url" id="coverImg" value="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80"></div>
-            <div class="field"><label>Link Ảnh Chú Rể</label><input type="url" id="groomImg" value="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=500&q=80"></div>
-            <div class="field"><label>Link Ảnh Cô Dâu</label><input type="url" id="brideImg" value="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=500&q=80"></div>
+            <div class="field">
+              <label>Link Ảnh Bìa Chính</label>
+              <div class="upload-row">
+                <input type="text" id="coverImg" value="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80">
+                <button type="button" class="btn-pick" data-target="coverImg" data-type="image">🖼️ Chọn ảnh</button>
+              </div>
+              <div class="upload-hint" id="hint-coverImg"></div>
+            </div>
+            <div class="field">
+              <label>Link Ảnh Chú Rể</label>
+              <div class="upload-row">
+                <input type="text" id="groomImg" value="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=500&q=80">
+                <button type="button" class="btn-pick" data-target="groomImg" data-type="image">🖼️ Chọn ảnh</button>
+              </div>
+              <div class="upload-hint" id="hint-groomImg"></div>
+            </div>
+            <div class="field">
+              <label>Link Ảnh Cô Dâu</label>
+              <div class="upload-row">
+                <input type="text" id="brideImg" value="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=500&q=80">
+                <button type="button" class="btn-pick" data-target="brideImg" data-type="image">🖼️ Chọn ảnh</button>
+              </div>
+              <div class="upload-hint" id="hint-brideImg"></div>
+            </div>
           </div>
+
           <div class="field">
-            <label>Danh sách Link Album (Mỗi link 1 dòng)</label>
-            <textarea id="albumUrlsText" rows="4">https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=600&q=80
-https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=600&q=80
-https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=900&q=80
-https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=600&q=80
-https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=600&q=80</textarea>
+            <div class="album-toolbar">
+              <label>Album Ảnh Cưới (6 ảnh — chọn từ máy hoặc dán link)</label>
+              <button type="button" class="btn-quick-6" id="quickPick6AlbumBtn">⚡ Chọn nhanh 6 ảnh album</button>
+            </div>
+            <div class="upload-hint" id="hint-albumBatch"></div>
+            <div class="grid-2">
+              <div>
+                <div class="upload-row">
+                  <input type="text" id="album1" value="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=600&q=80" placeholder="Link ảnh album 1">
+                  <button type="button" class="btn-pick" data-target="album1" data-type="image">🖼️ Chọn ảnh</button>
+                </div>
+                <div class="upload-hint" id="hint-album1"></div>
+              </div>
+              <div>
+                <div class="upload-row">
+                  <input type="text" id="album2" value="https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=600&q=80" placeholder="Link ảnh album 2">
+                  <button type="button" class="btn-pick" data-target="album2" data-type="image">🖼️ Chọn ảnh</button>
+                </div>
+                <div class="upload-hint" id="hint-album2"></div>
+              </div>
+              <div>
+                <div class="upload-row">
+                  <input type="text" id="album3" value="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=900&q=80" placeholder="Link ảnh album 3">
+                  <button type="button" class="btn-pick" data-target="album3" data-type="image">🖼️ Chọn ảnh</button>
+                </div>
+                <div class="upload-hint" id="hint-album3"></div>
+              </div>
+              <div>
+                <div class="upload-row">
+                  <input type="text" id="album4" value="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=600&q=80" placeholder="Link ảnh album 4">
+                  <button type="button" class="btn-pick" data-target="album4" data-type="image">🖼️ Chọn ảnh</button>
+                </div>
+                <div class="upload-hint" id="hint-album4"></div>
+              </div>
+              <div>
+                <div class="upload-row">
+                  <input type="text" id="album5" value="https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=600&q=80" placeholder="Link ảnh album 5">
+                  <button type="button" class="btn-pick" data-target="album5" data-type="image">🖼️ Chọn ảnh</button>
+                </div>
+                <div class="upload-hint" id="hint-album5"></div>
+              </div>
+              <div>
+                <div class="upload-row">
+                  <input type="text" id="album6" value="" placeholder="Link ảnh album 6">
+                  <button type="button" class="btn-pick" data-target="album6" data-type="image">🖼️ Chọn ảnh</button>
+                </div>
+                <div class="upload-hint" id="hint-album6"></div>
+              </div>
+            </div>
           </div>
-          <div class="field"><label>Link Nhạc Nền MP3</label><input type="text" id="musicUrl" value="https://cdn.pixabay.com/download/audio/2022/02/15/audio_8860669422.mp3?filename=romantic-piano-11157.mp3"></div>
+
+          <div class="field">
+            <label>Link Nhạc Nền MP3</label>
+            <div class="upload-row">
+              <input type="text" id="musicUrl" value="https://cdn.pixabay.com/download/audio/2022/02/15/audio_8860669422.mp3?filename=romantic-piano-11157.mp3">
+              <button type="button" class="btn-pick" data-target="musicUrl" data-type="audio">♫ Chọn nhạc</button>
+            </div>
+            <div class="upload-hint" id="hint-musicUrl"></div>
+          </div>
 
           <div class="grid-2" style="margin-top: 14px;">
             <div>
@@ -344,6 +459,8 @@ https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=cro
           </div>
         </div>
 
+        <input type="file" id="cloudinaryFilePicker" style="display:none;">
+        <input type="file" id="album6BatchPicker" accept="image/*" multiple style="display:none;">
         <button type="submit" class="btn btn-gold" id="saveConfigBtn" style="width: 100%; padding: 14px; font-size: 15px;">💾 Lưu Cấu Hình Thiệp Lên Firebase</button>
 
         <div id="saveResultBox" class="save-result-box">
@@ -419,6 +536,10 @@ https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=cro
       getFirestore, doc, getDoc, setDoc, collection, query, where, orderBy, onSnapshot, deleteDoc, serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
+    // Cấu hình Cloudinary
+    const CLOUDINARY_CLOUD_NAME = "a6goixuq";
+    const CLOUDINARY_UPLOAD_PRESET = "thiep_cuoi_online";
+
     const ADMIN_PASS = "Thong@121976";
     document.getElementById("loginBtn").addEventListener("click", () => {
       const val = document.getElementById("adminPasswordInput").value;
@@ -450,6 +571,121 @@ https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=cro
       return document.getElementById("cardIdInput").value.trim() || "default_mau_31";
     }
 
+    function setUploadHint(targetId, msg, type = "") {
+      const el = document.getElementById("hint-" + targetId);
+      if (!el) return;
+      el.textContent = msg;
+      el.className = "upload-hint" + (type ? " " + type : "");
+    }
+
+    async function uploadToCloudinary(file, folder) {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+      formData.append("folder", folder);
+
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`, {
+        method: "POST",
+        body: formData
+      });
+      const data = await res.json();
+      if (!res.ok || !data.secure_url) {
+        throw new Error(data.error?.message || "Tải lên thất bại");
+      }
+      return data.secure_url;
+    }
+
+    // Chọn ảnh / nhạc từ máy tính hoặc điện thoại -> upload thẳng lên Cloudinary
+    const filePicker = document.getElementById("cloudinaryFilePicker");
+    let activeTargetId = null;
+
+    document.querySelectorAll(".btn-pick").forEach(btn => {
+      btn.addEventListener("click", () => {
+        activeTargetId = btn.dataset.target;
+        const type = btn.dataset.type || "image";
+        filePicker.value = "";
+        filePicker.accept = type === "audio" ? "audio/*,.mp3,.m4a,.wav,.ogg" : "image/*";
+        filePicker.click();
+      });
+    });
+
+    filePicker.addEventListener("change", async () => {
+      const file = filePicker.files && filePicker.files[0];
+      if (!file || !activeTargetId) return;
+
+      const targetId = activeTargetId;
+      const inputEl = document.getElementById(targetId);
+      const triggerBtn = document.querySelector(`.btn-pick[data-target="${targetId}"]`);
+      const folder = `thiep-cuoi/mau-31/${getCardId().replace(/[^a-z0-9_-]/gi, "")}`;
+
+      if (triggerBtn) triggerBtn.disabled = true;
+      setUploadHint(targetId, `Đang tải "${file.name}" lên Cloudinary...`);
+
+      try {
+        const secureUrl = await uploadToCloudinary(file, folder);
+        if (inputEl) inputEl.value = secureUrl;
+        setUploadHint(targetId, `Đã tải lên: ${file.name}`, "ok");
+      } catch (err) {
+        setUploadHint(targetId, `Lỗi: ${err.message}`, "err");
+      } finally {
+        if (triggerBtn) triggerBtn.disabled = false;
+      }
+    });
+
+    // Chọn nhanh tối đa 6 ảnh album một lần và điền lần lượt vào các ô album1..album6
+    const quickPick6Btn = document.getElementById("quickPick6AlbumBtn");
+    const album6BatchPicker = document.getElementById("album6BatchPicker");
+
+    quickPick6Btn.addEventListener("click", () => {
+      album6BatchPicker.value = "";
+      album6BatchPicker.click();
+    });
+
+    album6BatchPicker.addEventListener("change", async () => {
+      const selectedFiles = Array.from(album6BatchPicker.files || []);
+      if (!selectedFiles.length) return;
+
+      const filesToUpload = selectedFiles.slice(0, 6);
+      const folder = `thiep-cuoi/mau-31/${getCardId().replace(/[^a-z0-9_-]/gi, "")}`;
+      const emptyInputs = [];
+      for (let i = 1; i <= 6; i++) {
+        const el = document.getElementById(`album${i}`);
+        if (el && !el.value.trim()) emptyInputs.push(el);
+      }
+      const targetInputs = emptyInputs.length >= filesToUpload.length
+        ? emptyInputs.slice(0, filesToUpload.length)
+        : Array.from({ length: filesToUpload.length }, (_, idx) => document.getElementById(`album${idx + 1}`));
+
+      quickPick6Btn.disabled = true;
+      setUploadHint("albumBatch", `Đang tải ${filesToUpload.length} ảnh album lên Cloudinary...`);
+
+      let successCount = 0;
+      for (let i = 0; i < filesToUpload.length; i++) {
+        const file = filesToUpload[i];
+        const targetEl = targetInputs[i];
+        const slotIndex = targetEl ? targetEl.id.replace("album", "") : (i + 1);
+        setUploadHint("albumBatch", `Đang tải ảnh ${i + 1}/${filesToUpload.length}: "${file.name}"...`);
+        setUploadHint(`album${slotIndex}`, `Đang tải "${file.name}"...`);
+
+        try {
+          const secureUrl = await uploadToCloudinary(file, folder);
+          if (targetEl) targetEl.value = secureUrl;
+          setUploadHint(`album${slotIndex}`, `Đã tải lên: ${file.name}`, "ok");
+          successCount++;
+        } catch (err) {
+          setUploadHint(`album${slotIndex}`, `Lỗi: ${err.message}`, "err");
+        }
+      }
+
+      if (successCount === filesToUpload.length) {
+        const extraNote = selectedFiles.length > 6 ? ` (đã lấy 6 ảnh đầu tiên trong ${selectedFiles.length} ảnh đã chọn)` : "";
+        setUploadHint("albumBatch", `Đã tải xong ${successCount} ảnh album${extraNote}. Nhớ bấm Lưu Cấu Hình Thiệp Lên Firebase.`, "ok");
+      } else {
+        setUploadHint("albumBatch", `Hoàn tất ${successCount}/${filesToUpload.length} ảnh. Kiểm tra các dòng báo lỗi bên dưới.`, "err");
+      }
+      quickPick6Btn.disabled = false;
+    });
+
     function buildFullCardUrl(cardId) {
       const baseFile = (document.getElementById("baseCardUrl")?.value.trim()) || "thiep-online-mau-31.html";
       if (/^https?:\/\//i.test(baseFile)) {
@@ -462,6 +698,10 @@ https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=cro
 
     async function loadCardConfig() {
       const cardId = getCardId();
+      document.querySelectorAll(".upload-hint").forEach(el => {
+        el.textContent = "";
+        el.className = "upload-hint";
+      });
       try {
         const snap = await getDoc(doc(db, "wedding_mau_31", cardId));
         if (snap.exists()) {
@@ -480,8 +720,10 @@ https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=cro
               document.getElementById(f).value = d[f];
             }
           });
-          if (Array.isArray(d.albumUrls)) {
-            document.getElementById("albumUrlsText").value = d.albumUrls.join("\n");
+          const albums = Array.isArray(d.albumUrls) ? d.albumUrls : [];
+          for (let i = 1; i <= 6; i++) {
+            const el = document.getElementById(`album${i}`);
+            if (el) el.value = albums[i - 1] || "";
           }
           if (Array.isArray(d.schedule)) {
             document.getElementById("scheduleText").value = d.schedule.map(s => `${s.time} | ${s.event}`).join("\n");
@@ -506,7 +748,11 @@ https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=cro
         return { time: (time || "").trim(), event: rest.join("|").trim() };
       }).filter(item => item.time || item.event);
 
-      const albumUrls = document.getElementById("albumUrlsText").value.split("\n").map(u => u.trim()).filter(Boolean);
+      const albumUrls = [];
+      for (let i = 1; i <= 6; i++) {
+        const val = document.getElementById(`album${i}`).value.trim();
+        if (val) albumUrls.push(val);
+      }
 
       const payload = {
         groomShort: document.getElementById("groomShort").value.trim(),

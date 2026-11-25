@@ -82,6 +82,10 @@
         .btn-save:hover {
             background-color: #971d31;
         }
+        .btn-save:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
         .nav-links {
             display: flex;
             justify-content: space-between;
@@ -137,41 +141,55 @@
         }
         #adminPanel { display: none; }
 
-   .action-buttons {
-    
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    width: 100%;
-    justify-content: right;
-}
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            width: 100%;
+            justify-content: right;
+            flex-wrap: wrap;
+        }
 
-/* Giao diện của từng nút */
-.home-btn { 
-    background-color: #7a0c1e; 
-    border: 1px solid #f1c40f;
-    font-family: 'Montserrat', sans-serif;
-    color: white; 
-    text-decoration: none; 
-    padding: 8px 15px; 
-    border-radius: 10px; 
-    font-weight: 500; 
-    display: inline-block; 
-    margin-bottom: 20px; 
-    transition: background-color 0.3s ease; 
-    font-family: 'Segoe UI', Tahoma, Arial, sans-serif; /* Đổi kiểu chữ */
-    font-size: 15px;                                    /* Đổi cỡ chữ */
-    font-weight: 600;                                   /* Độ đậm (400: thường, 600: đậm vừa, 700: đậm) */
-    color: #ffffff;}                                     /* Đổi màu chữ mặc định 
-}
+        /* Giao diện của từng nút */
+        .home-btn { 
+            background-color: #7a0c1e; 
+            border: 1px solid #f1c40f;
+            color: white; 
+            text-decoration: none; 
+            padding: 8px 15px; 
+            border-radius: 10px; 
+            display: inline-block; 
+            margin-bottom: 20px; 
+            transition: background-color 0.3s ease; 
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            color: #ffffff;
+        }
 
-/* Đổi màu khi rê chuột vào */
-.home-btn:hover {
-    background-color: #971d31;
-   
-   
-}
-   
+        /* Đổi màu khi rê chuột vào */
+        .home-btn:hover {
+            background-color: #971d31;
+        }
+
+        /* Nút tải ảnh / nhạc lên Cloudinary */
+        .upload-row { display: flex; gap: 6px; align-items: center; }
+        .upload-row input { flex: 1; min-width: 0; }
+        .btn-upload {
+            background-color: #7a0c1e;
+            border: 1px solid #f1c40f;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .btn-upload:hover { background-color: #971d31; }
+        .btn-upload:disabled { opacity: 0.6; cursor: not-allowed; }
+        .upload-status { font-size: 12px; color: #0284c7; margin-top: 4px; min-height: 16px; }
     </style>
 </head>
 <body>
@@ -203,13 +221,13 @@
     </div>
 
     <form id="adminForm">
- <div class="action-buttons">
-    <a href="https://postimages.org/vi/" class="home-btn" target="_blank" rel="noopener noreferrer">⬆️ Tải ảnh lên</a>
-    <a href="quan-ly-link-album-map.html" class="home-btn" target="_blank" rel="noopener noreferrer">🖼️ Ảnh & ♫ Nhạc</a>
-    <a href="https://console.firebase.google.com/project/thiep-cuoi-online-fa5d4/firestore/databases/-default-/data/~2Frsvp_mau_06~2FaFG7kqTAYHDexZnTOji4" class="home-btn" target="_blank" rel="noopener noreferrer">🔥 Firebase</a>
-</div>
+        <div class="action-buttons">
+            <a href="https://postimages.org/vi/" class="home-btn" target="_blank" rel="noopener noreferrer">⬆️ Tải ảnh lên</a>
+            <a href="quan-ly-link-album-map.html" class="home-btn" target="_blank" rel="noopener noreferrer">🖼️ Ảnh &amp; ♫ Nhạc</a>
+            <a href="https://console.firebase.google.com/project/thiep-cuoi-online-fa5d4/firestore/databases/-default-/data/~2Frsvp_mau_06~2FaFG7kqTAYHDexZnTOji4" class="home-btn" target="_blank" rel="noopener noreferrer">🔥 Firebase</a>
+        </div>
 
-        <h2>1. Thông Tin Cô Dâu & Chú Rể</h2>
+        <h2>1. Thông Tin Cô Dâu &amp; Chú Rể</h2>
         <div class="form-grid">
             <div class="form-group">
                 <label>Tên Chú Rể:</label>
@@ -223,17 +241,32 @@
                 <label>Ngày Cưới (ISO Format hoặc Date):</label>
                 <input type="datetime-local" id="date">
             </div>
-            <div class="form-group">
+            <div class="form-group upload-field-wrap">
                 <label>Link Nhạc Nền (.mp3):</label>
-                <input type="text" id="musicLink" placeholder="Dán link file nhạc trực tiếp">
+                <div class="upload-row">
+                    <input type="text" id="musicLink" placeholder="Dán link file nhạc trực tiếp">
+                    <button type="button" class="btn-upload" onclick="triggerUpload('fileMusic')">🎵 Chọn nhạc</button>
+                </div>
+                <div id="status_musicLink" class="upload-status"></div>
+                <input type="file" id="fileMusic" accept="audio/*" style="display:none" onchange="handleFileSelect(this, 'musicLink')">
             </div>
-            <div class="form-group full">
+            <div class="form-group full upload-field-wrap">
                 <label>Link Ảnh Bìa Trang Chủ (URL):</label>
-                <input type="text" id="coverBg">
+                <div class="upload-row">
+                    <input type="text" id="coverBg">
+                    <button type="button" class="btn-upload" onclick="triggerUpload('fileCoverBg')">🖼️ Chọn ảnh</button>
+                </div>
+                <div id="status_coverBg" class="upload-status"></div>
+                <input type="file" id="fileCoverBg" accept="image/*" style="display:none" onchange="handleFileSelect(this, 'coverBg')">
             </div>
-            <div class="form-group full">
+            <div class="form-group full upload-field-wrap">
                 <label>Ảnh "Ngày Vui Của Chúng Tôi" (URL):</label>
-                <input type="text" id="specialDayImg">
+                <div class="upload-row">
+                    <input type="text" id="specialDayImg">
+                    <button type="button" class="btn-upload" onclick="triggerUpload('fileSpecialDayImg')">🖼️ Chọn ảnh</button>
+                </div>
+                <div id="status_specialDayImg" class="upload-status"></div>
+                <input type="file" id="fileSpecialDayImg" accept="image/*" style="display:none" onchange="handleFileSelect(this, 'specialDayImg')">
             </div>
             <div class="form-group full">
                 <label>Lời Ngỏ / Thông Điệp Mời:</label>
@@ -270,7 +303,7 @@
             </div>
         </div>
 
-        <h2>3. Thời Gian & Địa Điểm Tổ Chức</h2>
+        <h2>3. Thời Gian &amp; Địa Điểm Tổ Chức</h2>
         <div class="form-grid">
             <div class="form-group">
                 <label>Thời Gian Lễ Thành Hôn:</label>
@@ -299,17 +332,76 @@
             </div>
         </div>
 
-        <h2>4. Album Hình Cưới (6 Ảnh)</h2>
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-top:25px; border-bottom:1px dashed #f2cfd3; padding-bottom:8px;">
+            <h2 style="margin:0; border:none; padding:0;">4. Album Hình Cưới (6 Ảnh)</h2>
+            <button type="button" class="btn-upload" onclick="triggerUpload('fileAlbumBatch')">🖼️ Chọn nhanh nhiều ảnh album</button>
+        </div>
+        <input type="file" id="fileAlbumBatch" accept="image/*" multiple style="display:none" onchange="handleAlbumBatchSelect(this)">
+        <div id="status_albumBatch" class="upload-status" style="margin:8px 0 10px;"></div>
+
         <div class="form-grid">
-            <div class="form-group"><label>Link Ảnh 1:</label><input type="text" id="img1"></div>
-            <div class="form-group"><label>Link Ảnh 2:</label><input type="text" id="img2"></div>
-            <div class="form-group"><label>Link Ảnh 3:</label><input type="text" id="img3"></div>
-            <div class="form-group"><label>Link Ảnh 4:</label><input type="text" id="img4"></div>
-            <div class="form-group"><label>Link Ảnh 5:</label><input type="text" id="img5"></div>
-            <div class="form-group"><label>Link Ảnh 6:</label><input type="text" id="img6"></div>
+            <div class="form-group upload-field-wrap">
+                <label>Link Ảnh 1:</label>
+                <div class="upload-row">
+                    <input type="text" id="img1">
+                    <button type="button" class="btn-upload" onclick="triggerUpload('fileImg1')">🖼️ Ảnh 01</button>
+                </div>
+                <div id="status_img1" class="upload-status"></div>
+                <input type="file" id="fileImg1" accept="image/*" style="display:none" onchange="handleFileSelect(this, 'img1')">
+            </div>
+
+            <div class="form-group upload-field-wrap">
+                <label>Link Ảnh 2:</label>
+                <div class="upload-row">
+                    <input type="text" id="img2">
+                    <button type="button" class="btn-upload" onclick="triggerUpload('fileImg2')">🖼️ Ảnh 02</button>
+                </div>
+                <div id="status_img2" class="upload-status"></div>
+                <input type="file" id="fileImg2" accept="image/*" style="display:none" onchange="handleFileSelect(this, 'img2')">
+            </div>
+
+            <div class="form-group upload-field-wrap">
+                <label>Link Ảnh 3:</label>
+                <div class="upload-row">
+                    <input type="text" id="img3">
+                    <button type="button" class="btn-upload" onclick="triggerUpload('fileImg3')">🖼️ Ảnh 03</button>
+                </div>
+                <div id="status_img3" class="upload-status"></div>
+                <input type="file" id="fileImg3" accept="image/*" style="display:none" onchange="handleFileSelect(this, 'img3')">
+            </div>
+
+            <div class="form-group upload-field-wrap">
+                <label>Link Ảnh 4:</label>
+                <div class="upload-row">
+                    <input type="text" id="img4">
+                    <button type="button" class="btn-upload" onclick="triggerUpload('fileImg4')">🖼️ Ảnh 04</button>
+                </div>
+                <div id="status_img4" class="upload-status"></div>
+                <input type="file" id="fileImg4" accept="image/*" style="display:none" onchange="handleFileSelect(this, 'img4')">
+            </div>
+
+            <div class="form-group upload-field-wrap">
+                <label>Link Ảnh 5:</label>
+                <div class="upload-row">
+                    <input type="text" id="img5">
+                    <button type="button" class="btn-upload" onclick="triggerUpload('fileImg5')">🖼️ Ảnh 05</button>
+                </div>
+                <div id="status_img5" class="upload-status"></div>
+                <input type="file" id="fileImg5" accept="image/*" style="display:none" onchange="handleFileSelect(this, 'img5')">
+            </div>
+
+            <div class="form-group upload-field-wrap">
+                <label>Link Ảnh 6:</label>
+                <div class="upload-row">
+                    <input type="text" id="img6">
+                    <button type="button" class="btn-upload" onclick="triggerUpload('fileImg6')">🖼️ Ảnh 06</button>
+                </div>
+                <div id="status_img6" class="upload-status"></div>
+                <input type="file" id="fileImg6" accept="image/*" style="display:none" onchange="handleFileSelect(this, 'img6')">
+            </div>
         </div>
 
-        <button type="button" class="btn-save" id="btnSaveData">💾 LƯU THAY ĐỔI & TẠO LINK ID</button>
+        <button type="button" class="btn-save" id="btnSaveData">💾 LƯU THAY ĐỔI &amp; TẠO LINK ID</button>
         <p id="saveStatus" style="text-align: center; font-weight: bold; margin-top: 10px; color: #7a0c1e;"></p>
 
         <!-- Khung hiển thị Link & Nút xem thiệp sau khi lưu -->
@@ -324,7 +416,7 @@
         </div>
     </form>
 
-    <h2 id="rsvpListTitle">5. Danh Sách Khách Xác Nhận Tham Dự & Lời Chúc (Theo ID đang chọn)</h2>
+    <h2 id="rsvpListTitle">5. Danh Sách Khách Xác Nhận Tham Dự &amp; Lời Chúc (Theo ID đang chọn)</h2>
     <table id="wishesTable">
         <thead>
             <tr>
@@ -357,6 +449,9 @@
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
+    const CLOUDINARY_CLOUD_NAME = "a6goixuq";
+    const CLOUDINARY_UPLOAD_PRESET = "thiep_cuoi_online";
+
     const COLLECTION_THIEP = "wedding_mau_13";
     const COLLECTION_RSVP  = "rsvp_mau_13";
     const FILE_THIEP       = "thiep-online-mau-13.html";
@@ -367,6 +462,87 @@
         'ceremonyTime', 'ceremonyAddress', 'ceremonyMap', 'partyTime', 'partyAddress', 'partyMap',
         'img1', 'img2', 'img3', 'img4', 'img5', 'img6'
     ];
+
+    function triggerUpload(fileInputId) {
+        const input = document.getElementById(fileInputId);
+        if (input) {
+            input.value = "";
+            input.click();
+        }
+    }
+
+    async function uploadSingleFileToCloudinary(file) {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`, {
+            method: "POST",
+            body: formData
+        });
+        const result = await res.json();
+        if (!res.ok) {
+            throw new Error(result.error?.message || "Tải file lên Cloudinary thất bại");
+        }
+        return result.secure_url;
+    }
+
+    async function handleFileSelect(fileInput, targetFieldId) {
+        const files = Array.from(fileInput.files || []);
+        if (!files.length) return;
+
+        const file = files[0];
+        const targetEl = document.getElementById(targetFieldId);
+        const statusEl = document.getElementById(`status_${targetFieldId}`);
+        const wrapEl = fileInput.closest(".upload-field-wrap");
+        const buttons = wrapEl ? wrapEl.querySelectorAll("button") : [];
+
+        buttons.forEach(btn => btn.disabled = true);
+        try {
+            if (statusEl) statusEl.textContent = `⏳ Đang tải: ${file.name}...`;
+            const url = await uploadSingleFileToCloudinary(file);
+            if (targetEl) targetEl.value = url;
+            if (statusEl) statusEl.textContent = `✅ Đã lấy link: ${file.name} (nhớ bấm "LƯU THAY ĐỔI & TẠO LINK ID")`;
+        } catch (err) {
+            if (statusEl) statusEl.textContent = `❌ Lỗi: ${err.message}`;
+            alert(`Lỗi tải lên Cloudinary: ${err.message}`);
+        } finally {
+            buttons.forEach(btn => btn.disabled = false);
+        }
+    }
+
+    async function handleAlbumBatchSelect(fileInput) {
+        const files = Array.from(fileInput.files || []);
+        if (!files.length) return;
+
+        const statusEl = document.getElementById('status_albumBatch');
+        const selectedFiles = files.slice(0, 6);
+        const albumBtns = document.querySelectorAll('.upload-field-wrap button, [onclick*="fileAlbumBatch"]');
+        albumBtns.forEach(btn => btn.disabled = true);
+
+        try {
+            if (files.length > 6 && statusEl) {
+                statusEl.textContent = `⚠️ Chọn ${files.length} ảnh — chỉ tải tối đa 6 ảnh đầu tiên...`;
+            }
+            for (let i = 0; i < selectedFiles.length; i++) {
+                const slot = i + 1;
+                const slotStatus = document.getElementById(`status_img${slot}`);
+                if (statusEl) statusEl.textContent = `⏳ Đang tải (${i + 1}/${selectedFiles.length}): ${selectedFiles[i].name}...`;
+                if (slotStatus) slotStatus.textContent = `⏳ Đang tải...`;
+                const url = await uploadSingleFileToCloudinary(selectedFiles[i]);
+                if (document.getElementById(`img${slot}`)) document.getElementById(`img${slot}`).value = url;
+                if (slotStatus) slotStatus.textContent = `✅ Xong`;
+            }
+            if (statusEl) {
+                statusEl.textContent = `✅ Đã điền ${selectedFiles.length} ảnh vào album (nhớ bấm "LƯU THAY ĐỔI & TẠO LINK ID")`;
+            }
+        } catch (err) {
+            if (statusEl) statusEl.textContent = `❌ Lỗi: ${err.message}`;
+            alert(`Lỗi tải album lên Cloudinary: ${err.message}`);
+        } finally {
+            albumBtns.forEach(btn => btn.disabled = false);
+        }
+    }
 
     // Xử lý đăng nhập mật khẩu
     document.getElementById('btnLogin').addEventListener('click', function() {
@@ -418,6 +594,7 @@
                 document.getElementById('saveStatus').innerText = "Mã ID này chưa có dữ liệu. Hãy điền thông tin và bấm Lưu.";
                 document.getElementById('successBox').style.display = 'none';
             }
+            document.querySelectorAll('.upload-status').forEach(el => el.textContent = '');
             listenToWishes(customerId);
         }).catch(err => {
             document.getElementById('saveStatus').innerText = "Lỗi load dữ liệu: " + err.message;

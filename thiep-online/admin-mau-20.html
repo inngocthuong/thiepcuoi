@@ -8,22 +8,22 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-      <style>
-
-  /* Khung bao ngoài để đẩy 2 nút sang phải */
-.action-buttons {
+  <style>
+  /* Khung bao ngoài để đẩy các nút sang phải */
+  .action-buttons {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
     width: 100%;
     justify-content: right;
-}
+    flex-wrap: wrap;
+  }
 
-/* Giao diện của từng nút */
-.home-btn { 
+  /* Giao diện của từng nút */
+  .home-btn { 
     background-color: #172821; 
     font-family: 'Montserrat', sans-serif;
-     border: 1px solid #f1c40f;
+    border: 1px solid #f1c40f;
     color: rgb(255, 255, 255); 
     text-decoration: none; 
     padding: 8px 15px; 
@@ -32,14 +32,14 @@
     display: inline-block; 
     margin-bottom: 20px; 
     transition: background-color 0.3s ease; 
-}
+  }
 
-/* Đổi màu khi rê chuột vào */
-.home-btn:hover {
+  /* Đổi màu khi rê chuột vào */
+  .home-btn:hover {
     background-color: #315c4a;
     color: white;
-}
-</style>
+  }
+  </style>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen p-4 sm:p-8">
 
@@ -54,10 +54,12 @@
 
   <!-- BẢNG ADMIN PANEL -->
   <div id="adminPanel" class="hidden max-w-3xl mx-auto bg-slate-800 p-6 sm:p-8 rounded-2xl border border-slate-700 shadow-2xl space-y-6">
-    <div class="flex justify-between items-center border-b border-slate-700 pb-4">
+    <div class="flex justify-between items-center border-b border-slate-700 pb-4 flex-wrap gap-2">
       <h1 class="text-2xl font-bold text-sky-400">Quản Trị Thiệp Mẫu 20 (ID Riêng Biệt)</h1>
-      <a href="https://upanhlaylink.com/dashboard" target="_blank" class="text-xs bg-sky-500/20 text-sky-300 border border-sky-500/40 px-3 py-1.5 rounded-full font-semibold hover:bg-sky-500/40"><i class="fas fa-image"></i> Lấy Ảnh</a>
-      <a href="https://www.image2url.com/vi/dashboard" target="_blank" class="text-xs bg-sky-500/20 text-sky-300 border border-sky-500/40 px-3 py-1.5 rounded-full font-semibold hover:bg-sky-500/40"><i class="fas fa-music"></i> Lấy Nhạc</a>
+      <div class="flex gap-2 flex-wrap">
+        <a href="https://upanhlaylink.com/dashboard" target="_blank" class="text-xs bg-sky-500/20 text-sky-300 border border-sky-500/40 px-3 py-1.5 rounded-full font-semibold hover:bg-sky-500/40"><i class="fas fa-image"></i> Lấy Ảnh</a>
+        <a href="https://www.image2url.com/vi/dashboard" target="_blank" class="text-xs bg-sky-500/20 text-sky-300 border border-sky-500/40 px-3 py-1.5 rounded-full font-semibold hover:bg-sky-500/40"><i class="fas fa-music"></i> Lấy Nhạc</a>
+      </div>
     </div>
 
     <!-- KHUNG NHẬP MÃ ID KHÁCH HÀNG -->
@@ -71,20 +73,54 @@
     </div>
 
     <div class="action-buttons">
-    <a href="https://postimages.org/vi/" class="home-btn" target="_blank" rel="noopener noreferrer">⬆️ Tải ảnh lên</a>
-    <a href="quan-ly-link-album-map.html" class="home-btn" target="_blank" rel="noopener noreferrer">🖼️ Ảnh & ♫ Nhạc</a>
-    <a href="https://console.firebase.google.com/project/thiep-cuoi-online-fa5d4/firestore/databases/-default-/data/~2Frsvp_mau_06~2FaFG7kqTAYHDexZnTOji4" class="home-btn" target="_blank" rel="noopener noreferrer">🔥 Firebase</a>
-</div>
+      <a href="https://postimages.org/vi/" class="home-btn" target="_blank" rel="noopener noreferrer">⬆️ Tải ảnh lên</a>
+      <a href="quan-ly-link-album-map.html" class="home-btn" target="_blank" rel="noopener noreferrer">🖼️ Ảnh &amp; ♫ Nhạc</a>
+      <a href="https://console.firebase.google.com/project/thiep-cuoi-online-fa5d4/firestore/databases/-default-/data/~2Frsvp_mau_06~2FaFG7kqTAYHDexZnTOji4" class="home-btn" target="_blank" rel="noopener noreferrer">🔥 Firebase</a>
+    </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
       <div><label class="block font-semibold mb-1">Tên Chú Rể</label><input type="text" id="cfg-groom" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-lg text-white"></div>
       <div><label class="block font-semibold mb-1">Tên Cô Dâu</label><input type="text" id="cfg-bride" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-lg text-white"></div>
       
-      <div><label class="block font-semibold mb-1">Link Ảnh Bìa / Mở Thiệp (URL)</label><input type="text" id="cfg-cover-bg" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-lg text-white"></div>
-      <div><label class="block font-semibold mb-1">Link Ảnh Khung Gia Đình (URL)</label><input type="text" id="cfg-card-frame-bg" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-lg text-white"></div>
+      <div class="upload-field-wrap">
+        <label class="block font-semibold mb-1">Link Ảnh Bìa / Mở Thiệp (URL)</label>
+        <div class="flex gap-1.5 items-center">
+          <input type="text" id="cfg-cover-bg" class="flex-1 min-w-0 p-2.5 bg-slate-900 border border-slate-700 rounded-lg text-white">
+          <button type="button" onclick="triggerUpload('fileCoverBg')" class="bg-blue-600 hover:bg-blue-500 disabled:opacity-60 text-white font-semibold px-2.5 py-2.5 rounded-lg text-xs whitespace-nowrap">🖼️ Chọn ảnh</button>
+        </div>
+        <div id="status_cfg-cover-bg" class="upload-status text-[11px] text-sky-400 mt-1 min-h-[16px]"></div>
+        <input type="file" id="fileCoverBg" accept="image/*" class="hidden" onchange="handleFileSelect(this, 'cfg-cover-bg')">
+      </div>
 
-      <div><label class="block font-semibold mb-1">Link Ảnh Khung Thiệp Mời (URL mới)</label><input type="text" id="cfg-invite-frame-bg" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-lg text-white" placeholder="Ảnh nền khung thiệp mời"></div>
-      <div><label class="block font-semibold mb-1">Link Ảnh Cặp đôi (Mục Ngày Vui)</label><input type="text" id="cfg-couple-banner-img" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-lg text-white" placeholder="Ảnh chụp đôi kích thước ngang/đẹp"></div>
+      <div class="upload-field-wrap">
+        <label class="block font-semibold mb-1">Link Ảnh Khung Gia Đình (URL)</label>
+        <div class="flex gap-1.5 items-center">
+          <input type="text" id="cfg-card-frame-bg" class="flex-1 min-w-0 p-2.5 bg-slate-900 border border-slate-700 rounded-lg text-white">
+          <button type="button" onclick="triggerUpload('fileCardFrameBg')" class="bg-blue-600 hover:bg-blue-500 disabled:opacity-60 text-white font-semibold px-2.5 py-2.5 rounded-lg text-xs whitespace-nowrap">🖼️ Chọn ảnh</button>
+        </div>
+        <div id="status_cfg-card-frame-bg" class="upload-status text-[11px] text-sky-400 mt-1 min-h-[16px]"></div>
+        <input type="file" id="fileCardFrameBg" accept="image/*" class="hidden" onchange="handleFileSelect(this, 'cfg-card-frame-bg')">
+      </div>
+
+      <div class="upload-field-wrap">
+        <label class="block font-semibold mb-1">Link Ảnh Khung Thiệp Mời (URL mới)</label>
+        <div class="flex gap-1.5 items-center">
+          <input type="text" id="cfg-invite-frame-bg" class="flex-1 min-w-0 p-2.5 bg-slate-900 border border-slate-700 rounded-lg text-white" placeholder="Ảnh nền khung thiệp mời">
+          <button type="button" onclick="triggerUpload('fileInviteFrameBg')" class="bg-blue-600 hover:bg-blue-500 disabled:opacity-60 text-white font-semibold px-2.5 py-2.5 rounded-lg text-xs whitespace-nowrap">🖼️ Chọn ảnh</button>
+        </div>
+        <div id="status_cfg-invite-frame-bg" class="upload-status text-[11px] text-sky-400 mt-1 min-h-[16px]"></div>
+        <input type="file" id="fileInviteFrameBg" accept="image/*" class="hidden" onchange="handleFileSelect(this, 'cfg-invite-frame-bg')">
+      </div>
+
+      <div class="upload-field-wrap">
+        <label class="block font-semibold mb-1">Link Ảnh Cặp đôi (Mục Ngày Vui)</label>
+        <div class="flex gap-1.5 items-center">
+          <input type="text" id="cfg-couple-banner-img" class="flex-1 min-w-0 p-2.5 bg-slate-900 border border-slate-700 rounded-lg text-white" placeholder="Ảnh chụp đôi kích thước ngang/đẹp">
+          <button type="button" onclick="triggerUpload('fileCoupleBannerImg')" class="bg-blue-600 hover:bg-blue-500 disabled:opacity-60 text-white font-semibold px-2.5 py-2.5 rounded-lg text-xs whitespace-nowrap">🖼️ Chọn ảnh</button>
+        </div>
+        <div id="status_cfg-couple-banner-img" class="upload-status text-[11px] text-sky-400 mt-1 min-h-[16px]"></div>
+        <input type="file" id="fileCoupleBannerImg" accept="image/*" class="hidden" onchange="handleFileSelect(this, 'cfg-couple-banner-img')">
+      </div>
 
       <div class="sm:col-span-2 border-t border-slate-700 pt-3">
         <p class="font-bold text-sky-300 mb-2">Thông Tin Nhà Trai (Bên Trái Khung)</p>
@@ -117,27 +153,37 @@
       <div><label class="block font-semibold mb-1">Link Google Maps</label><input type="url" id="cfg-map-url" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-lg text-white"></div>
       <div><label class="block font-semibold mb-1">Ngày Đếm Ngược (YYYY-MM-DD)</label><input type="date" id="cfg-date" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-lg text-white"></div>
 
-      <div class="sm:col-span-2">
+      <div class="sm:col-span-2 upload-field-wrap">
         <label class="block font-semibold mb-1"><i class="fas fa-music mr-1"></i> Link Nhạc Nền (.mp3)</label>
-        <input type="text" id="cfg-music-url" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-lg text-white font-mono">
+        <div class="flex gap-1.5 items-center">
+          <input type="text" id="cfg-music-url" class="flex-1 min-w-0 p-2.5 bg-slate-900 border border-slate-700 rounded-lg text-white font-mono">
+          <button type="button" onclick="triggerUpload('fileMusic')" class="bg-blue-600 hover:bg-blue-500 disabled:opacity-60 text-white font-semibold px-3 py-2.5 rounded-lg text-xs whitespace-nowrap">🎵 Chọn nhạc</button>
+        </div>
+        <div id="status_cfg-music-url" class="upload-status text-[11px] text-sky-400 mt-1 min-h-[16px]"></div>
+        <input type="file" id="fileMusic" accept="audio/*" class="hidden" onchange="handleFileSelect(this, 'cfg-music-url')">
       </div>
 
-      <div class="sm:col-span-2">
-        <label class="block font-semibold mb-1">Album Ảnh (Mỗi dòng một URL)</label>
+      <div class="sm:col-span-2 upload-field-wrap">
+        <div class="flex justify-between items-center gap-2 flex-wrap mb-1">
+          <label class="block font-semibold">Album Ảnh (Mỗi dòng một URL)</label>
+          <button type="button" onclick="triggerUpload('fileAlbumBatch')" class="bg-blue-600 hover:bg-blue-500 disabled:opacity-60 text-white font-semibold px-3 py-1.5 rounded-lg text-xs whitespace-nowrap">📁 Chọn thêm nhiều ảnh album</button>
+        </div>
         <textarea id="cfg-gallery" rows="4" class="w-full p-3 bg-slate-900 border border-slate-700 rounded-lg text-white font-mono"></textarea>
+        <div id="status_cfg-gallery" class="upload-status text-[11px] text-sky-400 mt-1 min-h-[16px]"></div>
+        <input type="file" id="fileAlbumBatch" accept="image/*" multiple class="hidden" onchange="handleAlbumBatchSelect(this)">
       </div>
 
       <div><label class="block font-semibold mb-1">STK Chú Rể</label><input type="text" id="cfg-groom-acc" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-lg text-white"></div>
       <div><label class="block font-semibold mb-1">STK Cô Dâu</label><input type="text" id="cfg-bride-acc" class="w-full p-2.5 bg-slate-900 border border-slate-700 rounded-lg text-white"></div>
     </div>
 
-    <button onclick="saveConfig()" class="w-full bg-sky-500 text-slate-950 font-bold py-3.5 rounded-xl shadow-lg hover:bg-sky-400 text-sm">Lưu Cấu Hình Mẫu 20 Lên Firebase</button>
+    <button type="button" onclick="saveConfig()" class="w-full bg-sky-500 text-slate-950 font-bold py-3.5 rounded-xl shadow-lg hover:bg-sky-400 text-sm">Lưu Cấu Hình Mẫu 20 Lên Firebase</button>
 
     <div id="saveResultBox20" class="hidden bg-slate-900 border border-sky-500/40 p-4 rounded-xl space-y-2 text-xs">
       <p class="font-bold text-sky-300">🎉 Lưu thành công! Link thiệp Mẫu 20 riêng của khách hàng:</p>
       <div class="flex gap-2">
         <input type="text" id="generatedLink20" readonly class="w-full p-2 bg-slate-950 border border-slate-700 rounded text-sky-200 font-mono">
-        <button onclick="copyLink20()" class="bg-sky-500 text-slate-950 font-bold px-3 py-1.5 rounded">Sao chép</button>
+        <button type="button" onclick="copyLink20()" class="bg-sky-500 text-slate-950 font-bold px-3 py-1.5 rounded">Sao chép</button>
       </div>
       <div><a id="previewBtn20" href="#" target="_blank" class="bg-emerald-700 text-white font-bold px-4 py-2 rounded inline-flex items-center gap-1 mt-2"><i class="fas fa-eye"></i> Xem Thiệp Ngay</a></div>
     </div>
@@ -158,13 +204,97 @@
       appId: "1:677765348842:web:001834792642097f5e4693"
     };
 
-
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     const ADMIN_PASS = "Thong@121976";
     const COLLECTION_THIEP = "wedding_mau_20";
     const COLLECTION_RSVP  = "rsvps_mau_20";
     const FILE_THIEP       = "thiep-online-mau-20.html";
+
+    const CLOUDINARY_CLOUD_NAME = "a6goixuq";
+    const CLOUDINARY_UPLOAD_PRESET = "thiep_cuoi_online";
+
+    function triggerUpload(fileInputId) {
+      const input = document.getElementById(fileInputId);
+      if (input) {
+        input.value = "";
+        input.click();
+      }
+    }
+
+    async function uploadSingleFileToCloudinary(file) {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`, {
+        method: "POST",
+        body: formData
+      });
+      const result = await res.json();
+      if (!res.ok) {
+        throw new Error(result.error?.message || "Tải file lên Cloudinary thất bại");
+      }
+      return result.secure_url;
+    }
+
+    async function handleFileSelect(fileInput, targetFieldId) {
+      const files = Array.from(fileInput.files || []);
+      if (!files.length) return;
+
+      const file = files[0];
+      const targetEl = document.getElementById(targetFieldId);
+      const statusEl = document.getElementById(`status_${targetFieldId}`);
+      const wrapEl = fileInput.closest(".upload-field-wrap");
+      const buttons = wrapEl ? wrapEl.querySelectorAll("button") : [];
+
+      buttons.forEach(btn => btn.disabled = true);
+      try {
+        if (statusEl) statusEl.textContent = `⏳ Đang tải: ${file.name}...`;
+        const url = await uploadSingleFileToCloudinary(file);
+        if (targetEl) targetEl.value = url;
+        if (statusEl) statusEl.textContent = `✅ Đã lấy link: ${file.name} (nhớ bấm "Lưu Cấu Hình Mẫu 20 Lên Firebase")`;
+      } catch (err) {
+        if (statusEl) statusEl.textContent = `❌ Lỗi: ${err.message}`;
+        alert(`Lỗi tải lên Cloudinary: ${err.message}`);
+      } finally {
+        buttons.forEach(btn => btn.disabled = false);
+      }
+    }
+
+    async function handleAlbumBatchSelect(fileInput) {
+      const files = Array.from(fileInput.files || []);
+      if (!files.length) return;
+
+      const galleryTextarea = document.getElementById('cfg-gallery');
+      const statusEl = document.getElementById('status_cfg-gallery');
+      const wrapEl = fileInput.closest(".upload-field-wrap");
+      const buttons = wrapEl ? wrapEl.querySelectorAll("button") : [];
+
+      const existingLines = (galleryTextarea.value || "")
+        .split(/\r?\n/)
+        .map(s => s.trim())
+        .filter(Boolean);
+
+      buttons.forEach(btn => btn.disabled = true);
+      try {
+        const uploadedUrls = [];
+        for (let i = 0; i < files.length; i++) {
+          if (statusEl) statusEl.textContent = `⏳ Đang tải (${i + 1}/${files.length}): ${files[i].name}...`;
+          const url = await uploadSingleFileToCloudinary(files[i]);
+          uploadedUrls.push(url);
+        }
+        galleryTextarea.value = existingLines.concat(uploadedUrls).join('\n');
+        if (statusEl) {
+          statusEl.textContent = `✅ Đã thêm ${uploadedUrls.length} ảnh vào album (nhớ bấm "Lưu Cấu Hình Mẫu 20 Lên Firebase")`;
+        }
+      } catch (err) {
+        if (statusEl) statusEl.textContent = `❌ Lỗi: ${err.message}`;
+        alert(`Lỗi tải album lên Cloudinary: ${err.message}`);
+      } finally {
+        buttons.forEach(btn => btn.disabled = false);
+      }
+    }
 
     function getCustomerId() {
       let id = document.getElementById('admCustomerId').value.trim().toLowerCase();
@@ -184,6 +314,7 @@
     let unsubWishes = null;
     function loadData() {
       const customerId = getCustomerId();
+      document.querySelectorAll('.upload-status').forEach(el => el.textContent = '');
       db.collection(COLLECTION_THIEP).doc(customerId).get().then(doc => {
         if(doc.exists) {
           const d = doc.data();

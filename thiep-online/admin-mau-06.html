@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
@@ -12,7 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 <style>
 :root{--paper:#f7f5ef;--ink:#222b24;--olive:#52634b;--olive-dark:#344232;--sage:#dfe5d8;--clay:#c17d61;--line:#d9ddd2;--muted:#697166;--white:#fffefa;--shadow:0 18px 50px #28332912}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:"DM Sans",sans-serif}button,input,textarea,select{font:inherit}button,a{-webkit-tap-highlight-color:transparent}button{cursor:pointer}img{max-width:100%;display:block}.serif{font-family:"Playfair Display",Georgia,serif}.eyebrow{text-transform:uppercase;letter-spacing:.19em;font-size:10px;font-weight:700;color:var(--olive)}.hidden{display:none!important}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:"DM Sans",sans-serif}button,input,textarea,select{font:inherit}button,a{-webkit-tap-highlight-color:transparent}button{cursor:pointer}button:disabled{opacity:.6;cursor:not-allowed}img{max-width:100%;display:block}.serif{font-family:"Playfair Display",Georgia,serif}.eyebrow{text-transform:uppercase;letter-spacing:.19em;font-size:10px;font-weight:700;color:var(--olive)}.hidden{display:none!important}
 .topbar{height:58px;padding:0 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #d9ddd280;background:#f7f5efed;position:sticky;top:0;z-index:20;backdrop-filter:blur(12px)}.brand{font-family:"Playfair Display",serif;font-size:18px;letter-spacing:.04em}.top-actions{display:flex;gap:8px}.quiet-btn,.solid-btn,.outline-btn{border:1px solid var(--olive);border-radius:999px;padding:10px 16px;font-size:11px;font-weight:700;letter-spacing:.03em;background:transparent;color:var(--olive-dark)}.solid-btn{background:var(--olive-dark);color:white;border-color:var(--olive-dark)}.quiet-btn{border-color:var(--line)}.hero{max-width:1240px;margin:0 auto;padding:28px 22px 64px}.hero-card{position:relative;min-height:min(720px,calc(100svh - 90px));overflow:hidden;background:#a5a995;border-radius:5px;display:flex;align-items:center;justify-content:center;text-align:center;color:white}.hero-card:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#17221921 0%,#17221918 35%,#17221988 100%);z-index:1}.hero-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 45%}.hero-inner{position:relative;z-index:2;width:min(760px,100%);padding:42px 20px}.hero .eyebrow{color:#f3e9d9}.hero-kicker{font-size:11px;letter-spacing:.27em;text-transform:uppercase;margin:0 0 24px}.hero-names{font-family:"Playfair Display",serif;font-weight:400;font-size:clamp(54px,10vw,112px);line-height:.98;letter-spacing:-.055em;margin:0}.hero-names .amp{display:block;font-size:.43em;font-style:italic;line-height:1.25;color:#e9d8bd}.hero-date{font-size:12px;letter-spacing:.18em;margin:28px 0 26px;text-transform:uppercase}.hero-cta{border:1px solid #ffffffb8;border-radius:999px;background:#ffffff12;color:white;padding:13px 22px;font-size:11px;letter-spacing:.13em;text-transform:uppercase;backdrop-filter:blur(8px)}.hero-cta:hover{background:#fff;color:var(--olive-dark)}
 .content{max-width:1000px;margin:0 auto;padding:0 22px}.intro{padding:44px 0 80px;text-align:center;max-width:700px;margin:auto}.intro .eyebrow{margin-bottom:20px}.intro h2{font-size:clamp(32px,5vw,50px);font-weight:400;line-height:1.15;margin:0 0 20px}.intro p{font-size:14px;line-height:1.9;color:var(--muted);margin:0 auto;max-width:580px;white-space:pre-line}
 .section{padding:60px 0;border-top:1px solid var(--line)}.section-heading{text-align:center;margin-bottom:32px}.section-heading .eyebrow{margin-bottom:12px}.section-heading h2{font-size:clamp(30px,4vw,42px);font-weight:400;margin:0}.family-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.family-card{background:var(--white);border:1px solid var(--line);padding:30px 22px;text-align:center}.family-card .label{font-size:10px;letter-spacing:.17em;color:var(--olive);font-weight:700}.family-card .family{font-size:12px;color:var(--muted);white-space:pre-line;line-height:1.8;margin:16px 0}.family-card h3{font-size:27px;font-weight:400;margin:0}
@@ -24,13 +24,14 @@
 @media(max-width:700px){.topbar{padding:0 14px;height:54px}.brand{font-size:16px}.top-actions{gap:5px}.quiet-btn,.solid-btn{padding:9px 11px;font-size:10px}.hero{padding:12px 12px 38px}.hero-card{min-height:calc(88svh - 54px);}.hero-names{font-size:clamp(52px,14vw,84px)}.hero-inner{padding:36px 14px}.content{padding:0 16px}.intro{padding:35px 0 55px}.section{padding:44px 0}.family-grid{gap:8px}.family-card{padding:24px 10px}.family-card h3{font-size:22px}.event-card{grid-template-columns:1fr}.event-side{padding:30px 18px}.event-side+.event-side{border-left:0;border-top:1px solid #bdc8b5}.gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.rsvp-form{grid-template-columns:1fr}.field.full,.form-submit{grid-column:auto}.rsvp-wrap{padding:22px 16px}.admin-grid{grid-template-columns:1fr}.admin-form{grid-template-columns:1fr}.admin-form .field.full{grid-column:auto}.admin-card{padding:17px}.admin-shell{padding:24px 13px 50px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
  
-/* Khung bao ngoài để đẩy 2 nút sang phải */
+/* Khung bao ngoài để đẩy các nút sang phải */
 .action-buttons {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
     width: 100%;
     justify-content: right;
+    flex-wrap: wrap;
 }
 
 /* Giao diện của từng nút */
@@ -50,6 +51,27 @@
 .home-btn:hover {
     background-color: #39473c;
     color: white;
+}
+
+/* Nút tải ảnh / nhạc lên Cloudinary */
+.upload-row { display: flex; gap: 8px; align-items: center; }
+.upload-row input[type="text"] { flex: 1; min-width: 0; }
+.btn-upload {
+    border: 1px solid #ffffff;
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-size: 11px;
+    font-weight: 700;
+    background: #222b24;
+    color: #fff;
+    white-space: nowrap;
+}
+.btn-upload:hover { background: #39473c; border-color: #ffffff; }
+.upload-status { font-size: 12px; color: #0284c7; margin-top: 2px; min-height: 16px; }
+
+@media (max-width: 700px) {
+    .upload-row { flex-direction: column; align-items: stretch; }
+    .btn-upload { width: 100%; }
 }
 </style>
 </head>
@@ -91,14 +113,24 @@
           </div>
           <small class="admin-help" style="display:block; margin-top:6px;">* Nhập mã ID mới để tạo thiệp mới, hoặc nhập mã ID cũ rồi bấm "Tải Dữ Liệu" để chỉnh sửa.</small>
         </div>
-<div class="action-buttons">
-    <a href="https://postimages.org/vi/" class="home-btn" target="_blank" rel="noopener noreferrer">⬆️ Tải ảnh lên</a>
-    <a href="quan-ly-link-album-map.html" class="home-btn" target="_blank" rel="noopener noreferrer">🖼️ Ảnh & ♫ Nhạc</a>
-    <a href="https://console.firebase.google.com/project/thiep-cuoi-online-fa5d4/firestore/databases/-default-/data/~2Frsvp_mau_06~2FaFG7kqTAYHDexZnTOji4" class="home-btn" target="_blank" rel="noopener noreferrer">🔥 Firebase</a>
-</div>
+
+        <div class="action-buttons">
+          <a href="https://postimages.org/vi/" class="home-btn" target="_blank" rel="noopener noreferrer">⬆️ Tải ảnh lên</a>
+          <a href="quan-ly-link-album-map.html" class="home-btn" target="_blank" rel="noopener noreferrer">🖼️ Ảnh &amp; ♫ Nhạc</a>
+          <a href="https://console.firebase.google.com/project/thiep-cuoi-online-fa5d4/firestore/databases/-default-/data/~2Frsvp_mau_06~2FaFG7kqTAYHDexZnTOji4" class="home-btn" target="_blank" rel="noopener noreferrer">🔥 Firebase</a>
+        </div>
 
         <form id="cardForm" class="admin-form">
-          <div class="field full"><label for="aHero">ẢNH BÌA</label><input id="aHero" type="text" placeholder="../anh/bia-thiep.jpg hoặc https://..."></div>
+          <div class="field full">
+            <label for="aHero">ẢNH BÌA</label>
+            <div class="upload-row">
+              <input id="aHero" type="text" placeholder="../anh/bia-thiep.jpg hoặc https://...">
+              <button type="button" class="btn-upload" onclick="triggerUpload('fileHero')">🖼️ Chọn ảnh</button>
+            </div>
+            <div id="status_aHero" class="upload-status"></div>
+            <input type="file" id="fileHero" accept="image/*" style="display:none" onchange="handleFileSelect(this, 'aHero', false)">
+          </div>
+
           <div class="field"><label for="aGroom">TÊN CHÚ RỂ</label><input id="aGroom" required maxlength="100"></div>
           <div class="field"><label for="aBride">TÊN CÔ DÂU</label><input id="aBride" required maxlength="100"></div>
           <div class="field"><label for="aDate">NGÀY HIỂN THỊ</label><input id="aDate" placeholder="20 · 12 · 2026"></div>
@@ -110,8 +142,35 @@
           <div class="field"><label for="aAddress">TÊN ĐỊA ĐIỂM</label><input id="aAddress"></div>
           <div class="field"><label for="aDetail">ĐỊA CHỈ CHI TIẾT</label><input id="aDetail"></div>
           <div class="field full"><label for="aMaps">LINK HOẶC TỪ KHÓA GOOGLE MAPS</label><input id="aMaps" type="text" placeholder="Địa chỉ hoặc link bản đồ"></div>
-          <div class="field full"><label for="aGallery">ALBUM ẢNH (MỖI DÒNG MỘT TÊN FILE HOẶC URL, TỐI ĐA 9 ẢNH)</label><textarea id="aGallery" rows="5" placeholder="anh-01.jpg&#10;anh-02.jpg"></textarea></div>
-          <div class="field full"><label for="aMusic">NHẠC NỀN</label><input id="aMusic" type="text" placeholder="audio/nhac-nen.mp3 hoặc https://..."></div>
+
+          <div class="field full">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+              <label for="aGallery" style="margin:0;">ALBUM ẢNH (MỖI DÒNG MỘT TÊN FILE HOẶC URL, TỐI ĐA 9 ẢNH)</label>
+              <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                <label style="display:inline-flex; align-items:center; gap:5px; font-weight:normal; font-size:12px; margin:0; cursor:pointer;">
+                  <input type="checkbox" id="replaceGalleryMode" checked style="width:auto; padding:0;">
+                  Ghi đè danh sách cũ
+                </label>
+                <button type="button" class="btn-upload" onclick="triggerUpload('fileGallery')">🖼️ Chọn ảnh album</button>
+              </div>
+            </div>
+            <textarea id="aGallery" rows="5" oninput="updateGalleryCounter()" placeholder="anh-01.jpg&#10;anh-02.jpg"></textarea>
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+              <div id="status_aGallery" class="upload-status"></div>
+              <div id="galleryCounter" class="admin-help" style="font-size:12px;">Số link hiện tại: 0/9 ảnh</div>
+            </div>
+            <input type="file" id="fileGallery" accept="image/*" multiple style="display:none" onchange="handleFileSelect(this, 'aGallery', true)">
+          </div>
+
+          <div class="field full">
+            <label for="aMusic">NHẠC NỀN</label>
+            <div class="upload-row">
+              <input id="aMusic" type="text" placeholder="audio/nhac-nen.mp3 hoặc https://...">
+              <button type="button" class="btn-upload" onclick="triggerUpload('fileMusic')">🎵 Chọn nhạc</button>
+            </div>
+            <div id="status_aMusic" class="upload-status"></div>
+            <input type="file" id="fileMusic" accept="audio/*" style="display:none" onchange="handleFileSelect(this, 'aMusic', false)">
+          </div>
 
           <button id="saveCardBtn" class="solid-btn form-submit" type="submit">LƯU THAY ĐỔI THIỆP</button>
           <p id="saveStatus" class="status full admin-status" role="status"></p>
@@ -152,6 +211,9 @@ const firebaseConfig = {
   messagingSenderId: "677765348842",
   appId: "1:677765348842:web:001834792642097f5e4693"
 };
+const CLOUDINARY_CLOUD_NAME = "a6goixuq";
+const CLOUDINARY_UPLOAD_PRESET = "thiep_cuoi_online";
+
 const COLLECTION_THIEP = "wedding_mau_06";
 const COLLECTION_RSVP  = "rsvp_mau_06";
 const FILE_THIEP       = "thiep-online-mau-06.html";
@@ -167,16 +229,95 @@ const DEFAULTS = {
   gallery_images:[], music_url:""
 };
 
-const keys = [
-  "groom_name", "bride_name", "display_date", "event_datetime", 
-  "groom_parents", "bride_parents", "invitation_text", "event_time", 
-  "event_address", "event_detail", "google_maps_link", "hero_image", "gallery_images", "music_url"
-];
-
 const $ = (id) => document.getElementById(id);
 let db=null, auth=null, currentUser=null, stopGuests=null;
 function setStatus(id,text,type=""){const el=$(id);if(el){el.textContent=text;el.className="status"+(type?" "+type:"");}}
 function str(v){return typeof v==="string"?v:"";}
+
+function countGalleryLines(val) {
+  return (val || "")
+    .split(/\r?\n/)
+    .map(x => x.trim())
+    .filter(Boolean);
+}
+
+function updateGalleryCounter() {
+  const ta = $("aGallery");
+  const counterEl = $("galleryCounter");
+  if (!ta || !counterEl) return;
+  const count = countGalleryLines(ta.value).length;
+  counterEl.textContent = `Số link hiện tại: ${count}/9 ảnh`;
+  counterEl.style.color = count > 9 ? "#a63e32" : "var(--muted)";
+}
+
+async function uploadSingleFileToCloudinary(file) {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`, {
+    method: "POST",
+    body: formData
+  });
+  const result = await res.json();
+  if (!res.ok) {
+    throw new Error(result.error?.message || "Tải file lên Cloudinary thất bại");
+  }
+  return result.secure_url;
+}
+
+window.triggerUpload = function(fileInputId) {
+  const input = $(fileInputId);
+  if (input) {
+    input.value = "";
+    input.click();
+  }
+};
+
+window.handleFileSelect = async function(fileInput, targetFieldId, isMultipleGallery) {
+  const files = Array.from(fileInput.files || []);
+  if (!files.length) return;
+
+  const targetEl = $(targetFieldId);
+  const statusEl = $(`status_${targetFieldId}`);
+  const fieldEl = fileInput.closest(".field");
+  const buttons = fieldEl ? fieldEl.querySelectorAll("button") : [];
+
+  buttons.forEach(btn => btn.disabled = true);
+
+  try {
+    if (!isMultipleGallery) {
+      const file = files[0];
+      if (statusEl) statusEl.textContent = `⏳ Đang tải: ${file.name}...`;
+      const url = await uploadSingleFileToCloudinary(file);
+      if (targetEl) targetEl.value = url;
+      if (statusEl) statusEl.textContent = `✅ Đã lấy link: ${file.name} (nhớ bấm "LƯU THAY ĐỔI THIỆP")`;
+    } else {
+      const uploadedUrls = [];
+      for (let i = 0; i < files.length; i++) {
+        if (statusEl) statusEl.textContent = `⏳ Đang tải (${i + 1}/${files.length}): ${files[i].name}...`;
+        const url = await uploadSingleFileToCloudinary(files[i]);
+        uploadedUrls.push(url);
+      }
+      if (targetEl) {
+        const shouldReplace = $("replaceGalleryMode")?.checked;
+        if (shouldReplace) {
+          targetEl.value = uploadedUrls.join("\n");
+        } else {
+          const existing = targetEl.value.trim();
+          targetEl.value = existing ? `${existing}\n${uploadedUrls.join("\n")}` : uploadedUrls.join("\n");
+        }
+        updateGalleryCounter();
+      }
+      if (statusEl) statusEl.textContent = `✅ Đã cập nhật ${uploadedUrls.length} ảnh album (nhớ bấm "LƯU THAY ĐỔI THIỆP")`;
+    }
+  } catch (err) {
+    if (statusEl) statusEl.textContent = `❌ Lỗi: ${err.message}`;
+    alert(`Lỗi tải lên Cloudinary: ${err.message}`);
+  } finally {
+    buttons.forEach(btn => btn.disabled = false);
+  }
+};
 
 function getCustomerId() {
   let id = $('admCustomerId').value.trim().toLowerCase();
@@ -200,18 +341,14 @@ function fillForm(d){
   $("aMaps").value = str(data.google_maps_link);
   $("aGallery").value = Array.isArray(data.gallery_images) ? data.gallery_images.join("\n") : "";
   $("aMusic").value = str(data.music_url);
+  updateGalleryCounter();
+  document.querySelectorAll(".upload-status").forEach(el => el.textContent = "");
 }
 
-$("loadIdBtn").onclick = () => loadData();
-
-async function loadData() {
-  const customerId = getCustomerId();
-  setStatus("saveStatus", "Đang tải dữ liệu ID: " + customerId);
-  try {
-    const snap = await doc(db, COLLECTION_THIEP, customerId);
-    // Sử dụng getDoc tương đương thông qua snapshot hoặc import getDoc
-  } catch(e) { console.error(e); }
-}
+$("loadIdBtn").onclick = () => {
+  const id = getCustomerId();
+  if (currentUser && db) listenCard(id);
+};
 
 // Lắng nghe dữ liệu theo ID
 let unsubCard = null;
@@ -263,7 +400,7 @@ function loadGuests(customerId){
   },err=>{
     console.error(err);
     $("summary").textContent = `[Mã ID: ${customerId}]`;
-    $("guestList.textContent") = "Không tải được danh sách. Hãy chắc chắn bạn đã tạo Composite Index trên Firebase cho collection " + COLLECTION_RSVP;
+    $("guestList").textContent = "Không tải được danh sách. Hãy chắc chắn bạn đã tạo Composite Index trên Firebase cho collection " + COLLECTION_RSVP;
   });
 }
 

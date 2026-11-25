@@ -16,38 +16,50 @@
         }
         button { background: #5b101b; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 16px; }
         button:hover { background: #741822; }
+        button:disabled { opacity: 0.6; cursor: not-allowed; }
         .hidden { display: none !important; }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
         th { background: #f8f9fa; font-weight: bold; }
 
-       .action-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    width: 100%;
-    justify-content: right;
-}
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            width: 100%;
+            justify-content: right;
+        }
 
-/* Giao diện của từng nút */
-.home-btn { 
-    background-color: #012725; 
-    color: white; 
-    text-decoration: none; 
-    padding: 8px 15px; 
-    border-radius: 10px; 
-    font-weight: 500; 
-    display: inline-block; 
-    margin-bottom: 20px; 
-    transition: background-color 0.3s ease; 
-}
+        /* Giao diện của từng nút */
+        .home-btn { 
+            background-color: #012725; 
+            color: white; 
+            text-decoration: none; 
+            padding: 8px 15px; 
+            border-radius: 10px; 
+            font-weight: 500; 
+            display: inline-block; 
+            margin-bottom: 20px; 
+            transition: background-color 0.3s ease; 
+        }
 
-/* Đổi màu khi rê chuột vào */
-.home-btn:hover {
-    background-color: #04747c;
-    color: white;
-}
+        /* Đổi màu khi rê chuột vào */
+        .home-btn:hover {
+            background-color: #04747c;
+            color: white;
+        }
 
+        /* Nút tải ảnh / nhạc lên Cloudinary */
+        .upload-row { display: flex; gap: 8px; align-items: center; }
+        .upload-row input[type="text"] { flex: 1; }
+        .btn-upload { background: #012725; padding: 10px 14px; font-size: 14px; white-space: nowrap; }
+        .btn-upload:hover { background: #04747c; }
+        .upload-status { font-size: 12px; color: #0284c7; margin-top: 4px; min-height: 16px; }
+
+        @media (max-width: 600px) {
+            .upload-row { flex-direction: column; align-items: stretch; }
+            .btn-upload { width: 100%; }
+        }
     </style>
 </head>
 <body>
@@ -77,25 +89,43 @@
             <small style="color: #666; display: block; margin-top: 6px;">* Nhập mã ID mới để tạo thiệp mới (không đè thiệp cũ), hoặc nhập mã ID cũ rồi bấm "Tải Dữ Liệu" để sửa lại.</small>
         </div>
 
- <div class="action-buttons">
-    <a href="https://postimages.org/vi/" class="home-btn" target="_blank" rel="noopener noreferrer">⬆️ Tải ảnh lên</a>
-    <a href="quan-ly-link-album-map.html" class="home-btn" target="_blank" rel="noopener noreferrer">🖼️ Ảnh & ♫ Nhạc</a>
-    <a href="https://console.firebase.google.com/project/thiep-cuoi-online-fa5d4/firestore/databases/-default-/data/~2Frsvp_mau_06~2FaFG7kqTAYHDexZnTOji4" 
-     class="home-btn" target="_blank" rel="noopener noreferrer">🔥 Firebase</a>
-</div>
+        <div class="action-buttons">
+            <a href="https://console.cloudinary.com/app/c-9f1b40c9249be1a5e61f03ed82fb31/assets/media_library/folders/home?view_mode=mosaic" class="home-btn" target="_blank" rel="noopener noreferrer">⬆️ Tải ảnh lên</a>
+            <a href="quan-ly-link-album-map.html" class="home-btn" target="_blank" rel="noopener noreferrer">🖼️ Ảnh &amp; ♫ Nhạc</a>
+            <a href="https://console.firebase.google.com/project/thiep-cuoi-online-fa5d4/firestore/databases/-default-/data/~2Frsvp_mau_06~2FaFG7kqTAYHDexZnTOji4" 
+             class="home-btn" target="_blank" rel="noopener noreferrer">🔥 Firebase</a>
+        </div>
 
         <div class="card">
             <h2>Chỉnh Sửa Thông Tin Mẫu 01</h2>
-                <div class="form-group" style="grid-column: span 2;"><label>URL ảnh bìa (để trống nếu dùng ảnh mặc định)</label><input type="text" id="coverPhoto"></div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="form-group" style="grid-column: span 2;">
+                <label>URL ảnh bìa (để trống nếu dùng ảnh mặc định)</label>
+                <div class="upload-row">
+                    <input type="text" id="coverPhoto">
+                    <button type="button" class="btn-upload" onclick="triggerUpload('fileCover')">🖼️ Chọn ảnh</button>
+                </div>
+                <div id="status_coverPhoto" class="upload-status"></div>
+                <input type="file" id="fileCover" accept="image/*" style="display:none" onchange="handleFileSelect(this, 'coverPhoto', false)">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                 <div class="form-group"><label>Tên Chú Rể</label><input type="text" id="groomName"></div>
                 <div class="form-group"><label>Tên Cô Dâu</label><input type="text" id="brideName"></div>
                 
                 <div class="form-group"><label>Thứ (vd: THỨ BẢY)</label><input type="text" id="heroDayOfWeek" placeholder="THỨ BẢY"></div>
                 <div class="form-group"><label>Ngày (vd: 25)</label><input type="text" id="heroDayNumber" placeholder="25"></div>
-                <div class="form-group"><label>Tháng & Năm (vd: THÁNG 10 &lt;br&gt; 2026)</label><input type="text" id="heroMonthYear" placeholder="THÁNG 10<br>2026"></div>
+                <div class="form-group"><label>Tháng &amp; Năm (vd: THÁNG 10 &lt;br&gt; 2026)</label><input type="text" id="heroMonthYear" placeholder="THÁNG 10<br>2026"></div>
                 <div class="form-group"><label>Giờ (vd: 10:30)</label><input type="text" id="heroTime" placeholder="10:30"></div>
-                <div class="form-group" style="grid-column: span 2;"><label>URL ảnh Our happy day</label><input type="text" id="imgSpecialDay"></div>
+
+                <div class="form-group" style="grid-column: span 2;">
+                    <label>URL ảnh Our happy day</label>
+                    <div class="upload-row">
+                        <input type="text" id="imgSpecialDay">
+                        <button type="button" class="btn-upload" onclick="triggerUpload('fileSpecialDay')">🖼️ Chọn ảnh</button>
+                    </div>
+                    <div id="status_imgSpecialDay" class="upload-status"></div>
+                    <input type="file" id="fileSpecialDay" accept="image/*" style="display:none" onchange="handleFileSelect(this, 'imgSpecialDay', false)">
+                </div>
 
                 <div class="form-group"><label>Bố Chú Rể</label><input type="text" id="groomFather"></div>
                 <div class="form-group"><label>Mẹ Chú Rể</label><input type="text" id="groomMother"></div>
@@ -111,10 +141,35 @@
                 <div class="form-group"><label>Địa điểm tiệc mừng</label><input type="text" id="locParty"></div>
                 <div class="form-group" style="grid-column: span 2;"><label>Địa chỉ Google Maps tiệc mừng</label><input type="text" id="partyMapQuery"></div>
                 
-                <div class="form-group" style="grid-column: span 2;"><label>Link Nhạc Nền (.mp3)</label><input type="text" id="musicUrl"></div>
+                <div class="form-group" style="grid-column: span 2;">
+                    <label>Link Nhạc Nền (.mp3)</label>
+                    <div class="upload-row">
+                        <input type="text" id="musicUrl">
+                        <button type="button" class="btn-upload" onclick="triggerUpload('fileMusic')">🎵 Chọn nhạc</button>
+                    </div>
+                    <div id="status_musicUrl" class="upload-status"></div>
+                    <input type="file" id="fileMusic" accept="audio/*" style="display:none" onchange="handleFileSelect(this, 'musicUrl', false)">
+                </div>
                
-                
-                <div class="form-group" style="grid-column: span 2;"><label>Album ảnh (mỗi URL một dòng)</label><textarea id="galleryUrls" style="min-height:90px"></textarea></div>       
+                <div class="form-group" style="grid-column: span 2;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:5px;">
+                        <label style="margin-bottom:0;">Album ảnh (mỗi URL một dòng — chuẩn 6 ảnh)</label>
+                        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                            <label style="display:inline-flex; align-items:center; gap:5px; font-weight:normal; font-size:13px; margin:0; cursor:pointer;">
+                                <input type="checkbox" id="replaceGalleryMode" checked>
+                                Ghi đè danh sách cũ
+                            </label>
+                            <button type="button" class="btn-upload" onclick="triggerUpload('fileGallery')">🖼️ Chọn ảnh album</button>
+                        </div>
+                    </div>
+                    <textarea id="galleryUrls" style="min-height:120px" oninput="updateGalleryCounter()" placeholder="Dán hoặc tải lên 6 link ảnh, mỗi link một dòng..."></textarea>
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+                        <div id="status_galleryUrls" class="upload-status"></div>
+                        <div id="galleryCounter" style="font-size:12px; color:#64748b; margin-top:4px;">Số link hiện tại: 0/6 ảnh</div>
+                    </div>
+                    <input type="file" id="fileGallery" accept="image/*" multiple style="display:none" onchange="handleFileSelect(this, 'galleryUrls', true)">
+                </div>
+
                 <div class="form-group" style="grid-column: span 2;"><label>Lời giới thiệu</label><textarea id="storyText" style="min-height:80px"></textarea></div>
             </div>
             <button type="button" onclick="handleUpdate()" style="margin-top:10px;">💾 Lưu Thay Đổi</button>
@@ -158,6 +213,10 @@
     const auth = firebase.auth();
     const db = firebase.firestore();
 
+    // Cấu hình Cloudinary
+    const CLOUDINARY_CLOUD_NAME = "a6goixuq";
+    const CLOUDINARY_UPLOAD_PRESET = "thiep_cuoi_online";
+
     // [NÂNG CẤP 2]: Đặt tên Collection riêng cho từng mẫu để 20 mẫu không đè nhau
     // Khi làm sang Mẫu 02, bạn chỉ cần đổi số 01 thành 02 ở 2 dòng này!
     const COLLECTION_THIEP = 'wedding_mau_01';
@@ -195,6 +254,100 @@
         return rawId;
     }
 
+    function countValidUrls(textareaValue) {
+        return (textareaValue || "")
+            .split(/\r?\n/)
+            .map(line => line.trim())
+            .filter(line => /^https?:\/\//i.test(line));
+    }
+
+    function updateGalleryCounter() {
+        const textarea = document.getElementById("galleryUrls");
+        const counterEl = document.getElementById("galleryCounter");
+        if (!textarea || !counterEl) return;
+
+        const validCount = countValidUrls(textarea.value).length;
+        counterEl.textContent = `Số link hiện tại: ${validCount}/6 ảnh`;
+
+        if (validCount === 6) {
+            counterEl.style.color = "#15803d";
+        } else if (validCount > 6) {
+            counterEl.style.color = "#b45309";
+        } else {
+            counterEl.style.color = "#64748b";
+        }
+    }
+
+    // Tải file ảnh/nhạc lên Cloudinary và điền đường link vào trường tương ứng
+    function triggerUpload(fileInputId) {
+        const input = document.getElementById(fileInputId);
+        if (input) {
+            input.value = "";
+            input.click();
+        }
+    }
+
+    async function uploadSingleFileToCloudinary(file) {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/auto/upload`, {
+            method: "POST",
+            body: formData
+        });
+        const result = await res.json();
+        if (!res.ok) {
+            throw new Error(result.error?.message || "Tải file lên Cloudinary thất bại");
+        }
+        return result.secure_url;
+    }
+
+    async function handleFileSelect(fileInput, targetFieldId, isMultipleGallery) {
+        const files = Array.from(fileInput.files || []);
+        if (!files.length) return;
+
+        const targetEl = document.getElementById(targetFieldId);
+        const statusEl = document.getElementById(`status_${targetFieldId}`);
+        const groupEl = fileInput.closest(".form-group");
+        const buttons = groupEl ? groupEl.querySelectorAll("button") : [];
+
+        buttons.forEach(btn => btn.disabled = true);
+
+        try {
+            if (!isMultipleGallery) {
+                const file = files[0];
+                if (statusEl) statusEl.textContent = `⏳ Đang tải: ${file.name}...`;
+                const url = await uploadSingleFileToCloudinary(file);
+                if (targetEl) targetEl.value = url;
+                if (statusEl) statusEl.textContent = `✅ Đã lấy link: ${file.name} (nhớ bấm "Lưu Thay Đổi")`;
+            } else {
+                const uploadedUrls = [];
+                for (let i = 0; i < files.length; i++) {
+                    if (statusEl) statusEl.textContent = `⏳ Đang tải (${i + 1}/${files.length}): ${files[i].name}...`;
+                    const url = await uploadSingleFileToCloudinary(files[i]);
+                    uploadedUrls.push(url);
+                }
+                if (targetEl) {
+                    const shouldReplace = document.getElementById("replaceGalleryMode")?.checked;
+                    if (shouldReplace) {
+                        targetEl.value = uploadedUrls.join("\n");
+                    } else {
+                        const existing = targetEl.value.trim();
+                        targetEl.value = existing ? `${existing}\n${uploadedUrls.join("\n")}` : uploadedUrls.join("\n");
+                    }
+                    updateGalleryCounter();
+                }
+                if (statusEl) statusEl.textContent = `✅ Đã cập nhật ${uploadedUrls.length} link ảnh album (nhớ bấm "Lưu Thay Đổi")`;
+            }
+        } catch (err) {
+            if (statusEl) statusEl.textContent = `❌ Lỗi: ${err.message}`;
+            alert(`Lỗi tải lên Cloudinary: ${err.message}`);
+        } finally {
+            buttons.forEach(btn => btn.disabled = false);
+        }
+    }
+
     // [NÂNG CẤP 3]: Đọc dữ liệu từ đúng Document mang tên customerId
     function loadData() {
         const customerId = getCustomerId();
@@ -223,6 +376,9 @@
             document.getElementById('ceremonyMapQuery').value = data.ceremony_map_query || '';
             document.getElementById('partyMapQuery').value = data.party_map_query || '';
             document.getElementById('storyText').value = data.story_text || '';
+
+            updateGalleryCounter();
+            document.querySelectorAll('.upload-status').forEach(el => el.textContent = '');
 
             if (docSnap.exists) {
                 showInviteLink(customerId);

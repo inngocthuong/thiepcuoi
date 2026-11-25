@@ -5,9 +5,9 @@ const tabProductsData = {
                 { code: "HHY-6160",
                 title: "Thiệp Cưới HHY-6160 kem Sang Trọng",
                 price: "4.500 đ",
-                oldPrice: "5.000 đ",
+                oldPrice: "",
                 badge: "sale-badge",
-                badgeText: "-15%",
+                badgeText: "BÁN CHẠY",
                 img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6160-0025.jpg",
                 desc: "Mẫu thiệp cưới được in trên máy in nhanh KTS" },
 
@@ -24,8 +24,8 @@ const tabProductsData = {
                 title: "Thiệp cưới thiết kế màu đỏ HHY-6166",
                 price: "4.500 đ",
                 oldPrice: "",
-                badge: "",
-                badgeText: "",
+                badge: "hot-badge",
+                badgeText: "BÁN CHẠY",
                 img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6166-0832.jpg",
                 desc: "Là Mẫu thiệp cưới được in trên máy in nhanh KTS, đặc điểm của hình thức in này là mực in rất bóng, thể hiện màu sắc rất tốt." },
 
@@ -33,8 +33,8 @@ const tabProductsData = {
                 title: "Thiệp cưới độc quyền giấy thơm ánh kim HHY-6146 kem",
                 price: "4.500 đ",
                 oldPrice: "5.400 đ",
-                badge: "sale-badge",
-                badgeText: "-20%",
+                badge: "hot-badge",
+                badgeText: "BÁN CHẠY",
                 img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/web6146kem-5233.jpg",
                 desc: "Là Mẫu thiệp cưới được in trên máy in nhanh KTS, đặc điểm của hình thức in này là mực in rất bóng, thể hiện màu sắc rất tốt." }
             ],

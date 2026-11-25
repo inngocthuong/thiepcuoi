@@ -168,9 +168,9 @@
   ];
 
   const TABS = [
-    { key: "best-seller", label: "Tab 1: Bán chạy (best-seller)", prefix: "NT-2026" },
-    { key: "new-arrival", label: "Tab 2: Hàng mới (new-arrival)", prefix: "NT-NEW" },
-    { key: "on-sale", label: "Tab 3: Khuyến mãi (on-sale)", prefix: "SALE-" }
+    { key: "best-seller", label: "Tab 1: Bán chạy (best-seller)", prefix: "NT-2026", badge: "hot-badge" },
+    { key: "new-arrival", label: "Tab 2: Hàng mới (new-arrival)", prefix: "NT-NEW", badge: "new-badge" },
+    { key: "on-sale", label: "Tab 3: Khuyến mãi (on-sale)", prefix: "SALE-", badge: "sale-badge" }
   ];
 
   let tabData = {
@@ -415,7 +415,7 @@
     els.title.value = "";
     els.price.value = "4.200 đ";
     els.oldPrice.value = "";
-    els.badge.value = "";
+    els.badge.value = tabInfo.badge || "";
     els.badgeText.value = "";
     els.desc.value = "";
     els.uploadStatus.textContent = "";

@@ -6,7 +6,7 @@ const tabProductsData = {
                 title: "Thiệp Cưới HHY-6160 kem Sang Trọng",
                 price: "4.500 đ",
                 oldPrice: "",
-                badge: "sale-badge",
+                badge: "hot-badge",
                 badgeText: "BÁN CHẠY",
                 img: "https://thiepcuoihoanghaiyen.com/upload/sanpham/hhy6160-0025.jpg",
                 desc: "Mẫu thiệp cưới được in trên máy in nhanh KTS" },
